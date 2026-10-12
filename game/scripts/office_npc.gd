@@ -144,9 +144,10 @@ func _ready() -> void:
 	_thin = opening_role == "coworker"
 	character_gender = "female" if affiliation == "department" and personality in ["rude", "intern"] and not _broad and not _thin and not _is_responder() else "male"
 	if _broad:
-		suit_color = Color("e7dfcd")
-		skin_color = Color("cc9870")
-		hair_color = Color("392f28")
+		# Approved lineup: charcoal jacket over a white shirt, greying temples.
+		suit_color = Color("47423f")
+		skin_color = Color("d09a74")
+		hair_color = Color("332d29")
 	elif _thin:
 		suit_color = Color("698f8d")
 		skin_color = Color("d4a37b")
@@ -347,17 +348,19 @@ func _make_arm(side: float) -> Node3D:
 	_visual.add_child(pivot)
 	var width: float = 0.235 if _broad else (0.13 if _thin else 0.17)
 	var cardigan: bool = not _broad and not _thin and personality in ["rude", "dumping"]
+	# The boss wears a full-length jacket sleeve with a white shirt cuff.
+	var sleeved: bool = cardigan or _broad
 	_chunk(pivot, Vector3(width, 0.31, width * 1.02), Vector3(0, -0.13, 0), suit_color)
-	if not cardigan:
+	if not sleeved:
 		_chunk(pivot, Vector3(width * 1.09, 0.062, width * 1.07), Vector3(0, -0.263, 0), suit_color.lightened(0.12))
 		_box(pivot, Vector3(width * 0.80, 0.008, 0.004), Vector3(0, -0.247, width * 0.55), suit_color.darkened(0.18))
 	var elbow: Node3D = Node3D.new()
 	elbow.position.y = -0.285
 	pivot.add_child(elbow)
-	_chunk(elbow, Vector3(width * (0.85 if cardigan else 0.77), 0.28, width * (0.83 if cardigan else 0.75)), Vector3(0, -0.125, 0), suit_color if cardigan else skin_color)
-	if cardigan:
+	_chunk(elbow, Vector3(width * (0.85 if sleeved else 0.77), 0.28, width * (0.83 if sleeved else 0.75)), Vector3(0, -0.125, 0), suit_color if sleeved else skin_color)
+	if sleeved:
 		_chunk(elbow, Vector3(width * 0.90, 0.048, width * 0.87), Vector3(0, -0.243, 0), suit_color.darkened(0.13))
-		_chunk(elbow, Vector3(width * 0.77, 0.025, width * 0.75), Vector3(0, -0.266, 0), Color("e4ddc9"))
+		_chunk(elbow, Vector3(width * 0.77, 0.025, width * 0.75), Vector3(0, -0.266, 0), Color("f1ede3") if _broad else Color("e4ddc9"))
 	var hand: Node3D = _chunk(elbow, Vector3(width * 0.93, 0.145, width * 0.90), Vector3(0, -0.295, 0.009), skin_color.lightened(0.02))
 	var thumb: Node3D = _chunk(elbow, Vector3(width * 0.30, 0.092, width * 0.44), Vector3(-side * width * 0.43, -0.27, 0.025), skin_color)
 	if _broad or _is_responder():
@@ -407,7 +410,7 @@ func _make_leg(side: float, trouser: Color) -> Node3D:
 	var ankle: Node3D = Node3D.new()
 	ankle.position.y = -SHIN_LENGTH
 	knee.add_child(ankle)
-	_chunk(ankle, Vector3(width * 1.07, 0.14, 0.36), Vector3(0, 0, 0.06), Color("303537"))
+	_chunk(ankle, Vector3(width * 1.07, 0.14, 0.36), Vector3(0, 0, 0.06), Color("3a2a21") if _broad else Color("303537"))
 	if side < 0.0:
 		_left_knee = knee
 		_left_ankle = ankle
@@ -451,7 +454,19 @@ func _make_tie_tail(color: Color) -> void:
 
 func _build_outfit() -> void:
 	var layered: bool = personality in ["rude", "dumping", "intern"] and not _thin and not _broad
-	var shirt: Color = Color("e4ddc9") if layered else suit_color
+	var shirt: Color = Color("e4ddc9") if layered else (Color("eeeae0") if _broad else suit_color)
+	if _broad:
+		# A white shirt V shows between the jacket lapels and follows the belly.
+		_form(_visual, [Vector3(0.006, 1.02, 0.007), Vector3(0.20, 1.25, 0.007), Vector3(0.36, 1.45, 0.007)], Vector3.ZERO, shirt, PackedFloat32Array([0.330, 0.303, 0.262]))
+		for side: float in [-1.0, 1.0]:
+			# Wide notched lapels run from the shoulder line to the single fastening.
+			_cloth_seam(_visual, Vector3(side * 0.19, 1.45, 0.266), Vector3(side * 0.10, 1.25, 0.309), 0.075, suit_color.darkened(0.16))
+			_cloth_seam(_visual, Vector3(side * 0.10, 1.25, 0.309), Vector3(side * 0.012, 1.03, 0.336), 0.055, suit_color.darkened(0.16))
+			# Low hip pockets with flaps, the most readable jacket cue at distance.
+			_box(_visual, Vector3(0.17, 0.045, 0.012), Vector3(side * 0.27, 0.955, 0.300), suit_color.darkened(0.12))
+		for button: Vector3 in [Vector3(0.0, 1.005, 0.334), Vector3(0.0, 0.915, 0.305)]:
+			_oval(_visual, Vector2(0.026, 0.026), button, Color("221f1d"), 0.008)
+		_box(_visual, Vector3(0.12, 0.010, 0.008), Vector3(-0.235, 1.33, 0.292), suit_color.darkened(0.2))
 	if layered:
 		_form(_visual, [Vector3(0.005, 1.115, 0.007), Vector3(0.155, 1.31, 0.007), Vector3(0.25, 1.49, 0.007)], Vector3.ZERO, shirt, PackedFloat32Array([0.195, 0.177, 0.149] if personality == "dumping" else [0.156, 0.155, 0.149]))
 		for side: float in [-1.0, 1.0]:
@@ -470,19 +485,16 @@ func _build_outfit() -> void:
 	_tie = Node3D.new()
 	_tie.position = Vector3(0, 1.405, 0.276 if _broad else 0.181)
 	_visual.add_child(_tie)
-	var tie_color: Color = Color("a77735") if _broad else Color("384548")
+	var tie_color: Color = Color("7d2b34") if _broad else Color("384548")
 	_chunk(_tie, Vector3(0.107 if _broad else 0.065, 0.095, 0.029), Vector3.ZERO, tie_color)
 	_make_tie_tail(tie_color)
-	_tie.visible = not layered
 	if _broad:
-		var placket: Array[Vector3] = [Vector3(0.018, 1.43, 0.254), Vector3(0.018, 1.25, 0.299), Vector3(0.018, 1.10, 0.322), Vector3(0.018, 0.97, 0.301), Vector3(0.018, 0.88, 0.270)]
-		for index: int in range(placket.size() - 1):
-			_cloth_seam(_visual, placket[index], placket[index + 1], 0.030, suit_color.darkened(0.075))
-		_panel(_visual, PackedVector2Array([Vector2(-0.080, 0.060), Vector2(-0.074, -0.057), Vector2(0, -0.077), Vector2(0.074, -0.057), Vector2(0.080, 0.060)]), Vector3(0.235, 1.292, 0.300), suit_color.darkened(0.055))
-		_box(_visual, Vector3(0.151, 0.011, 0.007), Vector3(0.235, 1.348, 0.307), suit_color.darkened(0.19))
-		for button: Vector3 in [Vector3(0.04, 1.265, 0.309), Vector3(0.04, 1.015, 0.317), Vector3(0.04, 0.899, 0.282)]:
-			_oval(_visual, Vector2(0.019, 0.019), button, Color("b9af96"), 0.007)
-	else:
+		# A small diamond print keeps the burgundy tie from reading as a flat slab.
+		for dot: Vector3 in [Vector3(-0.022, -0.13, 0.036), Vector3(0.022, -0.20, 0.052), Vector3(-0.024, -0.28, 0.068), Vector3(0.026, -0.35, 0.077)]:
+			var mark: Node3D = _oval(_tie, Vector2(0.020, 0.020), dot, tie_color.lightened(0.28), 0.006)
+			mark.rotation.z = PI * 0.25
+	_tie.visible = not layered
+	if not _broad:
 		_cloth_seam(_visual, Vector3(0.009, 1.10 if layered else 1.38, 0.163), Vector3(0.009, 0.89, 0.151), 0.021, suit_color.darkened(0.10))
 		for button_y: float in [1.23, 1.07, 0.925]:
 			_oval(_visual, Vector2(0.017, 0.017), Vector3(0.012, button_y, 0.175 if personality == "dumping" else 0.163), Color("a8a18a") if personality == "dumping" else suit_color.darkened(0.35), 0.006)
@@ -497,7 +509,21 @@ func _build_head_shape() -> void:
 	if _broad:
 		# A continuous jutting jaw is part of the head, not a second chin block.
 		_form(_head, [Vector3(0.41, -0.29, 0.33), Vector3(0.64, -0.16, 0.43), Vector3(0.57, 0.005, 0.43), Vector3(0.51, 0.15, 0.38), Vector3(0.43, 0.25, 0.33)], Vector3.ZERO, skin_color, PackedFloat32Array([0.026, 0.023, 0, 0, -0.01]))
-		_form(_head, [Vector3(0.105, -0.132, 0.045), Vector3(0.170, -0.083, 0.075), Vector3(0.115, 0.027, 0.058), Vector3(0.063, 0.145, 0.028)], Vector3(0, 0.018, 0.218), skin_color.lightened(0.04), PackedFloat32Array([0.053, 0.095, 0.055, 0]))
+		var ruddy: Color = skin_color.lerp(Color("c9675a"), 0.26)
+		_form(_head, [Vector3(0.105, -0.132, 0.045), Vector3(0.170, -0.083, 0.075), Vector3(0.115, 0.027, 0.058), Vector3(0.063, 0.145, 0.028)], Vector3(0, 0.018, 0.218), skin_color.lerp(ruddy, 0.5), PackedFloat32Array([0.053, 0.095, 0.055, 0]))
+		# Bulbous drinker's nose tip and flared nostrils.
+		_chunk(_head, Vector3(0.150, 0.088, 0.080), Vector3(0, -0.046, 0.316), ruddy)
+		for side: float in [-1.0, 1.0]:
+			_chunk(_head, Vector3(0.056, 0.050, 0.060), Vector3(side * 0.074, -0.066, 0.290), ruddy.darkened(0.05))
+		# Heavy jowls and a double chin hang below the jaw line.
+		var sag: Color = skin_color.darkened(0.035)
+		for side: float in [-1.0, 1.0]:
+			var jowl: MeshInstance3D = _chunk(_head, Vector3(0.16, 0.15, 0.24), Vector3(side * 0.175, -0.265, 0.085), sag)
+			jowl.rotation.z = side * -0.18
+		_chunk(_head, Vector3(0.26, 0.10, 0.20), Vector3(0, -0.322, 0.105), sag.darkened(0.03))
+		# Deep lines from the nose to the frowning mouth corners.
+		for side: float in [-1.0, 1.0]:
+			_cloth_seam(_head, Vector3(side * 0.098, -0.075, 0.262), Vector3(side * 0.142, -0.185, 0.248), 0.014, skin_color.darkened(0.24))
 	elif _thin:
 		_form(_head, [Vector3(0.205, -0.33, 0.23), Vector3(0.270, -0.22, 0.29), Vector3(0.31, -0.065, 0.285), Vector3(0.35, 0.17, 0.305), Vector3(0.285, 0.27, 0.26)], Vector3.ZERO, skin_color, PackedFloat32Array([0.020, 0.009, 0, 0, -0.006]))
 		_form(_head, [Vector3(0.075, -0.168, 0.030), Vector3(0.105, -0.128, 0.060), Vector3(0.075, 0.020, 0.041), Vector3(0.047, 0.150, 0.023)], Vector3(0, 0.014, 0.148), skin_color.lightened(0.04), PackedFloat32Array([0.048, 0.088, 0.043, 0]))
@@ -641,18 +667,20 @@ func _build_face() -> void:
 		_head.add_child(eye)
 		_oval(eye, Vector2(eye_width, _face_eye_height), Vector3.ZERO, Color("e7e1cf"), 0.004)
 		_eyes.append(eye)
-		var pupil: Node3D = _oval(eye, Vector2(0.028 if _broad else 0.027, 0.033), Vector3(-side * 0.006, -0.001, 0.004), Color("30352f"), 0.003)
+		var pupil: Node3D = _oval(eye, Vector2(0.028 if _broad else 0.027, 0.033), Vector3(0.016 if _broad else -side * 0.006, -0.001, 0.004), Color("30352f"), 0.003)
 		_pupils.append(pupil)
-		var lid: MeshInstance3D = _panel(_head, PackedVector2Array([Vector2(-eye_width * 0.51, -0.006), Vector2(-eye_width * 0.43, 0.004), Vector2(eye_width * 0.39, 0.005), Vector2(eye_width * 0.51, -0.006)]), Vector3(side * eye_x, _face_eye_y + 0.03, eye_z + 0.006), skin_color.darkened(0.19), 0.004)
+		var lid_outline: PackedVector2Array = PackedVector2Array([Vector2(-eye_width * 0.56, -0.016), Vector2(-eye_width * 0.45, 0.020), Vector2(eye_width * 0.42, 0.022), Vector2(eye_width * 0.56, -0.012), Vector2(eye_width * 0.30, -0.010), Vector2(-eye_width * 0.30, -0.012)]) if _broad else PackedVector2Array([Vector2(-eye_width * 0.51, -0.006), Vector2(-eye_width * 0.43, 0.004), Vector2(eye_width * 0.39, 0.005), Vector2(eye_width * 0.51, -0.006)])
+		var lid: MeshInstance3D = _panel(_head, lid_outline, Vector3(side * eye_x, _face_eye_y + 0.03, eye_z + 0.006), skin_color.darkened(0.13 if _broad else 0.19), 0.004)
 		lid.rotation.y = eye.rotation.y
 		lid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_upper_lids.append(lid)
-		var lower_lid: MeshInstance3D = _panel(_head, PackedVector2Array([Vector2(-eye_width * 0.42, 0.004), Vector2(-eye_width * 0.28, -0.002), Vector2(eye_width * 0.30, -0.002), Vector2(eye_width * 0.43, 0.005)]), Vector3(side * eye_x, _face_eye_y - 0.03, eye_z + 0.004), skin_color.darkened(0.10), 0.003)
+		var bag_outline: PackedVector2Array = PackedVector2Array([Vector2(-eye_width * 0.48, 0.006), Vector2(-eye_width * 0.30, -0.026), Vector2(eye_width * 0.32, -0.028), Vector2(eye_width * 0.50, 0.006), Vector2(eye_width * 0.30, 0.0), Vector2(-eye_width * 0.30, 0.0)]) if _broad else PackedVector2Array([Vector2(-eye_width * 0.42, 0.004), Vector2(-eye_width * 0.28, -0.002), Vector2(eye_width * 0.30, -0.002), Vector2(eye_width * 0.43, 0.005)])
+		var lower_lid: MeshInstance3D = _panel(_head, bag_outline, Vector3(side * eye_x, _face_eye_y - 0.03, eye_z + 0.004), skin_color.darkened(0.13 if _broad else 0.10), 0.003)
 		lower_lid.rotation.y = eye.rotation.y
 		lower_lid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_lower_lids.append(lower_lid)
-		var brow_width: float = 0.165 if _broad else (0.142 if _thin else 0.129)
-		var brow_height: float = 0.047 if _broad else (0.026 if personality == "dumping" else (0.023 if character_gender == "female" else 0.030))
+		var brow_width: float = 0.180 if _broad else (0.142 if _thin else 0.129)
+		var brow_height: float = 0.060 if _broad else (0.026 if personality == "dumping" else (0.023 if character_gender == "female" else 0.030))
 		var brow: MeshInstance3D = _panel(_head, PackedVector2Array([Vector2(-brow_width * 0.50, -brow_height * 0.21), Vector2(-brow_width * 0.46, brow_height * 0.27), Vector2(-brow_width * 0.18, brow_height * 0.57), Vector2(brow_width * 0.46, brow_height * 0.24), Vector2(brow_width * 0.50, -brow_height * 0.12), Vector2(brow_width * 0.19, -brow_height * 0.39)]), Vector3(side * eye_x, _face_eye_y + 0.080, _face_brow_z), hair_color, 0.007)
 		brow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_brows.append(brow)
@@ -675,8 +703,9 @@ func _build_face() -> void:
 	_mouth = Node3D.new()
 	_mouth.position = Vector3(0, -0.149 if _broad else (-0.216 if _thin else -0.130), 0.247 if _broad else (0.163 if _thin else (0.202 if personality == "dumping" else 0.172)))
 	_head.add_child(_mouth)
-	var mouth_width: float = 0.219 if _broad else (0.120 if _thin else (0.140 if personality == "dumping" else 0.112))
-	_panel(_mouth, PackedVector2Array([Vector2(-mouth_width * 0.49, 0.016), Vector2(-mouth_width * 0.31, 0.043), Vector2(mouth_width * 0.35, 0.030), Vector2(mouth_width * 0.50, 0.003), Vector2(mouth_width * 0.33, -0.040), Vector2(-mouth_width * 0.28, -0.045)]), Vector3.ZERO, Color("614936"), 0.004)
+	var mouth_width: float = 0.175 if _broad else (0.120 if _thin else (0.140 if personality == "dumping" else 0.112))
+	var mouth_outline: PackedVector2Array = PackedVector2Array([Vector2(-mouth_width * 0.50, -0.040), Vector2(-mouth_width * 0.30, 0.030), Vector2(0, 0.044), Vector2(mouth_width * 0.30, 0.030), Vector2(mouth_width * 0.50, -0.040), Vector2(mouth_width * 0.26, -0.012), Vector2(-mouth_width * 0.26, -0.012)]) if _broad else PackedVector2Array([Vector2(-mouth_width * 0.49, 0.016), Vector2(-mouth_width * 0.31, 0.043), Vector2(mouth_width * 0.35, 0.030), Vector2(mouth_width * 0.50, 0.003), Vector2(mouth_width * 0.33, -0.040), Vector2(-mouth_width * 0.28, -0.045)])
+	_panel(_mouth, mouth_outline, Vector3.ZERO, Color("5a3a31") if _broad else Color("614936"), 0.004)
 	_mouth.rotation.z = -0.07 if personality == "intern" else (0.06 if personality == "rude" else 0.0)
 	_lower_lip = _panel(_head, PackedVector2Array([Vector2(-mouth_width * 0.35, 0.008), Vector2(-mouth_width * 0.23, -0.005), Vector2(mouth_width * 0.25, -0.005), Vector2(mouth_width * 0.37, 0.007)]), _mouth.position + Vector3(0, -0.018, 0.001), skin_color.darkened(0.075), 0.003)
 
@@ -720,7 +749,8 @@ func _build_hair() -> void:
 		_form(_head, [Vector3(0.46, -0.050, 0.32), Vector3(0.48, 0.070, 0.34), Vector3(0.37, 0.137, 0.29)], Vector3(0, 0.22, -0.017), hair_color)
 		_panel(_head, PackedVector2Array([Vector2(-0.24, 0.032), Vector2(-0.23, 0.087), Vector2(-0.14, 0.143), Vector2(-0.08, 0.099), Vector2(0.07, 0.158), Vector2(0.22, 0.096), Vector2(0.24, 0.027), Vector2(0.11, 0.030)]), Vector3(0, 0.213, 0.151), hair_color, 0.031)
 		for side: float in [-1.0, 1.0]:
-			_chunk(_head, Vector3(0.053, 0.17, 0.23), Vector3(side * 0.238, 0.157, -0.045), hair_color)
+			_chunk(_head, Vector3(0.060, 0.19, 0.25), Vector3(side * 0.240, 0.150, -0.045), Color("8a847c"))
+			_chunk(_head, Vector3(0.050, 0.06, 0.20), Vector3(side * 0.236, 0.255, -0.050), hair_color.lightened(0.12))
 	elif _thin:
 		_panel(_head, PackedVector2Array([Vector2(-0.158, -0.047), Vector2(-0.183, 0.093), Vector2(-0.225, 0.164), Vector2(-0.089, 0.269), Vector2(0.030, 0.244), Vector2(0.100, 0.187), Vector2(0.158, 0.228), Vector2(0.184, 0.071), Vector2(0.144, -0.069)]), Vector3(0, 0.159, -0.020), hair_color, 0.313)
 		_panel(_head, PackedVector2Array([Vector2(-0.18, 0.076), Vector2(-0.094, 0.202), Vector2(0.031, 0.178), Vector2(0.115, 0.087), Vector2(-0.095, 0.025)]), Vector3(0, 0.200, 0.142), hair_color.lightened(0.06), 0.018)
@@ -1419,7 +1449,7 @@ func _animate_pose(delta: float, walking: float) -> void:
 		_pose_boss_walking_legs()
 		_tie.rotation.x = sin(_walk_phase * TAU - 0.35) * _walk_blend * 0.035
 		_tie.rotation.z = sin(_walk_phase * TAU) * _walk_blend * 0.018
-	var eye_goal: float = 0.43 if _broad else 0.52
+	var eye_goal: float = 0.36 if _broad else 0.52
 	var mouth_goal: float = 0.11 if _broad else 0.20
 	if coworker_hold:
 		eye_goal = 1.0
