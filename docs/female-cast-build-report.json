@@ -1,0 +1,135 @@
+{
+  "version": "0.2.2",
+  "godot_version": "4.7.2.stable.official.ed1daf0bf",
+  "checked_at_utc": "2026-10-11T12:22:15.176969+00:00",
+  "checks": [
+    {
+      "name": "final-import",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 3.08,
+      "marker": null,
+      "log": "docs/verification/female-cast/final-import.txt",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "source-smoke",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 3.17,
+      "marker": "DESK_BREAKER_SMOKE_OK:",
+      "log": "docs/verification/female-cast/source-smoke.txt",
+      "errors": [],
+      "warnings": [
+        "WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+      ]
+    },
+    {
+      "name": "windows-export",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 2.72,
+      "marker": null,
+      "log": "docs/verification/female-cast/windows-export.txt",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "embedded-only-smoke",
+      "exit_code": 0,
+      "passed": true,
+      "duration_seconds": 3.18,
+      "marker": "DESK_BREAKER_SMOKE_OK:",
+      "log": "docs/verification/female-cast/embedded-only-smoke.txt",
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "executable": {
+    "path": "builds/DeskBreaker.exe",
+    "size_bytes": 110481232,
+    "sha256": "c5710daf6ca8d518d7cf784f76f56862269671da7964d6579e8cc2277727601f",
+    "pe_machine": "0x8664",
+    "embedded_pack_offset": 109268480,
+    "embedded_pack_length": 1212740
+  },
+  "source_game_files_sha256": {
+    "game/assets/fonts/KoreanUI.ttf": "76f45ef4a6bcff344c837c95a7dcc26e017e38b5846d5ae0cdcb5b86be2e2d31",
+    "game/assets/fonts/KoreanUI.ttf.import": "c70c80c8417ccba9e7de9bc925a580291ff43d89a654f2b29f043da12eee7a14",
+    "game/assets/fonts/OFL.txt": "eeacf16032901d0ed0456876ec77b8f0fda6b3fecec7d972f8543eb602e6c30f",
+    "game/assets/icon.svg": "11d5c67419ca804e6326e32c24d608677d7d228fb03504dd9929afdf3d866012",
+    "game/assets/icon.svg.import": "0fcf612833458e015d28f4ba86b3a6a0749ac45e70e561cd416f01fb4b77c1e2",
+    "game/export_presets.cfg": "2e3f1a9a50a83214e92b5f44a13bbba25d2bd407f017917aef7f715891ea3b66",
+    "game/project.godot": "b1e3341917876a91a98b02c4decec941bec033fd922381f613ec3e74a833b6ba",
+    "game/scenes/main.tscn": "a86ad1492d44f7ce9d19db0f4170fbc3db35140108bc58b6da61dd4591c6abb3",
+    "game/scripts/audio.gd": "d640ac053f9077d1b5fee5c93d565d94f5d74eed8bd515d45a5b26748555c847",
+    "game/scripts/audio.gd.uid": "068a4a2a63c99371397f443a11ddf57ec7771195ae601052109cc3184767e1d7",
+    "game/scripts/hand_model.gd": "16ae98b024322d0cba92aed77c702f3102a1ae334816cc5869a811bca4c080d3",
+    "game/scripts/hand_model.gd.uid": "fcc4e08044f4abd4e7b174384ceda4f2d4d2783cf3d3789ffdd1940199b477f8",
+    "game/scripts/main.gd": "758548eb28cf9aa2851974dc18f2e6a5ca37e92de166fe86629ec4642ee1b85a",
+    "game/scripts/main.gd.uid": "ab459ac64cd3b0939c7f985501a5526a301d1b6f801d0273309e0d1dace59303",
+    "game/scripts/office_capture.gd": "b4749617ca0c25eb745c657a94d541e7b8bd01078db0cc5f9d11e4528f72edf9",
+    "game/scripts/office_capture.gd.uid": "a4a3ae086dd76075e884088d240d462e2ebaac24abf9be462dd0743059722081",
+    "game/scripts/office_npc.gd": "50c13756b7816a377fae2cfb542f052cb6d022ccea3cfb3699bdb08004df01db",
+    "game/scripts/office_npc.gd.uid": "4d30851a48d037d357e97887e3b47c1bc5fa5e83ad4ecd048175f53bbe2592f5",
+    "game/scripts/player.gd": "2e0103124b999f5dec20b02298a23b583da26f99bf9b1cdd6ae3c536703c6911",
+    "game/scripts/player.gd.uid": "a4a643239b7ed46fb04e747be3875fca19aae4f5bfeaaa9ace3fb0c0cf9f349b",
+    "game/scripts/prop.gd": "8e110409ae0ce81428511e5084e88f2a42806a6154e08d68db569ab97c85f764",
+    "game/scripts/prop.gd.uid": "71b071faca631e346d626914cf2510c91f2e71181d3255d22698177787265033",
+    "game/scripts/social_damage.gd": "47bd686e7888fc98587fada6b10799ce14bb02d0d07f81628ba5874a02defaa9",
+    "game/scripts/social_damage.gd.uid": "737429ad74822fd03d385f29ff81b3603a0202b9a77a88546308ca748a719a23",
+    "game/scripts/world.gd": "48f68db3de033aef86c5d31c6c928399b5719de6cd046aa571459f56c95f960e",
+    "game/scripts/world.gd.uid": "c39a61571caa55fd6da7e4b36093f8630de8350c5e0f74d0c2364a2750c6020d"
+  },
+  "windows_native_tested": false,
+  "source_tag": "v0.2.2-female-cast",
+  "base_commit": "3a19a1cba8bd045ab6310a74b0d9c3f701cb9024",
+  "scope": [
+    "이 사원과 정 인턴을 성인 여성 배역으로 변경",
+    "단발/묶은 머리, 얼굴·귀·눈썹·옷깃의 작은 형태 변경",
+    "기존 업무·대사·행동·충돌·양손·HUD·맵 유지",
+    "향후 아트 제작 제안 문서 추가; 제안 전체를 구현한 빌드는 아님"
+  ],
+  "render_verification": {
+    "passed": true,
+    "failures": [],
+    "capture_fixture": "tools/capture_female_cast.gd",
+    "cast_fixture": "tools/capture_character_lineup.gd",
+    "description": "Actual Godot office and production NPC model renders; office camera cuts for inspection. Simulation continues while intermediate 3D frames are skipped; each saved still is rendered.",
+    "evidence": "docs/verification/female-cast/capture-report.json",
+    "model_comparison": "docs/verification/female-cast/cast-change-summary.json",
+    "images": [
+      "docs/preview/female-cast-faces.png",
+      "docs/preview/female-cast-lineup.png",
+      "docs/preview/female-cast-intern-working.png",
+      "docs/preview/female-cast-junior-working.png",
+      "docs/preview/female-cast-office.png"
+    ],
+    "women_count": 2,
+    "women": [
+      "이 사원",
+      "정 인턴"
+    ],
+    "activities": [
+      "typing",
+      "papers"
+    ],
+    "unchanged_male_portraits_byte_identical": [
+      "김 팀장",
+      "박 대리",
+      "최 과장"
+    ],
+    "logs": [
+      "docs/verification/female-cast/model-render.txt",
+      "docs/verification/female-cast/office-render.txt"
+    ],
+    "initial_attempt": "The first software render exceeded its 90 second fixture timeout before the final image/report. The optimized capture completed; initial log is retained as office-render-initial-timeout.txt."
+  },
+  "validation_limits": [
+    "Windows x86_64 executable exported and its PE/embedded PCK checked. Embedded data smoke used Linux Godot in a separate source-free folder, not Windows native execution.",
+    "This cosmetic patch did not rerun all earlier gameplay regression suites, the PowerShell wrapper, or target-PC performance/control-feel checks.",
+    "Source smoke retained an ObjectDB shutdown warning; see its complete log. Virtual-display render VSync warnings are retained in render logs.",
+    "Procedural model refinement, not a completed Blender mesh/rig/art overhaul. Office layout A/B/C remains unselected."
+  ]
+}

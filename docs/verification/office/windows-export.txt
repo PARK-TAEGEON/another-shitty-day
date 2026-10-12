@@ -1,0 +1,46 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] first_scan_filesystem | Started Project initialization (5 steps)
+[   0% ] first_scan_filesystem | Scanning file structure...
+[  16% ] first_scan_filesystem | Loading global class names...
+[  33% ] first_scan_filesystem | Verifying GDExtensions...
+[  50% ] first_scan_filesystem | Creating autoload scripts...
+[  66% ] first_scan_filesystem | Initializing plugins...
+[  83% ] first_scan_filesystem | Starting file scan...
+[ DONE ] first_scan_filesystem
+
+[   0% ] update_scripts_classes | Started Registering global classes... (2 steps)
+[   0% ] update_scripts_classes |
+[  33% ] update_scripts_classes |
+[ DONE ] update_scripts_classes
+
+[   0% ] savepack | Started Packing (102 steps)
+[   1% ] savepack | Storing File: res://.godot/imported/KoreanUI.ttf-b9cafaf55f8f9f3ae6e40066c6f7f32d.fontdata
+[   1% ] savepack | Storing File: res://assets/fonts/KoreanUI.ttf.import
+[   9% ] savepack | Storing File: res://.godot/imported/icon.svg-56083ea2a1f1a4f1e49773bdc6d7826c.ctex
+[   9% ] savepack | Storing File: res://assets/icon.svg.import
+[  17% ] savepack | Storing File: res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
+[  26% ] savepack | Storing File: res://scripts/audio.gdc
+[  33% ] savepack | Storing File: res://scripts/hand_model.gdc
+[  41% ] savepack | Storing File: res://scripts/main.gdc
+[  50% ] savepack | Storing File: res://scripts/office_capture.gdc
+[  58% ] savepack | Storing File: res://scripts/office_npc.gdc
+[  66% ] savepack | Storing File: res://scripts/player.gdc
+[  74% ] savepack | Storing File: res://scripts/prop.gdc
+[  82% ] savepack | Storing File: res://scripts/social_damage.gdc
+[  90% ] savepack | Storing File: res://scripts/world.gdc
+[  90% ] savepack | Storing File: res://scenes/main.tscn.remap
+[  90% ] savepack | Storing File: res://scripts/audio.gd.remap
+[  90% ] savepack | Storing File: res://scripts/hand_model.gd.remap
+[  90% ] savepack | Storing File: res://scripts/main.gd.remap
+[  90% ] savepack | Storing File: res://scripts/office_capture.gd.remap
+[  90% ] savepack | Storing File: res://scripts/office_npc.gd.remap
+[  90% ] savepack | Storing File: res://scripts/player.gd.remap
+[  90% ] savepack | Storing File: res://scripts/prop.gd.remap
+[  90% ] savepack | Storing File: res://scripts/social_damage.gd.remap
+[  90% ] savepack | Storing File: res://scripts/world.gd.remap
+[  90% ] savepack | Storing File: res://.godot/global_script_class_cache.cfg
+[  90% ] savepack | Storing File: res://assets/icon.svg
+[  90% ] savepack | Storing File: res://.godot/uid_cache.bin
+[  90% ] savepack | Storing File: res://project.binary
+[ DONE ] savepack

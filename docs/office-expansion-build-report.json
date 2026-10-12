@@ -1,0 +1,204 @@
+{
+  "version": "0.2.0",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "host": "Linux x86_64",
+  "created_utc": "2026-10-11T11:07:03.704124+00:00",
+  "source_base_revision": "681295b7700e975a8a5a0d6748c06590a47cbf50",
+  "source_tag": "v0.2.0-office-expansion",
+  "native_windows_run": false,
+  "powershell_wrapper_run": false,
+  "steps": [
+    {
+      "name": "hand_motion_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/hand_motion_regression.json",
+      "log": "verification/office/hand_motion_regression.txt"
+    },
+    {
+      "name": "wall_throw_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/wall_throw_regression.json",
+      "log": "verification/office/wall_throw_regression.txt"
+    },
+    {
+      "name": "opening_reaction_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/opening_reaction_regression.json",
+      "log": "verification/office/opening_reaction_regression.txt"
+    },
+    {
+      "name": "boss_approach_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/boss_approach_regression.json",
+      "log": "verification/office/boss_approach_regression.txt"
+    },
+    {
+      "name": "boss_lecture_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/boss_lecture_regression.json",
+      "log": "verification/office/boss_lecture_regression.txt"
+    },
+    {
+      "name": "npc_office_behavior_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/npc_office_behavior_regression.json",
+      "log": "verification/office/npc_office_behavior_regression.txt"
+    },
+    {
+      "name": "property_damage_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/property_damage_regression.json",
+      "log": "verification/office/property_damage_regression.txt"
+    },
+    {
+      "name": "social_damage_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/social_damage_regression.json",
+      "log": "verification/office/social_damage_regression.txt"
+    },
+    {
+      "name": "office_layout_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/office/office_layout_regression.json",
+      "log": "verification/office/office_layout_regression.txt"
+    },
+    {
+      "name": "import",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/office/import.txt"
+    },
+    {
+      "name": "source-smoke",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/office/source-smoke.txt"
+    },
+    {
+      "name": "windows-export",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/office/windows-export.txt"
+    },
+    {
+      "name": "embedded-pack-smoke",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/office/embedded-pack-smoke.txt"
+    }
+  ],
+  "artifact": {
+    "file": "DeskBreaker.exe",
+    "bytes": 110474624,
+    "sha256": "074f70686c903e47d25d5bc1c72d160d9614fa1420af977e8354ea1cad9e62de",
+    "pe_x86_64": true,
+    "embedded_pck_footer": true,
+    "native_windows_run": false
+  },
+  "video": {
+    "file": "DeskBreaker-Office-Expansion.mp4",
+    "bytes": 3665826,
+    "sha256": "387590814b95c6e7beca5b8c5e5114d8d0782a5cc71c935b16cc2c7d450b6143",
+    "video": {
+      "codec_name": "h264",
+      "width": 1280,
+      "height": 720,
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "30/1",
+      "nb_frames": "1330",
+      "duration": "44.333333"
+    },
+    "audio_source": {
+      "channels": 2,
+      "sample_width": 4,
+      "rate": 48000,
+      "frames": 2646400,
+      "duration": 55.13333333333333,
+      "header_valid": true,
+      "repair_needed": false
+    },
+    "encode_exit": 0,
+    "full_decode_exit": 0,
+    "raw_frames": 1654,
+    "replay_passed": true,
+    "guard_tail_refreshed_from_frame": 1116,
+    "kept_ranges_seconds": [
+      [
+        0,
+        41
+      ],
+      [
+        51.8,
+        55.13333333333333
+      ]
+    ],
+    "removed_range_reason": "Repeated guard pushes between the first contacts and final natural subdual; no action or score is staged."
+  },
+  "replay": {
+    "passed": true,
+    "department_employees": 5,
+    "other_employees": 2,
+    "boss_gestures": 3,
+    "actual_guard_contacts": 10,
+    "natural_subdual": true,
+    "final_total": 995000,
+    "breakdown": {
+      "property": 335000,
+      "care": 300000,
+      "work": 260000,
+      "response": 100000
+    },
+    "full_report": "verification/office/full-replay.json",
+    "refreshed_guard_tail": "verification/office/guard-tail-replay.json"
+  },
+  "render_observations": [
+    "Intern, office zones and ordinary work visible; idle total remains zero.",
+    "Accepted coworker startle, boss peek, approach and three lecture gestures remain readable.",
+    "Monitor is picked and thrown through actual camera-ray input and becomes unusable.",
+    "Bystander line and fleeing behavior, guard warning/open palms/contact are visible.",
+    "Entry jamb coplanar seam corrected and guard section re-rendered.",
+    "Four result categories sum to visible total and remain fixed during idle subdual."
+  ],
+  "remaining_limits": [
+    "No native Windows launch, Windows target-PC performance, or PowerShell wrapper execution in this environment.",
+    "Some accelerated headless runs logged audio-object shutdown warnings; final embedded-pack smoke and actual rendered replays exited without object-leak warnings.",
+    "Procedural caricature art remains an initial pass; no authored final Blender model, voice acting, articulated ragdoll, separate fragment physics or infinite responder waves."
+  ],
+  "source_game_files_sha256": {
+    "game/assets/fonts/KoreanUI.ttf": "76f45ef4a6bcff344c837c95a7dcc26e017e38b5846d5ae0cdcb5b86be2e2d31",
+    "game/assets/fonts/KoreanUI.ttf.import": "c70c80c8417ccba9e7de9bc925a580291ff43d89a654f2b29f043da12eee7a14",
+    "game/assets/fonts/OFL.txt": "eeacf16032901d0ed0456876ec77b8f0fda6b3fecec7d972f8543eb602e6c30f",
+    "game/assets/icon.svg": "11d5c67419ca804e6326e32c24d608677d7d228fb03504dd9929afdf3d866012",
+    "game/assets/icon.svg.import": "0fcf612833458e015d28f4ba86b3a6a0749ac45e70e561cd416f01fb4b77c1e2",
+    "game/export_presets.cfg": "a7a1ef2ef901ec5f9a2676b068444cc4378a695ee733f8603b58edb9867d230a",
+    "game/project.godot": "7399eb9c5cd3cbdf4cd22f7c4ecdf03986b99c62becd410b2c31157579290a2f",
+    "game/scenes/main.tscn": "a86ad1492d44f7ce9d19db0f4170fbc3db35140108bc58b6da61dd4591c6abb3",
+    "game/scripts/audio.gd": "d640ac053f9077d1b5fee5c93d565d94f5d74eed8bd515d45a5b26748555c847",
+    "game/scripts/audio.gd.uid": "068a4a2a63c99371397f443a11ddf57ec7771195ae601052109cc3184767e1d7",
+    "game/scripts/hand_model.gd": "16ae98b024322d0cba92aed77c702f3102a1ae334816cc5869a811bca4c080d3",
+    "game/scripts/hand_model.gd.uid": "fcc4e08044f4abd4e7b174384ceda4f2d4d2783cf3d3789ffdd1940199b477f8",
+    "game/scripts/main.gd": "d0119b79200ffeb9aadfbf80ef27d2bb6ed877d5df0deb656dd4b9987ed080ed",
+    "game/scripts/main.gd.uid": "ab459ac64cd3b0939c7f985501a5526a301d1b6f801d0273309e0d1dace59303",
+    "game/scripts/office_capture.gd": "b4749617ca0c25eb745c657a94d541e7b8bd01078db0cc5f9d11e4528f72edf9",
+    "game/scripts/office_capture.gd.uid": "a4a3ae086dd76075e884088d240d462e2ebaac24abf9be462dd0743059722081",
+    "game/scripts/office_npc.gd": "26e5153ae72d62c9f86cec0ec73dc6d5283d12b5c15eda3a6ed61b7aa8fb6556",
+    "game/scripts/office_npc.gd.uid": "4d30851a48d037d357e97887e3b47c1bc5fa5e83ad4ecd048175f53bbe2592f5",
+    "game/scripts/player.gd": "58ecfaff58a9a0119b5eb28fcb2bcec31185ca84d5189aaeb7e581f2ac9a83a1",
+    "game/scripts/player.gd.uid": "a4a643239b7ed46fb04e747be3875fca19aae4f5bfeaaa9ace3fb0c0cf9f349b",
+    "game/scripts/prop.gd": "8e110409ae0ce81428511e5084e88f2a42806a6154e08d68db569ab97c85f764",
+    "game/scripts/prop.gd.uid": "71b071faca631e346d626914cf2510c91f2e71181d3255d22698177787265033",
+    "game/scripts/social_damage.gd": "f03fd6cc6dcbbb59714205f771b89daba64a0dab83fa9eca72b298e88a889835",
+    "game/scripts/social_damage.gd.uid": "737429ad74822fd03d385f29ff81b3603a0202b9a77a88546308ca748a719a23",
+    "game/scripts/world.gd": "48f68db3de033aef86c5d31c6c928399b5719de6cd046aa571459f56c95f960e",
+    "game/scripts/world.gd.uid": "c39a61571caa55fd6da7e4b36093f8630de8350c5e0f74d0c2364a2750c6020d"
+  }
+}

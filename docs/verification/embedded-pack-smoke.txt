@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+DESK_BREAKER_SMOKE_OK: props, reach, score deduplication, grab state, responders, subdual, reset

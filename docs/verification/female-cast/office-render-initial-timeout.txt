@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:372)
+OpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)
+
+FEMALE_CAST_RENDER /workspace/scratch/b949ace32258/female-cast-patch/in-game/01-intern-working.png
+FEMALE_CAST_RENDER /workspace/scratch/b949ace32258/female-cast-patch/in-game/02-junior-working.png
+Display runner failed: Command '['/workspace/scratch/b949ace32258/runtime/godot-4.7.2/Godot_v4.7.2-stable_linux.x86_64', '--fixed-fps', '60', '--path', '/workspace/scratch/b949ace32258/desk-breaker/game', '--audio-driver', 'Dummy', '--script', '/workspace/scratch/b949ace32258/desk-breaker/tools/capture_female_cast.gd', '--', '--capture-ui', '--capture-dir', '/workspace/scratch/b949ace32258/female-cast-patch/in-game']' timed out after 89.9999795390031 seconds

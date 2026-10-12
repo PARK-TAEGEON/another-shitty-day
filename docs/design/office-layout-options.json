@@ -1,0 +1,2333 @@
+{
+  "schema_version": 1,
+  "status": "layout_comparison_review",
+  "units": "metres",
+  "coordinate_system": {
+    "origin": "north-west interior corner",
+    "x": "right/east",
+    "y": "down/south",
+    "heading_deg": "0=east,90=south,-90=north",
+    "room_dimensions": "inside clear envelope; internal walls consume space",
+    "furniture_rect": "[left,top,width,depth]",
+    "routes": "centerline polylines; neither teleportation nor paths through walls"
+  },
+  "source": {
+    "repo_version": "v0.2.0",
+    "game_file": "game/scripts/world.gd",
+    "current_interior_m": [
+      16,
+      18
+    ],
+    "current_area_m2": 288,
+    "observations": [
+      "현재 전용 업무용 책상은 플레이어·박·이·정의 4개이며 김 팀장·최 과장 전용 책상이 없다.",
+      "넓은 한 방의 가장자리와 낮은 가림막에 기능이 흩어져 방·출입·복도의 관계가 약하다.",
+      "안은 모두 6개 업무석과 7명 직원을 같은 14×12m 범위에 맞춘 제안이며 게임 코드는 변경하지 않았다."
+    ]
+  },
+  "shared_constraints": {
+    "interior_size_m": [
+      14,
+      12
+    ],
+    "department_staff_excluding_player": 5,
+    "other_staff": 2,
+    "work_desks_including_player": 6,
+    "entry_width_m": 1.8,
+    "low_divider_height_m": 1.1,
+    "opening_divider_height_m": 1.54,
+    "glass_wall_height_m": 2.7,
+    "note": "게임 배치안의 제안 치수이며 법규·피난 인증이 아니다. 통로 폭은 고정 가구/벽 기준; 이동 NPC·물리 집기로 달라질 수 있다.",
+    "accepted_opening": "Existing player, park, boss and divider relative horizontal positions are translated as one group. A desk is newly assigned behind the boss. Final in-engine camera/peeking/walking still require validation."
+  },
+  "recommended": "B",
+  "layouts": [
+    {
+      "id": "A",
+      "title": "부서 중심 열린 사무실",
+      "subtitle": "가까운 여섯 자리에서 소동이 한꺼번에 번진다.",
+      "room": {
+        "width_m": 14.0,
+        "depth_m": 12.0,
+        "area_m2": 168.0
+      },
+      "entry_corridor": {
+        "rect": [
+          7.8,
+          12,
+          1.8,
+          1.4
+        ]
+      },
+      "zones": [
+        {
+          "id": "work",
+          "label": "운영지원팀",
+          "rect": [
+            0.2,
+            0.2,
+            9.3,
+            8.4
+          ],
+          "label_position": [
+            5.5,
+            7.8
+          ],
+          "type": "work"
+        },
+        {
+          "id": "meeting",
+          "label": "열린 회의 코너",
+          "rect": [
+            9.8,
+            0.2,
+            4,
+            5.4
+          ],
+          "label_position": [
+            11.85,
+            1.0
+          ],
+          "type": "meeting"
+        },
+        {
+          "id": "copy",
+          "label": "복사 · 서류",
+          "rect": [
+            9.8,
+            6.1,
+            4,
+            5.7
+          ],
+          "label_position": [
+            11.8,
+            6.5
+          ],
+          "type": "copy"
+        },
+        {
+          "id": "lounge",
+          "label": "휴게 코너",
+          "rect": [
+            0.2,
+            9,
+            7.3,
+            2.8
+          ],
+          "label_position": [
+            3.5,
+            9.25
+          ],
+          "type": "lounge"
+        }
+      ],
+      "furniture": [
+        {
+          "id": "player_desk",
+          "type": "desk",
+          "label": "내 자리",
+          "rect": [
+            3.55,
+            4.15,
+            2.9,
+            1.3
+          ],
+          "height_m": 1.05,
+          "owner_id": "player"
+        },
+        {
+          "id": "boss_desk",
+          "type": "desk",
+          "label": "김 팀장",
+          "rect": [
+            3.45,
+            1.8,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "boss"
+        },
+        {
+          "id": "park_desk",
+          "type": "desk",
+          "label": "박 대리",
+          "rect": [
+            7.125,
+            2.7,
+            1.85,
+            1.3
+          ],
+          "height_m": 1.05,
+          "owner_id": "park"
+        },
+        {
+          "id": "intern_desk",
+          "type": "desk",
+          "label": "정 인턴",
+          "rect": [
+            0.5,
+            1.4,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "intern"
+        },
+        {
+          "id": "lee_desk",
+          "type": "desk",
+          "label": "이 사원",
+          "rect": [
+            0.5,
+            3.8,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "lee"
+        },
+        {
+          "id": "choi_desk",
+          "type": "desk",
+          "label": "최 과장",
+          "rect": [
+            0.5,
+            6.3,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "choi"
+        },
+        {
+          "id": "meeting_table",
+          "type": "table",
+          "label": "회의 테이블",
+          "rect": [
+            10.6,
+            1.95,
+            2.5,
+            1.4
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "print_counter",
+          "type": "counter",
+          "label": "프린터 · 문서",
+          "rect": [
+            10.5,
+            7.025,
+            2.7,
+            0.75
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "sofa",
+          "type": "sofa",
+          "label": "소파",
+          "rect": [
+            1.65,
+            10.775,
+            3.0,
+            0.85
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "coffee_table",
+          "type": "table",
+          "label": "휴게 테이블",
+          "rect": [
+            2.3,
+            9.675,
+            1.7,
+            0.65
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "coffee",
+          "type": "counter",
+          "label": "커피",
+          "rect": [
+            5.4,
+            10.875,
+            1.8,
+            0.65
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "copy_storage",
+          "type": "cabinet",
+          "label": "서류장",
+          "rect": [
+            10.85,
+            10.225,
+            2.8,
+            0.55
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "work_storage",
+          "type": "cabinet",
+          "label": "공용 수납",
+          "rect": [
+            4.4,
+            0.225,
+            3.5,
+            0.55
+          ],
+          "height_m": 0.76
+        }
+      ],
+      "actors": [
+        {
+          "id": "player",
+          "label": "플레이어",
+          "short": "나",
+          "position": [
+            5.0,
+            5.95
+          ],
+          "affiliation": "player",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "player_desk"
+        },
+        {
+          "id": "boss",
+          "label": "김 팀장",
+          "short": "김",
+          "position": [
+            4.35,
+            3.15
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "boss_desk"
+        },
+        {
+          "id": "park",
+          "label": "박 대리",
+          "short": "박",
+          "position": [
+            6.78,
+            4.25
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "park_desk"
+        },
+        {
+          "id": "intern",
+          "label": "정 인턴",
+          "short": "정",
+          "position": [
+            1.4,
+            2.75
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "intern_desk"
+        },
+        {
+          "id": "lee",
+          "label": "이 사원",
+          "short": "이",
+          "position": [
+            1.4,
+            5.15
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "lee_desk"
+        },
+        {
+          "id": "choi",
+          "label": "최 과장",
+          "short": "최",
+          "position": [
+            1.4,
+            7.65
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "choi_desk"
+        },
+        {
+          "id": "other_meeting",
+          "label": "타 부서 · 구경",
+          "short": "타2",
+          "position": [
+            11.85,
+            4.1
+          ],
+          "affiliation": "other",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        },
+        {
+          "id": "other_copy",
+          "label": "타 부서 · 겁먹음",
+          "short": "타1",
+          "position": [
+            11.85,
+            8.7
+          ],
+          "affiliation": "other",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        },
+        {
+          "id": "guard",
+          "label": "회사 경비",
+          "short": "경",
+          "position": [
+            8.7,
+            13.0
+          ],
+          "affiliation": "security",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        }
+      ],
+      "walls": [
+        {
+          "id": "north",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            14,
+            0
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "west",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "east",
+          "start": [
+            14,
+            0
+          ],
+          "end": [
+            14,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "south_w",
+          "start": [
+            0,
+            12
+          ],
+          "end": [
+            7.8,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "south_e",
+          "start": [
+            9.6,
+            12
+          ],
+          "end": [
+            14,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "corridor_w",
+          "start": [
+            7.8,
+            12
+          ],
+          "end": [
+            7.8,
+            13.4
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "corridor_e",
+          "start": [
+            9.6,
+            12
+          ],
+          "end": [
+            9.6,
+            13.4
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "opening_divider",
+          "start": [
+            3.5,
+            3.84
+          ],
+          "end": [
+            6.2,
+            3.84
+          ],
+          "type": "divider",
+          "height_m": 1.54,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "meeting_screen",
+          "start": [
+            9.7,
+            0.4
+          ],
+          "end": [
+            9.7,
+            4.35
+          ],
+          "type": "low",
+          "height_m": 1.1,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "copy_screen",
+          "start": [
+            9.7,
+            6.15
+          ],
+          "end": [
+            9.7,
+            10.0
+          ],
+          "type": "low",
+          "height_m": 1.1,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "lounge_screen",
+          "start": [
+            0.4,
+            8.8
+          ],
+          "end": [
+            5.4,
+            8.8
+          ],
+          "type": "low",
+          "height_m": 1.1,
+          "thickness_m": 0.12
+        }
+      ],
+      "doors": [
+        {
+          "id": "entry",
+          "start": [
+            7.8,
+            12
+          ],
+          "end": [
+            9.6,
+            12
+          ],
+          "width_m": 1.8,
+          "label": "층 입구"
+        },
+        {
+          "id": "meeting_open",
+          "start": [
+            9.7,
+            4.35
+          ],
+          "end": [
+            9.7,
+            6.15
+          ],
+          "width_m": 1.8,
+          "label": "열린 통로"
+        },
+        {
+          "id": "copy_open",
+          "start": [
+            9.7,
+            10
+          ],
+          "end": [
+            9.7,
+            12
+          ],
+          "width_m": 2.0,
+          "label": "열린 통로"
+        }
+      ],
+      "routes": [
+        {
+          "id": "boss",
+          "label": "상사 접근",
+          "points": [
+            [
+              4.35,
+              3.15
+            ],
+            [
+              2.9,
+              3.5
+            ],
+            [
+              2.9,
+              5.6
+            ],
+            [
+              3.07,
+              5.81
+            ]
+          ],
+          "color": "#DC6B35",
+          "radius_m": 0.34
+        },
+        {
+          "id": "guard",
+          "label": "경비 진입",
+          "points": [
+            [
+              8.7,
+              13.0
+            ],
+            [
+              8.7,
+              7.5
+            ],
+            [
+              5.0,
+              7.5
+            ],
+            [
+              5.0,
+              7.2
+            ]
+          ],
+          "color": "#3678B6",
+          "radius_m": 0.34
+        }
+      ],
+      "circulation": [
+        {
+          "points": [
+            [
+              8.65,
+              11.6
+            ],
+            [
+              8.65,
+              6.55
+            ],
+            [
+              5.6,
+              6.55
+            ]
+          ],
+          "width_m": 1.8
+        }
+      ],
+      "opening": {
+        "anchor": [
+          5.0,
+          5.3
+        ],
+        "player_id": "player",
+        "coworker_id": "park",
+        "boss_id": "boss",
+        "divider_id": "opening_divider",
+        "facing_deg": -90,
+        "illustrative_horizontal_fov_deg": 110,
+        "radius_m": 3.6,
+        "description": "나·박 대리·상사·가림막은 기존 상대 위치를 평행 이동. 상사 업무석만 뒤에 추가."
+      },
+      "notes": [
+        "내 부서가 한 덩어리로 보임",
+        "가까운 동료들이 먼저 반응",
+        "짧은 이동으로 공용 집기에 닿음"
+      ],
+      "tradeoff": "실별 구분과 숨 돌릴 구간은 약하다.",
+      "recommended": false,
+      "clearances": {
+        "main_aisle_m": 2.0,
+        "secondary_aisle_m": 1.2,
+        "entry_m": 1.8,
+        "note": "가구 사이 의도한 주통로 약 2.0m. 작은 책상 틈은 이동 통로로 보지 않음."
+      },
+      "metrics": {
+        "boss_route_length_m": 3.86,
+        "guard_route_length_m": 9.5,
+        "staff_desks": 6,
+        "department_staff": 5,
+        "other_staff": 2
+      },
+      "status": "proposal_not_implemented",
+      "validation": {
+        "method": "2D fixed-footprint route sampling at <= 0.01m, 0.34m actor radius",
+        "scope": "Schematic geometry only; in-engine camera, animation and dynamic collision validation pending",
+        "counts": {
+          "desks": 6,
+          "department": 5,
+          "other_department": 2
+        },
+        "routes": [
+          {
+            "route": "boss",
+            "actor_radius_m": 0.34,
+            "minimum_fixed_geometry_clearance_m": 0.411,
+            "minimum_body_edge_clearance_m": 0.071,
+            "nearest_object": "opening_divider",
+            "passes": true
+          },
+          {
+            "route": "guard",
+            "actor_radius_m": 0.34,
+            "minimum_fixed_geometry_clearance_m": 0.84,
+            "minimum_body_edge_clearance_m": 0.5,
+            "nearest_object": "corridor_w",
+            "passes": true
+          }
+        ],
+        "issues": [],
+        "passes": true
+      }
+    },
+    {
+      "id": "B",
+      "title": "중앙 복도와 실별 구성",
+      "subtitle": "부서 → 복도 → 공용실 순서로 사건이 퍼진다.",
+      "room": {
+        "width_m": 14.0,
+        "depth_m": 12.0,
+        "area_m2": 168.0
+      },
+      "entry_corridor": {
+        "rect": [
+          7.8,
+          12,
+          1.8,
+          1.4
+        ]
+      },
+      "zones": [
+        {
+          "id": "work",
+          "label": "운영지원팀",
+          "rect": [
+            0.1,
+            0.1,
+            7.55,
+            7.58
+          ],
+          "label_position": [
+            3.85,
+            7.12
+          ],
+          "type": "work"
+        },
+        {
+          "id": "hall",
+          "label": "중앙 복도",
+          "rect": [
+            7.8,
+            0.1,
+            1.8,
+            11.8
+          ],
+          "label_position": [
+            8.7,
+            1.3
+          ],
+          "type": "hall"
+        },
+        {
+          "id": "meeting",
+          "label": "회의실",
+          "rect": [
+            9.75,
+            0.1,
+            4.15,
+            5.8
+          ],
+          "label_position": [
+            11.85,
+            0.85
+          ],
+          "type": "meeting"
+        },
+        {
+          "id": "copy",
+          "label": "복사 · 서류실",
+          "rect": [
+            9.75,
+            6.1,
+            4.15,
+            5.8
+          ],
+          "label_position": [
+            11.85,
+            6.6
+          ],
+          "type": "copy"
+        },
+        {
+          "id": "lounge",
+          "label": "휴게실",
+          "rect": [
+            0.1,
+            7.9,
+            7.55,
+            4.0
+          ],
+          "label_position": [
+            3.85,
+            8.55
+          ],
+          "type": "lounge"
+        }
+      ],
+      "furniture": [
+        {
+          "id": "player_desk",
+          "type": "desk",
+          "label": "내 자리",
+          "rect": [
+            1.75,
+            4.35,
+            2.9,
+            1.3
+          ],
+          "height_m": 1.05,
+          "owner_id": "player"
+        },
+        {
+          "id": "boss_desk",
+          "type": "desk",
+          "label": "김 팀장",
+          "rect": [
+            1.65,
+            2.0,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "boss"
+        },
+        {
+          "id": "park_desk",
+          "type": "desk",
+          "label": "박 대리",
+          "rect": [
+            5.325,
+            2.9,
+            1.85,
+            1.3
+          ],
+          "height_m": 1.05,
+          "owner_id": "park"
+        },
+        {
+          "id": "intern_desk",
+          "type": "desk",
+          "label": "정 인턴",
+          "rect": [
+            0.25,
+            0.5,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "intern"
+        },
+        {
+          "id": "lee_desk",
+          "type": "desk",
+          "label": "이 사원",
+          "rect": [
+            3.75,
+            0.45,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "lee"
+        },
+        {
+          "id": "choi_desk",
+          "type": "desk",
+          "label": "최 과장",
+          "rect": [
+            5.7,
+            0.45,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "choi"
+        },
+        {
+          "id": "meeting_table",
+          "type": "table",
+          "label": "회의 테이블",
+          "rect": [
+            10.625,
+            1.8,
+            2.45,
+            1.6
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "print_counter",
+          "type": "counter",
+          "label": "프린터 · 문서",
+          "rect": [
+            10.5,
+            7.075,
+            2.7,
+            0.75
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "sofa",
+          "type": "sofa",
+          "label": "소파",
+          "rect": [
+            1.85,
+            10.725,
+            3.1,
+            0.85
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "coffee_table",
+          "type": "table",
+          "label": "휴게 테이블",
+          "rect": [
+            2.5,
+            9.55,
+            1.8,
+            0.7
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "coffee",
+          "type": "counter",
+          "label": "커피",
+          "rect": [
+            0.45,
+            8.175,
+            2.5,
+            0.65
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "copy_storage",
+          "type": "cabinet",
+          "label": "문서 보관",
+          "rect": [
+            12.975,
+            8.85,
+            0.65,
+            2.8
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "copy_workbench",
+          "type": "table",
+          "label": "자료 정리",
+          "rect": [
+            10.35,
+            10.25,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76
+        }
+      ],
+      "actors": [
+        {
+          "id": "player",
+          "label": "플레이어",
+          "short": "나",
+          "position": [
+            3.2,
+            6.15
+          ],
+          "affiliation": "player",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "player_desk"
+        },
+        {
+          "id": "boss",
+          "label": "김 팀장",
+          "short": "김",
+          "position": [
+            2.55,
+            3.35
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "boss_desk"
+        },
+        {
+          "id": "park",
+          "label": "박 대리",
+          "short": "박",
+          "position": [
+            4.98,
+            4.45
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "park_desk"
+        },
+        {
+          "id": "intern",
+          "label": "정 인턴",
+          "short": "정",
+          "position": [
+            1.15,
+            1.85
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "intern_desk"
+        },
+        {
+          "id": "lee",
+          "label": "이 사원",
+          "short": "이",
+          "position": [
+            4.65,
+            1.8
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "lee_desk"
+        },
+        {
+          "id": "choi",
+          "label": "최 과장",
+          "short": "최",
+          "position": [
+            6.6,
+            1.8
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "choi_desk"
+        },
+        {
+          "id": "other_meeting",
+          "label": "타 부서 · 구경",
+          "short": "타2",
+          "position": [
+            11.85,
+            4.25
+          ],
+          "affiliation": "other",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        },
+        {
+          "id": "other_copy",
+          "label": "타 부서 · 겁먹음",
+          "short": "타1",
+          "position": [
+            11.35,
+            8.8
+          ],
+          "affiliation": "other",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        },
+        {
+          "id": "guard",
+          "label": "회사 경비",
+          "short": "경",
+          "position": [
+            8.7,
+            13.0
+          ],
+          "affiliation": "security",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        }
+      ],
+      "walls": [
+        {
+          "id": "north",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            14,
+            0
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "west",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "east",
+          "start": [
+            14,
+            0
+          ],
+          "end": [
+            14,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "south_w",
+          "start": [
+            0,
+            12
+          ],
+          "end": [
+            7.8,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "south_e",
+          "start": [
+            9.6,
+            12
+          ],
+          "end": [
+            14,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "corridor_w",
+          "start": [
+            7.8,
+            12
+          ],
+          "end": [
+            7.8,
+            13.4
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "corridor_e",
+          "start": [
+            9.6,
+            12
+          ],
+          "end": [
+            9.6,
+            13.4
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "opening_divider",
+          "start": [
+            1.7,
+            4.04
+          ],
+          "end": [
+            4.4,
+            4.04
+          ],
+          "type": "divider",
+          "height_m": 1.54,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "work_w1",
+          "start": [
+            7.74,
+            0
+          ],
+          "end": [
+            7.74,
+            5.4
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "work_w2",
+          "start": [
+            7.74,
+            7.0
+          ],
+          "end": [
+            7.74,
+            9.2
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "lounge_w",
+          "start": [
+            7.74,
+            10.8
+          ],
+          "end": [
+            7.74,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "lounge_top",
+          "start": [
+            0,
+            7.8
+          ],
+          "end": [
+            7.74,
+            7.8
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "meeting_glass1",
+          "start": [
+            9.66,
+            0
+          ],
+          "end": [
+            9.66,
+            3.4
+          ],
+          "type": "glass",
+          "height_m": 2.7,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "meeting_glass2",
+          "start": [
+            9.66,
+            5.0
+          ],
+          "end": [
+            9.66,
+            6.0
+          ],
+          "type": "glass",
+          "height_m": 2.7,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "copy_w1",
+          "start": [
+            9.66,
+            6.0
+          ],
+          "end": [
+            9.66,
+            8.3
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "copy_w2",
+          "start": [
+            9.66,
+            9.9
+          ],
+          "end": [
+            9.66,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "right_cross",
+          "start": [
+            9.66,
+            6
+          ],
+          "end": [
+            14,
+            6
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "back_bench",
+          "start": [
+            3.72,
+            0.32
+          ],
+          "end": [
+            7.5,
+            0.32
+          ],
+          "type": "low",
+          "height_m": 1.1,
+          "thickness_m": 0.12
+        }
+      ],
+      "doors": [
+        {
+          "id": "entry",
+          "start": [
+            7.8,
+            12
+          ],
+          "end": [
+            9.6,
+            12
+          ],
+          "width_m": 1.8,
+          "label": "층 입구"
+        },
+        {
+          "id": "work_door",
+          "start": [
+            7.74,
+            5.4
+          ],
+          "end": [
+            7.74,
+            7.0
+          ],
+          "width_m": 1.6,
+          "label": "부서 출입"
+        },
+        {
+          "id": "lounge_door",
+          "start": [
+            7.74,
+            9.2
+          ],
+          "end": [
+            7.74,
+            10.8
+          ],
+          "width_m": 1.6,
+          "label": "휴게실"
+        },
+        {
+          "id": "meeting_door",
+          "start": [
+            9.66,
+            3.4
+          ],
+          "end": [
+            9.66,
+            5.0
+          ],
+          "width_m": 1.6,
+          "label": "회의실"
+        },
+        {
+          "id": "copy_door",
+          "start": [
+            9.66,
+            8.3
+          ],
+          "end": [
+            9.66,
+            9.9
+          ],
+          "width_m": 1.6,
+          "label": "서류실"
+        }
+      ],
+      "routes": [
+        {
+          "id": "boss",
+          "label": "상사 접근",
+          "points": [
+            [
+              2.55,
+              3.35
+            ],
+            [
+              1.1,
+              3.7
+            ],
+            [
+              1.1,
+              5.8
+            ],
+            [
+              1.27,
+              6.01
+            ]
+          ],
+          "color": "#DC6B35",
+          "radius_m": 0.34
+        },
+        {
+          "id": "guard",
+          "label": "경비 진입",
+          "points": [
+            [
+              8.7,
+              13.0
+            ],
+            [
+              8.7,
+              6.3
+            ],
+            [
+              6.65,
+              6.3
+            ],
+            [
+              5.6,
+              6.95
+            ],
+            [
+              3.2,
+              6.95
+            ]
+          ],
+          "color": "#3678B6",
+          "radius_m": 0.34
+        }
+      ],
+      "circulation": [
+        {
+          "points": [
+            [
+              8.7,
+              11.75
+            ],
+            [
+              8.7,
+              0.7
+            ]
+          ],
+          "width_m": 1.8
+        },
+        {
+          "points": [
+            [
+              8.7,
+              6.3
+            ],
+            [
+              6.5,
+              6.3
+            ],
+            [
+              5.6,
+              6.95
+            ]
+          ],
+          "width_m": 1.2
+        }
+      ],
+      "opening": {
+        "anchor": [
+          3.2,
+          5.5
+        ],
+        "player_id": "player",
+        "coworker_id": "park",
+        "boss_id": "boss",
+        "divider_id": "opening_divider",
+        "facing_deg": -90,
+        "illustrative_horizontal_fov_deg": 110,
+        "radius_m": 3.6,
+        "description": "나·박 대리·상사·가림막은 기존 상대 위치를 평행 이동. 상사 업무석만 뒤에 추가."
+      },
+      "notes": [
+        "가구가 아닌 방·복도로 구조를 만듦",
+        "부서 문에서 타 부서 반응이 나타남",
+        "경비가 복도를 따라 들어오는 의도 명확"
+      ],
+      "tradeoff": "방 입구에서 동선이 겹치지 않게 관리해야 한다.",
+      "recommended": true,
+      "clearances": {
+        "main_aisle_m": 1.8,
+        "secondary_aisle_m": 1.2,
+        "entry_m": 1.8,
+        "room_doors_m": 1.6,
+        "note": "중앙 복도는 벽 마감면 사이 1.8m. 실 출입구는 1.6m의 실제 틈."
+      },
+      "metrics": {
+        "boss_route_length_m": 3.86,
+        "guard_route_length_m": 12.38,
+        "staff_desks": 6,
+        "department_staff": 5,
+        "other_staff": 2
+      },
+      "status": "proposal_not_implemented",
+      "validation": {
+        "method": "2D fixed-footprint route sampling at <= 0.01m, 0.34m actor radius",
+        "scope": "Schematic geometry only; in-engine camera, animation and dynamic collision validation pending",
+        "counts": {
+          "desks": 6,
+          "department": 5,
+          "other_department": 2
+        },
+        "routes": [
+          {
+            "route": "boss",
+            "actor_radius_m": 0.34,
+            "minimum_fixed_geometry_clearance_m": 0.411,
+            "minimum_body_edge_clearance_m": 0.071,
+            "nearest_object": "opening_divider",
+            "passes": true
+          },
+          {
+            "route": "guard",
+            "actor_radius_m": 0.34,
+            "minimum_fixed_geometry_clearance_m": 0.64,
+            "minimum_body_edge_clearance_m": 0.3,
+            "nearest_object": "work_w2",
+            "passes": true
+          }
+        ],
+        "issues": [],
+        "passes": true
+      }
+    },
+    {
+      "id": "C",
+      "title": "유리 회의실을 도는 순환형",
+      "subtitle": "보이는 소동을 따라 양쪽으로 돌아 들어간다.",
+      "room": {
+        "width_m": 14.0,
+        "depth_m": 12.0,
+        "area_m2": 168.0
+      },
+      "entry_corridor": {
+        "rect": [
+          7.8,
+          12,
+          1.8,
+          1.4
+        ]
+      },
+      "zones": [
+        {
+          "id": "work",
+          "label": "운영지원팀",
+          "rect": [
+            0.2,
+            0.2,
+            5.8,
+            9.25
+          ],
+          "label_position": [
+            2.8,
+            6.55
+          ],
+          "type": "work"
+        },
+        {
+          "id": "work_north",
+          "label": "운영지원팀 · 보조석",
+          "rect": [
+            8.1,
+            0.2,
+            5.7,
+            2.65
+          ],
+          "label_position": [
+            10.95,
+            2.72
+          ],
+          "type": "work"
+        },
+        {
+          "id": "meeting",
+          "label": "유리 회의실",
+          "rect": [
+            6.36,
+            4.76,
+            4.28,
+            4.18
+          ],
+          "label_position": [
+            8.5,
+            5.3
+          ],
+          "type": "meeting"
+        },
+        {
+          "id": "copy",
+          "label": "복사 · 서류",
+          "rect": [
+            12.6,
+            4.0,
+            1.2,
+            5.2
+          ],
+          "label_position": [
+            13.15,
+            4.4
+          ],
+          "type": "copy"
+        },
+        {
+          "id": "lounge",
+          "label": "휴게 코너",
+          "rect": [
+            0.2,
+            10.0,
+            5.0,
+            1.8
+          ],
+          "label_position": [
+            2.5,
+            10.32
+          ],
+          "type": "lounge"
+        }
+      ],
+      "furniture": [
+        {
+          "id": "player_desk",
+          "type": "desk",
+          "label": "내 자리",
+          "rect": [
+            1.7,
+            2.95,
+            2.9,
+            1.3
+          ],
+          "height_m": 1.05,
+          "owner_id": "player"
+        },
+        {
+          "id": "boss_desk",
+          "type": "desk",
+          "label": "김 팀장",
+          "rect": [
+            1.6,
+            0.6,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "boss"
+        },
+        {
+          "id": "park_desk",
+          "type": "desk",
+          "label": "박 대리",
+          "rect": [
+            5.275,
+            1.5,
+            1.85,
+            1.3
+          ],
+          "height_m": 1.05,
+          "owner_id": "park"
+        },
+        {
+          "id": "intern_desk",
+          "type": "desk",
+          "label": "정 인턴",
+          "rect": [
+            8.6,
+            0.75,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "intern"
+        },
+        {
+          "id": "lee_desk",
+          "type": "desk",
+          "label": "이 사원",
+          "rect": [
+            11.3,
+            0.75,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "lee"
+        },
+        {
+          "id": "choi_desk",
+          "type": "desk",
+          "label": "최 과장",
+          "rect": [
+            1.9,
+            7.4,
+            1.8,
+            0.8
+          ],
+          "height_m": 0.76,
+          "owner_id": "choi"
+        },
+        {
+          "id": "meeting_table",
+          "type": "table",
+          "label": "회의 테이블",
+          "rect": [
+            7.4,
+            6.075,
+            2.2,
+            1.55
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "print_counter",
+          "type": "counter",
+          "label": "프린터",
+          "rect": [
+            12.895,
+            5.15,
+            0.75,
+            2.9
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "copy_storage",
+          "type": "cabinet",
+          "label": "서류장",
+          "rect": [
+            12.895,
+            8.3,
+            0.75,
+            1.0
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "coffee",
+          "type": "counter",
+          "label": "커피",
+          "rect": [
+            0.5,
+            10.925,
+            2.0,
+            0.65
+          ],
+          "height_m": 0.76
+        },
+        {
+          "id": "sofa",
+          "type": "sofa",
+          "label": "소파",
+          "rect": [
+            3.1,
+            10.725,
+            1.8,
+            0.85
+          ],
+          "height_m": 0.76
+        }
+      ],
+      "actors": [
+        {
+          "id": "player",
+          "label": "플레이어",
+          "short": "나",
+          "position": [
+            3.15,
+            4.75
+          ],
+          "affiliation": "player",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "player_desk"
+        },
+        {
+          "id": "boss",
+          "label": "김 팀장",
+          "short": "김",
+          "position": [
+            2.5,
+            1.95
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "boss_desk"
+        },
+        {
+          "id": "park",
+          "label": "박 대리",
+          "short": "박",
+          "position": [
+            4.93,
+            3.05
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "park_desk"
+        },
+        {
+          "id": "intern",
+          "label": "정 인턴",
+          "short": "정",
+          "position": [
+            9.5,
+            2.1
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "intern_desk"
+        },
+        {
+          "id": "lee",
+          "label": "이 사원",
+          "short": "이",
+          "position": [
+            12.2,
+            2.1
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "lee_desk"
+        },
+        {
+          "id": "choi",
+          "label": "최 과장",
+          "short": "최",
+          "position": [
+            2.8,
+            8.75
+          ],
+          "affiliation": "department",
+          "radius_m": 0.28,
+          "facing_deg": -90,
+          "desk_id": "choi_desk"
+        },
+        {
+          "id": "other_meeting",
+          "label": "타 부서 · 구경",
+          "short": "타2",
+          "position": [
+            8.5,
+            8.38
+          ],
+          "affiliation": "other",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        },
+        {
+          "id": "other_copy",
+          "label": "타 부서 · 겁먹음",
+          "short": "타1",
+          "position": [
+            12.15,
+            7.2
+          ],
+          "affiliation": "other",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        },
+        {
+          "id": "guard",
+          "label": "회사 경비",
+          "short": "경",
+          "position": [
+            8.7,
+            13.0
+          ],
+          "affiliation": "security",
+          "radius_m": 0.28,
+          "facing_deg": -90
+        }
+      ],
+      "walls": [
+        {
+          "id": "north",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            14,
+            0
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "west",
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "east",
+          "start": [
+            14,
+            0
+          ],
+          "end": [
+            14,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "south_w",
+          "start": [
+            0,
+            12
+          ],
+          "end": [
+            7.8,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "south_e",
+          "start": [
+            9.6,
+            12
+          ],
+          "end": [
+            14,
+            12
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "corridor_w",
+          "start": [
+            7.8,
+            12
+          ],
+          "end": [
+            7.8,
+            13.4
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "corridor_e",
+          "start": [
+            9.6,
+            12
+          ],
+          "end": [
+            9.6,
+            13.4
+          ],
+          "type": "wall",
+          "height_m": 2.8,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "opening_divider",
+          "start": [
+            1.65,
+            2.64
+          ],
+          "end": [
+            4.35,
+            2.64
+          ],
+          "type": "divider",
+          "height_m": 1.54,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "glass_top",
+          "start": [
+            6.3,
+            4.7
+          ],
+          "end": [
+            10.7,
+            4.7
+          ],
+          "type": "glass",
+          "height_m": 2.7,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "glass_bottom",
+          "start": [
+            6.3,
+            9.0
+          ],
+          "end": [
+            10.7,
+            9.0
+          ],
+          "type": "glass",
+          "height_m": 2.7,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "glass_left1",
+          "start": [
+            6.3,
+            4.7
+          ],
+          "end": [
+            6.3,
+            7.4
+          ],
+          "type": "glass",
+          "height_m": 2.7,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "glass_left2",
+          "start": [
+            6.3,
+            8.8
+          ],
+          "end": [
+            6.3,
+            9.0
+          ],
+          "type": "glass",
+          "height_m": 2.7,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "glass_right1",
+          "start": [
+            10.7,
+            4.7
+          ],
+          "end": [
+            10.7,
+            5.0
+          ],
+          "type": "glass",
+          "height_m": 2.7,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "glass_right2",
+          "start": [
+            10.7,
+            6.4
+          ],
+          "end": [
+            10.7,
+            9.0
+          ],
+          "type": "glass",
+          "height_m": 2.7,
+          "thickness_m": 0.12
+        },
+        {
+          "id": "side_bench",
+          "start": [
+            8.6,
+            0.48
+          ],
+          "end": [
+            13.1,
+            0.48
+          ],
+          "type": "low",
+          "height_m": 1.1,
+          "thickness_m": 0.12
+        }
+      ],
+      "doors": [
+        {
+          "id": "entry",
+          "start": [
+            7.8,
+            12
+          ],
+          "end": [
+            9.6,
+            12
+          ],
+          "width_m": 1.8,
+          "label": "층 입구"
+        },
+        {
+          "id": "meeting_west",
+          "start": [
+            6.3,
+            7.4
+          ],
+          "end": [
+            6.3,
+            8.8
+          ],
+          "width_m": 1.4,
+          "label": "회의실"
+        },
+        {
+          "id": "meeting_east",
+          "start": [
+            10.7,
+            5.0
+          ],
+          "end": [
+            10.7,
+            6.4
+          ],
+          "width_m": 1.4,
+          "label": "회의실"
+        }
+      ],
+      "routes": [
+        {
+          "id": "boss",
+          "label": "상사 접근",
+          "points": [
+            [
+              2.5,
+              1.95
+            ],
+            [
+              1.05,
+              2.3
+            ],
+            [
+              1.05,
+              4.4
+            ],
+            [
+              1.22,
+              4.61
+            ]
+          ],
+          "color": "#DC6B35",
+          "radius_m": 0.34
+        },
+        {
+          "id": "guard",
+          "label": "경비 진입",
+          "points": [
+            [
+              8.7,
+              13.0
+            ],
+            [
+              8.7,
+              10.1
+            ],
+            [
+              5.4,
+              10.1
+            ],
+            [
+              5.4,
+              6.2
+            ],
+            [
+              3.15,
+              6.2
+            ]
+          ],
+          "color": "#3678B6",
+          "radius_m": 0.34
+        }
+      ],
+      "circulation": [
+        {
+          "points": [
+            [
+              5.4,
+              3.7
+            ],
+            [
+              11.6,
+              3.7
+            ],
+            [
+              11.6,
+              10.1
+            ],
+            [
+              5.4,
+              10.1
+            ],
+            [
+              5.4,
+              3.7
+            ]
+          ],
+          "width_m": 1.6
+        }
+      ],
+      "opening": {
+        "anchor": [
+          3.15,
+          4.1
+        ],
+        "player_id": "player",
+        "coworker_id": "park",
+        "boss_id": "boss",
+        "divider_id": "opening_divider",
+        "facing_deg": -90,
+        "illustrative_horizontal_fov_deg": 110,
+        "radius_m": 3.6,
+        "description": "나·박 대리·상사·가림막은 기존 상대 위치를 평행 이동. 상사 업무석만 뒤에 추가."
+      },
+      "notes": [
+        "회의실 너머로 반응이 계속 보임",
+        "좌·우 두 방향으로 이동 가능",
+        "구경하던 직원이 뒤늦게 회피하기 좋음"
+      ],
+      "tradeoff": "부서가 나뉘어 보이고 반복 추격이 길어질 수 있다.",
+      "recommended": false,
+      "clearances": {
+        "main_aisle_m": 1.6,
+        "secondary_aisle_m": 1.2,
+        "entry_m": 1.8,
+        "room_doors_m": 1.4,
+        "note": "회의실 둘레에 1.6m 연속 통로, 상단은 약 1.8m. 유리벽은 충돌하며 통과 불가."
+      },
+      "metrics": {
+        "boss_route_length_m": 3.86,
+        "guard_route_length_m": 12.35,
+        "staff_desks": 6,
+        "department_staff": 5,
+        "other_staff": 2
+      },
+      "status": "proposal_not_implemented",
+      "validation": {
+        "method": "2D fixed-footprint route sampling at <= 0.01m, 0.34m actor radius",
+        "scope": "Schematic geometry only; in-engine camera, animation and dynamic collision validation pending",
+        "counts": {
+          "desks": 6,
+          "department": 5,
+          "other_department": 2
+        },
+        "routes": [
+          {
+            "route": "boss",
+            "actor_radius_m": 0.34,
+            "minimum_fixed_geometry_clearance_m": 0.411,
+            "minimum_body_edge_clearance_m": 0.071,
+            "nearest_object": "opening_divider",
+            "passes": true
+          },
+          {
+            "route": "guard",
+            "actor_radius_m": 0.34,
+            "minimum_fixed_geometry_clearance_m": 0.8,
+            "minimum_body_edge_clearance_m": 0.46,
+            "nearest_object": "sofa",
+            "passes": true
+          }
+        ],
+        "issues": [],
+        "passes": true
+      }
+    }
+  ]
+}

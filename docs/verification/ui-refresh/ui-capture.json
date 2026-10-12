@@ -1,0 +1,74 @@
+{
+  "input": "real slam action through Input.parse_input_event",
+  "kind": "actual rendered UI review",
+  "result_screen": "UI fixture via _end_run; not a natural subdual replay",
+  "states": [
+    {
+      "caption": "",
+      "caption_visible": false,
+      "label": "01-main-menu",
+      "menu_visible": true,
+      "phase": 0,
+      "score": 0,
+      "score_text": "$0"
+    },
+    {
+      "caption": "",
+      "caption_visible": false,
+      "label": "02-quiet-hud",
+      "menu_visible": false,
+      "phase": 0,
+      "score": 0,
+      "score_text": "$0"
+    },
+    {
+      "caption": "왜 그래?",
+      "caption_visible": true,
+      "label": "03-slam-with-dialogue",
+      "menu_visible": false,
+      "phase": 1,
+      "score": 40000,
+      "score_text": "$40,000"
+    },
+    {
+      "caption": "뭐야 무슨 소리야?",
+      "caption_visible": true,
+      "label": "04-boss-peek",
+      "menu_visible": false,
+      "phase": 1,
+      "score": 95000,
+      "score_text": "$95,000"
+    },
+    {
+      "caption": "뭐야 무슨 소리야?",
+      "caption_visible": false,
+      "label": "05-settings",
+      "menu_visible": true,
+      "phase": 1,
+      "score": 95000,
+      "score_text": "$95,000"
+    },
+    {
+      "caption": "뭐야 무슨 소리야?",
+      "caption_visible": false,
+      "label": "06-controls",
+      "menu_visible": true,
+      "phase": 1,
+      "score": 95000,
+      "score_text": "$95,000"
+    },
+    {
+      "caption": "뭐야 무슨 소리야?",
+      "caption_visible": false,
+      "label": "07-result-ui-fixture",
+      "menu_visible": true,
+      "phase": 1,
+      "score": 95000,
+      "score_text": "$95,000"
+    }
+  ],
+  "viewport": [
+    1280,
+    720
+  ]
+}

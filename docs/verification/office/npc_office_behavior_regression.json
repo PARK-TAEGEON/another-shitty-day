@@ -1,0 +1,40 @@
+{
+  "bystanders": {
+    "fearful": "flee",
+    "line_count": 2,
+    "spectator_near_threat": "flee",
+    "work_entries": 2
+  },
+  "failures": [],
+  "guard": {
+    "assessments": [
+      {
+        "category": "care",
+        "label": "guard 치료·수습",
+        "total": 300000
+      }
+    ],
+    "validated_hits": [
+      10.0
+    ],
+    "warning_count": 1
+  },
+  "interruption_and_loss": [
+    {
+      "category": "work",
+      "label": "정 인턴 업무 중단",
+      "total": 10000
+    },
+    {
+      "category": "care",
+      "label": "정 인턴 치료·수습",
+      "total": 300000
+    },
+    {
+      "category": "work",
+      "label": "정 인턴 업무 복귀 불가",
+      "total": 200000
+    }
+  ],
+  "passed": true
+}

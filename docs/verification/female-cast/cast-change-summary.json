@@ -1,0 +1,17 @@
+{
+  "npc_sha256": "50c13756b7816a377fae2cfb542f052cb6d022ccea3cfb3699bdb08004df01db",
+  "unchanged_characters": {
+    "김 팀장": {
+      "unchanged_png": true,
+      "sha256": "872148065c3edcd47867f62782d6a8892ed1a1ae58df0c626654592677d79376"
+    },
+    "박 대리": {
+      "unchanged_png": true,
+      "sha256": "36a866ad24379a820d09b0e350283e9b83e2cc79786f194d9f4350a1b76a10aa"
+    },
+    "최 과장": {
+      "unchanged_png": true,
+      "sha256": "a68048eb880b9d39d95f995e2893cfb4ebd060a0492372f571c031eada218fcb"
+    }
+  }
+}

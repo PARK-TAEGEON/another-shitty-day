@@ -1,0 +1,44 @@
+{
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "host": "Linux x86_64",
+  "steps": [
+    {
+      "step": "import",
+      "exit_code": 0,
+      "passed": true,
+      "log": "verification/import.txt"
+    },
+    {
+      "step": "source-smoke",
+      "exit_code": 0,
+      "passed": true,
+      "log": "verification/source-smoke.txt"
+    },
+    {
+      "step": "wall-throw-regression",
+      "exit_code": 0,
+      "passed": true,
+      "log": "verification/wall-throw-regression.txt"
+    },
+    {
+      "step": "windows-export",
+      "exit_code": 0,
+      "passed": true,
+      "log": "verification/windows-export.txt"
+    },
+    {
+      "step": "embedded-pack-smoke",
+      "exit_code": 0,
+      "passed": true,
+      "log": "verification/embedded-pack-smoke.txt"
+    }
+  ],
+  "artifact": {
+    "file": "DeskBreaker.exe",
+    "bytes": 110379720,
+    "sha256": "7a70c41a49642c350f018656b52ea4aaf52f78fef732896c65fed8d4a63b7712",
+    "pe_x86_64": true,
+    "embedded_pck_footer": true,
+    "windows_native_run": false
+  }
+}

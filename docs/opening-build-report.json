@@ -1,0 +1,1080 @@
+{
+  "version": "0.1.3",
+  "date": "2026-10-11",
+  "baseline_commit": "73142b4ff7446d3acef146ac5ce14c860935474f",
+  "previous_version": "0.1.2",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+  "host": "Linux x86_64; OpenGL Compatibility / Mesa llvmpipe actual render",
+  "change": "Post-arrival idle boss lecture: three captioned upper-body gestures, activity-aware interruption, finite resumption, and cancellation. User-accepted boss navigation and gait retained.",
+  "checks": {
+    "import_parse": "pass",
+    "main_smoke": "pass; standard headless command, no warnings",
+    "regressions": {
+      "boss_lecture_regression": "pass",
+      "opening_reaction_regression": "pass",
+      "boss_approach_regression": "pass",
+      "hand_motion_regression": "pass",
+      "wall_throw_regression": "pass"
+    },
+    "actual_game_render": "pass; 611 frames, all three cues observed",
+    "mp4_full_decode": "pass",
+    "windows_export": "pass",
+    "embedded_pck_linux_smoke": "pass",
+    "native_windows_execution": "not tested"
+  },
+  "lecture": {
+    "required_idle_seconds": 1.0,
+    "between_line_gap_seconds": 0.4,
+    "lines": [
+      {
+        "text": "지금 뭐 하는 거야? 여기가 집이야?",
+        "gesture": "question",
+        "duration": 2.8
+      },
+      {
+        "text": "기분 나쁘다고 책상을 치면, 일이 해결돼?",
+        "gesture": "admonish",
+        "duration": 3.25
+      },
+      {
+        "text": "내가 말하고 있잖아. 대답 안 해?",
+        "gesture": "insist",
+        "duration": 2.8
+      }
+    ],
+    "trigger": "After the original opening; boss arrived, facing player, grounded and nearly stationary in an unobstructed speaking range; player physically idle. Camera movement allowed.",
+    "interruption": "Any held movement key (including blocked/opposing input) or accepted action/interaction interrupts the current caption and gesture. After a new quiet interval the next unsaid sentence resumes; consumed lines never repeat.",
+    "permanent_cancellation": [
+      "boss hit",
+      "boss down",
+      "response level >= 2",
+      "run ended",
+      "world reset"
+    ],
+    "pause": "World, gesture and caption timers freeze with the real pause menu."
+  },
+  "lecture_regression": {
+    "down_cancellation": {
+      "delayed_dialogue_count": 0,
+      "new_actor_after_reset": false
+    },
+    "end_cancellation": {
+      "delayed_dialogue_count": 0,
+      "new_actor_after_reset": false
+    },
+    "escalation_cancellation": {
+      "delayed_dialogue_count": 0,
+      "new_actor_after_reset": false
+    },
+    "failures": [],
+    "hit_cancellation": {
+      "delayed_dialogue_count": 0,
+      "new_actor_after_reset": false
+    },
+    "idle_look_pause_blocked_move_missed_punch_resume": {
+      "action_results": [
+        "swing"
+      ],
+      "blocked_player_drift_metres": 0.0,
+      "blocked_sample_end": [
+        0.0,
+        -0.0196185167878866,
+        0.69861114025116
+      ],
+      "blocked_sample_start": [
+        0.0,
+        -0.0196185167878866,
+        0.69861114025116
+      ],
+      "completed_without_repeat": true,
+      "dialogue": [
+        {
+          "duration": 1.35,
+          "gesture": "",
+          "source_id": 64709725677,
+          "speaker": "박 대리 · 옆자리",
+          "text": "왜 그래?",
+          "time": 1.63333333333333
+        },
+        {
+          "duration": 1.8,
+          "gesture": "",
+          "source_id": 60918074686,
+          "speaker": "김 팀장 · 가림막 너머",
+          "text": "뭐야 무슨 소리야?",
+          "time": 3.28333333333333
+        },
+        {
+          "duration": 2.2,
+          "gesture": "",
+          "source_id": 60918074686,
+          "speaker": "김 팀장",
+          "text": "이게 무슨 짓이지?",
+          "time": 5.23333333333332
+        },
+        {
+          "duration": 2.8,
+          "gesture": "question",
+          "source_id": 60918074686,
+          "speaker": "김 팀장",
+          "text": "지금 뭐 하는 거야? 여기가 집이야?",
+          "time": 8.96666666666669
+        },
+        {
+          "duration": 3.25,
+          "gesture": "admonish",
+          "source_id": 60918074686,
+          "speaker": "김 팀장",
+          "text": "기분 나쁘다고 책상을 치면, 일이 해결돼?",
+          "time": 12.3500000000002
+        },
+        {
+          "duration": 2.8,
+          "gesture": "insist",
+          "source_id": 60918074686,
+          "speaker": "김 팀장",
+          "text": "내가 말하고 있잖아. 대답 안 해?",
+          "time": 13.8666666666669
+        }
+      ],
+      "first_lecture_started_at": 8.96666666666669,
+      "look_verification": "camera rotation; headless pointer capture unavailable",
+      "player_composure": 100.0
+    },
+    "reset_cancellation": {
+      "delayed_dialogue_count": 0,
+      "fresh_opening_dialogue": [
+        {
+          "duration": 1.35,
+          "gesture": "",
+          "source_id": 644278655212,
+          "speaker": "박 대리 · 옆자리",
+          "text": "왜 그래?",
+          "time": 13.6333333333336
+        },
+        {
+          "duration": 1.8,
+          "gesture": "",
+          "source_id": 640487004221,
+          "speaker": "김 팀장 · 가림막 너머",
+          "text": "뭐야 무슨 소리야?",
+          "time": 15.2833333333337
+        },
+        {
+          "duration": 2.2,
+          "gesture": "",
+          "source_id": 640487004221,
+          "speaker": "김 팀장",
+          "text": "이게 무슨 짓이지?",
+          "time": 17.2333333333336
+        },
+        {
+          "duration": 2.8,
+          "gesture": "question",
+          "source_id": 640487004221,
+          "speaker": "김 팀장",
+          "text": "지금 뭐 하는 거야? 여기가 집이야?",
+          "time": 20.9666666666668
+        }
+      ],
+      "new_actor_after_reset": true
+    }
+  },
+  "approach_regression": {
+    "failures": [],
+    "moving_player": {
+      "arrival_distance": 1.9288809299469,
+      "arrival_seconds": 4.01666666666667,
+      "arrived": true,
+      "backward_seconds": 0.0,
+      "longest_stall_seconds": 0.0,
+      "max_distance_to_player": 5.24408674240112,
+      "max_root_height": -0.0200000032782555,
+      "player_displacement": 2.97972917556763,
+      "samples": [
+        {
+          "boss": [
+            -0.652876555919647,
+            -0.0200000032782555,
+            -2.14968061447144
+          ],
+          "distance": 2.87479734420776,
+          "player": [
+            0.0,
+            -0.0199739579111338,
+            0.649999976158142
+          ],
+          "speed": 0.140994936227798,
+          "time": 0.0166666666666667
+        },
+        {
+          "boss": [
+            -0.82087504863739,
+            -0.0200000032782555,
+            -2.13101410865784
+          ],
+          "distance": 2.89963364601135,
+          "player": [
+            0.0,
+            -0.0199739579111338,
+            0.649999976158142
+          ],
+          "speed": 1.44099509716034,
+          "time": 0.216666666666667
+        },
+        {
+          "boss": [
+            -1.19194865226746,
+            -0.0200000032782555,
+            -2.08978390693665
+          ],
+          "distance": 2.98783469200134,
+          "player": [
+            0.0,
+            -0.0199739579111338,
+            0.649999976158142
+          ],
+          "speed": 1.94852387905121,
+          "time": 0.416666666666667
+        },
+        {
+          "boss": [
+            -1.57949924468994,
+            -0.0200000032782555,
+            -2.04672288894653
+          ],
+          "distance": 3.12524127960205,
+          "player": [
+            0.0,
+            -0.0199739579111338,
+            0.649999976158142
+          ],
+          "speed": 1.94996690750122,
+          "time": 0.616666666666667
+        },
+        {
+          "boss": [
+            -1.94139230251312,
+            -0.0200000032782555,
+            -1.99918460845947
+          ],
+          "distance": 3.29409122467041,
+          "player": [
+            0.0069444440305233,
+            -0.0191235784441233,
+            0.656944394111633
+          ],
+          "speed": 1.38164186477661,
+          "time": 0.816666666666667
+        },
+        {
+          "boss": [
+            -2.09808993339539,
+            -0.0200000032782555,
+            -1.82355904579163
+          ],
+          "distance": 3.70125889778137,
+          "player": [
+            0.564011573791504,
+            -0.0191290732473135,
+            0.747925639152527
+          ],
+          "speed": 1.38828384876251,
+          "time": 1.01666666666667
+        },
+        {
+          "boss": [
+            -2.10441875457764,
+            -0.0200000032782555,
+            -1.46688795089722
+          ],
+          "distance": 4.12525129318237,
+          "player": [
+            1.24298691749573,
+            -0.0191213972866535,
+            0.944039642810822
+          ],
+          "speed": 1.94891119003296,
+          "time": 1.21666666666667
+        },
+        {
+          "boss": [
+            -2.08474326133728,
+            -0.0200000032782555,
+            -1.07743215560913
+          ],
+          "distance": 4.59644889831543,
+          "player": [
+            1.99752104282379,
+            -0.0191292446106672,
+            1.03502094745636
+          ],
+          "speed": 1.94997572898865,
+          "time": 1.41666666666667
+        },
+        {
+          "boss": [
+            -2.06506514549255,
+            -0.0200000032782555,
+            -0.68792986869812
+          ],
+          "distance": 5.13838529586792,
+          "player": [
+            2.7451114654541,
+            -0.0191290564835072,
+            1.11905765533447
+          ],
+          "speed": 1.94999957084656,
+          "time": 1.61666666666667
+        },
+        {
+          "boss": [
+            -2.04538702964783,
+            -0.0200000032782555,
+            -0.298426628112793
+          ],
+          "distance": 5.18546628952026,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.95000016689301,
+          "time": 1.81666666666667
+        },
+        {
+          "boss": [
+            -2.02570939064026,
+            -0.0200000032782555,
+            0.091076672077179
+          ],
+          "distance": 5.07352304458618,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.95000016689301,
+          "time": 2.01666666666667
+        },
+        {
+          "boss": [
+            -1.96335756778717,
+            -0.0200000032782555,
+            0.449490457773209
+          ],
+          "distance": 4.95141696929932,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.67263305187225,
+          "time": 2.21666666666667
+        },
+        {
+          "boss": [
+            -1.71962678432465,
+            -0.0200000032782555,
+            0.616624712944031
+          ],
+          "distance": 4.68920040130615,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.66783785820007,
+          "time": 2.41666666666667
+        },
+        {
+          "boss": [
+            -1.33948564529419,
+            -0.0200000032782555,
+            0.66075611114502
+          ],
+          "distance": 4.30652046203613,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.94842195510864,
+          "time": 2.61666666666667
+        },
+        {
+          "boss": [
+            -0.951768815517426,
+            -0.0200000032782555,
+            0.702252805233002
+          ],
+          "distance": 3.91658902168274,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.94996476173401,
+          "time": 2.81666666666667
+        },
+        {
+          "boss": [
+            -0.563985049724579,
+            -0.0200000032782555,
+            0.743756711483002
+          ],
+          "distance": 3.52659058570862,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.94999933242798,
+          "time": 3.01666666666667
+        },
+        {
+          "boss": [
+            -0.176199853420258,
+            -0.0200000032782555,
+            0.785260856151581
+          ],
+          "distance": 3.13659071922302,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.95000016689301,
+          "time": 3.21666666666667
+        },
+        {
+          "boss": [
+            0.211585447192192,
+            -0.0200000032782555,
+            0.82676500082016
+          ],
+          "distance": 2.74659037590027,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.95000016689301,
+          "time": 3.41666666666667
+        },
+        {
+          "boss": [
+            0.599370658397675,
+            -0.0200000032782555,
+            0.868269145488739
+          ],
+          "distance": 2.35659050941467,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.95000016689301,
+          "time": 3.61666666666667
+        },
+        {
+          "boss": [
+            0.898714363574982,
+            -0.0200000032782555,
+            0.900307357311249
+          ],
+          "distance": 2.05553722381592,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 1.03669953346252,
+          "time": 3.81666666666667
+        },
+        {
+          "boss": [
+            1.0246514081955,
+            -0.0200000032782555,
+            0.913786113262177
+          ],
+          "distance": 1.9288809299469,
+          "player": [
+            2.94257879257202,
+            -0.0191171560436487,
+            1.11905765533447
+          ],
+          "speed": 0.10033193230629,
+          "time": 4.01666666666667
+        }
+      ],
+      "solid_overlap_frames": 0,
+      "walked_metres": 6.89952850330155
+    },
+    "settled_arrival": {
+      "dialogue": [
+        "왜 그래?",
+        "뭐야 무슨 소리야?",
+        "이게 무슨 짓이지?",
+        "지금 뭐 하는 거야? 여기가 집이야?"
+      ],
+      "facing_error_degrees": 2.10910960544432e-05,
+      "max_drift_metres": 0.0,
+      "max_speed": 0.0
+    },
+    "stationary_player": {
+      "arrival_distance": 1.93593204021454,
+      "arrival_seconds": 2.6,
+      "arrived": true,
+      "backward_seconds": 0.0,
+      "longest_stall_seconds": 0.0,
+      "max_distance_to_player": 3.2976758480072,
+      "max_root_height": -0.0200000032782555,
+      "player_displacement": 0.0,
+      "samples": [
+        {
+          "boss": [
+            -0.652876555919647,
+            -0.0200000032782555,
+            -2.14968061447144
+          ],
+          "distance": 2.87479734420776,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 0.140994936227798,
+          "time": 0.0166666666666667
+        },
+        {
+          "boss": [
+            -0.82087504863739,
+            -0.0200000032782555,
+            -2.13101410865784
+          ],
+          "distance": 2.89963364601135,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.44099509716034,
+          "time": 0.216666666666667
+        },
+        {
+          "boss": [
+            -1.19194865226746,
+            -0.0200000032782555,
+            -2.08978390693665
+          ],
+          "distance": 2.98783469200134,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.94852387905121,
+          "time": 0.416666666666667
+        },
+        {
+          "boss": [
+            -1.57949924468994,
+            -0.0200000032782555,
+            -2.04672288894653
+          ],
+          "distance": 3.12524127960205,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.94996690750122,
+          "time": 0.616666666666667
+        },
+        {
+          "boss": [
+            -1.94139230251312,
+            -0.0200000032782555,
+            -1.99918460845947
+          ],
+          "distance": 3.28438472747803,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.38164186477661,
+          "time": 0.816666666666667
+        },
+        {
+          "boss": [
+            -2.09808993339539,
+            -0.0200000032782555,
+            -1.82355904579163
+          ],
+          "distance": 3.24352812767029,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.38828384876251,
+          "time": 1.01666666666667
+        },
+        {
+          "boss": [
+            -2.10441875457764,
+            -0.0200000032782555,
+            -1.46688795089722
+          ],
+          "distance": 2.98492789268494,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.94891119003296,
+          "time": 1.21666666666667
+        },
+        {
+          "boss": [
+            -2.08474326133728,
+            -0.0200000032782555,
+            -1.07743215560913
+          ],
+          "distance": 2.70742988586426,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.94997572898865,
+          "time": 1.41666666666667
+        },
+        {
+          "boss": [
+            -2.06506514549255,
+            -0.0200000032782555,
+            -0.68792986869812
+          ],
+          "distance": 2.46059966087341,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.94999957084656,
+          "time": 1.61666666666667
+        },
+        {
+          "boss": [
+            -2.04538702964783,
+            -0.0200000032782555,
+            -0.298426628112793
+          ],
+          "distance": 2.25457787513733,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.95000016689301,
+          "time": 1.81666666666667
+        },
+        {
+          "boss": [
+            -2.02704071998596,
+            -0.0200000032782555,
+            0.0647213906049728
+          ],
+          "distance": 2.10984468460083,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 1.31666648387909,
+          "time": 2.01666666666667
+        },
+        {
+          "boss": [
+            -2.01630735397339,
+            -0.0200000032782555,
+            0.277186930179596
+          ],
+          "distance": 2.05048418045044,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 0.966215252876282,
+          "time": 2.21666666666667
+        },
+        {
+          "boss": [
+            -2.00292325019836,
+            -0.0200000032782555,
+            0.448243021965027
+          ],
+          "distance": 2.01305913925171,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 0.630596399307251,
+          "time": 2.41666666666667
+        },
+        {
+          "boss": [
+            -1.93057262897491,
+            -0.0200000032782555,
+            0.506047666072845
+          ],
+          "distance": 1.93593204021454,
+          "player": [
+            0.0,
+            -0.019166674464941,
+            0.649999976158142
+          ],
+          "speed": 0.0,
+          "time": 2.61666666666667
+        }
+      ],
+      "solid_overlap_frames": 0,
+      "walked_metres": 3.91630129457917
+    }
+  },
+  "opening_scenario": {
+    "actor_specific_interruption": {
+      "dialogue": [
+        {
+          "duration": 1.35,
+          "scene_time": 0.266666666666667,
+          "source_id": 131348830270,
+          "speaker": "박 대리 · 옆자리",
+          "text": "왜 그래?"
+        },
+        {
+          "duration": 1.8,
+          "scene_time": 1.91666666666666,
+          "source_id": 127557179279,
+          "speaker": "김 팀장 · 가림막 너머",
+          "text": "뭐야 무슨 소리야?"
+        },
+        {
+          "duration": 2.2,
+          "scene_time": 3.86666666666666,
+          "source_id": 127557179279,
+          "speaker": "김 팀장",
+          "text": "이게 무슨 짓이지?"
+        }
+      ],
+      "speaker_invalidated": true
+    },
+    "downed_future_speaker_and_reset": {
+      "pending_boss_lines_suppressed": true,
+      "post_reset_dialogue_count": 0
+    },
+    "earlier_disturbance": {
+      "staged_dialogue_count": 0
+    },
+    "explicit_cancel": {
+      "post_cancel_dialogue_count": 0
+    },
+    "failures": [],
+    "first_slam_repeat_pause_and_route": {
+      "boss_end": [
+        -0.803905308246613,
+        -0.0195391140878201,
+        0.691215932369232
+      ],
+      "boss_reached_speaking_range": true,
+      "boss_start": [
+        -0.649999976158142,
+        -0.0200000032782555,
+        -2.15000009536743
+      ],
+      "dialogue": [
+        {
+          "duration": 1.35,
+          "scene_time": 0.266666666666667,
+          "source_id": 65397591627,
+          "speaker": "박 대리 · 옆자리",
+          "text": "왜 그래?"
+        },
+        {
+          "duration": 1.8,
+          "scene_time": 1.91666666666666,
+          "source_id": 61605940636,
+          "speaker": "김 팀장 · 가림막 너머",
+          "text": "뭐야 무슨 소리야?"
+        },
+        {
+          "duration": 2.2,
+          "scene_time": 3.86666666666666,
+          "source_id": 61605940636,
+          "speaker": "김 팀장",
+          "text": "이게 무슨 짓이지?"
+        }
+      ],
+      "pause_scene_time": 1.0,
+      "player_after_move": [
+        1.11252307891846,
+        -0.0191242061555386,
+        0.442220360040665
+      ],
+      "player_before_move": [
+        0.0,
+        -0.019166674464941,
+        0.649999976158142
+      ],
+      "player_damage": 0.0,
+      "route_samples": [
+        [
+          -0.803905308246613,
+          -0.0195391140878201,
+          0.691215932369232
+        ]
+      ]
+    }
+  },
+  "hand_motion": {
+    "checks": [
+      "B28f and A20f",
+      "contact11f and9f",
+      "success-confirmed switch",
+      "event/contact pose alignment",
+      "desktop height",
+      "left/right placement",
+      "pause cancellation",
+      "normal punch"
+    ],
+    "contacts": [
+      {
+        "elapsed": 0.366666666666667,
+        "left_error": 0.0,
+        "left_x": -0.245000004768372,
+        "min_world_y": 1.06199991703033,
+        "right_error": 0.0,
+        "right_x": 0.245000004768372,
+        "variant": "B"
+      },
+      {
+        "elapsed": 0.933333333333333,
+        "left_error": 0.0,
+        "left_x": -0.245000004768372,
+        "min_world_y": 1.06199991703033,
+        "right_error": 0.0,
+        "right_x": 0.245000004768372,
+        "variant": "B"
+      },
+      {
+        "elapsed": 0.3,
+        "left_error": 0.0,
+        "left_x": -0.245000004768372,
+        "min_world_y": 1.06199991703033,
+        "right_error": 0.0,
+        "right_x": 0.245000004768372,
+        "variant": "A"
+      }
+    ],
+    "failures": [],
+    "status": "pass",
+    "swings": [
+      "swing"
+    ]
+  },
+  "wall_throw": {
+    "failures": [],
+    "normal_desk_mug": {
+      "after_40_frames": [
+        1.31622421741486,
+        1.33867156505585,
+        -1.13478994369507
+      ],
+      "before_throw": [
+        0.848105907440186,
+        1.19365620613098,
+        0.21186426281929
+      ],
+      "camera_ray_succeeded": true,
+      "events": [
+        "pickup",
+        "throw"
+      ],
+      "immediate_after_throw": [
+        0.848105907440186,
+        1.19365620613098,
+        0.21186426281929
+      ],
+      "release_displacement": 0.0,
+      "release_velocity": [
+        0.0,
+        -2.10467958450317,
+        -9.86186027526855
+      ]
+    },
+    "wall_throw": {
+      "after_40_frames": [
+        7.86768388748169,
+        1.79468679428101,
+        -0.858356475830078
+      ],
+      "before_throw": [
+        7.85929775238037,
+        1.67800104618073,
+        -0.961001038551331
+      ],
+      "camera_forward": [
+        1.0,
+        0.0,
+        4.37113882867379e-08
+      ],
+      "camera_pickup_succeeded": true,
+      "events": [
+        "pickup",
+        "throw"
+      ],
+      "held_updates": 30,
+      "immediate_after_throw": [
+        7.85929775238037,
+        1.67800104618073,
+        -0.961001038551331
+      ],
+      "maximum_held_x": 7.85929775238037,
+      "maximum_x_during_40_frames": 7.93103504180908,
+      "player": [
+        7.65000009536743,
+        0.100000001490116,
+        -1.0
+      ],
+      "release_displacement": 0.0,
+      "release_velocity": [
+        10.5,
+        1.5,
+        4.58969566352607e-07
+      ]
+    }
+  },
+  "accepted_approach_history": {
+    "version": "0.1.2",
+    "commit": "73142b4ff7446d3acef146ac5ce14c860935474f",
+    "user_feedback": "Boss movement has become natural; preserve it when adding lecture.",
+    "comparison_from_previous_release": {
+      "measurement": "Same stationary starting player and same probe; time from impact+3.8s until first arrival flag, not the complete opening or settled-stop timer.",
+      "before": {
+        "arrival_route_m": 9.94079149398021,
+        "arrival_seconds_after_3_8": 8.65,
+        "max_distance_to_player": 4.48433494567871,
+        "extra_collision_frames": 0
+      },
+      "after": {
+        "arrival_route_m": 3.91113889269764,
+        "arrival_seconds_after_3_8": 2.63333333333333,
+        "max_distance_to_player": 3.2976758480072,
+        "extra_collision_frames": 0
+      }
+    }
+  },
+  "windows": {
+    "file": "DeskBreaker.exe",
+    "size_bytes": 110431064,
+    "sha256": "4b8265d90038e7666af3a3c19ef86f3c373c167bc5188a5af7be049594272af0",
+    "windows_export_exit": 0,
+    "embedded_pck_linux_smoke_exit": 0,
+    "windows_native_execution": "not_tested"
+  },
+  "video": {
+    "programs": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1280,
+        "height": 720,
+        "pix_fmt": "yuv420p",
+        "r_frame_rate": "30/1",
+        "nb_frames": "611"
+      },
+      {
+        "codec_name": "aac",
+        "sample_rate": "48000",
+        "channels": 2,
+        "r_frame_rate": "0/0",
+        "nb_frames": "956"
+      }
+    ],
+    "format": {
+      "duration": "20.366667",
+      "size": "1626738"
+    },
+    "file": "DeskBreaker-Opening-Reaction.mp4",
+    "sha256": "adea1d7583fe9545820f72f9a6a6c3a63f6a3f26569cdb403545566b384fa151",
+    "encode_exit": 0,
+    "full_decode_exit": 0,
+    "capture_exit": 0,
+    "capture": "Actual in-game automated F/slam replay; only the recording follows the boss with the free camera.",
+    "dialogue_audio": "Subtitles only; no voice acting",
+    "source_audio": {
+      "format": "Original in-game stereo PCM32, 48000 Hz",
+      "original_header_valid": false,
+      "original_data_bytes": 7806932,
+      "incomplete_sample_bytes_discarded": 4,
+      "header_rebuilt": true,
+      "verified_original_last_100ms_silent": true,
+      "trailing_silence_added_ms": 36.125,
+      "final_sample_frames": 977600,
+      "pcm_bytes": 7820800
+    }
+  },
+  "visual_review": {
+    "stills": [
+      "06-boss-question.png",
+      "07-boss-admonish.png",
+      "08-boss-insist.png",
+      "09-boss-finished.png"
+    ],
+    "additional_transition_frames": [
+      264,
+      270,
+      354,
+      362
+    ],
+    "reviewers": 2,
+    "observed": [
+      "Open palms and tilted head distinguish the question gesture.",
+      "Admonishing hand is raised above the desk; sideways index/folded-finger silhouette is visible.",
+      "Asymmetric offered palm and modest upper-body lean distinguish the demand for an answer.",
+      "Speaker names and Korean lines remain readable without covering the face or hands.",
+      "Arms return to neutral and the speech caption disappears at completion.",
+      "Final neutral frame shows both feet without an abnormal leg pose."
+    ],
+    "iteration": "Raised and rotated the hand in admonish/insist after actual first-render desk occlusion was identified.",
+    "scope": "Held gestures and sampled transitions reviewed from actual game frames. Caption panel hides lower legs during most speech; continuous foot contact is not proven by these stills. Animation feel remains for user review."
+  },
+  "runtime_source_sha256": {
+    "game/scripts/audio.gd": "d640ac053f9077d1b5fee5c93d565d94f5d74eed8bd515d45a5b26748555c847",
+    "game/scripts/hand_model.gd": "16ae98b024322d0cba92aed77c702f3102a1ae334816cc5869a811bca4c080d3",
+    "game/scripts/main.gd": "24fdad27cd52a0ddc7ada69b1d9d745dae9afbc63c5822aabb01a8502a826ff2",
+    "game/scripts/office_npc.gd": "c3ffd85cdc2a1e56cc68b5138e07e74b31fa64e57421b0baf2309ac07ec804e8",
+    "game/scripts/player.gd": "fbf17b25866d9539ad9c0dfc51f48dfa7b63ff2cc99770531da0d739ae7a307f",
+    "game/scripts/prop.gd": "3c28598e769d3ff83ba6ac7132d4f6f9d8dd8c5d0526a6a4d5e275bca133dab5",
+    "game/scripts/world.gd": "274a14c193d0da6995b3095cd167150990fb2fa08e5a75c032f5b9cfa003bb5d"
+  },
+  "test_source_sha256": {
+    "tools/tests/boss_lecture_regression.gd": "dffebd21747f43024efbc01162d1318aae7ca757f7a29d17e61c1e814948dddb",
+    "tools/tests/opening_reaction_regression.gd": "efd02e0d2adfaee9f2e35c8dd2b1a41ebfa79904e323fdfc7e53b7c18b6b05bd",
+    "tools/tests/boss_approach_regression.gd": "fff286145cbe127d7e24e665f65b237988c1b7fac2528002122f8777c5aaf8a7",
+    "tools/tests/hand_motion_regression.gd": "890b8eee980c4b06a53bb5375a3cb3413081ed2790bb4eb8031e3962f9c79b92",
+    "tools/tests/wall_throw_regression.gd": "7adb9e53604d91e50a19523e1ee4fb5b6430ad5f7c14ff8d7e63ae6ae97e8fb0"
+  },
+  "limitations": [
+    "Procedural first character meshes; final sculpted assets and art finishing remain.",
+    "Dialogue uses captions and mouth/face animation; no voice acting.",
+    "Windows executable exported on Linux; native Windows execution and target-PC performance untested.",
+    "Headless free-look regression rotates actual camera fields because physical pointer capture is unavailable; native mouse capture is not claimed.",
+    "Initial accelerated headless smoke emitted audio shutdown resource warnings; the documented standard smoke and embedded-package smoke completed cleanly."
+  ]
+}

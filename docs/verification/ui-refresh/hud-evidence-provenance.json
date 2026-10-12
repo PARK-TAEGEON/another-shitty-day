@@ -1,0 +1,16 @@
+{
+  "provenance": "Existing engine logs copied without edits. JSON extracted from those logs. stdout.txt reconstructs the already-observed exec console output; the social damage shutdown warning appeared in exec output but was not persisted by the engine log.",
+  "tests_rerun_to_create_evidence": false,
+  "minimal_hud_regression": {
+    "exit_code": 0,
+    "marker": "MINIMAL_HUD_REGRESSION_OK",
+    "failures": [],
+    "console_warning": null
+  },
+  "social_damage_regression": {
+    "exit_code": 0,
+    "marker": "SOCIAL_DAMAGE_REGRESSION_OK",
+    "failures": [],
+    "console_warning": "WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).\n   at: cleanup (core/object/object.cpp:2536)"
+  }
+}

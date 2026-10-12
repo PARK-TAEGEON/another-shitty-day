@@ -1,0 +1,72 @@
+{
+  "failures": [],
+  "normal_desk_mug": {
+    "after_40_frames": [
+      1.31622421741486,
+      1.33867156505585,
+      -1.13478994369507
+    ],
+    "before_throw": [
+      0.848105907440186,
+      1.19365620613098,
+      0.21186426281929
+    ],
+    "camera_ray_succeeded": true,
+    "events": [
+      "pickup",
+      "throw"
+    ],
+    "immediate_after_throw": [
+      0.848105907440186,
+      1.19365620613098,
+      0.21186426281929
+    ],
+    "release_displacement": 0.0,
+    "release_velocity": [
+      0.0,
+      -2.10467958450317,
+      -9.86186027526855
+    ]
+  },
+  "wall_throw": {
+    "after_40_frames": [
+      7.87038040161133,
+      1.81673896312714,
+      -0.93477588891983
+    ],
+    "before_throw": [
+      7.85929775238037,
+      1.67800104618073,
+      -0.961001038551331
+    ],
+    "camera_forward": [
+      1.0,
+      0.0,
+      4.37113882867379e-08
+    ],
+    "camera_pickup_succeeded": true,
+    "events": [
+      "pickup",
+      "throw"
+    ],
+    "held_updates": 30,
+    "immediate_after_throw": [
+      7.85929775238037,
+      1.67800104618073,
+      -0.961001038551331
+    ],
+    "maximum_held_x": 7.85929775238037,
+    "maximum_x_during_40_frames": 7.93103504180908,
+    "player": [
+      7.65000009536743,
+      0.100000001490116,
+      -1.0
+    ],
+    "release_displacement": 0.0,
+    "release_velocity": [
+      10.5,
+      1.5,
+      4.58969566352607e-07
+    ]
+  }
+}

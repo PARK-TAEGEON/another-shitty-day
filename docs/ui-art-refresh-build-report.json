@@ -1,0 +1,173 @@
+{
+  "version": "0.2.1",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "host": "Linux x86_64",
+  "created_utc": "2026-10-11T12:02:37.619472+00:00",
+  "source_base_revision": "f183c3a913d52914584d0a7fc382fa8f2f96665d",
+  "source_tag": "v0.2.1-ui-art",
+  "native_windows_run": false,
+  "powershell_wrapper_run": false,
+  "steps": [
+    {
+      "name": "minimal_hud_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/ui-refresh/minimal_hud_regression.json",
+      "log": "verification/ui-refresh/minimal_hud_regression.txt"
+    },
+    {
+      "name": "social_damage_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/ui-refresh/social_damage_regression.json",
+      "log": "verification/ui-refresh/social_damage_regression.txt"
+    },
+    {
+      "name": "opening_reaction_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/ui-refresh/opening_reaction_regression.json",
+      "log": "verification/ui-refresh/opening_reaction_regression.txt"
+    },
+    {
+      "name": "boss_approach_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/ui-refresh/boss_approach_regression.json",
+      "log": "verification/ui-refresh/boss_approach_regression.txt"
+    },
+    {
+      "name": "boss_lecture_regression",
+      "passed": true,
+      "exit_code": 0,
+      "report": "verification/ui-refresh/boss_lecture_regression.json",
+      "log": "verification/ui-refresh/boss_lecture_regression.txt"
+    },
+    {
+      "name": "import",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/ui-refresh/import.txt"
+    },
+    {
+      "name": "source-smoke",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/ui-refresh/source-smoke.txt"
+    },
+    {
+      "name": "windows-export",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/ui-refresh/windows-export.txt"
+    },
+    {
+      "name": "embedded-pack-smoke",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/ui-refresh/embedded-pack-smoke.txt"
+    },
+    {
+      "name": "ui-render",
+      "passed": true,
+      "exit_code": 0,
+      "log": "verification/ui-refresh/ui-render.txt"
+    }
+  ],
+  "artifact": {
+    "file": "DeskBreaker.exe",
+    "bytes": 110479584,
+    "sha256": "88d97e04a198678163bab5fd07b1159a47ed6e33c7c6e81802356f45614201f8",
+    "pe_x86_64": true,
+    "embedded_pck_footer": true,
+    "pack_bytes": 1211092,
+    "native_windows_run": false
+  },
+  "hud": {
+    "title": "누적 피해액",
+    "currency": "USD game currency",
+    "number_rebalance": false,
+    "foreign_exchange_conversion": false,
+    "record_key": "records/social_damage_usd_v1",
+    "hidden": [
+      "damage toasts",
+      "source-less system captions",
+      "time and high score",
+      "persistent controls",
+      "top-right phase box",
+      "health bar"
+    ],
+    "preserved": [
+      "actual NPC dialogue",
+      "damage ledger",
+      "response escalation",
+      "settings",
+      "result breakdown"
+    ]
+  },
+  "layouts": {
+    "status": "proposals_not_applied",
+    "recommended": "B",
+    "data": "design/office-layout-options.json",
+    "comparison": "preview/office-layout-comparison.png",
+    "count": 3,
+    "shared_interior_m": [
+      14,
+      12
+    ],
+    "work_desks": 6,
+    "department_staff_excluding_player": 5,
+    "other_staff": 2,
+    "geometry_validation": "Six proposed boss/guard polylines checked against fixed furniture and walls at <= 1cm intervals with radius 0.34m; actor footprint review used radius 0.28m. No engine navigation claim."
+  },
+  "render": {
+    "viewport": [
+      1280,
+      720
+    ],
+    "ui_capture_report": "verification/ui-refresh/ui-capture.json",
+    "actual_slam_input": true,
+    "actual_settings_controls_tabs": true,
+    "result_screen": "UI fixture via _end_run, not natural subdual replay",
+    "character_capture": "tools/capture_character_lineup.gd",
+    "character_before": "preview/characters-refresh-before.png",
+    "character_after": "preview/characters-refresh-faces.png",
+    "final_npc_sha256": "252d92264e3121a42c7aab6a16130040a56094fde6860a1f9e85e66f9adc241e",
+    "final_hair_correction": "Raised three boss fringe points to separate raised eyebrows during peek; final render and final Windows export include this correction. Opening/boss regressions ran immediately before this geometry-only correction."
+  },
+  "remaining_limits": [
+    "No native Windows launch, PowerShell wrapper execution or target-PC performance/play-feel verification.",
+    "Source and embedded-pack smoke and social damage test retain audio ObjectDB shutdown warnings. Actual rendered UI did not emit ObjectDB warnings; virtual display V-Sync warning is retained.",
+    "Models remain procedural caricatures; no final Blender model, final skinning/blend shapes, voice acting, articulated ragdoll, separate fragment physics or infinite responder waves.",
+    "The three floor plans are unselected 2D proposals. Existing gameplay geometry is unchanged; chosen-plan camera, movement and dynamic congestion require later engine validation.",
+    "Only the five listed regressions were run for this patch, not all ten now listed in tools/test.ps1."
+  ],
+  "source_game_files_sha256": {
+    "game/assets/fonts/KoreanUI.ttf": "76f45ef4a6bcff344c837c95a7dcc26e017e38b5846d5ae0cdcb5b86be2e2d31",
+    "game/assets/fonts/KoreanUI.ttf.import": "c70c80c8417ccba9e7de9bc925a580291ff43d89a654f2b29f043da12eee7a14",
+    "game/assets/fonts/OFL.txt": "eeacf16032901d0ed0456876ec77b8f0fda6b3fecec7d972f8543eb602e6c30f",
+    "game/assets/icon.svg": "11d5c67419ca804e6326e32c24d608677d7d228fb03504dd9929afdf3d866012",
+    "game/assets/icon.svg.import": "0fcf612833458e015d28f4ba86b3a6a0749ac45e70e561cd416f01fb4b77c1e2",
+    "game/export_presets.cfg": "81470342cc89a89846de2469e7a17cfe8658494f61b7a0faedcadf7e269facd1",
+    "game/project.godot": "894b33b758b6ae24cdabf718ddf952743e5cdcf7c5912fc7602d9b3834862dfa",
+    "game/scenes/main.tscn": "a86ad1492d44f7ce9d19db0f4170fbc3db35140108bc58b6da61dd4591c6abb3",
+    "game/scripts/audio.gd": "d640ac053f9077d1b5fee5c93d565d94f5d74eed8bd515d45a5b26748555c847",
+    "game/scripts/audio.gd.uid": "068a4a2a63c99371397f443a11ddf57ec7771195ae601052109cc3184767e1d7",
+    "game/scripts/hand_model.gd": "16ae98b024322d0cba92aed77c702f3102a1ae334816cc5869a811bca4c080d3",
+    "game/scripts/hand_model.gd.uid": "fcc4e08044f4abd4e7b174384ceda4f2d4d2783cf3d3789ffdd1940199b477f8",
+    "game/scripts/main.gd": "758548eb28cf9aa2851974dc18f2e6a5ca37e92de166fe86629ec4642ee1b85a",
+    "game/scripts/main.gd.uid": "ab459ac64cd3b0939c7f985501a5526a301d1b6f801d0273309e0d1dace59303",
+    "game/scripts/office_capture.gd": "b4749617ca0c25eb745c657a94d541e7b8bd01078db0cc5f9d11e4528f72edf9",
+    "game/scripts/office_capture.gd.uid": "a4a3ae086dd76075e884088d240d462e2ebaac24abf9be462dd0743059722081",
+    "game/scripts/office_npc.gd": "252d92264e3121a42c7aab6a16130040a56094fde6860a1f9e85e66f9adc241e",
+    "game/scripts/office_npc.gd.uid": "4d30851a48d037d357e97887e3b47c1bc5fa5e83ad4ecd048175f53bbe2592f5",
+    "game/scripts/player.gd": "2e0103124b999f5dec20b02298a23b583da26f99bf9b1cdd6ae3c536703c6911",
+    "game/scripts/player.gd.uid": "a4a643239b7ed46fb04e747be3875fca19aae4f5bfeaaa9ace3fb0c0cf9f349b",
+    "game/scripts/prop.gd": "8e110409ae0ce81428511e5084e88f2a42806a6154e08d68db569ab97c85f764",
+    "game/scripts/prop.gd.uid": "71b071faca631e346d626914cf2510c91f2e71181d3255d22698177787265033",
+    "game/scripts/social_damage.gd": "47bd686e7888fc98587fada6b10799ce14bb02d0d07f81628ba5874a02defaa9",
+    "game/scripts/social_damage.gd.uid": "737429ad74822fd03d385f29ff81b3603a0202b9a77a88546308ca748a719a23",
+    "game/scripts/world.gd": "48f68db3de033aef86c5d31c6c928399b5719de6cd046aa571459f56c95f960e",
+    "game/scripts/world.gd.uid": "c39a61571caa55fd6da7e4b36093f8630de8350c5e0f74d0c2364a2750c6020d"
+  }
+}

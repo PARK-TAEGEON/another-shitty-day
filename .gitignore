@@ -1,0 +1,26 @@
+.DS_Store
+game/.godot/
+game/export_credentials.cfg
+builds/
+validation/
+*.tmp
+*.log
+__pycache__/
+.env
+.env.*
+!.env.example
+
+# Built artifacts and generated Blender/Godot caches
+*.blend1
+*.blend2
+*.autosave
+*.bak
+*.exe
+*.pck
+*.aab
+*.apk
+*.app/
+*.dmg
+*.zip
+*.bundle
+*/.godot/

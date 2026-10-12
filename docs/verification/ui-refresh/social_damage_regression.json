@@ -1,0 +1,28 @@
+{
+  "caption_priority": "ambient has no queue; active line protected; scene preempts; both source types invalidate; non-opening staff speak",
+  "controller": {
+    "heat": 32.0,
+    "phase": 4,
+    "responders": 3,
+    "response_cost": 1400000
+  },
+  "example": {
+    "categories": {
+      "care": 300000,
+      "property": 300000,
+      "response": 600000,
+      "work": 220000
+    },
+    "currency": "$1,420,000",
+    "total": 1420000
+  },
+  "failures": [],
+  "guard_warning_preemption": "actual once-only warning preempted ordinary caption; ordinary followup did not replace it",
+  "ledger_delta_dedup_freeze_reset": true,
+  "result_and_reset": {
+    "after_reset_new_assessment": 100000,
+    "category_sum": 11400000,
+    "frozen_total": 11400000,
+    "legacy_record_preserved": 98765
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "file": "DeskBreaker-Office-Expansion.mp4",
+  "bytes": 3665826,
+  "sha256": "387590814b95c6e7beca5b8c5e5114d8d0782a5cc71c935b16cc2c7d450b6143",
+  "video": {
+    "codec_name": "h264",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "yuv420p",
+    "r_frame_rate": "30/1",
+    "nb_frames": "1330",
+    "duration": "44.333333"
+  },
+  "audio_source": {
+    "channels": 2,
+    "sample_width": 4,
+    "rate": 48000,
+    "frames": 2646400,
+    "duration": 55.13333333333333,
+    "header_valid": true,
+    "repair_needed": false
+  },
+  "encode_exit": 0,
+  "full_decode_exit": 0,
+  "raw_frames": 1654,
+  "replay_passed": true,
+  "guard_tail_refreshed_from_frame": 1116,
+  "kept_ranges_seconds": [
+    [
+      0,
+      41
+    ],
+    [
+      51.8,
+      55.13333333333333
+    ]
+  ],
+  "removed_range_reason": "Repeated guard pushes between the first contacts and final natural subdual; no action or score is staged."
+}

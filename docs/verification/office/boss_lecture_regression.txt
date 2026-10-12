@@ -1,0 +1,130 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"down_cancellation": {
+		"delayed_dialogue_count": 0,
+		"new_actor_after_reset": false
+	},
+	"end_cancellation": {
+		"delayed_dialogue_count": 0,
+		"new_actor_after_reset": false
+	},
+	"escalation_cancellation": {
+		"delayed_dialogue_count": 0,
+		"new_actor_after_reset": false
+	},
+	"failures": [],
+	"hit_cancellation": {
+		"delayed_dialogue_count": 0,
+		"new_actor_after_reset": false
+	},
+	"idle_look_pause_blocked_move_missed_punch_resume": {
+		"action_results": [
+			"swing"
+		],
+		"blocked_player_drift_metres": 0.0,
+		"blocked_sample_end": [
+			0.0,
+			-0.0196185167878866,
+			0.69861114025116
+		],
+		"blocked_sample_start": [
+			0.0,
+			-0.0196185167878866,
+			0.69861114025116
+		],
+		"completed_without_repeat": true,
+		"dialogue": [
+			{
+				"duration": 1.35,
+				"gesture": "",
+				"source_id": 70682414902,
+				"speaker": "박 대리 · 옆자리",
+				"text": "왜 그래?",
+				"time": 1.63333333333333
+			},
+			{
+				"duration": 1.8,
+				"gesture": "",
+				"source_id": 66890763911,
+				"speaker": "김 팀장 · 가림막 너머",
+				"text": "뭐야 무슨 소리야?",
+				"time": 3.28333333333333
+			},
+			{
+				"duration": 2.2,
+				"gesture": "",
+				"source_id": 66890763911,
+				"speaker": "김 팀장",
+				"text": "이게 무슨 짓이지?",
+				"time": 5.23333333333332
+			},
+			{
+				"duration": 2.8,
+				"gesture": "question",
+				"source_id": 66890763911,
+				"speaker": "김 팀장",
+				"text": "지금 뭐 하는 거야? 여기가 집이야?",
+				"time": 8.96666666666669
+			},
+			{
+				"duration": 3.25,
+				"gesture": "admonish",
+				"source_id": 66890763911,
+				"speaker": "김 팀장",
+				"text": "기분 나쁘다고 책상을 치면, 일이 해결돼?",
+				"time": 12.3500000000002
+			},
+			{
+				"duration": 2.8,
+				"gesture": "insist",
+				"source_id": 66890763911,
+				"speaker": "김 팀장",
+				"text": "내가 말하고 있잖아. 대답 안 해?",
+				"time": 13.8666666666669
+			}
+		],
+		"first_lecture_started_at": 8.96666666666669,
+		"look_verification": "camera rotation; headless pointer capture unavailable",
+		"player_composure": 100.0
+	},
+	"reset_cancellation": {
+		"delayed_dialogue_count": 0,
+		"fresh_opening_dialogue": [
+			{
+				"duration": 1.35,
+				"gesture": "",
+				"source_id": 771416399394,
+				"speaker": "박 대리 · 옆자리",
+				"text": "왜 그래?",
+				"time": 13.6333333333336
+			},
+			{
+				"duration": 1.8,
+				"gesture": "",
+				"source_id": 767624748403,
+				"speaker": "김 팀장 · 가림막 너머",
+				"text": "뭐야 무슨 소리야?",
+				"time": 15.2833333333337
+			},
+			{
+				"duration": 2.2,
+				"gesture": "",
+				"source_id": 767624748403,
+				"speaker": "김 팀장",
+				"text": "이게 무슨 짓이지?",
+				"time": 17.2333333333336
+			},
+			{
+				"duration": 2.8,
+				"gesture": "question",
+				"source_id": 767624748403,
+				"speaker": "김 팀장",
+				"text": "지금 뭐 하는 거야? 여기가 집이야?",
+				"time": 20.9666666666668
+			}
+		],
+		"new_actor_after_reset": true
+	}
+}
+BOSS_LECTURE_REGRESSION_OK

@@ -1,0 +1,82 @@
+{
+  "failures": [],
+  "kind": "actual office; camera cuts only",
+  "moments": [
+    {
+      "caption": "이건 AI로 하면 금방 아닌가요?",
+      "caption_speaker": "정 인턴",
+      "heat": 0.0,
+      "image": "docs/preview/female-cast-intern-working.png",
+      "score": 0,
+      "women": [
+        {
+          "activity": "typing",
+          "gender": "female",
+          "health": 40.0,
+          "name": "이 사원",
+          "state": "idle",
+          "working": true
+        },
+        {
+          "activity": "papers",
+          "gender": "female",
+          "health": 40.0,
+          "name": "정 인턴",
+          "state": "idle",
+          "working": true
+        }
+      ]
+    },
+    {
+      "caption": "마무리는 선배님이 좀 해주세요.",
+      "caption_speaker": "이 사원",
+      "heat": 0.0,
+      "image": "docs/preview/female-cast-junior-working.png",
+      "score": 0,
+      "women": [
+        {
+          "activity": "typing",
+          "gender": "female",
+          "health": 40.0,
+          "name": "이 사원",
+          "state": "idle",
+          "working": true
+        },
+        {
+          "activity": "papers",
+          "gender": "female",
+          "health": 40.0,
+          "name": "정 인턴",
+          "state": "idle",
+          "working": true
+        }
+      ]
+    },
+    {
+      "caption": "마무리는 선배님이 좀 해주세요.",
+      "caption_speaker": "이 사원",
+      "heat": 0.0,
+      "image": "docs/preview/female-cast-office.png",
+      "score": 0,
+      "women": [
+        {
+          "activity": "typing",
+          "gender": "female",
+          "health": 40.0,
+          "name": "이 사원",
+          "state": "idle",
+          "working": true
+        },
+        {
+          "activity": "papers",
+          "gender": "female",
+          "health": 40.0,
+          "name": "정 인턴",
+          "state": "idle",
+          "working": true
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,6 @@
+DESK BREAKER v0.2.2
+Source commit: 0e5fe38307571bf2dfe075f16eb5f20c77b89dea
+Source tag: v0.2.2-female-cast
+Godot: 4.7.2.stable.official.ed1daf0bf
+Build report: BUILD-REPORT.json (Windows), docs/female-cast-build-report.json (source)
+Windows native execution has not been tested in this environment.
