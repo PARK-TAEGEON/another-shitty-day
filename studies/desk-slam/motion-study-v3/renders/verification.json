@@ -1,0 +1,85 @@
+{
+  "revision": "v3 anatomical left/right correction",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "import_parse": {
+    "exit_code": 0
+  },
+  "headless_smoke": {
+    "exit_code": 0,
+    "marker": "MOTION_STUDY_SMOKE_OK"
+  },
+  "real_render": {
+    "renderer": "OpenGL 4.5, Mesa 25.2.8 llvmpipe via Xvfb",
+    "frame_count": 240,
+    "resolution": [
+      960,
+      540
+    ],
+    "fps": 30,
+    "complete": true
+  },
+  "mp4": {
+    "full_decode_exit_code": 0,
+    "video_codec": "h264",
+    "audio_codec": "aac",
+    "duration_s": 8.0,
+    "video_frames": 240,
+    "audio_channels": 2,
+    "sample_rate_hz": 48000,
+    "size_bytes": 535661,
+    "sha256": "fe9434f0165f97ead0488c53b520cc456c695568a0802486bc2b20074ceceb32"
+  },
+  "unchanged_from_v2": {
+    "event_timings": true,
+    "contact_frames": [
+      41,
+      105,
+      171
+    ],
+    "world_fov_deg": 62,
+    "contact_wrists": [
+      "(-0.245, 0.827356, -0.13)",
+      "(0.245, 0.827356, -0.13)"
+    ],
+    "identical_synthesized_wav": true,
+    "wav_sha256": "44676e24af51762c55f17e0ba24ad8ec62500d7a3db506dc4567f986b870c9a3"
+  },
+  "geometry": {
+    "local_axes": "+Y knuckles; +Z hand back",
+    "left_thumb_local_x": "positive",
+    "right_thumb_local_x": "negative",
+    "left_hand_screen_side": "left",
+    "right_hand_screen_side": "right",
+    "palms": "inward",
+    "hand_backs": "outward",
+    "ulnar_edge": "toward desk",
+    "elbows": "outward, v2 silhouette preserved"
+  },
+  "visual_review": {
+    "reviewer": "hand_side_review",
+    "status": "passed within requested left/right correction scope",
+    "reviewed_frames": [
+      20,
+      38,
+      40,
+      41,
+      46,
+      110
+    ],
+    "findings": [
+      "Thumb side is inward on both hands",
+      "Wrist/cuff remains continuous",
+      "Sleeves extend to matching screen sides without crossing",
+      "Ulnar contact surface remains below thumb"
+    ]
+  },
+  "art_direction": "Satirical cartoon accepted; final character and hand assets not produced by this study",
+  "limits": [
+    "Procedural fixed-fist geometry retains thick thumb and ring-like contour; not a finished rig",
+    "Automatic B-A-A demonstration; no game input integration",
+    "Scripted prop motion; not rigid-body validation",
+    "Audio content unchanged; subjective sound quality not listened to or approved",
+    "No Windows or target PC performance verification"
+  ],
+  "encoding_note": "Initial container failed decode; original 240 frames were re-encoded into the final MP4, which fully decodes successfully."
+}

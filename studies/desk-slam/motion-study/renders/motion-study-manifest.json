@@ -1,0 +1,296 @@
+{
+  "fps": 30,
+  "frames_per_variant": 240,
+  "resolution": [
+    960,
+    540
+  ],
+  "duration_s": 8.0,
+  "audio": "Original deterministic synthesized impact, identical waveform and 0.50 peak in A and B; onset matches contact frame.",
+  "comparison_audio": "A is left channel, B is right channel. Single clips have centred identical impact audio.",
+  "timing_provenance": "Authored proposal; not copied or measured from reference games.",
+  "rendering": "Godot 4.7.2 real 3D geometry, scripted pose interpolation; frame capture at 30 fps.",
+  "limitations": [
+    "Not final game graphics",
+    "Not skeletal animation or a playable build",
+    "Props use a shared scripted response",
+    "No NPC behaviour in this timing study",
+    "Audio waveform validated numerically, not an acoustic quality approval"
+  ],
+  "A": {
+    "contact_wrists_m": [
+      "(-0.235, 0.829863, -0.255)",
+      "(0.235, 0.829863, -0.255)"
+    ],
+    "controlled_variables": [
+      "hand geometry",
+      "desk and props",
+      "camera",
+      "lighting",
+      "impact response function",
+      "impact audio and gain"
+    ],
+    "desk_pad_top_m": 0.764,
+    "desk_top_m": 0.76,
+    "difference": "lift, contact hold and recovery duration only; downstroke duration and poses identical",
+    "duration_s": 8.0,
+    "events": [
+      {
+        "contact_frame": 39,
+        "contact_s": 1.3,
+        "input_frame": 30,
+        "input_s": 1.0,
+        "phases": [
+          {
+            "duration_s": 0.2,
+            "end_frame_exclusive": 36,
+            "phase": "lift",
+            "start_frame": 30,
+            "start_s": 1.0
+          },
+          {
+            "duration_s": 0.1,
+            "end_frame_exclusive": 39,
+            "phase": "down",
+            "start_frame": 36,
+            "start_s": 1.2
+          },
+          {
+            "duration_s": 0.0666666666666667,
+            "end_frame_exclusive": 41,
+            "phase": "hold",
+            "start_frame": 39,
+            "start_s": 1.3
+          },
+          {
+            "duration_s": 0.3,
+            "end_frame_exclusive": 50,
+            "phase": "recover",
+            "start_frame": 41,
+            "start_s": 1.36666666666667
+          }
+        ]
+      },
+      {
+        "contact_frame": 105,
+        "contact_s": 3.5,
+        "input_frame": 96,
+        "input_s": 3.2,
+        "phases": [
+          {
+            "duration_s": 0.2,
+            "end_frame_exclusive": 102,
+            "phase": "lift",
+            "start_frame": 96,
+            "start_s": 3.2
+          },
+          {
+            "duration_s": 0.1,
+            "end_frame_exclusive": 105,
+            "phase": "down",
+            "start_frame": 102,
+            "start_s": 3.4
+          },
+          {
+            "duration_s": 0.0666666666666667,
+            "end_frame_exclusive": 107,
+            "phase": "hold",
+            "start_frame": 105,
+            "start_s": 3.5
+          },
+          {
+            "duration_s": 0.3,
+            "end_frame_exclusive": 116,
+            "phase": "recover",
+            "start_frame": 107,
+            "start_s": 3.56666666666667
+          }
+        ]
+      },
+      {
+        "contact_frame": 171,
+        "contact_s": 5.7,
+        "input_frame": 162,
+        "input_s": 5.4,
+        "phases": [
+          {
+            "duration_s": 0.2,
+            "end_frame_exclusive": 168,
+            "phase": "lift",
+            "start_frame": 162,
+            "start_s": 5.4
+          },
+          {
+            "duration_s": 0.1,
+            "end_frame_exclusive": 171,
+            "phase": "down",
+            "start_frame": 168,
+            "start_s": 5.6
+          },
+          {
+            "duration_s": 0.0666666666666667,
+            "end_frame_exclusive": 173,
+            "phase": "hold",
+            "start_frame": 171,
+            "start_s": 5.7
+          },
+          {
+            "duration_s": 0.3,
+            "end_frame_exclusive": 182,
+            "phase": "recover",
+            "start_frame": 173,
+            "start_s": 5.76666666666667
+          }
+        ]
+      }
+    ],
+    "fps": 30,
+    "limitations": [
+      "Timing study, not final art",
+      "Pose interpolation; not a final skeletal animation",
+      "Scripted prop responses, not rigid-body validation",
+      "No NPC behaviour or playable controls"
+    ],
+    "provenance": "Original hand geometry, scene and keyframe timing. Values proposed for comparison, not measured from a reference game.",
+    "total_frames": 240,
+    "variant": "A"
+  },
+  "B": {
+    "contact_wrists_m": [
+      "(-0.235, 0.829863, -0.255)",
+      "(0.235, 0.829863, -0.255)"
+    ],
+    "controlled_variables": [
+      "hand geometry",
+      "desk and props",
+      "camera",
+      "lighting",
+      "impact response function",
+      "impact audio and gain"
+    ],
+    "desk_pad_top_m": 0.764,
+    "desk_top_m": 0.76,
+    "difference": "lift, contact hold and recovery duration only; downstroke duration and poses identical",
+    "duration_s": 8.0,
+    "events": [
+      {
+        "contact_frame": 41,
+        "contact_s": 1.36666666666667,
+        "input_frame": 30,
+        "input_s": 1.0,
+        "phases": [
+          {
+            "duration_s": 0.266666666666667,
+            "end_frame_exclusive": 38,
+            "phase": "lift",
+            "start_frame": 30,
+            "start_s": 1.0
+          },
+          {
+            "duration_s": 0.1,
+            "end_frame_exclusive": 41,
+            "phase": "down",
+            "start_frame": 38,
+            "start_s": 1.26666666666667
+          },
+          {
+            "duration_s": 0.133333333333333,
+            "end_frame_exclusive": 45,
+            "phase": "hold",
+            "start_frame": 41,
+            "start_s": 1.36666666666667
+          },
+          {
+            "duration_s": 0.433333333333333,
+            "end_frame_exclusive": 58,
+            "phase": "recover",
+            "start_frame": 45,
+            "start_s": 1.5
+          }
+        ]
+      },
+      {
+        "contact_frame": 107,
+        "contact_s": 3.56666666666667,
+        "input_frame": 96,
+        "input_s": 3.2,
+        "phases": [
+          {
+            "duration_s": 0.266666666666667,
+            "end_frame_exclusive": 104,
+            "phase": "lift",
+            "start_frame": 96,
+            "start_s": 3.2
+          },
+          {
+            "duration_s": 0.1,
+            "end_frame_exclusive": 107,
+            "phase": "down",
+            "start_frame": 104,
+            "start_s": 3.46666666666667
+          },
+          {
+            "duration_s": 0.133333333333333,
+            "end_frame_exclusive": 111,
+            "phase": "hold",
+            "start_frame": 107,
+            "start_s": 3.56666666666667
+          },
+          {
+            "duration_s": 0.433333333333333,
+            "end_frame_exclusive": 124,
+            "phase": "recover",
+            "start_frame": 111,
+            "start_s": 3.7
+          }
+        ]
+      },
+      {
+        "contact_frame": 173,
+        "contact_s": 5.76666666666667,
+        "input_frame": 162,
+        "input_s": 5.4,
+        "phases": [
+          {
+            "duration_s": 0.266666666666667,
+            "end_frame_exclusive": 170,
+            "phase": "lift",
+            "start_frame": 162,
+            "start_s": 5.4
+          },
+          {
+            "duration_s": 0.1,
+            "end_frame_exclusive": 173,
+            "phase": "down",
+            "start_frame": 170,
+            "start_s": 5.66666666666667
+          },
+          {
+            "duration_s": 0.133333333333333,
+            "end_frame_exclusive": 177,
+            "phase": "hold",
+            "start_frame": 173,
+            "start_s": 5.76666666666667
+          },
+          {
+            "duration_s": 0.433333333333333,
+            "end_frame_exclusive": 190,
+            "phase": "recover",
+            "start_frame": 177,
+            "start_s": 5.9
+          }
+        ]
+      }
+    ],
+    "fps": 30,
+    "limitations": [
+      "Timing study, not final art",
+      "Pose interpolation; not a final skeletal animation",
+      "Scripted prop responses, not rigid-body validation",
+      "No NPC behaviour or playable controls"
+    ],
+    "provenance": "Original hand geometry, scene and keyframe timing. Values proposed for comparison, not measured from a reference game.",
+    "total_frames": 240,
+    "variant": "B"
+  }
+}

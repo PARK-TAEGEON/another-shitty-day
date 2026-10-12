@@ -1,0 +1,49 @@
+{
+  "godot_import": "PASS, Godot 4.7.2 --headless --editor --import",
+  "headless_smoke": "PASS, MOTION_STUDY_SMOKE_OK",
+  "renderer": "Linux OpenGL compatibility, Mesa llvmpipe 25.2.8",
+  "direct_rendered_frames": 240,
+  "video_decode": "PASS, full FFmpeg audio/video decode, no errors",
+  "video": {
+    "width": 960,
+    "height": 540,
+    "fps": "30/1",
+    "frames": 240,
+    "duration_s": 8.0,
+    "bytes": 533128,
+    "sha256": "1d47aa3be97f9d803f77348f87ca01a266dadc1c4576cc983b7ee0d7496e07bf"
+  },
+  "audio": {
+    "channels": 2,
+    "sample_rate": "48000",
+    "peak_before_encoding": 0.5,
+    "listened": false
+  },
+  "sequence": {
+    "timing": [
+      "B",
+      "A",
+      "A"
+    ],
+    "total_motion_frames": [
+      28,
+      20,
+      20
+    ],
+    "contact_frames": [
+      41,
+      105,
+      171
+    ]
+  },
+  "visual_review": "Direct rest/lift/contact/recover PNGs inspected. Sleeves remain continuous; reduced long-arm silhouette. Procedural finger shapes remain visibly approximate.",
+  "not_verified": [
+    "Playable input feel",
+    "NPC behaviour",
+    "Actual rigid-body contact",
+    "Windows execution",
+    "Target-PC performance",
+    "Acoustic quality"
+  ],
+  "independent_review": "PASS for this follow-up study: no visible sleeve cuts or detached wrists; props remain still before contact and respond on following frame; B/A/A labels match timing. Approximate rounded finger shapes remain a known art limitation."
+}

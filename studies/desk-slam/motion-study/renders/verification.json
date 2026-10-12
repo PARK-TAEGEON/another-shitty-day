@@ -1,0 +1,130 @@
+{
+  "render_exit_code": 0,
+  "render_engine": "Godot 4.7.2 stable",
+  "render_device": "Mesa llvmpipe, OpenGL 4.5 compatibility",
+  "visual_review": "Reviewer inspected rest/lift and A38-40/B40-42 contact frames after correcting exposure, sleeves, and lift pose. No blocking issue found for timing comparison.",
+  "not_verified": [
+    "Windows execution",
+    "Playable input feel",
+    "Production rig deformation",
+    "Final asset quality",
+    "Acoustic quality by listening"
+  ],
+  "videos": {
+    "motion-a.mp4": {
+      "bytes": 474611,
+      "sha256": "a1cdc836ccba5bc28a71c3c7fc8c907a76dffc201aeff01e55c62e562c6cbd2c",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 960,
+            "height": 540,
+            "avg_frame_rate": "30/1",
+            "duration": "8.000000",
+            "nb_frames": "240"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "avg_frame_rate": "0/0",
+            "duration": "8.000000",
+            "nb_frames": "376"
+          }
+        ],
+        "format": {
+          "duration": "8.000000"
+        }
+      },
+      "full_decode": "PASS"
+    },
+    "motion-b.mp4": {
+      "bytes": 497612,
+      "sha256": "3d7cf2a317c48f06af43e922d3312929520609b06135fc698151602e73ffdfb5",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 960,
+            "height": 540,
+            "avg_frame_rate": "30/1",
+            "duration": "8.000000",
+            "nb_frames": "240"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "avg_frame_rate": "0/0",
+            "duration": "8.000000",
+            "nb_frames": "376"
+          }
+        ],
+        "format": {
+          "duration": "8.000000"
+        }
+      },
+      "full_decode": "PASS"
+    },
+    "motion-comparison.mp4": {
+      "bytes": 909510,
+      "sha256": "58bcc467f30f6d6849646d78eea2c8b6d62af21c17e13757ccf06577d9ca3602",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 540,
+            "avg_frame_rate": "30/1",
+            "duration": "8.000000",
+            "nb_frames": "240"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "avg_frame_rate": "0/0",
+            "duration": "8.000000",
+            "nb_frames": "376"
+          }
+        ],
+        "format": {
+          "duration": "8.000000"
+        }
+      },
+      "full_decode": "PASS"
+    }
+  },
+  "source_sha256": {
+    "scene.gd": "936c1a341ca3938489a7e794ac281c52f1278bbe62642a72633ecac9dd4d3307",
+    "hand_model.gd": "382de0a21ed4e6e1093d55a93abd9365d26436273e67702cf5277bc8512326e9",
+    "render_study.py": "dd015d7f4acf6aca081f0d22caf529c37da39860baee1199b7ccce0449f74eb7"
+  },
+  "audio": {
+    "a": {
+      "peak_s16": 16384,
+      "contact_frame": 39,
+      "contact_s": 1.3,
+      "waveform_sha256": "2e95632b6c8e4983dc8dbd438ab2ec4330c525863216e6110616929c1f0cc466",
+      "frames": 384000
+    },
+    "b": {
+      "peak_s16": 16384,
+      "contact_frame": 41,
+      "contact_s": 1.36666666666667,
+      "waveform_sha256": "2e95632b6c8e4983dc8dbd438ab2ec4330c525863216e6110616929c1f0cc466",
+      "frames": 384000
+    },
+    "identical_impact_waveform": "PASS"
+  }
+}

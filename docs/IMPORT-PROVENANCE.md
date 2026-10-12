@@ -11,8 +11,3 @@
 모션 연구 ZIP SHA-256: `0207774b416ca1de357ebde24908ed9aebbf0a9bc62847ad653f0c4e1b09df5e`
 
 > Windows 실행본은 이 Git repo에서 재빌드한 것이 아니며, 최신 원본 Windows ZIP과 이전 자료는 별도 아티팩트로 보관한다. 상용 배포 시에는 추후 R6 기준으로 새 Windows 빌드를 생성한다.
-
-
-### GitHub import note (2026-10-12)
-
-The historical office-expansion preview MP4 was re-encoded to a smaller review copy for GitHub transfer. The original higher-bitrate MP4 remains in the preserved local repository ZIP backup (`another-shitty-day-repo.zip`). Gameplay source files were not changed.

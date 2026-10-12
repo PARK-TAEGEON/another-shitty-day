@@ -1,0 +1,146 @@
+{
+	"changes": [
+		"Outward elbow bend shortens the straight sleeve silhouette",
+		"Contact moved 12.5 cm closer to camera, lift reduced by 6.5 cm",
+		"Compact thumb and curled fingers with a 2 mm grip cue",
+		"Small wrist turn, curved preparation and controlled body follow",
+		"First B 28f, next two A 20f; original timing preserved"
+	],
+	"contact_wrists_m": [
+		"(-0.245, 0.827356, -0.13)",
+		"(0.245, 0.827356, -0.13)"
+	],
+	"desk_pad_top_m": 0.764,
+	"desk_top_m": 0.76,
+	"duration_s": 8.0,
+	"events": [
+		{
+			"contact_frame": 41,
+			"contact_s": 1.36666666666667,
+			"input_frame": 30,
+			"input_s": 1.0,
+			"phases": [
+				{
+					"duration_s": 0.266666666666667,
+					"end_frame_exclusive": 38,
+					"phase": "lift",
+					"start_frame": 30,
+					"start_s": 1.0
+				},
+				{
+					"duration_s": 0.1,
+					"end_frame_exclusive": 41,
+					"phase": "down",
+					"start_frame": 38,
+					"start_s": 1.26666666666667
+				},
+				{
+					"duration_s": 0.133333333333333,
+					"end_frame_exclusive": 45,
+					"phase": "hold",
+					"start_frame": 41,
+					"start_s": 1.36666666666667
+				},
+				{
+					"duration_s": 0.433333333333333,
+					"end_frame_exclusive": 58,
+					"phase": "recover",
+					"start_frame": 45,
+					"start_s": 1.5
+				}
+			],
+			"role": "intro",
+			"timing": "B",
+			"total_motion_frames": 28
+		},
+		{
+			"contact_frame": 105,
+			"contact_s": 3.5,
+			"input_frame": 96,
+			"input_s": 3.2,
+			"phases": [
+				{
+					"duration_s": 0.2,
+					"end_frame_exclusive": 102,
+					"phase": "lift",
+					"start_frame": 96,
+					"start_s": 3.2
+				},
+				{
+					"duration_s": 0.1,
+					"end_frame_exclusive": 105,
+					"phase": "down",
+					"start_frame": 102,
+					"start_s": 3.4
+				},
+				{
+					"duration_s": 0.0666666666666667,
+					"end_frame_exclusive": 107,
+					"phase": "hold",
+					"start_frame": 105,
+					"start_s": 3.5
+				},
+				{
+					"duration_s": 0.3,
+					"end_frame_exclusive": 116,
+					"phase": "recover",
+					"start_frame": 107,
+					"start_s": 3.56666666666667
+				}
+			],
+			"role": "repeat_action",
+			"timing": "A",
+			"total_motion_frames": 20
+		},
+		{
+			"contact_frame": 171,
+			"contact_s": 5.7,
+			"input_frame": 162,
+			"input_s": 5.4,
+			"phases": [
+				{
+					"duration_s": 0.2,
+					"end_frame_exclusive": 168,
+					"phase": "lift",
+					"start_frame": 162,
+					"start_s": 5.4
+				},
+				{
+					"duration_s": 0.1,
+					"end_frame_exclusive": 171,
+					"phase": "down",
+					"start_frame": 168,
+					"start_s": 5.6
+				},
+				{
+					"duration_s": 0.0666666666666667,
+					"end_frame_exclusive": 173,
+					"phase": "hold",
+					"start_frame": 171,
+					"start_s": 5.7
+				},
+				{
+					"duration_s": 0.3,
+					"end_frame_exclusive": 182,
+					"phase": "recover",
+					"start_frame": 173,
+					"start_s": 5.76666666666667
+				}
+			],
+			"role": "repeat_action",
+			"timing": "A",
+			"total_motion_frames": 20
+		}
+	],
+	"fps": 30,
+	"limitations": [
+		"Motion study, character art direction not selected",
+		"Pose interpolation and procedural meshes, not a production skeletal rig",
+		"Scripted props and automatic sequence; not playable controls",
+		"Audio added during encoding"
+	],
+	"provenance": "Original procedural hand geometry and scripted poses. Revision of motion-study based on user feedback; no reference motion extracted.",
+	"total_frames": 240,
+	"variant": "SEQUENCE",
+	"world_fov_deg": 62
+}

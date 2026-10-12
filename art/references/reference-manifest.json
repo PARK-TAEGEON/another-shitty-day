@@ -1,0 +1,58 @@
+[
+  {
+    "path": "art/references/approved/office-caricature-original.png",
+    "origin": "풍자_만화형_오피스_코미디.png",
+    "classification": "approved",
+    "bytes": 1804624,
+    "sha256": "d2bca9e3b29ea92a66118eb8d9e2418381e3932623b7f566af786d6e54953f2d",
+    "notes": "Original office/caricature style reference approved by user."
+  },
+  {
+    "path": "art/references/approved/five-staff-unlikable-approved.png",
+    "origin": "얄미운_직장인_5인방.png",
+    "classification": "approved",
+    "bytes": 1979890,
+    "sha256": "31d6c71b632f847861e82eec5a7e447edf6aee7a9f6dfbb53cc7d72266c9db3b",
+    "notes": "Most recently approved five-character lineup. Approved as visual direction, not as implemented mesh."
+  },
+  {
+    "path": "art/references/concept-wip/boss-kim-turnaround-v1-concept.png",
+    "origin": "김_팀장_캐릭터_시트.png",
+    "classification": "concept-wip",
+    "bytes": 2013298,
+    "sha256": "571a349026bebc577f6348ecd4cad0ef6873ef30bf2b4212ff51fc679f7d3879",
+    "notes": "Turnaround/expression concept approved as direction; orthographic A-pose sheet v2 remains pending."
+  },
+  {
+    "path": "art/references/exploration/five-staff-initial-lineup.png",
+    "origin": "사무실_캐릭터_5인_라인업.png",
+    "classification": "exploration",
+    "bytes": 1924843,
+    "sha256": "fbf971eb70ace7241fc9edd6db31e4abdfaf2a3eafda6a6bcbb3549fa3704d49",
+    "notes": "Earlier less-irritating lineup; superseded by approved lineup."
+  },
+  {
+    "path": "art/references/exploration/photoreal-option-a-rejected.png",
+    "origin": "책상_너머의_두_동료.png",
+    "classification": "exploration",
+    "bytes": 2011067,
+    "sha256": "a89ce0d5ddfe67610b90bb8686f3f04bb53e654fee1cd63dc4c87599356755fe",
+    "notes": "Early realism-heavy option rejected as too realistic."
+  },
+  {
+    "path": "art/references/exploration/stylized-option-b-rejected.png",
+    "origin": "스타일드_3d_오피스_협업_장면.png",
+    "classification": "exploration",
+    "bytes": 1914515,
+    "sha256": "619fb32f780beaf7fcbc14186f9c5f88104e4481f22bbfe3ef01235f372ff815",
+    "notes": "Earlier stylized-realistic option rejected as too realistic."
+  },
+  {
+    "path": "art/references/office-caricature-approved.png",
+    "origin": "v0.2.2 source ZIP",
+    "classification": "approved",
+    "bytes": 1804624,
+    "sha256": "d2bca9e3b29ea92a66118eb8d9e2418381e3932623b7f566af786d6e54953f2d",
+    "notes": "Existing original in source project; kept unchanged."
+  }
+]
