@@ -255,8 +255,138 @@ func _triangle(surface: SurfaceTool, a: Vector3, b: Vector3, c: Vector3) -> void
 		surface.set_normal(normal)
 		surface.add_vertex(point)
 
+const FORM_SEGMENTS: int = 20
+const FORM_SUBSTEPS: int = 4
+const FORM_ROUNDNESS: float = 2.6 # Superellipse exponent: 2 = ellipse, higher = boxier.
+
 func _form(parent: Node3D, rings: Array[Vector3], at: Vector3, color: Color, forward_offsets: PackedFloat32Array = PackedFloat32Array()) -> MeshInstance3D:
-	# Each ring is (width, height, depth). Eight-sided rings retain broad flat planes.
+	# Each ring is (width, height, depth). Rings become rounded superellipse
+	# sections, joined by a Catmull-Rom curve and shaded with smooth normals, so
+	# bodies read as soft sculpted forms instead of faceted blocks. The authored
+	# ring sizes, heights and offsets are unchanged.
+	var has_offsets: bool = forward_offsets.size() == rings.size()
+	var keys: Array[Vector4] = []
+	for ring_index: int in range(rings.size()):
+		var ring: Vector3 = rings[ring_index]
+		keys.append(Vector4(ring.x, ring.y, ring.z, forward_offsets[ring_index] if has_offsets else 0.0))
+	var profile: Array[Vector4] = []
+	for band: int in range(keys.size() - 1):
+		var p0: Vector4 = keys[maxi(band - 1, 0)]
+		var p1: Vector4 = keys[band]
+		var p2: Vector4 = keys[band + 1]
+		var p3: Vector4 = keys[mini(band + 2, keys.size() - 1)]
+		for step: int in range(FORM_SUBSTEPS):
+			var t: float = float(step) / float(FORM_SUBSTEPS)
+			var value: Vector4 = 0.5 * ((2.0 * p1) + (p2 - p0) * t + (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t * t + (3.0 * p1 - p0 - 3.0 * p2 + p3) * t * t * t)
+			# Keep each section inside its two authored rings; no overshoot bulges.
+			value.x = clampf(value.x, minf(p1.x, p2.x), maxf(p1.x, p2.x))
+			value.z = clampf(value.z, minf(p1.z, p2.z), maxf(p1.z, p2.z))
+			value.y = lerpf(p1.y, p2.y, t)
+			profile.append(value)
+	profile.append(keys[-1])
+	profile = _round_form_ends(profile)
+	var ring_points: Array[PackedVector3Array] = []
+	var exponent: float = 2.0 / FORM_ROUNDNESS
+	for section: Vector4 in profile:
+		var points: PackedVector3Array = PackedVector3Array()
+		for edge: int in range(FORM_SEGMENTS):
+			# Decreasing angle keeps the original winding and outward normals.
+			var angle: float = PI * 0.5 - float(edge) * TAU / float(FORM_SEGMENTS)
+			var c: float = cos(angle)
+			var s: float = sin(angle)
+			points.append(Vector3(
+				signf(c) * pow(absf(c), exponent) * section.x * 0.5,
+				section.y,
+				signf(s) * pow(absf(s), exponent) * section.z * 0.5 + section.w))
+		ring_points.append(points)
+	var vertices: PackedVector3Array = PackedVector3Array()
+	var normals: PackedVector3Array = PackedVector3Array()
+	var indices: PackedInt32Array = PackedInt32Array()
+	for points: PackedVector3Array in ring_points:
+		vertices.append_array(points)
+	normals.resize(vertices.size())
+	for band: int in range(ring_points.size() - 1):
+		for edge: int in range(FORM_SEGMENTS):
+			var next: int = (edge + 1) % FORM_SEGMENTS
+			var a: int = band * FORM_SEGMENTS + edge
+			var b: int = (band + 1) * FORM_SEGMENTS + edge
+			var c: int = (band + 1) * FORM_SEGMENTS + next
+			var d: int = band * FORM_SEGMENTS + next
+			for tri: PackedInt32Array in [PackedInt32Array([a, b, c]), PackedInt32Array([a, c, d])]:
+				var face: Vector3 = (vertices[tri[2]] - vertices[tri[0]]).cross(vertices[tri[1]] - vertices[tri[0]])
+				for corner: int in tri:
+					normals[corner] += face
+				indices.append_array(tri)
+	for index: int in range(normals.size()):
+		normals[index] = normals[index].normalized() if normals[index].length_squared() > 0.0 else Vector3.UP
+	# Flat end caps keep their own vertices so the side shading stays smooth.
+	for cap: int in [0, ring_points.size() - 1]:
+		var points: PackedVector3Array = ring_points[cap]
+		var section: Vector4 = profile[cap]
+		var center: int = vertices.size()
+		var cap_normal: Vector3 = Vector3.DOWN if cap == 0 else Vector3.UP
+		vertices.append(Vector3(0, section.y, section.w))
+		normals.append(cap_normal)
+		for point: Vector3 in points:
+			vertices.append(point)
+			normals.append(cap_normal)
+		for edge: int in range(FORM_SEGMENTS):
+			var next: int = (edge + 1) % FORM_SEGMENTS
+			if cap == 0:
+				indices.append_array(PackedInt32Array([center, center + 1 + edge, center + 1 + next]))
+			else:
+				indices.append_array(PackedInt32Array([center, center + 1 + next, center + 1 + edge]))
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_INDEX] = indices
+	var smooth_mesh: ArrayMesh = ArrayMesh.new()
+	smooth_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	var smooth_node: MeshInstance3D = MeshInstance3D.new()
+	smooth_node.mesh = smooth_mesh
+	smooth_node.material_override = _mat(color)
+	smooth_node.position = at
+	parent.add_child(smooth_node)
+	return smooth_node
+
+const FORM_END_ROUNDING: float = 0.32 # Share of the end section's smaller side.
+const FORM_END_SCALE: float = 0.5 # Section scale left at the very end.
+
+func _round_form_ends(profile: Array[Vector4]) -> Array[Vector4]:
+	# Curl each end inward like a dome instead of cutting it flat. The length of
+	# the form is unchanged; only the last few centimetres taper.
+	if profile.size() < 2:
+		return profile
+	var total: float = absf(profile[-1].y - profile[0].y)
+	if total <= 0.0001:
+		return profile
+	var reach: Array[float] = []
+	for end_section: Vector4 in [profile[0], profile[-1]]:
+		reach.append(minf(minf(end_section.x, end_section.z) * FORM_END_ROUNDING, total * 0.4))
+	# Densify rows close to either end so the dome is smooth.
+	var dense: Array[Vector4] = [profile[0]]
+	for index: int in range(1, profile.size()):
+		var a: Vector4 = profile[index - 1]
+		var b: Vector4 = profile[index]
+		var near_end: bool = absf(a.y - profile[0].y) < reach[0] or absf(b.y - profile[-1].y) < reach[1]
+		var steps: int = 4 if near_end else 1
+		for step: int in range(1, steps + 1):
+			dense.append(a.lerp(b, float(step) / float(steps)))
+	var result: Array[Vector4] = []
+	for section: Vector4 in dense:
+		var scale: float = 1.0
+		for end_index: int in range(2):
+			var end_y: float = profile[0].y if end_index == 0 else profile[-1].y
+			var h: float = reach[end_index]
+			if h > 0.0001:
+				var d: float = clampf(absf(section.y - end_y) / h, 0.0, 1.0)
+				scale = minf(scale, lerpf(FORM_END_SCALE, 1.0, sqrt(1.0 - (1.0 - d) * (1.0 - d))))
+		result.append(Vector4(section.x * scale, section.y, section.z * scale, section.w))
+	return result
+
+func _faceted_form(parent: Node3D, rings: Array[Vector3], at: Vector3, color: Color, forward_offsets: PackedFloat32Array = PackedFloat32Array()) -> MeshInstance3D:
+	# Original v0.2.2 eight-sided faceted form, kept for comparison.
 	var surface: SurfaceTool = SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var points: Array[PackedVector3Array] = []
