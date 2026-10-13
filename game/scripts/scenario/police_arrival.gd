@@ -1,14 +1,17 @@
 extends Node
 ## A presentation of an already-spawned police officer, never a dispatch authority.
 ## Integration must cancel before menu/end/restart changes player input ownership.
-## World physics remains live; accepted contacts are not deleted by set_active(false).
+## Full pauses the single-player world and game clock; accepted contacts wait intact.
+## Short/Off and the multiplayer boundary never pause or take a player's camera.
 signal finished
 
-const DURATION: float = 1.85
+const DURATION: float = 3.0
+const SHORT_DURATION: float = 1.0
 const FONT: Font = preload("res://assets/fonts/KoreanUI.ttf")
 
 var presented: bool = false
 var active: bool = false
+var mode: String = "full"
 var _remaining: float = 0.0
 var _player: Node3D
 var _previous_camera: Camera3D
@@ -18,9 +21,11 @@ var _overlay: CanvasLayer
 var _title: Label
 var _skip: Label
 var _panel: PanelContainer
+var _owns_pause: bool = false
+var _previous_paused: bool = false
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_PAUSABLE
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_overlay()
 	set_process(false)
 	set_process_input(false)
@@ -30,14 +35,18 @@ func begin(player: Node3D, arrival_position: Vector3, nonblocking: bool = false)
 		return
 	presented = true
 	active = true
-	_remaining = DURATION
 	_player = player
+	var selected: String = mode.to_lower() if mode.to_lower() in ["full", "short", "off"] else "full"
+	if selected == "off":
+		_finish()
+		return
+	_remaining = SHORT_DURATION if selected == "short" or nonblocking else DURATION
 	_panel.visible = true
 	_skip.visible = false
 	set_process(true)
 	# Invalid references, inactive/menu state and future multiplayer all degrade
 	# to the same one-shot subtitle. They never schedule a late camera takeover.
-	if nonblocking or get_tree().paused or not is_instance_valid(player) or not player.is_inside_tree():
+	if selected == "short" or nonblocking or get_tree().paused or not is_instance_valid(player) or not player.is_inside_tree():
 		return
 	if not _has_property(player, "enabled") or not bool(player.get("enabled")):
 		return
@@ -53,8 +62,8 @@ func begin(player: Node3D, arrival_position: Vector3, nonblocking: bool = false)
 		"key": player.is_processing_unhandled_key_input(),
 		"shortcut": player.is_processing_shortcut_input()
 	}
-	# Keep enabled and action serial intact: an already accepted asynchronous
-	# attack still resolves. New input and player locomotion are suspended only.
+	# Keep enabled and action serial intact. A pending attack timer is paused by
+	# the tree and resolves once after the world resumes, using the same input.
 	player.set_process(false)
 	player.set_physics_process(false)
 	player.set_process_input(false)
@@ -72,11 +81,17 @@ func begin(player: Node3D, arrival_position: Vector3, nonblocking: bool = false)
 	_cut_camera.make_current()
 	_skip.visible = true
 	set_process_input(true)
+	_previous_paused = get_tree().paused
+	_owns_pause = true
+	get_tree().paused = true
 
 func cancel() -> void:
 	if not active:
 		return
 	_finish()
+
+func owns_world_pause() -> bool:
+	return active and _owns_pause
 
 func reset_round() -> void:
 	cancel()
@@ -84,6 +99,10 @@ func reset_round() -> void:
 
 func _process(delta: float) -> void:
 	if not active:
+		return
+	# This controller advances through the pause it owns, but respects a pause
+	# established by a menu/other owner for subtitle-only presentations.
+	if get_tree().paused and not _owns_pause:
 		return
 	if not is_instance_valid(_player) or not _player.is_inside_tree():
 		_finish()
@@ -105,6 +124,11 @@ func _finish() -> void:
 	set_process_input(false)
 	if is_instance_valid(_panel):
 		_panel.visible = false
+	# Restore before the caller establishes its menu/result/restart pause. This
+	# module never writes the player's enabled flag or resets an accepted action.
+	if _owns_pause:
+		get_tree().paused = _previous_paused
+	_owns_pause = false
 	if is_instance_valid(_cut_camera):
 		# A new camera owner (results/restart/another presentation) has priority.
 		if _cut_camera.is_inside_tree() and _cut_camera.get_viewport().get_camera_3d() == _cut_camera:

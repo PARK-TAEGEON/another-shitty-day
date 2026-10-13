@@ -1,0 +1,17 @@
+[
+  {
+    "name": "social_damage_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\transaction-fix-social_damage_regression.log"
+  },
+  {
+    "name": "police_arrival_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\transaction-fix-police_arrival_regression.log"
+  },
+  {
+    "name": "police_arrival_damage_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\transaction-fix-police_arrival_damage_regression.log"
+  }
+]

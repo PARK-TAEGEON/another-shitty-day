@@ -1,0 +1,105 @@
+{
+	"capture": "native Windows automated gameplay replay; round starting position and police placement/dispatch staged; E and paired traversal/police response/physical subdual are production systems",
+	"evidence": [
+		{
+			"caption": "뭐야 무슨 소리야?",
+			"ceo": "(12.7, -0.019375, -2.8)",
+			"ended": false,
+			"held": false,
+			"hold_age": 0.0,
+			"holder": "(0.0, -0.019167, 0.65)",
+			"label": "01-golden-opening",
+			"money": 95000,
+			"police_witness": false
+		},
+		{
+			"caption": "이게 무슨 짓이지?",
+			"ceo": "(12.7, -0.019375, -2.8)",
+			"ended": false,
+			"held": false,
+			"hold_age": 0.0,
+			"holder": "(0.0, -0.019167, 0.65)",
+			"label": "01b-repeat-desk-A",
+			"money": 95000,
+			"police_witness": false
+		},
+		{
+			"caption": "",
+			"ceo": "(12.7, -0.019375, -2.8)",
+			"ended": false,
+			"held": false,
+			"hold_age": 0.0,
+			"holder": "(12.7, -0.019896, -1.85)",
+			"label": "02-ceo-E-prompt",
+			"money": 0,
+			"police_witness": false
+		},
+		{
+			"caption": "나 누군지 알고 이래?",
+			"ceo": "(12.15, -0.019129, -2.48)",
+			"ended": false,
+			"held": true,
+			"hold_age": 0.700000000000001,
+			"holder": "(12.7, -0.019896, -1.85)",
+			"label": "03-real-E-held",
+			"money": 10000,
+			"police_witness": false
+		},
+		{
+			"caption": "회사는 가족이라도 이렇게 붙어 다니는 건 아니지.",
+			"ceo": "(6.120686, -0.019892, -1.859333)",
+			"ended": false,
+			"held": true,
+			"hold_age": 4.16666666666666,
+			"holder": "(6.670686, -0.019892, -1.229333)",
+			"label": "04-pair-crossed-doorway",
+			"money": 10000,
+			"police_witness": false
+		},
+		{
+			"caption": "회사는 가족이라도 이렇게 붙어 다니는 건 아니지.",
+			"ceo": "(6.120686, -0.019892, -1.859333)",
+			"ended": false,
+			"held": true,
+			"hold_age": 4.16666666666666,
+			"holder": "(6.670686, -0.019892, -1.229333)",
+			"label": "05-first-police-full",
+			"money": 610000,
+			"police_witness": false
+		},
+		{
+			"caption": "잠깐, 사장님은 놓고 얘기하세요.",
+			"ceo": "(6.869988, -0.019129, -2.041539)",
+			"ended": false,
+			"held": true,
+			"hold_age": 6.46666666666665,
+			"holder": "(6.670686, -0.019892, -1.229333)",
+			"label": "06-police-witness-standoff",
+			"money": 610000,
+			"police_witness": true
+		},
+		{
+			"caption": "그만하시고 뒤로 물러나세요.",
+			"ceo": "(6.868599, -0.019129, -2.042928)",
+			"ended": false,
+			"held": false,
+			"hold_age": 0.0,
+			"holder": "(6.670686, -0.019892, -1.229333)",
+			"label": "07-E-release-normal-response",
+			"money": 610000,
+			"police_witness": false
+		},
+		{
+			"caption": "그만하시고 뒤로 물러나세요.",
+			"ceo": "(5.181281, -0.019129, -2.834496)",
+			"ended": true,
+			"held": false,
+			"hold_age": 0.0,
+			"holder": "(6.670686, -0.019892, -1.229333)",
+			"label": "08-social-damage-result",
+			"money": 610000,
+			"police_witness": false
+		}
+	],
+	"failures": []
+}

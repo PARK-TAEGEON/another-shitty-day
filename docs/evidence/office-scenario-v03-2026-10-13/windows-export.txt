@@ -1,0 +1,56 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started 프로젝트 초기화 (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | 파일 구조 스캔 중...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | 전역 클래스 이름을 불러오는 중...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | GDExtensions 검증 중...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | 오토로드 스크립트를 만드는 중...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | 플러그인을 초기화 중...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | 파일 스캔 시작 중...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1msavepack[22m | Started 패킹 중 (102 steps)[39m[0m
+[   1% ] [90m[1msavepack[22m | 파일 저장 중: res://.godot/imported/KoreanUI.ttf-b9cafaf55f8f9f3ae6e40066c6f7f32d.fontdata[39m[0m
+[   1% ] [90m[1msavepack[22m | 파일 저장 중: res://assets/fonts/KoreanUI.ttf.import[39m[0m
+[   6% ] [90m[1msavepack[22m | 파일 저장 중: res://.godot/imported/icon.svg-56083ea2a1f1a4f1e49773bdc6d7826c.ctex[39m[0m
+[   6% ] [90m[1msavepack[22m | 파일 저장 중: res://assets/icon.svg.import[39m[0m
+[  11% ] [90m[1msavepack[22m | 파일 저장 중: res://data/scenario/ceo_hold_v03.json[39m[0m
+[  16% ] [90m[1msavepack[22m | 파일 저장 중: res://data/scenario/chaos_score_v1.json[39m[0m
+[  21% ] [90m[1msavepack[22m | 파일 저장 중: res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn[39m[0m
+[  26% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/ceo_hold.gdc[39m[0m
+[  31% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/ceo_npc.gdc[39m[0m
+[  35% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/chaos_score.gdc[39m[0m
+[  40% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/event_stream.gdc[39m[0m
+[  45% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/police_arrival.gdc[39m[0m
+[  50% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/police_npc.gdc[39m[0m
+[  55% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/audio.gdc[39m[0m
+[  60% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/hand_model.gdc[39m[0m
+[  65% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/main.gdc[39m[0m
+[  69% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/office_capture.gdc[39m[0m
+[  74% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/office_npc.gdc[39m[0m
+[  79% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/player.gdc[39m[0m
+[  84% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/prop.gdc[39m[0m
+[  89% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/social_damage.gdc[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/world.gdc[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scenes/main.tscn.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/ceo_hold.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/ceo_npc.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/chaos_score.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/event_stream.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/police_arrival.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/scenario/police_npc.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/audio.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/hand_model.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/main.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/office_capture.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/office_npc.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/player.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/prop.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/social_damage.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://scripts/world.gd.remap[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://.godot/global_script_class_cache.cfg[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://assets/icon.svg[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://.godot/uid_cache.bin[39m[0m
+[  94% ] [90m[1msavepack[22m | 파일 저장 중: res://project.binary[39m[0m
+[92m[ DONE ][39m [1msavepack[22m
+[0m

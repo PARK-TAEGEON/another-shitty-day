@@ -1,0 +1,1666 @@
+4.7.2.stable.official.ed1daf0bf
+Importing project resources...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] first_scan_filesystem | Started 프로젝트 초기화 (5 steps)
+[   0% ] first_scan_filesystem | 파일 구조 스캔 중...
+[  16% ] first_scan_filesystem | 전역 클래스 이름을 불러오는 중...
+[  33% ] first_scan_filesystem | GDExtensions 검증 중...
+[  50% ] first_scan_filesystem | 오토로드 스크립트를 만드는 중...
+[  66% ] first_scan_filesystem | 플러그인을 초기화 중...
+[  83% ] first_scan_filesystem | 파일 스캔 시작 중...
+[ DONE ] first_scan_filesystem
+
+[   0% ] update_scripts_classes | Started 전역 클래스를 등록하는 중... (18 steps)
+[   0% ] update_scripts_classes |
+[   5% ] update_scripts_classes |
+[  10% ] update_scripts_classes |
+[  15% ] update_scripts_classes |
+[  21% ] update_scripts_classes |
+[  26% ] update_scripts_classes |
+[  31% ] update_scripts_classes |
+[  36% ] update_scripts_classes |
+[  42% ] update_scripts_classes |
+[  47% ] update_scripts_classes |
+[  52% ] update_scripts_classes |
+[  57% ] update_scripts_classes |
+[  63% ] update_scripts_classes |
+[  68% ] update_scripts_classes |
+[  73% ] update_scripts_classes |
+[  78% ] update_scripts_classes |
+[  84% ] update_scripts_classes |
+[  89% ] update_scripts_classes |
+[ DONE ] update_scripts_classes
+
+[   0% ] _update_scan_actions | Started 액션 스캔 중... (5 steps)
+[   0% ] _update_scan_actions | impactSoft_heavy_000.ogg
+[  16% ] _update_scan_actions | impactWood_medium_000.ogg
+[  33% ] _update_scan_actions | boss_kim.glb
+[  50% ] _update_scan_actions | KoreanUI.ttf
+[  66% ] _update_scan_actions | icon.svg
+[ DONE ] _update_scan_actions
+
+[   0% ] reimport | Started 애셋 (다시) 가져오는 중 (5 steps)
+[   0% ] reimport | 다시 가져올 파일을 준비 중...
+[  16% ] reimport | 다시 가져올 파일을 준비 중...
+[  33% ] reimport | 다시 가져올 파일을 준비 중...
+[  50% ] reimport | 다시 가져올 파일을 준비 중...
+[  66% ] reimport | 다시 가져올 파일을 준비 중...
+[   0% ] reimport | 다시 가져오기 전 작업을 수행 중...
+[   0% ] preload_reimporting_scene | Started 다시 불러오기를 위해 씬 준비 중 (1 steps)
+[   0% ] preload_reimporting_scene | 씬 [비었음] 분석 중
+[  50% ] preload_reimporting_scene | 준비가 완료되었습니다.
+[ DONE ] preload_reimporting_scene
+
+[   0% ] reimport | KoreanUI.ttf
+[  16% ] reimport | KoreanUI.ttf
+[  33% ] reimport | impactSoft_heavy_000.ogg
+[  50% ] reimport | icon.svg
+[  66% ] reimport | boss_kim.glb
+[   0% ] import | Started 씬 가져오기 (104 steps)
+[   0% ] import | 씬 가져오는 중...
+[   1% ] import | 커스텀 스크립트 실행 중...
+[  99% ] import | 저장 중...
+[ DONE ] import
+
+[  83% ] reimport | 애셋 가져오기 마무리 중...
+[ DONE ] reimport
+
+[   0% ] reimport | Started 애셋 (다시) 가져오는 중 (5 steps)
+[   0% ] reimport | 다시 가져오기 후 작업을 수행 중...
+[ DONE ] reimport
+
+[   0% ] loading_editor_layout | Started 편집기를 불러오는 중 (5 steps)
+[   0% ] loading_editor_layout | 편집기 레이아웃을 불러오는 중...
+[  16% ] loading_editor_layout | 독을 불러오는 중...
+[ DONE ] loading_editor_layout
+
+Running smoke scenario...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+DESK_BREAKER_SMOKE_OK: seven employees, reach, actual work/prop/dispatch ledger, money-response separation, grab, results freeze, reset
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+Running held-item wall and camera-pickup regression...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"failures": [],
+	"normal_desk_mug": {
+		"after_40_frames": [
+			1.31622421741486,
+			1.33867156505585,
+			-1.13478994369507
+		],
+		"before_throw": [
+			0.848105907440186,
+			1.19365620613098,
+			0.21186426281929
+		],
+		"camera_ray_succeeded": true,
+		"events": [
+			"pickup",
+			"throw"
+		],
+		"immediate_after_throw": [
+			0.848105907440186,
+			1.19365620613098,
+			0.21186426281929
+		],
+		"release_displacement": 0.0,
+		"release_velocity": [
+			0.0,
+			-2.10467958450317,
+			-9.86186027526855
+		]
+	},
+	"wall_throw": {
+		"after_40_frames": [
+			7.87038040161133,
+			1.81673526763916,
+			-2.93475604057312
+		],
+		"before_throw": [
+			7.85929775238037,
+			1.67800104618073,
+			-2.96100091934204
+		],
+		"camera_forward": [
+			1.0,
+			0.0,
+			0.0000000437113882867379
+		],
+		"camera_pickup_succeeded": true,
+		"events": [
+			"pickup",
+			"throw"
+		],
+		"held_updates": 30,
+		"immediate_after_throw": [
+			7.85929775238037,
+			1.67800104618073,
+			-2.96100091934204
+		],
+		"maximum_held_x": 7.85929775238037,
+		"maximum_x_during_40_frames": 7.93103504180908,
+		"player": [
+			7.65000009536743,
+			0.100000001490116,
+			-3.0
+		],
+		"release_displacement": 0.0,
+		"release_velocity": [
+			10.5,
+			1.5,
+			0.000000458969566352607
+		]
+	}
+}
+WALL_THROW_REGRESSION_OK
+Running first desk-slam reaction regression...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"actor_specific_interruption": {
+		"dialogue": [
+			{
+				"duration": 1.35,
+				"scene_time": 0.266666666666667,
+				"source_id": 179902095776,
+				"speaker": "박 대리 · 옆자리",
+				"text": "왜 그래?"
+			},
+			{
+				"duration": 1.8,
+				"scene_time": 1.91666666666666,
+				"source_id": 175405801687,
+				"speaker": "김 팀장 · 가림막 너머",
+				"text": "뭐야 무슨 소리야?"
+			},
+			{
+				"duration": 2.2,
+				"scene_time": 3.86666666666666,
+				"source_id": 175405801687,
+				"speaker": "김 팀장",
+				"text": "이게 무슨 짓이지?"
+			}
+		],
+		"speaker_invalidated": true
+	},
+	"downed_future_speaker_and_reset": {
+		"pending_boss_lines_suppressed": true,
+		"post_reset_dialogue_count": 0
+	},
+	"earlier_disturbance": {
+		"staged_dialogue_count": 0
+	},
+	"explicit_cancel": {
+		"post_cancel_dialogue_count": 0
+	},
+	"failures": [],
+	"first_slam_repeat_pause_and_route": {
+		"boss_end": [
+			-0.803905308246613,
+			-0.0195391215384007,
+			0.691215932369232
+		],
+		"boss_reached_speaking_range": true,
+		"boss_start": [
+			-0.649999976158142,
+			-0.0200000032782555,
+			-2.15000009536743
+		],
+		"dialogue": [
+			{
+				"duration": 1.35,
+				"scene_time": 0.266666666666667,
+				"source_id": 81252061549,
+				"speaker": "박 대리 · 옆자리",
+				"text": "왜 그래?"
+			},
+			{
+				"duration": 1.8,
+				"scene_time": 1.91666666666666,
+				"source_id": 76755767460,
+				"speaker": "김 팀장 · 가림막 너머",
+				"text": "뭐야 무슨 소리야?"
+			},
+			{
+				"duration": 2.2,
+				"scene_time": 3.86666666666666,
+				"source_id": 76755767460,
+				"speaker": "김 팀장",
+				"text": "이게 무슨 짓이지?"
+			}
+		],
+		"pause_scene_time": 1.0,
+		"player_after_move": [
+			1.11252307891846,
+			-0.0191242061555386,
+			0.442220360040665
+		],
+		"player_before_move": [
+			0.0,
+			-0.019166674464941,
+			0.649999976158142
+		],
+		"player_damage": 0.0,
+		"route_samples": [
+			[
+				-0.803905308246613,
+				-0.0195391215384007,
+				0.691215932369232
+			]
+		]
+	}
+}
+OPENING_REACTION_REGRESSION_OK
+Running boss travel, physical clearance, and settled-arrival regression...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"failures": [],
+	"moving_player": {
+		"arrival_distance": 1.92797422409058,
+		"arrival_seconds": 3.7,
+		"arrived": true,
+		"backward_seconds": 0.0,
+		"longest_stall_seconds": 0.0,
+		"max_distance_to_player": 4.67905426025391,
+		"max_root_height": -0.0200000032782555,
+		"player_displacement": 2.16971302032471,
+		"samples": [
+			{
+				"boss": [
+					-0.652876555919647,
+					-0.0200000032782555,
+					-2.14968061447144
+				],
+				"distance": 2.87479734420776,
+				"player": [
+					0.0,
+					-0.0199739579111338,
+					0.649999976158142
+				],
+				"speed": 0.140994936227798,
+				"time": 0.0166666666666667
+			},
+			{
+				"boss": [
+					-0.82087504863739,
+					-0.0200000032782555,
+					-2.13101410865784
+				],
+				"distance": 2.89963364601135,
+				"player": [
+					0.0,
+					-0.0199739579111338,
+					0.649999976158142
+				],
+				"speed": 1.44099509716034,
+				"time": 0.216666666666667
+			},
+			{
+				"boss": [
+					-1.19194865226746,
+					-0.0200000032782555,
+					-2.08978390693665
+				],
+				"distance": 2.98783469200134,
+				"player": [
+					0.0,
+					-0.0199739579111338,
+					0.649999976158142
+				],
+				"speed": 1.94852387905121,
+				"time": 0.416666666666667
+			},
+			{
+				"boss": [
+					-1.57949924468994,
+					-0.0200000032782555,
+					-2.04672288894653
+				],
+				"distance": 3.12524127960205,
+				"player": [
+					0.0,
+					-0.0199739579111338,
+					0.649999976158142
+				],
+				"speed": 1.94996690750122,
+				"time": 0.616666666666667
+			},
+			{
+				"boss": [
+					-1.94139230251312,
+					-0.0200000032782555,
+					-1.99918460845947
+				],
+				"distance": 3.29409122467041,
+				"player": [
+					0.0069444440305233,
+					-0.0191235784441233,
+					0.656944394111633
+				],
+				"speed": 1.38164186477661,
+				"time": 0.816666666666667
+			},
+			{
+				"boss": [
+					-2.09808993339539,
+					-0.0200000032782555,
+					-1.82355904579163
+				],
+				"distance": 3.70125889778137,
+				"player": [
+					0.564011573791504,
+					-0.0191290732473135,
+					0.747925639152527
+				],
+				"speed": 1.38828384876251,
+				"time": 1.01666666666667
+			},
+			{
+				"boss": [
+					-2.10441875457764,
+					-0.0200000032782555,
+					-1.46688795089722
+				],
+				"distance": 4.12525129318237,
+				"player": [
+					1.24298691749573,
+					-0.0191213972866535,
+					0.944039642810822
+				],
+				"speed": 1.94891119003296,
+				"time": 1.21666666666667
+			},
+			{
+				"boss": [
+					-2.08474326133728,
+					-0.0200000032782555,
+					-1.07743215560913
+				],
+				"distance": 4.59644889831543,
+				"player": [
+					1.99752104282379,
+					-0.0191292446106672,
+					1.03502094745636
+				],
+				"speed": 1.94997572898865,
+				"time": 1.41666666666667
+			},
+			{
+				"boss": [
+					-2.06506514549255,
+					-0.0200000032782555,
+					-0.68792986869812
+				],
+				"distance": 4.55681085586548,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.94999957084656,
+				"time": 1.61666666666667
+			},
+			{
+				"boss": [
+					-2.04538702964783,
+					-0.0200000032782555,
+					-0.298426628112793
+				],
+				"distance": 4.39832258224487,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.95000016689301,
+				"time": 1.81666666666667
+			},
+			{
+				"boss": [
+					-2.02570939064026,
+					-0.0200000032782555,
+					0.091076672077179
+				],
+				"distance": 4.2696795463562,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.95000016689301,
+				"time": 2.01666666666667
+			},
+			{
+				"boss": [
+					-2.00570392608643,
+					-0.0200000032782555,
+					0.477961599826813
+				],
+				"distance": 4.17371845245361,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.79430937767029,
+				"time": 2.21666666666667
+			},
+			{
+				"boss": [
+					-1.88118124008179,
+					-0.0200000032782555,
+					0.698150157928467
+				],
+				"distance": 4.02181053161621,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.32189524173737,
+				"time": 2.41666666666667
+			},
+			{
+				"boss": [
+					-1.5490106344223,
+					-0.0200000032782555,
+					0.776199340820313
+				],
+				"distance": 3.68355894088745,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.94808852672577,
+				"time": 2.61666666666667
+			},
+			{
+				"boss": [
+					-1.16184484958649,
+					-0.0200000032782555,
+					0.822432279586792
+				],
+				"distance": 3.29378914833069,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.94995748996735,
+				"time": 2.81666666666667
+			},
+			{
+				"boss": [
+					-0.774598002433777,
+					-0.0200000032782555,
+					0.868674874305725
+				],
+				"distance": 2.90397787094116,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.9499990940094,
+				"time": 3.01666666666667
+			},
+			{
+				"boss": [
+					-0.387349247932434,
+					-0.0200000032782555,
+					0.914917588233948
+				],
+				"distance": 2.51422214508057,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.95000004768372,
+				"time": 3.21666666666667
+			},
+			{
+				"boss": [
+					-0.0265430063009262,
+					-0.0200000032782555,
+					0.958002805709839
+				],
+				"distance": 2.15115976333618,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 1.42454063892365,
+				"time": 3.41666666666667
+			},
+			{
+				"boss": [
+					0.163183942437172,
+					-0.0200000032782555,
+					0.980658769607544
+				],
+				"distance": 1.96029222011566,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 0.650243759155273,
+				"time": 3.61666666666667
+			},
+			{
+				"boss": [
+					0.195312857627869,
+					-0.0200000032782555,
+					0.984495401382446
+				],
+				"distance": 1.92797422409058,
+				"player": [
+					2.11866855621338,
+					-0.019881060346961,
+					1.11786508560181
+				],
+				"speed": 0.0,
+				"time": 3.81666666666667
+			}
+		],
+		"solid_overlap_frames": 0,
+		"walked_metres": 6.21725964907091
+	},
+	"settled_arrival": {
+		"dialogue": [
+			"왜 그래?",
+			"뭐야 무슨 소리야?",
+			"이게 무슨 짓이지?",
+			"지금 뭐 하는 거야? 여기가 집이야?"
+		],
+		"facing_error_degrees": 0.0000210910960544432,
+		"max_drift_metres": 0.0,
+		"max_speed": 0.0
+	},
+	"stationary_player": {
+		"arrival_distance": 1.93593204021454,
+		"arrival_seconds": 2.6,
+		"arrived": true,
+		"backward_seconds": 0.0,
+		"longest_stall_seconds": 0.0,
+		"max_distance_to_player": 3.2976758480072,
+		"max_root_height": -0.0200000032782555,
+		"player_displacement": 0.0,
+		"samples": [
+			{
+				"boss": [
+					-0.652876555919647,
+					-0.0200000032782555,
+					-2.14968061447144
+				],
+				"distance": 2.87479734420776,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 0.140994936227798,
+				"time": 0.0166666666666667
+			},
+			{
+				"boss": [
+					-0.82087504863739,
+					-0.0200000032782555,
+					-2.13101410865784
+				],
+				"distance": 2.89963364601135,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.44099509716034,
+				"time": 0.216666666666667
+			},
+			{
+				"boss": [
+					-1.19194865226746,
+					-0.0200000032782555,
+					-2.08978390693665
+				],
+				"distance": 2.98783469200134,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.94852387905121,
+				"time": 0.416666666666667
+			},
+			{
+				"boss": [
+					-1.57949924468994,
+					-0.0200000032782555,
+					-2.04672288894653
+				],
+				"distance": 3.12524127960205,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.94996690750122,
+				"time": 0.616666666666667
+			},
+			{
+				"boss": [
+					-1.94139230251312,
+					-0.0200000032782555,
+					-1.99918460845947
+				],
+				"distance": 3.28438472747803,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.38164186477661,
+				"time": 0.816666666666667
+			},
+			{
+				"boss": [
+					-2.09808993339539,
+					-0.0200000032782555,
+					-1.82355904579163
+				],
+				"distance": 3.24352812767029,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.38828384876251,
+				"time": 1.01666666666667
+			},
+			{
+				"boss": [
+					-2.10441875457764,
+					-0.0200000032782555,
+					-1.46688795089722
+				],
+				"distance": 2.98492789268494,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.94891119003296,
+				"time": 1.21666666666667
+			},
+			{
+				"boss": [
+					-2.08474326133728,
+					-0.0200000032782555,
+					-1.07743215560913
+				],
+				"distance": 2.70742988586426,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.94997572898865,
+				"time": 1.41666666666667
+			},
+			{
+				"boss": [
+					-2.06506514549255,
+					-0.0200000032782555,
+					-0.68792986869812
+				],
+				"distance": 2.46059966087341,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.94999957084656,
+				"time": 1.61666666666667
+			},
+			{
+				"boss": [
+					-2.04538702964783,
+					-0.0200000032782555,
+					-0.298426628112793
+				],
+				"distance": 2.25457787513733,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.95000016689301,
+				"time": 1.81666666666667
+			},
+			{
+				"boss": [
+					-2.02704071998596,
+					-0.0200000032782555,
+					0.0647213906049728
+				],
+				"distance": 2.10984468460083,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 1.31666648387909,
+				"time": 2.01666666666667
+			},
+			{
+				"boss": [
+					-2.01630735397339,
+					-0.0200000032782555,
+					0.277186930179596
+				],
+				"distance": 2.05048418045044,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 0.966215252876282,
+				"time": 2.21666666666667
+			},
+			{
+				"boss": [
+					-2.00292325019836,
+					-0.0200000032782555,
+					0.448243021965027
+				],
+				"distance": 2.01305913925171,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 0.630596399307251,
+				"time": 2.41666666666667
+			},
+			{
+				"boss": [
+					-1.93057262897491,
+					-0.0200000032782555,
+					0.506047666072845
+				],
+				"distance": 1.93593204021454,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"speed": 0.0,
+				"time": 2.61666666666667
+			}
+		],
+		"solid_overlap_frames": 0,
+		"walked_metres": 3.91630129457917
+	}
+}
+BOSS_APPROACH_REGRESSION_OK
+Running boss lecture, player activity, caption interruption, and reset regression...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"down_cancellation": {
+		"delayed_dialogue_count": 0,
+		"new_actor_after_reset": false
+	},
+	"end_cancellation": {
+		"delayed_dialogue_count": 0,
+		"new_actor_after_reset": false
+	},
+	"escalation_cancellation": {
+		"delayed_dialogue_count": 0,
+		"new_actor_after_reset": false
+	},
+	"failures": [],
+	"hit_cancellation": {
+		"delayed_dialogue_count": 0,
+		"new_actor_after_reset": false
+	},
+	"idle_look_pause_blocked_move_missed_punch_resume": {
+		"action_results": [
+			"swing"
+		],
+		"blocked_player_drift_metres": 0.0,
+		"blocked_sample_end": [
+			0.0,
+			-0.0196185167878866,
+			0.69861114025116
+		],
+		"blocked_sample_start": [
+			0.0,
+			-0.0196185167878866,
+			0.69861114025116
+		],
+		"completed_without_repeat": true,
+		"dialogue": [
+			{
+				"duration": 1.35,
+				"gesture": "",
+				"source_id": 81537274130,
+				"speaker": "박 대리 · 옆자리",
+				"text": "왜 그래?",
+				"time": 1.63333333333333
+			},
+			{
+				"duration": 1.8,
+				"gesture": "",
+				"source_id": 77040980041,
+				"speaker": "김 팀장 · 가림막 너머",
+				"text": "뭐야 무슨 소리야?",
+				"time": 3.28333333333333
+			},
+			{
+				"duration": 2.2,
+				"gesture": "",
+				"source_id": 77040980041,
+				"speaker": "김 팀장",
+				"text": "이게 무슨 짓이지?",
+				"time": 5.23333333333332
+			},
+			{
+				"duration": 2.8,
+				"gesture": "question",
+				"source_id": 77040980041,
+				"speaker": "김 팀장",
+				"text": "지금 뭐 하는 거야? 여기가 집이야?",
+				"time": 8.96666666666669
+			},
+			{
+				"duration": 3.25,
+				"gesture": "admonish",
+				"source_id": 77040980041,
+				"speaker": "김 팀장",
+				"text": "기분 나쁘다고 책상을 치면, 일이 해결돼?",
+				"time": 12.3500000000002
+			},
+			{
+				"duration": 2.8,
+				"gesture": "insist",
+				"source_id": 77040980041,
+				"speaker": "김 팀장",
+				"text": "내가 말하고 있잖아. 대답 안 해?",
+				"time": 13.8666666666669
+			}
+		],
+		"first_lecture_started_at": 8.96666666666669,
+		"look_verification": "camera rotation; headless pointer capture unavailable",
+		"player_composure": 100.0
+	},
+	"reset_cancellation": {
+		"delayed_dialogue_count": 0,
+		"fresh_opening_dialogue": [
+			{
+				"duration": 1.35,
+				"gesture": "",
+				"source_id": 873589646027,
+				"speaker": "박 대리 · 옆자리",
+				"text": "왜 그래?",
+				"time": 13.6333333333336
+			},
+			{
+				"duration": 1.8,
+				"gesture": "",
+				"source_id": 869093351938,
+				"speaker": "김 팀장 · 가림막 너머",
+				"text": "뭐야 무슨 소리야?",
+				"time": 15.2833333333337
+			},
+			{
+				"duration": 2.2,
+				"gesture": "",
+				"source_id": 869093351938,
+				"speaker": "김 팀장",
+				"text": "이게 무슨 짓이지?",
+				"time": 17.2333333333336
+			},
+			{
+				"duration": 2.8,
+				"gesture": "question",
+				"source_id": 869093351938,
+				"speaker": "김 팀장",
+				"text": "지금 뭐 하는 거야? 여기가 집이야?",
+				"time": 20.9666666666668
+			}
+		],
+		"new_actor_after_reset": true
+	}
+}
+BOSS_LECTURE_REGRESSION_OK
+Running hand contact, B/A timing, and pause-cancellation regression...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+  "checks": [
+    "B28f and A20f",
+    "contact11f and9f",
+    "success-confirmed switch",
+    "event/contact pose alignment",
+    "desktop height",
+    "left/right placement",
+    "pause cancellation",
+    "normal punch"
+  ],
+  "contacts": [
+    {
+      "elapsed": 0.366666666666667,
+      "left_error": 0.0,
+      "left_x": -0.245000004768372,
+      "min_world_y": 1.06199991703033,
+      "right_error": 0.0,
+      "right_x": 0.245000004768372,
+      "variant": "B"
+    },
+    {
+      "elapsed": 0.933333333333333,
+      "left_error": 0.0,
+      "left_x": -0.245000004768372,
+      "min_world_y": 1.06199991703033,
+      "right_error": 0.0,
+      "right_x": 0.245000004768372,
+      "variant": "B"
+    },
+    {
+      "elapsed": 0.3,
+      "left_error": 0.0,
+      "left_x": -0.245000004768372,
+      "min_world_y": 1.06199991703033,
+      "right_error": 0.0,
+      "right_x": 0.245000004768372,
+      "variant": "A"
+    }
+  ],
+  "failures": [],
+  "status": "pass",
+  "swings": [
+    "swing"
+  ]
+}
+HAND_MOTION_REGRESSION_OK
+Running npc_office_behavior_regression.gd...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"bystanders": {
+		"fearful": "flee",
+		"line_count": 2,
+		"spectator_near_threat": "flee",
+		"work_entries": 2
+	},
+	"failures": [],
+	"guard": {
+		"assessments": [
+			{
+				"category": "care",
+				"label": "guard 치료·수습",
+				"total": 300000
+			}
+		],
+		"validated_hits": [
+			10.0
+		],
+		"warning_count": 1
+	},
+	"interruption_and_loss": [
+		{
+			"category": "work",
+			"label": "정 인턴 업무 중단",
+			"total": 10000
+		},
+		{
+			"category": "care",
+			"label": "정 인턴 치료·수습",
+			"total": 300000
+		},
+		{
+			"category": "work",
+			"label": "정 인턴 업무 복귀 불가",
+			"total": 200000
+		}
+	],
+	"passed": true
+}
+NPC_OFFICE_BEHAVIOR_REGRESSION_OK
+Running property_damage_regression.gd...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"all_prop_types": {
+		"binder": {
+			"assessments": 2,
+			"cost": 30000,
+			"stage": 2
+		},
+		"chair": {
+			"assessments": 2,
+			"cost": 120000,
+			"stage": 2
+		},
+		"keyboard": {
+			"assessments": 2,
+			"cost": 50000,
+			"stage": 2
+		},
+		"mug": {
+			"assessments": 1,
+			"cost": 10000,
+			"stage": 2
+		},
+		"paper": {
+			"assessments": 2,
+			"cost": 15000,
+			"stage": 2
+		},
+		"plant": {
+			"assessments": 2,
+			"cost": 40000,
+			"stage": 2
+		},
+		"printer": {
+			"assessments": 2,
+			"cost": 450000,
+			"stage": 2
+		}
+	},
+	"broken_prop_rethrow": {
+		"events": {
+			"amounts": [
+				{
+					"category": "property",
+					"label": "mug 파손",
+					"total": 10000
+				}
+			],
+			"incidents": [
+				{
+					"kind": "THROW",
+					"weight": 1.0
+				},
+				{
+					"kind": "THROW",
+					"weight": 1.0
+				}
+			],
+			"legacy": [
+				{
+					"kind": "THROW",
+					"points": 25
+				}
+			],
+			"noise": [
+				3.0,
+				3.0
+			]
+		},
+		"target_damage": 25.0,
+		"target_hits": 1
+	},
+	"failures": [],
+	"monitor_costs": {
+		"amounts": [
+			{
+				"category": "property",
+				"label": "monitor 손상",
+				"total": 100000
+			},
+			{
+				"category": "property",
+				"label": "monitor 사용 불능",
+				"total": 300000
+			}
+		],
+		"incidents": [
+			{
+				"kind": "PROPERTY",
+				"weight": 0.6
+			},
+			{
+				"kind": "PROPERTY",
+				"weight": 0.6
+			},
+			{
+				"kind": "PROPERTY",
+				"weight": 0.6
+			}
+		],
+		"legacy": [
+			{
+				"kind": "OBJECT",
+				"points": 15
+			}
+		],
+		"noise": [
+			1.82002747058868,
+			1.82002747058868,
+			3.0
+		]
+	},
+	"ordinary_physics": {
+		"ordinary_drop": {
+			"amounts": [],
+			"incidents": [],
+			"legacy": [],
+			"noise": []
+		},
+		"ordinary_drop_y": 0.139991864562035,
+		"startup": {
+			"amounts": [],
+			"incidents": [],
+			"legacy": [],
+			"noise": []
+		},
+		"startup_y": 0.109999649226666
+	},
+	"throws_and_desk_splash": {
+		"desk_splash": {
+			"amounts": [
+				{
+					"category": "property",
+					"label": "mug 파손",
+					"total": 10000
+				}
+			],
+			"incidents": [],
+			"legacy": [
+				{
+					"kind": "OBJECT",
+					"points": 15
+				}
+			],
+			"noise": [
+				1.9092001914978
+			]
+		},
+		"explicit_throw": {
+			"amounts": [
+				{
+					"category": "property",
+					"label": "mug 파손",
+					"total": 10000
+				}
+			],
+			"incidents": [
+				{
+					"kind": "THROW",
+					"weight": 1.0
+				}
+			],
+			"legacy": [
+				{
+					"kind": "THROW",
+					"points": 25
+				}
+			],
+			"noise": [
+				3.0
+			]
+		},
+		"legacy_throw": {
+			"amounts": [
+				{
+					"category": "property",
+					"label": "mug 파손",
+					"total": 10000
+				}
+			],
+			"incidents": [
+				{
+					"kind": "THROW",
+					"weight": 1.0
+				}
+			],
+			"legacy": [
+				{
+					"kind": "THROW",
+					"points": 25
+				}
+			],
+			"noise": [
+				3.0
+			]
+		}
+	}
+}
+PROPERTY_DAMAGE_REGRESSION_OK
+Running social_damage_regression.gd...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"caption_priority": "ambient has no queue; active line protected; scene preempts; both source types invalidate; non-opening staff speak",
+	"controller": {
+		"heat": 32.0,
+		"phase": 4,
+		"responders": 3,
+		"response_cost": 1400000
+	},
+	"example": {
+		"categories": {
+			"care": 300000,
+			"property": 300000,
+			"response": 600000,
+			"work": 220000
+		},
+		"currency": "$1,420,000",
+		"total": 1420000
+	},
+	"failures": [],
+	"guard_warning_preemption": "actual once-only warning preempted ordinary caption; ordinary followup did not replace it",
+	"ledger_delta_dedup_freeze_reset": true,
+	"result_and_reset": {
+		"after_reset_new_assessment": 100000,
+		"category_sum": 11400000,
+		"frozen_total": 11400000,
+		"legacy_record_preserved": 98765
+	}
+}
+SOCIAL_DAMAGE_REGRESSION_OK
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+Running office_layout_regression.gd...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"boss_listen_cancel": {
+		"booked_work": 10000,
+		"phase_after_cancel": "released",
+		"working_after_cancel": false
+	},
+	"entry_guard_route": {
+		"contacts": [
+			{
+				"damage": 10.0,
+				"distance": 0.777863264083862,
+				"guard": [
+					-0.0768817067146301,
+					-0.0191093627363443,
+					1.42405450344086
+				],
+				"line_clear": true,
+				"player": [
+					0.0,
+					-0.019166674464941,
+					0.649999976158142
+				],
+				"push_velocity": [
+					0.23720894753933,
+					0.0,
+					-2.38824892044067
+				],
+				"time": 4.51666666666666
+			}
+		],
+		"end": [
+			-0.0768817067146301,
+			-0.0191093627363443,
+			1.34852945804596
+		],
+		"longest_stall_seconds": 0.0,
+		"minimum_distance": 0.77144330739975,
+		"player_displacement": 0.144713059067726,
+		"samples": [
+			{
+				"distance": 6.56756496429443,
+				"position": [
+					-0.498611122369766,
+					0.0749999955296516,
+					7.19861078262329
+				],
+				"time": 0.0166666666666666
+			},
+			{
+				"distance": 5.91601943969727,
+				"position": [
+					-0.425612658262253,
+					-0.0191093627363443,
+					6.55069017410278
+				],
+				"time": 0.516666666666665
+			},
+			{
+				"distance": 4.91601896286011,
+				"position": [
+					-0.353670448064804,
+					-0.0191093627363443,
+					5.55328035354614
+				],
+				"time": 1.01666666666666
+			},
+			{
+				"distance": 3.91601777076721,
+				"position": [
+					-0.281728237867355,
+					-0.0191093627363443,
+					4.5558705329895
+				],
+				"time": 1.51666666666666
+			},
+			{
+				"distance": 2.91601657867432,
+				"position": [
+					-0.209785774350166,
+					-0.0191093627363443,
+					3.55846071243286
+				],
+				"time": 2.01666666666666
+			},
+			{
+				"distance": 1.91601574420929,
+				"position": [
+					-0.137843117117882,
+					-0.0191093627363443,
+					2.56105089187622
+				],
+				"time": 2.51666666666666
+			},
+			{
+				"distance": 0.937632024288177,
+				"position": [
+					-0.0768817067146301,
+					-0.0191093627363443,
+					1.58447468280792
+				],
+				"time": 3.01666666666666
+			}
+		],
+		"seconds_to_contact": 3.16666666666666,
+		"solid_overlap_frames": 0,
+		"start": [
+			-0.5,
+			0.0799999982118607,
+			7.19999980926514
+		],
+		"walked_metres": 5.80930343503132
+	},
+	"failures": [],
+	"initial_roster_and_idle": {
+		"after_ten_seconds": [
+			{
+				"health": 90.0,
+				"name": "사장 · 임시 모델",
+				"position": [
+					12.6999998092651,
+					-0.0193750038743019,
+					-2.79999995231628
+				],
+				"state": "idle",
+				"working": true
+			},
+			{
+				"health": 40.0,
+				"name": "김 팀장",
+				"position": [
+					-0.649999976158142,
+					-0.0200000032782555,
+					-2.15000009536743
+				],
+				"state": "idle",
+				"working": true
+			},
+			{
+				"health": 40.0,
+				"name": "박 대리",
+				"position": [
+					1.77999997138977,
+					-0.0199218802154064,
+					-1.04999995231628
+				],
+				"state": "idle",
+				"working": true
+			},
+			{
+				"health": 40.0,
+				"name": "이 사원",
+				"position": [
+					4.15000009536743,
+					-0.019687507301569,
+					-4.21999979019165
+				],
+				"state": "idle",
+				"working": true
+			},
+			{
+				"health": 40.0,
+				"name": "최 과장",
+				"position": [
+					-5.69999980926514,
+					-0.019687507301569,
+					4.19999980926514
+				],
+				"state": "idle",
+				"working": true
+			},
+			{
+				"health": 40.0,
+				"name": "정 인턴",
+				"position": [
+					-4.09999990463257,
+					-0.019687507301569,
+					-3.25
+				],
+				"state": "idle",
+				"working": true
+			},
+			{
+				"health": 40.0,
+				"name": "타 부서 직원 · 복사실",
+				"position": [
+					-6.34999990463257,
+					-0.019687507301569,
+					-7.92000007629395
+				],
+				"state": "idle",
+				"working": true
+			},
+			{
+				"health": 40.0,
+				"name": "타 부서 직원 · 회의실",
+				"position": [
+					4.44999980926514,
+					-0.019687507301569,
+					3.75
+				],
+				"state": "idle",
+				"working": true
+			}
+		],
+		"initial_overlaps": [],
+		"response_heat": 0.0,
+		"roster": [
+			{
+				"activity": "papers",
+				"affiliation": "executive",
+				"name": "사장 · 임시 모델",
+				"position": [
+					12.6999998092651,
+					0.0399999991059303,
+					-2.79999995231628
+				]
+			},
+			{
+				"activity": "papers",
+				"affiliation": "department",
+				"name": "김 팀장",
+				"position": [
+					-0.649999976158142,
+					0.0199999995529652,
+					-2.15000009536743
+				]
+			},
+			{
+				"activity": "typing",
+				"affiliation": "department",
+				"name": "박 대리",
+				"position": [
+					1.77999997138977,
+					0.0199999995529652,
+					-1.04999995231628
+				]
+			},
+			{
+				"activity": "typing",
+				"affiliation": "department",
+				"name": "이 사원",
+				"position": [
+					4.15000009536743,
+					0.0599999986588955,
+					-4.21999979019165
+				]
+			},
+			{
+				"activity": "coffee",
+				"affiliation": "department",
+				"name": "최 과장",
+				"position": [
+					-5.69999980926514,
+					0.0599999986588955,
+					4.19999980926514
+				]
+			},
+			{
+				"activity": "papers",
+				"affiliation": "department",
+				"name": "정 인턴",
+				"position": [
+					-4.09999990463257,
+					0.0599999986588955,
+					-3.25
+				]
+			},
+			{
+				"activity": "copy",
+				"affiliation": "other",
+				"name": "타 부서 직원 · 복사실",
+				"position": [
+					-6.34999990463257,
+					0.0599999986588955,
+					-7.92000007629395
+				]
+			},
+			{
+				"activity": "papers",
+				"affiliation": "other",
+				"name": "타 부서 직원 · 회의실",
+				"position": [
+					4.44999980926514,
+					0.0599999986588955,
+					3.75
+				]
+			}
+		],
+		"score": 0
+	},
+	"meeting_access": {
+		"destination": [
+			4.44999980926514,
+			0.0799999982118607,
+			4.59999990463257
+		],
+		"player_end": [
+			4.52333688735962,
+			-0.019117496907711,
+			4.62183952331543
+		],
+		"remaining_metres": 0.0765199065208435,
+		"route": [
+			[
+				4.44999980926514,
+				0.0,
+				4.59999990463257
+			]
+		],
+		"walked_metres": 4.31395709794015
+	},
+	"passed": true
+}
+OFFICE_LAYOUT_REGRESSION_OK
+Running minimal_hud_regression.gd...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"after_incident_texts": [
+		"누적 피해액",
+		"$100,000",
+		"·"
+	],
+	"failures": [],
+	"final": {
+		"currency": "$400,000",
+		"phase": 2,
+		"record_key": "social_damage_usd_v1",
+		"total": 400000
+	},
+	"pause_controls": {
+		"card_position": [
+			314.0,
+			50.0
+		],
+		"card_size": [
+			652.0,
+			620.0
+		],
+		"visible_controls": 25
+	},
+	"pause_settings": {
+		"card_position": [
+			314.0,
+			50.0
+		],
+		"card_size": [
+			652.0,
+			620.0
+		],
+		"visible_controls": 15
+	},
+	"results": {
+		"card_position": [
+			314.0,
+			110.0
+		],
+		"card_size": [
+			652.0,
+			500.0
+		],
+		"visible_controls": 14
+	},
+	"start_controls": {
+		"card_position": [
+			314.0,
+			50.0
+		],
+		"card_size": [
+			652.0,
+			620.0
+		],
+		"visible_controls": 24
+	},
+	"start_settings": {
+		"card_position": [
+			314.0,
+			50.0
+		],
+		"card_size": [
+			652.0,
+			620.0
+		],
+		"visible_controls": 14
+	}
+}
+MINIMAL_HUD_REGRESSION_OK
+WARNING: 12 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+Import, smoke and all ten regressions passed. Visual, audio, native Windows launch and play-feel checks remain separate.

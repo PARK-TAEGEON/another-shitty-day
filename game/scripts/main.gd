@@ -4,13 +4,10 @@ const WorldScript = preload("res://scripts/world.gd")
 const PlayerScript = preload("res://scripts/player.gd")
 const SoundScript = preload("res://scripts/audio.gd")
 const SocialDamageScript = preload("res://scripts/social_damage.gd")
-const ChaosScript = preload("res://scripts/scenario/chaos_score.gd")
+const CeoHoldScript = preload("res://scripts/scenario/ceo_hold.gd")
 const PoliceArrivalScript = preload("res://scripts/scenario/police_arrival.gd")
-var chaos: RefCounted = ChaosScript.new()
-var chaos_high_score: int = 0
+var ceo_hold: Node
 var police_arrival: Node
-var _result_chaos: Label
-var _result_route: Label
 var _caption_priority: int = 0
 const RESPONSE_THRESHOLDS: Array[float] = [0.0, 0.0, 8.0, 18.0, 32.0]
 const RESPONSE_DELAYS: Array[float] = [0.0, 0.0, 0.0, 8.0, 10.0]
@@ -70,7 +67,6 @@ func _ready() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	_automated_run = args.has("--smoke-test") or args.has("--capture-demo") or args.has("--capture-opening") or args.has("--capture-lecture") or args.has("--capture-office") or args.has("--capture-ui")
 	_settings.load("user://settings.cfg")
-	chaos_high_score = maxi(0, int(_settings.get_value(ChaosScript.RECORD_SECTION, ChaosScript.RECORD_KEY, 0)))
 	high_score = maxi(0, int(_settings.get_value(SocialDamageScript.RECORD_SECTION, SocialDamageScript.RECORD_KEY, 0)))
 	if _automated_run:
 		high_score = 0
@@ -87,10 +83,19 @@ func _ready() -> void:
 	player.shake_scale = float(_settings.get_value("options", "shake", 0.55))
 	world.player_target = player
 	world.scenario_line_can_start = func(priority: int) -> bool: return _caption_timer <= 0.0 or _caption_priority < priority
-	chaos.reset(world.events.round_id)
+	ceo_hold = CeoHoldScript.new()
+	ceo_hold.holder = player
+	ceo_hold.process_mode = Node.PROCESS_MODE_PAUSABLE
+	player.add_child(ceo_hold)
+	player.actor_hold = ceo_hold
+	world.ceo_hold = ceo_hold
+	ceo_hold.grab_started.connect(func(actor: CharacterBody3D) -> void: world.begin_player_contact("actor_grab", actor))
+	ceo_hold.holding_changed.connect(_on_hold_changed)
+	ceo_hold.hold_motion.connect(func(actor: CharacterBody3D) -> void: world.queue_scenario_line("ceo-held-walk", actor, "회사는 가족이라도 이렇게 붙어 다니는 건 아니지.", 60))
+	ceo_hold.hold_expiring.connect(func(actor: CharacterBody3D) -> void: world.queue_scenario_line("ceo-held-expiring", actor, "팔 좀 놔. 출근 체크는 했지?", 60))
+	world.world_resetting.connect(ceo_hold.reset_round)
 	police_arrival = PoliceArrivalScript.new()
 	add_child(police_arrival)
-	world.scenario_event.connect(_on_scenario_event)
 	world.scenario_dialogue.connect(_scenario_caption)
 	world.responder_arrived.connect(_on_responder_arrived)
 	sound = SoundScript.new()
@@ -297,6 +302,21 @@ func _build_ui() -> void:
 	_add_option(_options_panel, "화면 흔들림", 0.0, 1.0, player.shake_scale, func(value: float) -> void:
 		player.shake_scale = value
 		_save_option("shake", value))
+	var police_row: HBoxContainer = HBoxContainer.new()
+	police_row.add_child(_label("경찰 등장 연출", 16, INK))
+	var police_modes: OptionButton = OptionButton.new()
+	police_modes.add_theme_font_override("font", FONT)
+	police_modes.add_theme_font_size_override("font_size", 16)
+	for title: String in ["전체", "짧게", "끄기"]:
+		police_modes.add_item(title)
+	var selected_mode: int = clampi(int(_settings.get_value("options", "police_intro", 0)), 0, 2)
+	police_modes.select(selected_mode)
+	police_arrival.mode = ["full", "short", "off"][selected_mode]
+	police_modes.item_selected.connect(func(index: int) -> void:
+		police_arrival.mode = ["full", "short", "off"][index]
+		_save_option("police_intro", index))
+	police_row.add_child(police_modes)
+	_options_panel.add_child(police_row)
 	_controls_panel = GridContainer.new()
 	_full(_controls_panel)
 	_controls_panel.columns = 2
@@ -308,7 +328,7 @@ func _build_ui() -> void:
 		["마우스 이동", "둘러보기"],
 		["Shift", "달리기"],
 		["마우스 왼쪽", "주먹질 · 들고 있는 물건 던지기"],
-		["E", "물건 집기 · 내려놓기"],
+		["E", "물건 집기·놓기 / 사장 붙잡기·놓기"],
 		["Q", "발차기"],
 		["F", "양손으로 책상 내려치기"],
 		["R", "새 판 시작"],
@@ -325,11 +345,6 @@ func _build_ui() -> void:
 	_result_panel = VBoxContainer.new()
 	_result_panel.add_theme_constant_override("separation", 7)
 	col.add_child(_result_panel)
-	_result_chaos = _label("", 25, INK)
-	_result_panel.add_child(_result_chaos)
-	_result_route = _label("", 16, INK)
-	_result_route.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_result_panel.add_child(_result_route)
 	_result_total = _label("", 36, INK)
 	_result_panel.add_child(_result_total)
 	var result_grid: GridContainer = GridContainer.new()
@@ -439,7 +454,7 @@ func _open_menu(first: bool) -> void:
 	_menu_pages.visible = not ended
 	if not ended:
 		_show_menu_page("settings")
-	var menu_height: float = 580.0 if ended else 620.0
+	var menu_height: float = 500.0 if ended else 620.0
 	_centered(_menu_card, -menu_height * 0.5, 652.0, menu_height)
 	if not first and not ended:
 		_menu_title.text = "잠깐 쉬어갑니다"
@@ -453,14 +468,18 @@ func _resume() -> void:
 	get_tree().paused = false
 	player.set_active(true)
 
+func _notification(what: int) -> void:
+	# Losing window focus is the same user pause as Esc; keep the held pair.
+	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT and playing and not ended and not _automated_run and is_instance_valid(_menu) and not _menu.visible:
+		_open_menu(false)
+
 func _restart() -> void:
 	if _restarting:
 		return
 	_restarting = true
 	police_arrival.cancel()
+	ceo_hold.release("restart")
 	world.events.frozen = true
-	world.office_route.finish()
-	chaos.freeze()
 	get_tree().paused = false
 	player.set_active(false)
 	get_tree().reload_current_scene.call_deferred()
@@ -487,7 +506,10 @@ func _on_impact(_kind: String, _points: int, _at: Vector3) -> void:
 	pass
 
 func _on_damage_assessed(target_id: String, category: String, cumulative_amount: int, _label_text: String) -> void:
-	if not playing or ended or get_tree().paused:
+	# The triggering hit can emit its incident before its care/work assessment.
+	# Finish that synchronous ledger transaction when Full freezes the world.
+	# A user/menu pause still rejects assessments; no new physics runs in Full.
+	if not playing or ended or (get_tree().paused and not police_arrival.owns_world_pause()):
 		return
 	var increase: int = damage_ledger.assess(target_id, category, cumulative_amount)
 	if increase <= 0:
@@ -501,7 +523,9 @@ func _refresh_damage_ui() -> void:
 		_score_label.text = SocialDamageScript.format_currency(score)
 
 func _on_incident(_kind: String, weight: float, _at: Vector3) -> void:
-	if not playing or ended or get_tree().paused or not is_finite(weight) or weight <= 0.0:
+	# A thrown object's contact may start Full before its receiver emits ASSAULT.
+	# Preserve that same contact's incident; response escalation waits for resume.
+	if not playing or ended or (get_tree().paused and not police_arrival.owns_world_pause()) or not is_finite(weight) or weight <= 0.0:
 		return
 	_first_disturbance()
 	response_heat += weight
@@ -594,6 +618,7 @@ func _invalidate_speaker(source: Node3D) -> void:
 func _on_player_hit(damage: float) -> void:
 	if not playing or ended or get_tree().paused:
 		return
+	ceo_hold.release("player_hit")
 	composure = maxf(0, composure - damage)
 	player.add_shake(0.7)
 	sound.play("impact", 0.8)
@@ -605,20 +630,13 @@ func _end_run() -> void:
 		return
 	ended = true
 	police_arrival.cancel()
-	world.office_route.finish()
+	ceo_hold.release("result")
 	world.events.frozen = true
-	chaos.freeze()
 	damage_ledger.freeze()
 	world.cancel_opening_scene()
 	_clear_caption()
 	_refresh_damage_ui()
 	high_score = maxi(high_score, score)
-	chaos_high_score = maxi(chaos_high_score, chaos.total())
-	_settings.set_value(ChaosScript.RECORD_SECTION, ChaosScript.RECORD_KEY, chaos_high_score)
-	if world.office_route.status == "resolved":
-		var records: Dictionary = _settings.get_value(ChaosScript.RECORD_SECTION, ChaosScript.ROUTE_RECORD_KEY, {})
-		records[world.office_route.outcome] = true
-		_settings.set_value(ChaosScript.RECORD_SECTION, ChaosScript.ROUTE_RECORD_KEY, records)
 	_settings.set_value(SocialDamageScript.RECORD_SECTION, SocialDamageScript.RECORD_KEY, high_score)
 	if not _automated_run:
 		_settings.save("user://settings.cfg")
@@ -629,12 +647,6 @@ func _end_run() -> void:
 		var value_label: Label = _result_values[category] as Label
 		value_label.text = SocialDamageScript.format_currency(int(categories[category]))
 	_result_record.text = "최고 기록 %s  ·  게임 내 추산액" % SocialDamageScript.format_currency(high_score)
-	var detail: Dictionary = chaos.breakdown()
-	_result_chaos.text = "Chaos Score %d / 1,000 · 최고 %d" % [chaos.total(), chaos_high_score]
-	var route_text: String = {"available": "미선택", "failed": "사장 행동 불능", "interrupted": "중단"}.get(world.office_route.status, "미결")
-	if world.office_route.status == "resolved":
-		route_text = "A · 대표자 현장 배치" if world.office_route.outcome == "A" else "B · 사장실 영업 종료"
-	_result_route.text = "일반 %d · 특별 %d\n오늘의 사건: %s" % [detail.general, detail.special, route_text]
 	_open_menu(false)
 	_menu_title.text = "오늘 발생한 피해"
 	_menu_subtitle.text = "제압되었습니다."
@@ -644,7 +656,7 @@ func _reset_run_state() -> void:
 	# Scene reload also reconstructs this state. Keeping the reset explicit permits
 	# checking world resets without importing an old point record into the currency.
 	damage_ledger.reset()
-	chaos.reset(world.events.round_id)
+	ceo_hold.reset_round()
 	police_arrival.reset_round()
 	score = 0
 	response_heat = 0.0
@@ -659,9 +671,17 @@ func _reset_run_state() -> void:
 	_result_panel.visible = false
 	_refresh_damage_ui()
 
-func _on_scenario_event(event: Dictionary) -> void:
-	if playing and not ended and not get_tree().paused:
-		chaos.consume(event)
+func _on_hold_changed(actor: CharacterBody3D, held: bool, reason: String) -> void:
+	if not is_instance_valid(actor) or not actor.is_inside_tree():
+		return
+	if held:
+		world.end_player_contact("actor_grab", actor)
+		world.cancel_scenario_speaker(actor)
+		world.queue_scenario_line("ceo-grab-start", actor, "나 누군지 알고 이래?", 60)
+	else:
+		world.cancel_scenario_speaker(actor)
+		if reason in ["input", "timeout"] and not ended:
+			world.queue_scenario_line("ceo-grab-release", actor, "오늘 일은 인사평가에… 아니, 대화로 하자.", 60)
 
 func _on_responder_arrived(actor: Node3D) -> void:
 	if playing and not ended:
@@ -735,6 +755,7 @@ func _smoke_test() -> void:
 	_check(int(damage_ledger.breakdown()["response"]) == 100000, "actual guard dispatch was not booked once", failures)
 	_set_phase(3)
 	_check(_staff_count("security") == 2 and int(damage_ledger.breakdown()["response"]) == 600000, "actual police dispatch did not extend the response ledger", failures)
+	police_arrival.cancel() # The smoke's synthetic hit is a post-intro fixture.
 	_on_player_hit(100)
 	_check(ended and _menu.visible and get_tree().paused and damage_ledger.is_frozen(), "subdual did not freeze money and open results/pause", failures)
 	var frozen_total: int = score

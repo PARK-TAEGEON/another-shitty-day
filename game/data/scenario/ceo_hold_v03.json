@@ -1,0 +1,14 @@
+{
+  "grab_distance": 1.1,
+  "hold_seconds": 12.0,
+  "regrab_seconds": 6.0,
+  "walk_scale": 0.7,
+  "turn_rate": 2.5,
+  "follow_speed": 5.0,
+  "side_offset": 0.55,
+  "forward_offset": 0.63,
+  "floor_height_tolerance": 0.25,
+  "minimum_floor_dot": 0.98,
+  "overlap_release_seconds": 0.5,
+  "grab_incident_weight": 3.0
+}

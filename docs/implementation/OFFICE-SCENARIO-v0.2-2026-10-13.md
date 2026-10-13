@@ -1,5 +1,7 @@
 # Office Scenario v0.2 구현 결과
 
+> 역사 기록: A/B와 Chaos 게임 연결은 후속 v0.3 브랜치에서 제거/분리했다. 최신 구현은 [v0.3 결과](OFFICE-SCENARIO-v0.3-2026-10-13.md)를 참조한다. 이 문서·증거·PR #7은 당시 결과를 보존한다.
+
 제출: [Draft PR #7](https://github.com/PARK-TAEGEON/another-shitty-day/pull/7), base=main.
 
 2026-10-13 KST. 기존 사무실 옆 임시 사장실에서 플레이어가 A/B 특별 결과를 만드는 최소 구현이다. 전체 회사 건물이나 Release-P2 완료를 뜻하지 않는다. 기준 main은 `1244b54d56c774c78160d044f667872cbb1b66d4`, 구현 브랜치는 `implementation/office-scenario-v02`다.

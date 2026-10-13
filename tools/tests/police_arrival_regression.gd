@@ -6,6 +6,8 @@ const ArrivalScript: Script = preload("res://scripts/scenario/police_arrival.gd"
 const PlayerScript: Script = preload("res://scripts/player.gd")
 const WorldScript: Script = preload("res://scripts/world.gd")
 const MainScript: Script = preload("res://scripts/main.gd")
+const CeoScript: Script = preload("res://scripts/scenario/ceo_npc.gd")
+const HoldScript: Script = preload("res://scripts/scenario/ceo_hold.gd")
 
 var failures: Array[String] = []
 var observations: Dictionary = {}
@@ -53,6 +55,64 @@ func _reset_intro() -> void:
 	player.set_process_unhandled_input(true)
 	player.get("camera").make_current()
 
+func _held_pair_full_regression(spawn: Vector3) -> void:
+	# A separate open-floor fixture isolates presentation from the office's live
+	# pursuit/furniture. The real E path alone creates the held relation.
+	var pair_stage: Node3D = Node3D.new()
+	root.add_child(pair_stage)
+	var floor_body: StaticBody3D = StaticBody3D.new()
+	floor_body.position = Vector3(30.0, -0.1, 30.0)
+	var floor_shape: CollisionShape3D = CollisionShape3D.new()
+	var floor_box: BoxShape3D = BoxShape3D.new()
+	floor_box.size = Vector3(12.0, 0.2, 12.0)
+	floor_shape.shape = floor_box
+	floor_body.add_child(floor_shape)
+	pair_stage.add_child(floor_body)
+	var holder: CharacterBody3D = PlayerScript.new() as CharacterBody3D
+	holder.position = Vector3(30.0, 0.08, 30.0)
+	holder.process_mode = Node.PROCESS_MODE_PAUSABLE
+	pair_stage.add_child(holder)
+	holder.call("set_active", true)
+	var actor: CharacterBody3D = CeoScript.new() as CharacterBody3D
+	actor.set("role", "ceo")
+	actor.set("health", 90.0)
+	actor.set("player_target", holder)
+	actor.position = Vector3(30.0, 0.04, 29.05)
+	pair_stage.add_child(actor)
+	var relation: Node = HoldScript.new()
+	relation.set("holder", holder)
+	relation.process_mode = Node.PROCESS_MODE_PAUSABLE
+	holder.add_child(relation)
+	holder.set("actor_hold", relation)
+	var pair_arrival: Node = ArrivalScript.new()
+	pair_stage.add_child(pair_arrival)
+	await _advance(1.6)
+	holder.call("_pickup_or_drop")
+	await _advance(0.08)
+	check(is_instance_valid(relation) and bool(relation.get("active")) and relation.get("target") == actor, "real E input did not create the held pair for Full")
+	if not is_instance_valid(relation) or not bool(relation.get("active")):
+		pair_stage.queue_free()
+		await process_frame
+		player.get("camera").make_current()
+		return
+	var age: float = float(relation.get("age"))
+	var clock: float = float(world.get("scenario_time"))
+	var holder_position: Vector3 = holder.global_position
+	var actor_position: Vector3 = actor.global_position
+	pair_arrival.call("begin", holder, spawn)
+	await _advance(0.4)
+	check(paused and bool(relation.get("active")) and relation.get("target") == actor and actor.get("grabbed_by") == holder, "Full lost an already validated held pair")
+	check(is_equal_approx(float(relation.get("age")), age) and is_equal_approx(float(world.get("scenario_time")), clock) and holder.global_position.is_equal_approx(holder_position) and actor.global_position.is_equal_approx(actor_position), "Full consumed hold age/game time or moved a held body")
+	pair_arrival.call("cancel")
+	await _advance(0.1)
+	check(not paused and bool(relation.get("active")) and float(relation.get("age")) > age, "Full did not resume the same held pair and its clock")
+	holder.call("_pickup_or_drop")
+	check(not bool(relation.get("active")), "real E could not release the held pair after Full")
+	observations["actual_held_pair_freeze_resume"] = {"held_age_during_cut": age, "game_time_during_cut": clock, "same_pair_resumed": true, "real_E_released": true}
+	pair_stage.queue_free()
+	await process_frame
+	player.get("camera").make_current()
+
 func _main_wiring_regression() -> void:
 	# This second fixture exercises the production signal wiring and lifecycle,
 	# not a manual call to the new presentation controller.
@@ -63,6 +123,7 @@ func _main_wiring_regression() -> void:
 	var actual_world: Node3D = game.get("world") as Node3D
 	var actual_player: Node3D = game.get("player") as Node3D
 	var actual_arrival: Node = game.get("police_arrival") as Node
+	actual_arrival.set("mode", "full")
 	var actual_view: Camera3D = actual_player.get("camera") as Camera3D
 	await _advance(0.05)
 	actual_world.call("escalate", 3)
@@ -84,7 +145,23 @@ func _main_wiring_regression() -> void:
 	game.call("_reset_run_state")
 	actual_world.call("escalate", 3)
 	check(bool(actual_arrival.get("active")), "production round reset failed to restore first police presentation")
+	# Damage cannot occur while Full owns the frozen world. Resume, then let the
+	# existing guard's real palm contact flow through world.player_hit and Main.
 	game.call("_on_player_hit", 100.0)
+	check(not bool(game.get("ended")), "paused Full accepted new player damage")
+	actual_arrival.call("cancel")
+	actual_player.global_position = Vector3(0.0, 0.08, 3.0)
+	game.set("composure", 5.0)
+	var actual_guard: Node3D
+	for npc: Node3D in actual_world.get("npcs"):
+		if str(npc.get("role")) == "guard":
+			actual_guard = npc
+	check(is_instance_valid(actual_guard), "production subdual fixture had no existing guard")
+	if is_instance_valid(actual_guard):
+		actual_guard.global_position = Vector3(0.0, 0.08, 4.0)
+		actual_guard.set("_cooldown", 0.0)
+		actual_guard.set("velocity", Vector3.ZERO)
+	await _advance(0.6)
 	check(bool(game.get("ended")) and paused and not bool(actual_arrival.get("active")) and not bool(actual_player.get("enabled")) and root.get_camera_3d() == actual_view, "production subdual did not prioritize results over arrival camera/input")
 	await create_timer(0.15, true).timeout
 	check(not bool(actual_player.get("enabled")) and bool(game.get("ended")), "completed run resumed after cut cancellation")
@@ -128,27 +205,57 @@ func _run() -> void:
 		return
 	var spawn: Vector3 = police.global_position
 	var dispatch_count: int = assessments.size()
-	# Enter while an actual punch contact is pending. set_active(false) would
-	# delete it; the arrival owns callbacks only and must preserve this acceptance.
+	# Enter while an actual punch contact is pending. Full must preserve its
+	# serial and timer, freeze physics, then resolve that same contact after resume.
+	var contact_target: Node3D
+	for npc: Node3D in world.get("npcs"):
+		if str(npc.get("display_name")) == "박 대리":
+			contact_target = npc
+	check(is_instance_valid(contact_target), "accepted contact fixture had no protected coworker")
+	if not is_instance_valid(contact_target):
+		quit(1)
+		return
+	contact_target.global_position = Vector3(0.0, 0.08, 2.0)
+	player.global_position = Vector3(0.0, 0.08, 3.5)
+	view.look_at(contact_target.global_position + Vector3.UP * 1.1, Vector3.UP)
+	player.set("_pitch", view.rotation.x)
+	original_transform = view.global_transform
+	var target_health: float = float(contact_target.get("health"))
+	var airborne: RigidBody3D = world.get("props")[0] as RigidBody3D
+	airborne.global_position = Vector3(0.0, 2.2, 5.0)
+	airborne.freeze = false
+	airborne.linear_velocity = Vector3(2.0, 1.0, 0.0)
+	var airborne_position: Vector3 = airborne.global_position
+	var clock_before: float = float(world.get("scenario_time"))
+	var restored_view: Dictionary = {}
+	arrival.connect("finished", func() -> void:
+		if restored_view.is_empty():
+			restored_view["basis"] = view.global_basis
+			restored_view["fov"] = view.fov
+			restored_view["mouse"] = Input.mouse_mode, CONNECT_ONE_SHOT)
 	player.call("perform_action", "punch")
 	var serial: int = int(player.get("_action_serial"))
 	arrival.call("begin", player, spawn)
 	check(bool(arrival.get("active")) and bool(arrival.get("presented")), "first arrival did not begin exactly once")
 	check(root.get_camera_3d() == arrival.get("_cut_camera") and root.get_camera_3d() != view, "arrival did not cut to its native camera")
-	check(not paused and bool(player.get("enabled")) and not player.is_processing_unhandled_input() and not player.is_physics_processing(), "arrival changed global pause/enabled or left new input and locomotion active")
+	check(paused and bool(player.get("enabled")) and not player.is_processing_unhandled_input() and not player.is_physics_processing(), "Full failed to own pause or modified accepted input/enabled")
 	check((arrival.get("_title") as Label).text == "POLICE ARRIVED!" and (arrival.get("_panel") as Control).is_visible_in_tree(), "arrival subtitle is missing")
 	var cut: Camera3D = arrival.get("_cut_camera") as Camera3D
 	var toward: Vector3 = (spawn + Vector3.UP * 1.10 - cut.global_position).normalized()
 	check((-cut.global_basis.z).dot(toward) > 0.999, "cut camera did not frame the actual spawn point")
 	await _advance(0.25)
-	check(actions.size() == 1 and actions[0] in ["impact", "swing"] and int(player.get("_action_serial")) == serial, "arrival deleted or duplicated an accepted punch contact")
+	check(actions.is_empty() and int(player.get("_action_serial")) == serial and is_equal_approx(float(contact_target.get("health")), target_health), "Full resolved/deleted an accepted punch while paused")
+	check(is_equal_approx(float(world.get("scenario_time")), clock_before) and airborne.global_position.is_equal_approx(airborne_position), "Full did not freeze the game clock and in-flight physical prop")
 	check(assessments.size() >= dispatch_count, "arrival removed the real dispatch assessment")
 	await _capture("01-first-police-arrival")
 	arrival.call("begin", player, spawn)
-	await _advance(1.9)
+	await _advance(ArrivalScript.DURATION + 0.15)
 	check(not bool(arrival.get("active")) and completions == 1, "timeout/repeated dispatch finalized more than once")
-	check(root.get_camera_3d() == view and _callbacks() == original_callbacks, "timeout did not return original camera and callback state")
-	check(is_equal_approx(view.fov, original_fov) and view.global_basis.is_equal_approx(original_transform.basis) and Input.mouse_mode == original_mouse, "arrival modified FOV, view rotation or mouse ownership")
+	check(not paused and root.get_camera_3d() == view and _callbacks() == original_callbacks, "timeout did not return original pause, camera and callback state")
+	await _advance(0.18)
+	check(actions.size() == 1 and actions[0] == "impact" and int(player.get("_action_serial")) == serial and float(contact_target.get("health")) < target_health, "resuming Full did not resolve the same accepted real punch exactly once")
+	check(float(world.get("scenario_time")) > clock_before and not airborne.global_position.is_equal_approx(airborne_position), "resuming Full did not restore game time and physical motion")
+	check(is_equal_approx(float(restored_view.get("fov", -1.0)), original_fov) and (restored_view.get("basis", Basis.IDENTITY) as Basis).is_equal_approx(original_transform.basis) and restored_view.get("mouse") == original_mouse, "arrival modified FOV, view rotation or mouse ownership before the pending hit resumed")
 	await _capture("02-player-view-restored")
 	arrival.call("begin", player, spawn)
 	check(not bool(arrival.get("active")) and root.get_camera_3d() == view, "same round replayed the first-arrival cut")
@@ -167,7 +274,7 @@ func _run() -> void:
 	_reset_intro()
 	arrival.call("begin", player, spawn)
 	player.call("set_active", false)
-	await _advance(2.0)
+	await _advance(ArrivalScript.DURATION + 0.1)
 	check(not bool(player.get("enabled")) and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE, "timeout resurrected externally disabled player/mouse ownership")
 
 	# New round resets the presentation, but initially disabled/menu callers
@@ -176,7 +283,26 @@ func _run() -> void:
 	arrival.call("begin", player, spawn)
 	check(arrival.get("_cut_camera") == null and root.get_camera_3d() == view and not bool(player.get("enabled")), "inactive start forced a cut or enabled control")
 	arrival.call("cancel")
+	# Short and Off preserve live physics/input, and Off still consumes first arrival.
 	_reset_intro()
+	arrival.set("mode", "short")
+	var short_callbacks: Array[bool] = _callbacks()
+	var short_clock: float = float(world.get("scenario_time"))
+	arrival.call("begin", player, spawn)
+	check(bool(arrival.get("active")) and not paused and root.get_camera_3d() == view and _callbacks() == short_callbacks, "Short took camera/input or paused the world")
+	await _advance(0.25)
+	check(float(world.get("scenario_time")) > short_clock, "Short stopped the game clock")
+	await _advance(ArrivalScript.SHORT_DURATION)
+	check(not bool(arrival.get("active")), "Short did not finish near one second")
+	_reset_intro()
+	arrival.set("mode", "off")
+	var off_callbacks: Array[bool] = _callbacks()
+	arrival.call("begin", player, spawn)
+	check(bool(arrival.get("presented")) and not bool(arrival.get("active")) and not (arrival.get("_panel") as Control).visible and not paused and root.get_camera_3d() == view and _callbacks() == off_callbacks, "Off presented or changed pause/camera/input")
+	arrival.call("begin", player, spawn)
+	check(not bool(arrival.get("active")), "Off replayed after consuming the first arrival")
+	_reset_intro()
+	arrival.set("mode", "full")
 	var before_nonblocking: Array[bool] = _callbacks()
 	arrival.call("begin", player, spawn, true)
 	check(root.get_camera_3d() == view and bool(player.get("enabled")) and _callbacks() == before_nonblocking and not paused, "nonblocking boundary changed local camera/control or global pause")
@@ -185,9 +311,9 @@ func _run() -> void:
 
 	# The module follows an existing menu pause rather than owning/clearing it.
 	_reset_intro()
+	paused = true
 	arrival.call("begin", player, spawn)
 	var remaining: float = float(arrival.get("_remaining"))
-	paused = true
 	await create_timer(0.15, true).timeout
 	check(is_equal_approx(float(arrival.get("_remaining")), remaining) and paused, "presentation advanced or cleared an existing user pause")
 	arrival.call("cancel")
@@ -215,6 +341,7 @@ func _run() -> void:
 	external_camera.queue_free()
 	view.make_current()
 	await process_frame
+	await _held_pair_full_regression(spawn)
 
 	# Missing camera falls back; losing the actual player safely finalizes.
 	_reset_intro()

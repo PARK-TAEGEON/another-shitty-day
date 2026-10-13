@@ -1,0 +1,692 @@
+4.7.2.stable.official.ed1daf0bf
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+CEO_HOLD_REGRESSION_BEGIN
+{
+	"E_hold_release_no_farming": {
+		"changes": [
+			{
+				"actor": 154501390499,
+				"held": true,
+				"reason": "input"
+			},
+			{
+				"actor": 154501390499,
+				"held": false,
+				"reason": "input"
+			}
+		],
+		"facts": [
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e2",
+				"fact": "npc_reaction",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "183693747673",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e3",
+				"fact": "work_interrupted",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "183693747673",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "641891:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "641891:a1",
+				"round_id": "641891",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			}
+		],
+		"heat_after": 3.0,
+		"heat_before": 0.0,
+		"money_after": 10000,
+		"money_before": 0
+	},
+	"E_precedence_readiness_distance_only_CEO": true,
+	"actual_scene_restart_and_old_metadata": {
+		"fresh_E_works": true,
+		"new_round": "2602283"
+	},
+	"failures": [],
+	"fixture_scope": "Free actor/prop placements and stress obstacles are fixtures. All successful holds/releases use E input; live movement/turns use normal input. Specialized police LOS/windup tests are separate.",
+	"normal_hit_missing_actor_result_release": true,
+	"pause_timeout_cooldown": {
+		"changes": [
+			{
+				"actor": 873639972817,
+				"held": true,
+				"reason": "input"
+			},
+			{
+				"actor": 873639972817,
+				"held": false,
+				"reason": "timeout"
+			},
+			{
+				"actor": 873639972817,
+				"held": true,
+				"reason": "input"
+			}
+		],
+		"hold_seconds": 12.0,
+		"regrab_seconds": 6.0
+	},
+	"real_pair_walk_wall_rapid_rotation": {
+		"barrier_z": 2.59600007534027,
+		"ceo": "(12.55, -0.019125, 1.47974)",
+		"player": "(12.0, -0.0191, 2.16419)",
+		"still_held": true
+	},
+	"torso_occlusion_occupied_alignment_unsupported_floor": true
+}
+CEO_HOLD_REGRESSION_OK
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"accepted_windup_preserved": true,
+	"both_bodies_props_range_and_once": true,
+	"failures": [],
+	"guard_unchanged": true,
+	"invalid_provider_down_and_freed_target": true,
+	"missing_relation_properties_boolean_and_holder_null_safety": true,
+	"new_push_standoff_release": {
+		"held_distance": 2.53666496276855,
+		"resumed_hits": 1
+	},
+	"per_police_solid_camera_independence": true
+}
+POLICE_HOLD_REGRESSION_OK
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"actual_dispatch_and_return": {
+		"accepted_action": "impact",
+		"dispatch_assessments": 2,
+		"duration": 3.0,
+		"finished_count": 1
+	},
+	"actual_held_pair_freeze_resume": {
+		"game_time_during_cut": 8.18333333333332,
+		"held_age_during_cut": 0.0833333333333333,
+		"real_E_released": true,
+		"same_pair_resumed": true
+	},
+	"cancellation_nonblocking_pause_skip_ownership": "checked",
+	"failures": [],
+	"production_dispatch_menu_results_reset": {
+		"checked": true,
+		"original_response_cost": 600000
+	}
+}
+POLICE_ARRIVAL_REGRESSION_OK
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+POLICE_ARRIVAL_DAMAGE_REGRESSION_BEGIN
+{
+	"failures": [],
+	"full_native_throw_receiver": {
+		"actual_signals": [
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "619179936539",
+				"label": "커피잔 파손",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "634648529347",
+				"label": "프린터 손상",
+				"paused_at_emit": true
+			}
+		],
+		"after": {
+			"care": 0,
+			"property": 160000,
+			"response": 600000,
+			"work": 0
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"duplicate_replays": 8,
+		"receiver_damage": 150000,
+		"source_damage": 10000
+	},
+	"full_real_punch_down": {
+		"actual_signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": true
+			}
+		],
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"duplicate_menu_result_checks": true
+	},
+	"full_real_throw_npc": {
+		"actual_witness_reaction": {
+			"action_kind": "throw",
+			"event_id": "1285953:e5",
+			"fact": "npc_reaction",
+			"instigator_id": "player",
+			"root_action_id": "1285953:a1",
+			"round_id": "1285953",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "368444444794",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"after": {
+			"care": 300000,
+			"property": 10000,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"contact": {
+			"action_kind": "throw",
+			"event_id": "1285953:e4",
+			"fact": "action_contact",
+			"instigator_id": "player",
+			"root_action_id": "1285953:a1",
+			"round_id": "1285953",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "359888066315",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"health": -7.0,
+		"heat": 21.25
+	},
+	"off_real_punch_down": {
+		"actual_signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "264677363523",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "264677363523",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "264677363523",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": false
+			}
+		],
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"duplicate_menu_result_checks": false
+	},
+	"off_real_throw_npc": {
+		"actual_witness_reaction": {
+			"action_kind": "throw",
+			"event_id": "1792891:e5",
+			"fact": "npc_reaction",
+			"instigator_id": "player",
+			"root_action_id": "1792891:a1",
+			"round_id": "1792891",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "561080438846",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"after": {
+			"care": 300000,
+			"property": 10000,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"contact": {
+			"action_kind": "throw",
+			"event_id": "1792891:e4",
+			"fact": "action_contact",
+			"instigator_id": "player",
+			"root_action_id": "1792891:a1",
+			"round_id": "1792891",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "552524057001",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"health": -7.0,
+		"heat": 21.25
+	},
+	"short_real_punch_down": {
+		"actual_signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "169466662761",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "169466662761",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "169466662761",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": false
+			}
+		],
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"duplicate_menu_result_checks": false
+	},
+	"short_real_throw_npc": {
+		"actual_witness_reaction": {
+			"action_kind": "throw",
+			"event_id": "1526023:e5",
+			"fact": "npc_reaction",
+			"instigator_id": "player",
+			"root_action_id": "1526023:a1",
+			"round_id": "1526023",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "464846327779",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"after": {
+			"care": 300000,
+			"property": 10000,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"contact": {
+			"action_kind": "throw",
+			"event_id": "1526023:e4",
+			"fact": "action_contact",
+			"instigator_id": "player",
+			"root_action_id": "1526023:a1",
+			"round_id": "1526023",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "456289946914",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"health": -7.0,
+		"heat": 21.25
+	}
+}
+POLICE_ARRIVAL_DAMAGE_REGRESSION_OK
+All v0.3 scenario regressions passed. Native display and human play quality remain separate gates.

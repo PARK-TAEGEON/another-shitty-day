@@ -13,16 +13,19 @@ signal ambient_dialogue(speaker: String, text: String, duration: float, source: 
 signal scenario_event(event: Dictionary)
 signal scenario_dialogue(speaker: String, text: String, duration: float, source: Node3D, priority: int)
 signal responder_arrived(actor: Node3D)
+signal world_resetting
 const EventStream = preload("res://scripts/scenario/event_stream.gd")
 const CeoScript = preload("res://scripts/scenario/ceo_npc.gd")
-const RouteScript = preload("res://scripts/scenario/office_route.gd")
+const PoliceScript = preload("res://scripts/scenario/police_npc.gd")
 var events: RefCounted = EventStream.new()
-var office_route: Node
+var ceo: CharacterBody3D
+var ceo_hold: Node
 var scenario_time: float = 0.0
 var _contact: Dictionary = {}
 var _last_cause: Dictionary = {}
 var _scenario_line: Dictionary = {}
 var _pending_reactions: Dictionary = {}
+var _scenario_spoken: Dictionary = {}
 var scenario_line_can_start: Callable
 
 const PROP_SCRIPT: Script = preload("res://scripts/prop.gd")
@@ -493,7 +496,7 @@ func _build_office_zones() -> void:
 	_label("잠깐만 부탁해요", Vector3(-5.8, 2.06, 7.80), 0.0031, TEAL, PI)
 
 func _npc(name_value: String, role_value: String, at: Vector3, color: Color, yaw: float = 0.0, opening_role: String = "", profile: Dictionary = {}) -> Node3D:
-	var npc: CharacterBody3D = (CeoScript if role_value == "ceo" else NPC_SCRIPT).new() as CharacterBody3D
+	var npc: CharacterBody3D = (CeoScript if role_value == "ceo" else (PoliceScript if role_value == "police" else NPC_SCRIPT)).new() as CharacterBody3D
 	npc.set("display_name", name_value)
 	npc.set("role", role_value)
 	npc.set("opening_role", opening_role)
@@ -516,6 +519,9 @@ func _npc(name_value: String, role_value: String, at: Vector3, color: Color, yaw
 	npc.connect("noise", _on_noise)
 	npc.connect("damage_assessed", _on_damage_assessed.bind(npc))
 	npc.connect("incident", _on_incident)
+	if role_value == "police":
+		npc.set("hold_provider", Callable(self, "_hold_relation"))
+		npc.connect("hold_observed", _on_police_observed)
 	npcs.append(npc)
 	return npc
 
@@ -529,8 +535,14 @@ func _build_people() -> void:
 	_npc("타 부서 직원 · 회의실", "observer", Vector3(4.45, 0.06, 3.75), Color("897887"), PI, "", {"affiliation": "other", "personality": "spectator", "work_activity": "papers", "reaction_line": "어… 저쪽 무슨 일이야?"})
 
 func slam_desk(origin: Vector3, strength: float = 1.0) -> bool:
-	if is_instance_valid(office_route) and origin.distance_to(Vector3(12.7, 1.0, -4.2)) < 2.15:
-		var object: Node3D = office_route.authority_props[0]
+	if origin.distance_to(Vector3(12.7, 1.0, -4.2)) < 2.15:
+		var object: Node3D
+		for item: Node3D in props:
+			if is_instance_valid(item) and item.get("display_name") == "대표 기념패":
+				object = item
+				break
+		if not is_instance_valid(object):
+			return false
 		begin_player_contact("slam", object)
 		object.receive_hit(Vector3.UP * 2.0, object.global_position, 8.0)
 		incident_event.emit("DESK_SLAM", 0.75, object.global_position)
@@ -836,18 +848,12 @@ func _build_ceo_room() -> void:
 	_label("공용 서류", Vector3(9.9, 1.55, -2.5), 0.0028, CREAM)
 	_label("방문객", Vector3(13.3, 1.55, 2.4), 0.0028, CREAM)
 	_light(Vector3(12.0, 3.7, -1.0), 1.2, Color("ffecd0"), 8.0)
-	var plaque: Node3D = _prop("binder", "대표 기념패", Vector3(12.0, 1.13, -4.0), ORANGE)
-	var tray: Node3D = _prop("paper", "대표 결재함", Vector3(13.4, 1.1, -4.0), CREAM)
-	var chair: Node3D = _prop("chair", "대표 의자", Vector3(13.5, 0.04, -2.8), INK, PI)
+	_prop("binder", "대표 기념패", Vector3(12.0, 1.13, -4.0), ORANGE)
+	_prop("paper", "대표 결재함", Vector3(13.4, 1.1, -4.0), CREAM)
+	_prop("chair", "대표 의자", Vector3(13.5, 0.04, -2.8), INK, PI)
 	_prop("paper", "밀린 공용 서류", Vector3(9.9, 1.1, -2.5), CREAM)
 	_prop("mug", "대표 커피잔", Vector3(13.3, 1.16, 2.4), ORANGE)
-	var actor: Node3D = _npc("사장 · 임시 모델", "ceo", Vector3(12.7, 0.04, -2.8), Color("634e46"), PI, "", {"affiliation": "executive", "personality": "dumping", "health": 90.0, "work_activity": "papers"})
-	office_route = RouteScript.new()
-	office_route.world = self
-	office_route.ceo = actor
-	office_route.command_prop = chair
-	office_route.authority_props.assign([plaque, tray, chair])
-	add_child(office_route)
+	ceo = _npc("사장 · 임시 모델", "ceo", Vector3(12.7, 0.04, -2.8), Color("634e46"), PI, "", {"affiliation": "executive", "personality": "dumping", "health": 90.0, "work_activity": "papers"})
 
 func record_scenario_fact(origin: Dictionary, fact: String, target: Node3D = null, extra: Dictionary = {}) -> Dictionary:
 	var event: Dictionary = events.fact(origin, fact, target, extra)
@@ -859,8 +865,6 @@ func begin_player_contact(kind: String, target: Node3D) -> void:
 	_contact = events.action(kind, target, scenario_time)
 	if not _contact.is_empty():
 		_contact["state_before"] = _target_state(target)
-		if is_instance_valid(office_route) and is_instance_valid(office_route.command_prop):
-			_contact["command_before"] = _target_state(office_route.command_prop)
 		if target.has_method("mark_player_impulse") and kind in ["punch", "kick", "throw"]:
 			target.set_meta("scenario_origin", _contact.duplicate(true))
 			target.set_meta("scenario_origin_time", scenario_time)
@@ -878,14 +882,16 @@ func end_player_contact(kind: String, target: Node3D) -> void:
 		_contact.clear()
 		return
 	var origin: Dictionary = _contact.duplicate(true)
-	var fact: String = "action_contact" if kind in ["punch", "kick", "slam"] else "prop_manipulated"
+	var fact: String = "actor_held" if kind == "actor_grab" else ("action_contact" if kind in ["punch", "kick", "slam"] else "prop_manipulated")
 	var event: Dictionary = record_scenario_fact(origin, fact, target, {"state_after": _target_state(target)})
 	if fact == "action_contact":
 		_last_cause = origin
 		if target.has_method("react") and _actor_living(target):
 			record_scenario_fact(origin, "npc_reaction", target)
-	if is_instance_valid(office_route) and not event.is_empty():
-		office_route.on_action(event, target)
+	if kind == "actor_grab" and not event.is_empty():
+		_last_cause = origin
+		incident_event.emit("ACTOR_GRAB", float(ceo_hold.rules.grab_incident_weight), target.global_position)
+		_disturb(target.global_position, 1.8)
 	_contact.clear()
 
 func begin_prop_contact(source: Node3D, target: Node3D) -> void:
@@ -898,8 +904,6 @@ func begin_prop_contact(source: Node3D, target: Node3D) -> void:
 		return
 	if is_instance_valid(target):
 		_contact["state_before"] = _target_state(target)
-		if is_instance_valid(office_route.command_prop):
-			_contact["command_before"] = _target_state(office_route.command_prop)
 		if target.has_method("mark_player_impulse"):
 			target.set_meta("scenario_origin", _contact.duplicate(true))
 			target.set_meta("scenario_origin_time", source.get_meta("scenario_origin_time"))
@@ -910,12 +914,7 @@ func end_prop_contact(source: Node3D, target: Node3D) -> void:
 		return
 	var origin: Dictionary = _contact.duplicate(true)
 	_last_cause = origin
-	var event: Dictionary = record_scenario_fact(origin, "action_contact", target if is_instance_valid(target) else source)
-	if is_instance_valid(office_route) and not event.is_empty():
-		if target == office_route.ceo or target == office_route.command_prop:
-			office_route.on_action(event, target)
-		else:
-			office_route.on_action(event, source if source in office_route.authority_props else target)
+	record_scenario_fact(origin, "action_contact", target if is_instance_valid(target) else source)
 	_contact.clear()
 
 func _record_applied_reaction(actor: Node3D) -> void:
@@ -931,8 +930,12 @@ func _record_applied_reaction(actor: Node3D) -> void:
 func queue_scenario_line(beat: String, actor: Node3D, text: String, priority: int) -> void:
 	if not _actor_living(actor):
 		return
+	var once_key: String = "%d:%s" % [actor.get_instance_id(), beat]
+	if _scenario_spoken.has(once_key):
+		return
 	if not _scenario_line.is_empty() and int(_scenario_line["priority"]) > priority:
 		return
+	_scenario_spoken[once_key] = true
 	_scenario_line = {"beat": beat, "actor": actor, "text": text, "priority": priority, "due": scenario_time + 0.2, "expires": scenario_time + 3.2}
 
 func cancel_scenario_speaker(actor: Node3D) -> void:
@@ -958,22 +961,17 @@ func _advance_scenario_line() -> void:
 	actor.set("_talk_time", 2.8)
 	_scenario_line.clear()
 
-func react_to_route_result(result: String, actor: Node3D) -> void:
-	for npc: Node3D in npcs:
-		if npc.get("affiliation") != "department" or not _actor_living(npc) or npc.global_position.distance_to(actor.global_position) > 7.0:
-			continue
-		var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(npc.global_position + Vector3.UP * 1.5, actor.global_position + Vector3.UP * 1.5, 1)
-		if not get_world_3d().direct_space_state.intersect_ray(query).is_empty():
-			continue
-		npc.call("react", actor.global_position, 1.0)
-		queue_scenario_line("staff-result-" + result, npc, "그럼 마무리는 사장님이 하시는 거죠?" if result == "A" else "그럼 회의는 취소된 거지?", 50)
-		break
+func _hold_relation() -> Node:
+	return ceo_hold if is_instance_valid(ceo_hold) else null
+
+func _on_police_observed(actor: CharacterBody3D) -> void:
+	if _actor_living(actor):
+		queue_scenario_line("ceo-police-seen", actor, "봤지? 대표가 있어야 말을 듣잖아.", 60)
 
 func reset_world() -> void:
+	world_resetting.emit()
 	_pending_reactions.clear()
-	if is_instance_valid(office_route):
-		remove_child(office_route)
-		office_route.queue_free()
+	_scenario_spoken.clear()
 	_contact.clear()
 	_last_cause.clear()
 	_scenario_line.clear()
