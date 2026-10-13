@@ -1,7 +1,7 @@
 # 김 팀장 × Office Scenario v0.3 통합
 
 2026-10-13 KST. **IMPLEMENTED / 아래 범위 VERIFIED / 인간의 최종 아트·재미 승인 전.**
-통합 브랜치: `integration/kim-ragdoll-office-v03`. main 자동 병합 없음.
+통합 브랜치: `integration/kim-ragdoll-office-v03`. [Draft PR #9](https://github.com/PARK-TAEGEON/another-shitty-day/pull/9), base=PR #8. 코드/검증 커밋 `b16359d79276e14e926b89e6940dbed675e77acc`. main 자동 병합 없음.
 
 ## 기준과 의존성
 
