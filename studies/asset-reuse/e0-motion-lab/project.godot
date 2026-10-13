@@ -1,0 +1,15 @@
+; Isolated technical bench only. This is NOT the shipping game.
+config_version=5
+
+[application]
+
+config/name="ASD E0 Animation Import Bench"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
