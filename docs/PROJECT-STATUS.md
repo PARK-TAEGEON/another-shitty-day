@@ -2,6 +2,8 @@
 
 ## 2026-10-13 회사원 시나리오 구현 브랜치
 
+제출: [Draft PR #7](https://github.com/PARK-TAEGEON/another-shitty-day/pull/7), base=main. 코드/증거 검토용이며 자동 병합하지 않는다.
+
 `implementation/office-scenario-v02`에 기존 사무실과 연결된 임시 사장실, O-30~38 A/B 실제 행동 분기, 최소 공통 사건 연결, 별도 결과 Chaos/최고 기록, 최초 경찰 입구 카메라를 **IMPLEMENTED**했다. Godot4.7.2 Windows에서 기존 회귀10+신규3, 실제42초 렌더/제압 결과, standalone Windows smoke를 **VERIFIED**했다. [상세 범위·증거·변경 파일](implementation/OFFICE-SCENARIO-v0.2-2026-10-13.md).
 
 PR #2는 미병합 그대로다. 임시 로컬 결합의 OFF/ON 회귀·native smoke 통과, 기존 Kim 재시작 검사의 NPC7→8 기대치 조정 필요를 기록했다. 최종 아트/인간 재미·장시간 성능 승인, 전체 회사 건물/신고·수색/상위 대응은 남아 있다. **main에 병합되었다거나 Release-P2가 완료됐다는 의미가 아니다.** 11월30일 목표 및 기존 출시 범위는 유지한다. 아래 표는 이번 구현 브랜치 이전 main 감사 이력이다.

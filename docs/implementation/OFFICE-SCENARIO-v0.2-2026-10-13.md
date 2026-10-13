@@ -1,5 +1,7 @@
 # Office Scenario v0.2 구현 결과
 
+제출: [Draft PR #7](https://github.com/PARK-TAEGEON/another-shitty-day/pull/7), base=main.
+
 2026-10-13 KST. 기존 사무실 옆 임시 사장실에서 플레이어가 A/B 특별 결과를 만드는 최소 구현이다. 전체 회사 건물이나 Release-P2 완료를 뜻하지 않는다. 기준 main은 `1244b54d56c774c78160d044f667872cbb1b66d4`, 구현 브랜치는 `implementation/office-scenario-v02`다.
 
 설계 기준 ZIP: `Another-Shitty-Day-Scenario-Design-v0.2.zip`, SHA256 `4270DDF730B1E39155585DEA7E41DBFD9607F682328984501B3FDBB145BA6053`. AGENTS, 최신 상태/출시 로드맵/결정/공통 규격, ZIP 전체와 열린 PR #1/#2를 확인했다.

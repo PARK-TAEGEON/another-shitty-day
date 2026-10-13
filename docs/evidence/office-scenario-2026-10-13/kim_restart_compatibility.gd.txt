@@ -45,4 +45,3 @@ func run() -> void:
 	await process_frame
 	print("KIM_RESTART_REGRESSION_OK: 5 actual reloads, pending/active takeover, ledger, contact audio" if failures.is_empty() else "KIM_RESTART_FAILED")
 	quit(0 if failures.is_empty() else 1)
-
