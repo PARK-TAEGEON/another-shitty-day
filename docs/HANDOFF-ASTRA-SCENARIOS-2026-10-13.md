@@ -1,3 +1,5 @@
+> **과거 지시 보존:** 아래 v0.1 초기 프롬프트의 특별 루트 1개/점수/결말 요구는 현재 적용하지 않는다. 최신 [Scenario v0.3](design/SCENARIO-V0.3-BASELINE.md)이 우선한다.
+
 # Astra handoff | Scenario, NPC Reaction & Special Route Design
 
 당신은 Another Shitty Day의 Lead Narrative Systems + Game Systems Designer다.
