@@ -1,6 +1,6 @@
 # Another Shitty Day — 에이전트 개발 원칙
 
-작업 시작 전 반드시 다음 순서로 읽는다: `docs/START-HERE.md` → `docs/DECISIONS-2026-10-12.md` → `docs/DECISIONS-2026-10-13.md` → `docs/design/SCENARIO-FRAMEWORK.md` → `docs/ROADMAP-AND-GATES.md` → 관련 폴더의 상세 설계.
+작업 시작 전 반드시 다음 순서로 읽는다: `docs/PROJECT-STATUS.md` → `docs/RELEASE-ROADMAP.md` → `docs/START-HERE.md` → `docs/DECISIONS-2026-10-12.md` → `docs/DECISIONS-2026-10-13.md` → `docs/design/SCENARIO-FRAMEWORK.md` → `docs/ROADMAP-AND-GATES.md` → 관련 폴더의 상세 설계.
 
 1. **안정된 게임 보존:** 기준 게임은 `game/`의 v0.2.2. 아트 이미지/래그돌 문서를 넣었다고 구현된 것으로 쓰지 않는다. 큰 리팩터링은 별도 브랜치에서 한다.
 2. **수용 장면 보호:** 박 대리의 놀람과 구도, 김 팀장 빼꼼/가까운 접근/대사/잔소리, 첫 B→반복 A, 왼손·오른손 방향, 5인 부서 및 2인 타 부서 유지.
@@ -13,5 +13,9 @@
 9. **GitHub:** 원격 `PARK-TAEGEON/another-shitty-day`가 연결되어 있다. 변경은 실제 파일·커밋 결과로 확인하며, 큰 게임 코드 변경은 브랜치/PR로 분리한다.
 
 10. **시나리오 설계:** 2026-10-13 승인 방향은 `docs/DECISIONS-2026-10-13.md`가 기준이다. 각 시나리오에 평상시 마찰/대표 첫 행동/전용 NPC 반응/폴백/선택형 특별 루트를 설계한다. 원본 책상 내려치기 장면과 기존 누적 피해액($) 장부를 보호한다. 장기 구상을 IMPLEMENTED로 표시하지 않는다.
+
+11. **출시 목표와 정의:** [`docs/RELEASE-ROADMAP.md`](docs/RELEASE-ROADMAP.md) 의 2026-11-30 Release-P2, 2027-06-30 정식 1.0을 사용자 목표로 관리한다. 기존 아트 R2와 Release-P2를 혼동하지 않고, 일정 목표만으로 완료 보고를 하지 않는다.
+12. **현 상태와 PR 종속:** [`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md) 를 최신 확인 문서로 유지한다. PR #2 opt-in 김 팀장 구현은 PR #1 연구 브랜치 기반이고 `main` 미병합이다. 별도 트랙은 공통 코드/동일 파일 병렬 편집 금지, 리뷰와 실제 Windows/시각 게이트 뒤 병합한다.
+13. **이슈 기반 스프린트:** #3 시나리오, #4 Chaos 코어, #5 Release-P2, #6 멀티 선행 실험. 날짜/이슈/CI는 승인·재미 통과 증거가 아니다. 외부 공개 및 정식 출시·일정/콘텐츠 범위 변경은 사용자 결정.
 
 기존 v0.2.2 가이드는 `docs/archive/AGENTS-v0.2.2.md`에 보존했다.

@@ -1,3 +1,5 @@
+> **최신 출시 일정:** [RELEASE-ROADMAP.md](RELEASE-ROADMAP.md) (**2026-11-30 Release-P2, 2027-06-30 정식 1.0**). 이 문서의 R1~R6는 아트·피격 검증 단계이며 Release-P2와 다르다. 최신 브랜치/PR·CI 현황은 [PROJECT-STATUS.md](PROJECT-STATUS.md). 아래 '출시 범위 미확정'은 당시 계획 이력으로 보존한 표현이다.
+
 # 제작 로드맵 · 사람 검수는 중요 지점에만
 
 | 단계 | 에이전트 산출물 | 자동·기술 검사 | 사용자 검수 게이트 |

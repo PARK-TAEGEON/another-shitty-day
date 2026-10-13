@@ -4,7 +4,9 @@
 
 **기존 프로젝트명:** DESK BREAKER  
 **현재 플레이 가능한 소스:** Godot `v0.2.2` (이 저장소에 코드 그대로 보존)  
-**다음 목표:** 김 팀장 3D 제작 기준 v2 → Blender 리깅 → Godot 하이브리드 피격·래그돌 검증
+**활성 구현 후보:** 김 팀장 3D 리깅·하이브리드 래그돌은 [Draft PR #2](https://github.com/PARK-TAEGEON/another-shitty-day/pull/2)에 opt-in 구현되고 CI 성공. **main 미병합·외형/타격감 사용자 승인 전**.
+
+**일정 목표:** **2026-11-30 Release Phase 2 완료 → 2027년 상반기 Steam 정식 1.0(2027-06-30 목표)**. 품질 게이트를 통과하기 전 완료를 주장하지 않음.
 
 ![승인된 직원 5인 외형 콘셉트](art/references/approved/five-staff-unlikable-approved.png)
 
@@ -14,7 +16,8 @@
 
 | 용도 | 문서 |
 |---|---|
-| 지금 작동하는 것과 미완료 | [현재 개발 상태](docs/START-HERE.md) · [기존 v0.2.2 상태 기록](docs/current-status.md) |
+| 지금 작동하는 것과 미완료 | **[최신 작업 현황·PR/CI](docs/PROJECT-STATUS.md)** · [구버전 기준](docs/START-HERE.md) · [v0.2.2 역사 기록](docs/current-status.md) |
+| 출시 목표/실행 계획 | **[2026~2027 정식 출시 로드맵](docs/RELEASE-ROADMAP.md)** · [Phase 2 이슈](https://github.com/PARK-TAEGEON/another-shitty-day/issues/5) |
 | 확정한 캐릭터/게임 결정 | [10/12 결정](docs/DECISIONS-2026-10-12.md) · [10/13 확장 방향](docs/DECISIONS-2026-10-13.md) |
 | 시나리오/첫 돌발행동/NPC 연쇄 반응 | [공통 시나리오 규격](docs/design/SCENARIO-FRAMEWORK.md) · [시나리오 목록](docs/design/SCENARIO-CATALOG.md) |
 | Astra 기획 위임 | [Astra 전달 프롬프트](docs/HANDOFF-ASTRA-SCENARIOS-2026-10-13.md) |
@@ -24,6 +27,13 @@
 | 실제 작업 순서 및 사용자 검수 | [로드맵과 품질 게이트](docs/ROADMAP-AND-GATES.md) |
 | AI/에이전트 실행 규칙 | [AGENTS.md](AGENTS.md) |
 | GitHub 연결 | [원격 저장소 설정](docs/GITHUB-SETUP.md) |
+
+## 2026-10-13 승인된 일정과 진행 방식
+
+- **11월 30일:** 회사 사무실 한 층을 넘어 연결된 건물/사장실 특별 루트/경찰 대응까지 실제 플레이 가능한 Release Phase 2를 완료하는 목표.
+- **2027년 3월 말:** 시장·공무원·교통사고·야구 등 싱글 시나리오와 은행 2인 협동을 통합하고 콘텐츠 동결 목표. 4인은 별도 검증 후.
+- **2027년 6월 30일:** Steam 정식 1.0 출시 목표. 얼리 액세스는 기본 계획이 아님.
+- AI 병렬 트랙(코어·아트·Astra 시나리오·멀티 스파이크·QA) 및 단일 통합 소유자, 실제 테스트·검수 근거는 [Release Roadmap](docs/RELEASE-ROADMAP.md) 참조.
 
 ## 2026-10-13 확정된 장기 방향 (기획, 미구현)
 

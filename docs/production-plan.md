@@ -1,3 +1,5 @@
+> **기존 v0.2.x 제작 계획 기록:** 새로운 사용자 승인 일정(2026-11-30 Release-P2, 2027-06-30 정식 출시)의 기준 문서는 [RELEASE-ROADMAP.md](RELEASE-ROADMAP.md)이다. 최신 구현과 PR 상태는 [PROJECT-STATUS.md](PROJECT-STATUS.md).
+
 # DESK BREAKER — 제작과 재개 지침
 
 ## 제작 흐름

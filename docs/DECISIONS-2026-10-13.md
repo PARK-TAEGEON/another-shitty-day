@@ -50,3 +50,11 @@
 - **인간 검수:** 매 대사·이벤트를 하나씩 승인받지 말고 대표 도입 장면과 전체 세션 영상/조작 테스트 중심으로 최소화한다.
 
 상세 콘텐츠 규격: [SCENARIO-FRAMEWORK.md](design/SCENARIO-FRAMEWORK.md) · [SCENARIO-CATALOG.md](design/SCENARIO-CATALOG.md). Astra 전달안: [HANDOFF-ASTRA-SCENARIOS-2026-10-13.md](HANDOFF-ASTRA-SCENARIOS-2026-10-13.md).
+
+## F. 후속 승인: 일정·개발 체계 (TARGET, 완료 아님)
+
+- **2026-11-30:** 회사원 연결 건물/사장실 특별 루트/경찰 대응을 포함한 **Release-P2** 완료 목표. 아트 단계 `R2`와 별개.
+- **2027년 상반기 정식 1.0 출시**, 관리상 목표일 **2027-06-30**. 얼리 액세스를 기본 전제로 두지 않는다.
+- **GPT/Codex 적극 활용:** 코어 구현 1명 소유, 별도 아트·Astra 시나리오·멀티 기술 스파이크 병렬, 독립 Reviewer. 10/31 Steam 기술 게이트 및 2027-03-31 콘텐츠 동결 목표.
+- **현재 증거와 완료 분리:** main v0.2.2, Draft PR #1/#2 기술 증거와 미병합, 시나리오/멀티 미구현. 기한/기획을 VERIFIED나 IMPLEMENTED로 표시하지 않는다.
+- 사용자 승인 없는 정식 출시 공개·제품 범위/출시일 자동 변경 금지. [실행 로드맵](RELEASE-ROADMAP.md) · [현황](PROJECT-STATUS.md).

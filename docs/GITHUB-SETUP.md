@@ -1,3 +1,5 @@
+> **2026-10-13 안내:** 아래 '원격 저장소 미생성'은 과거 준비 기록이다. 현재 비공개 원격 [PARK-TAEGEON/another-shitty-day](https://github.com/PARK-TAEGEON/another-shitty-day)는 생성되어 `main` 브랜치가 있다. 저장소를 다시 만들지 말고 [PROJECT-STATUS.md](PROJECT-STATUS.md)를 확인한다.
+
 # GitHub 비공개 저장소 연결
 
 **현재 상태:** 로컬 Git repository는 준비했지만 GitHub 원격 저장소는 생성/푸시하지 못했다. 연결된 GitHub 도구가 기존 저장소 읽기·수정은 지원하지만 새 저장소 생성 기능을 제공하지 않았다.
