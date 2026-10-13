@@ -1,3 +1,4 @@
+> **2026-10-13 김 팀장 통합:** `integration/kim-ragdoll-office-v03`는 PR #8 위에 PR #1→#2의 실제 Blender/GLB와 하이브리드 래그돌을 결합한다. 새 김 팀장 기본 ON, 기존 모델 복귀 및 1회 발차기/체력 기준 비교 실행기를 제공한다. 3모드 회귀47개·Windows EXE GPU smoke·28초 통합 영상 VERIFIED. [통합 범위·의존성·증거·인간 검수](implementation/KIM-DEMO-INTEGRATION-2026-10-13.md). main 미병합, 최종 아트/재미와 장시간 성능 미승인. 아래 PR #2 기본 OFF 설명은 원래 슬라이스 시점의 기록이다.
 > **2026-10-13 회사원 v0.3 구현 브랜치:** `implementation/office-scenario-v03`에서 기존 v0.2 결과물을 간소화했다. 사장 E 붙잡기/같은 층 물리 이동/목격 경찰 거리 유지/안전 해제, 경찰 Full·Short·Off와 기존 피해액 결과를 구현·검증했다. [실제 범위와 검증](implementation/OFFICE-SCENARIO-v0.3-2026-10-13.md). main 통합·최상층 접근·야구·다른 신규 시나리오·장시간 재미 검수는 완료하지 않았다. 아래 v0.2와 초기 main 감사는 해당 시점의 역사 정보다.
 
 # Another Shitty Day | 실제 개발 현황 (Living Status)

@@ -186,7 +186,9 @@ func _ready() -> void:
 		state = "pursue"
 		health = 65.0 if role == "police" else 48.0
 	add_to_group("office_npc")
-	if _broad and (use_kim_rig or bool(ProjectSettings.get_setting("asd/characters/kim_rig_enabled", false)) or "--kim-rig" in OS.get_cmdline_user_args()):
+	# Explicit rollback wins over the build default and per-instance opt-in.
+	var kim_enabled: bool = use_kim_rig or bool(ProjectSettings.get_setting("asd/characters/kim_rig_enabled", false)) or "--kim-rig" in OS.get_cmdline_user_args()
+	if _broad and kim_enabled and not "--kim-legacy" in OS.get_cmdline_user_args():
 		_rig_adapter = load("res://scripts/characters/kim_visual_adapter.gd").new()
 		_rig_adapter.name = "KimVisualAdapter"
 		_rig_adapter.actor = self
@@ -971,7 +973,7 @@ func receive_hit(impulse: Vector3, _point: Vector3, damage: float) -> void:
 	incident.emit("ASSAULT", 3.0, global_position)
 	noise.emit(global_position, 2.0)
 	health -= maxf(damage, 18.0)
-	var physical_down: bool = is_instance_valid(_rig_adapter) and (health <= 0.0 or _rig_adapter.severity(impulse) == "Heavy")
+	var physical_down: bool = is_instance_valid(_rig_adapter) and (health <= 0.0 or _rig_adapter.should_knock_down(impulse))
 	if physical_down:
 		health = minf(health, 0.0)
 	else:

@@ -1,3 +1,4 @@
+> **최신 통합 검수 빌드 (2026-10-13):** PR #8 회사원 v0.3 + PR #1/#2 김 팀장. 이 브랜치는 새 김 팀장 **기본 ON**이며 `--kim-legacy`로 복귀, `--kim-health-only`로 체력 기준을 비교한다. [범위·실행·47개 검사·Windows·영상](implementation/KIM-DEMO-INTEGRATION-2026-10-13.md). 아래 초기 스냅샷과 PR #2 OFF 기록보다 이 통합 안내를 우선한다.
 # 프로젝트 시작점 / 실제 현재 상태
 
 > 2026-10-13 구현 브랜치 갱신: [김 팀장 opt-in Vertical Slice 및 실제 검증](animation-ragdoll/KIM-VERTICAL-SLICE-2026-10-13.md). 아래 표는 보존된 2026-10-12 기준 기록이다. 새 기능은 기본 OFF이며 최종 외형·타격감 승인은 아직 없다.

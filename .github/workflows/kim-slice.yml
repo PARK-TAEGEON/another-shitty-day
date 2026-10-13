@@ -16,17 +16,12 @@ jobs:
           version: '4.7.2'
           use-dotnet: false
           include-templates: false
-      - name: Baseline flag OFF
+      - name: Default, health-only and legacy integration matrix
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p validation/kim
-          pwsh -File tools/test.ps1 -GodotPath "$(command -v godot)" 2>&1 | tee validation/kim/baseline.txt
-      - name: Production Kim flag ON
-        shell: bash
-        run: |
-          set -euo pipefail
-          pwsh -File tools/test-kim.ps1 -GodotPath "$(command -v godot)" 2>&1 | tee validation/kim/enabled.txt
+          pwsh -File tools/test-kim-integration.ps1 -GodotPath "$(command -v godot)" -EvidencePath validation/kim 2>&1 | tee validation/kim/matrix.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:

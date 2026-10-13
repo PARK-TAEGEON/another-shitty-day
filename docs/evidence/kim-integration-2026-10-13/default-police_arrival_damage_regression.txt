@@ -1,0 +1,326 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+POLICE_ARRIVAL_DAMAGE_REGRESSION_BEGIN
+{
+	"failures": [],
+	"full_native_throw_receiver": {
+		"actual_signals": [
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "626947786777",
+				"label": "커피잔 파손",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "642416381287",
+				"label": "프린터 손상",
+				"paused_at_emit": true
+			}
+		],
+		"after": {
+			"care": 0,
+			"property": 160000,
+			"response": 600000,
+			"work": 0
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"duplicate_replays": 8,
+		"receiver_damage": 150000,
+		"source_damage": 10000
+	},
+	"full_real_punch_down": {
+		"actual_signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": true
+			}
+		],
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"duplicate_menu_result_checks": true
+	},
+	"full_real_throw_npc": {
+		"actual_witness_reaction": {
+			"action_kind": "throw",
+			"event_id": "1148597:e5",
+			"fact": "npc_reaction",
+			"instigator_id": "player",
+			"root_action_id": "1148597:a1",
+			"round_id": "1148597",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "374266138771",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"after": {
+			"care": 300000,
+			"property": 10000,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"contact": {
+			"action_kind": "throw",
+			"event_id": "1148597:e4",
+			"fact": "action_contact",
+			"instigator_id": "player",
+			"root_action_id": "1148597:a1",
+			"round_id": "1148597",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "364736681827",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"health": -7.0,
+		"heat": 21.25
+	},
+	"off_real_punch_down": {
+		"actual_signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "268552900419",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "268552900419",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "268552900419",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": false
+			}
+		],
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"duplicate_menu_result_checks": false
+	},
+	"off_real_throw_npc": {
+		"actual_witness_reaction": {
+			"action_kind": "throw",
+			"event_id": "1616401:e5",
+			"fact": "npc_reaction",
+			"instigator_id": "player",
+			"root_action_id": "1616401:a1",
+			"round_id": "1616401",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "568848289800",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"after": {
+			"care": 300000,
+			"property": 10000,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"contact": {
+			"action_kind": "throw",
+			"event_id": "1616401:e4",
+			"fact": "action_contact",
+			"instigator_id": "player",
+			"root_action_id": "1616401:a1",
+			"round_id": "1616401",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "559318829481",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"health": -7.0,
+		"heat": 21.25
+	},
+	"short_real_punch_down": {
+		"actual_signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "172369121129",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "172369121129",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "172369121129",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": false
+			}
+		],
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"duplicate_menu_result_checks": false
+	},
+	"short_real_throw_npc": {
+		"actual_witness_reaction": {
+			"action_kind": "throw",
+			"event_id": "1393780:e5",
+			"fact": "npc_reaction",
+			"instigator_id": "player",
+			"root_action_id": "1393780:a1",
+			"round_id": "1393780",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "471641100496",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"after": {
+			"care": 300000,
+			"property": 10000,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"contact": {
+			"action_kind": "throw",
+			"event_id": "1393780:e4",
+			"fact": "action_contact",
+			"instigator_id": "player",
+			"root_action_id": "1393780:a1",
+			"round_id": "1393780",
+			"state_before": {
+				"health": 18.0,
+				"position": "(12.7, -0.019375, -2.8)",
+				"state": "idle"
+			},
+			"target_id": "462111640866",
+			"time": 1.86666666666666,
+			"validated": true
+		},
+		"health": -7.0,
+		"heat": 21.25
+	}
+}
+POLICE_ARRIVAL_DAMAGE_REGRESSION_OK

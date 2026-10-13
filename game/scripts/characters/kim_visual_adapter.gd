@@ -124,8 +124,20 @@ func severity(impulse: Vector3) -> String:
 		return "Heavy"
 	return "Medium" if impulse.length() >= MEDIUM_IMPULSE else "Light"
 
+func should_knock_down(impulse: Vector3) -> bool:
+	# A/B comparison changes only Kim's early physical takeover, never damage.
+	var args: PackedStringArray = OS.get_cmdline_user_args()
+	if "--kim-health-only" in args:
+		return false
+	var enabled: bool = bool(ProjectSettings.get_setting("asd/characters/kim_heavy_knockdown", true)) or "--kim-one-kick" in args
+	return enabled and severity(impulse) == "Heavy"
+
 func react_to_hit(impulse: Vector3, point: Vector3) -> void:
 	reaction = severity(impulse)
+	# In the health-only comparison a surviving heavy impact uses the existing
+	# recoverable stagger. At zero health the caller still hands off to physics.
+	if reaction == "Heavy":
+		reaction = "Medium"
 	reaction_duration = 1.05 if reaction == "Medium" else .42
 	reaction_time = reaction_duration
 	reaction_direction = actor.global_basis.inverse() * impulse.normalized()

@@ -37,7 +37,7 @@ func run() -> void:
 		game._restart()
 		for f in range(5):await process_frame
 		check(current_scene != null and current_scene.get_instance_id()!=old_id,"actual reload failed")
-		check(get_nodes_in_group("office_npc").size()==7,"restart leaked NPCs")
+		check(get_nodes_in_group("office_npc").size()==8,"restart leaked NPCs (7 original staff + v0.3 CEO)")
 	paused=false
 	current_scene.sound.stop_all()
 	current_scene.queue_free()
