@@ -79,6 +79,7 @@ godot --path game res://tests/ragdoll_lab.tscn
 | 실제 장면 재시작 | PASS, 메인 tscn 실제 reload 5회. 활성/지연 물리 전환 모두 검사. NPC 7명, 새 라운드 피해액 0 |
 | 기존 게임 OFF | PASS, 기존 import/smoke + 10종 회귀 전체 |
 | 기존 게임 ON | PASS, 기존 10종 + 새 2종 회귀. 첫 B/반복 A, 빼꼼/접근/대사, 경비·경찰, 가격·손상, HUD/초기화 포함 |
+| GitHub Actions 독립 재현 | PASS, Ubuntu 22.04 / Godot 4.7.2, [실행 38354245070](https://github.com/PARK-TAEGEON/another-shitty-day/actions/runs/38354245070). OFF/ON 전체 검사와 증거 artifact 업로드 성공 |
 | 실제 Windows release | PASS, 공식 템플릿 export 후 기본/ON 모드 모두 GTX 1660 SUPER OpenGL에서 스모크 성공 |
 | 실제 렌더 | CAPTURED & REVIEWED, 회전 비교·관절 변형·28초 본편/25초 테스트장. AI 콘셉트 영상이 아님 |
 | 음향 | 물리 접촉 이벤트 검사 + 실제 영상 음향 트랙 포함. 주관적 믹스/청감 승인 NOT VERIFIED |
