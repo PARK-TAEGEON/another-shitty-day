@@ -2,7 +2,7 @@
 
 - 조사일: 2026-10-13 (KST)
 - 비교 기준: GitHub main dcc6db7810ebf065f49ad23d4b037da5fa754302, v0.2.2 스냅샷
-- 문서 상태: RESEARCH / PROPOSED. 외부 파일을 내려받거나 Godot에서 실행 검증한 보고서가 아니다.
+- 문서 상태: RESEARCH / PROPOSED. 초안 조사 이후 **별도 GitHub Actions 실측 E0(46/46 모션)과 E1(15/15 래그돌)이 통과**했다. 자세한 실제 검증 결과는 [기술 검증 기록](ASSET-TECH-VERIFICATION-2026-10-13.md)에 보존했다.
 - 원칙: 게임 본체는 변경하지 않는다. 무료/CC0 우선, 사용자 검수는 핵심 아트와 타격감 단계에 집중.
 - 별도 승인 없는 에셋 구매, main 병합, 코드 라이선스 변경, 원본 게임 기능 재설계 금지.
 
@@ -40,6 +40,8 @@
 | P2 | Simple Ragdoll Wizard: https://godotengine.org/asset-library/asset/5077 | 무료 MIT, Godot 4.6 대상으로 표시 | 2026-04-24 공개된 물리본 생성 보조 도구 | 기본 래그돌 수동 설정이 병목일 때만 분리 브랜치에서 비교. 처음부터 설치 불필요 |
 | P3 | Omie's Assets Office Set: https://omies-assets.itch.io/omies-assets-office-set | 무료 선택 가능 / CC0 | 502MB FBX/Blender+2K PBR 텍스처, 파티션·컴퓨터·모니터·키보드 포함 | 다소 사실적이고 무겁다. 부족한 사무용 모델만 필요할 때 후순위 |
 | HOLD | Adobe Mixamo: https://helpx.adobe.com/creative-cloud/faq/mixamo-faq.html | Adobe ID 무료, 상업 게임 로열티 프리 | 인간형만 자동 리깅 가능; 큰 비율 왜곡과 분리 메시에는 제약 | CC0가 아님. Quaternius로 필요한 동작을 충당하지 못할 때만 검토. 원본 동작 데이터 재배포 권한 별도 확인 후 사용 |
+
+**공식 래그돌 데모 권리 예외:** Godot Foundation의 데모 프로젝트는 MIT로 게시돼 있지만 그 안의 `characters/mannequiny.glb`는 **GDQuest의 CC BY 4.0**이다. 확인 원문: https://github.com/godotengine/godot-demo-projects/blob/master/3d/ragdoll_physics/characters/mannequiny.LICENSE.md . E1은 이 모델을 임시 GitHub Actions 러너에서만 사용하며, `game/` 또는 저장소의 출시용 에셋으로 복제하지 않는다. MIT 표기만 믿고 모델을 자유 라이선스로 취급하지 않는다.
 
 라이선스 지침: CC0는 통상 상업적 사용·수정에 별도 표시가 필요하지 않지만 출처 기록은 유지한다. MIT 코드를 가져오면 저작권/라이선스 고지를 동봉해야 한다. 저작자 배포 페이지의 라이선스가 최종 다운로드에 실린 파일 전부를 포괄하는지 외부 파일 도입 시 다시 확인한다. Mixamo는 상업적 게임 사용과 원본 데이터 재배포 허용이 같은 뜻이 아니다. 혼합 라이선스 파일을 무심코 오픈소스/공개 저장소에 커밋하지 않는다. 자세한 출처 등록 정책은 docs/assets.md 와 licenses/PROJECT-LICENSE-STATUS.md.
 
@@ -131,3 +133,9 @@ Kenney/Kay 모델 중 플레이 중 반복 노출되는 의자·서류함·컵 �
 - Simple Ragdoll Wizard: https://godotengine.org/asset-library/asset/5077
 - Omie's Office Set: https://omies-assets.itch.io/omies-assets-office-set
 - Adobe Mixamo FAQ: https://helpx.adobe.com/creative-cloud/faq/mixamo-faq.html
+
+## 10. 실제 기술 검증 결과 (추가 기록)
+
+- E0 Godot 4.7.2 Compatibility: 무료 Quaternius Standard GLB 1개, Skeleton3D 1개, skinned mesh 1개, **46/46 재생**, 오류 0. [실행 기록](https://github.com/PARK-TAEGEON/another-shitty-day/actions/runs/38348850781)
+- E1 Godot 4.7.2 Compatibility + Jolt: 공식 데모 골격(18 PhysicalBone3D)으로 전·측·후 5회씩 **15/15 안정성 기준 통과**, 위치/속도 비정상 0. [실행 기록](https://github.com/PARK-TAEGEON/another-shitty-day/actions/runs/38349124791)
+- 이 통과는 **테스트 모델 기준의 headless 기술 증명**이며, 최종 김 팀장 외형/리타게팅/물리 복귀/물체 충돌/재미/FPS를 인증하지 않는다. [수치·로그·라이선스 예외 기록](ASSET-TECH-VERIFICATION-2026-10-13.md)을 참조.
