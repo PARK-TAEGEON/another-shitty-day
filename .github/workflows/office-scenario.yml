@@ -1,7 +1,7 @@
 name: Office scenario v0.2
 on:
   pull_request:
-    paths: ['game/**', 'tools/**', 'docs/implementation/**', 'docs/PROJECT-STATUS.md', '.github/workflows/office-scenario.yml']
+    paths: ['game/**', 'tools/**', 'docs/**', '.github/workflows/office-scenario.yml']
   workflow_dispatch:
 jobs:
   windows-gameplay:
