@@ -33,7 +33,8 @@ func _run() -> void:
 	var world: Node3D = WorldScript.new()
 	stage.add_child(world)
 	var player: CharacterBody3D = PlayerScript.new()
-	player.position = Vector3(6.2, 0.1, -1.0)
+	# z=-1 is now the real CEO doorway; use the intact east wall segment.
+	player.position = Vector3(6.2, 0.1, -3.0)
 	stage.add_child(player)
 	world.set("player_target", player)
 	player.set("enabled", true)
@@ -50,7 +51,7 @@ func _run() -> void:
 	var cup: RigidBody3D = PropScript.new()
 	cup.set("kind", "mug")
 	cup.set("display_name", "Wall check cup")
-	cup.position = Vector3(7.15, 1.72, -1.0)
+	cup.position = Vector3(7.15, 1.72, -3.0)
 	cup.freeze = true
 	stage.add_child(cup)
 	await physics_frame
@@ -60,7 +61,7 @@ func _run() -> void:
 	player.call("_pickup_or_drop")
 	check(player.get("held_prop") == cup and bool(cup.get("held")), "camera pickup did not hold the near-wall cup")
 	# Move an already picked-up item toward the wall, as a player approaching it would.
-	player.global_position = Vector3(7.65, 0.1, -1.0)
+	player.global_position = Vector3(7.65, 0.1, -3.0)
 	aim(player, -PI * 0.5, 0.0)
 	await physics_frame
 	var max_held_x: float = cup.global_position.x

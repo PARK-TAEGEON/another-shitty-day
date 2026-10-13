@@ -16,6 +16,8 @@ signal action_performed(kind: String, at: Vector3)
 signal activity_started(kind: String)
 signal focus_changed(text: String)
 signal desk_requested(origin: Vector3)
+signal contact_started(kind: String, target: Node3D)
+signal contact_finished(kind: String, target: Node3D)
 
 var camera: Camera3D
 var enabled: bool = false
@@ -325,7 +327,9 @@ func _commit_hit_later(kind: String, serial: int) -> void:
 	if target != null and target.has_method("receive_hit"):
 		var power: float = 13.0 if kind == "kick" else 7.0
 		var impulse: Vector3 = -camera.global_basis.z * power + Vector3.UP * 2.0
+		contact_started.emit(kind, target)
 		target.receive_hit(impulse, hit["position"], 28.0 if kind == "kick" else 20.0)
+		contact_finished.emit(kind, target)
 		add_shake(0.45)
 		action_performed.emit("impact", hit["position"])
 	else:
@@ -345,8 +349,10 @@ func _pickup_or_drop() -> void:
 	var result: Dictionary = _ray(2.7)
 	var body: RigidBody3D = result.get("collider") as RigidBody3D
 	if body != null and body.has_method("set_held"):
+		contact_started.emit("pickup", body)
 		held_prop = body
 		held_prop.set_held(true)
+		contact_finished.emit("pickup", body)
 		action_performed.emit("pickup", body.global_position)
 
 func _update_held(delta: float) -> void:
@@ -409,6 +415,7 @@ func _drop(throw_item: bool) -> void:
 		held_prop = null
 		return
 	var item: RigidBody3D = held_prop
+	contact_started.emit("throw" if throw_item else "drop", item)
 	held_prop = null
 	item.set_held(false)
 	# Release at the last collision-checked position; never teleport through scenery.
@@ -420,6 +427,7 @@ func _drop(throw_item: bool) -> void:
 			item.call("mark_player_throw")
 	else:
 		item.linear_velocity = -camera.global_basis.z * 0.5
+	contact_finished.emit("throw" if throw_item else "drop", item)
 
 func _update_focus() -> void:
 	var text: String = ""

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "chaos_score_regression",
+    "kim_rig": "off",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-scenario-off-chaos_score_regression.log"
+  },
+  {
+    "name": "office_scenario_regression",
+    "kim_rig": "off",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-scenario-off-office_scenario_regression.log"
+  },
+  {
+    "name": "police_arrival_regression",
+    "kim_rig": "off",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-scenario-off-police_arrival_regression.log"
+  },
+  {
+    "name": "chaos_score_regression",
+    "kim_rig": "on",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-scenario-on-chaos_score_regression.log"
+  },
+  {
+    "name": "office_scenario_regression",
+    "kim_rig": "on",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-scenario-on-office_scenario_regression.log"
+  },
+  {
+    "name": "police_arrival_regression",
+    "kim_rig": "on",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-scenario-on-police_arrival_regression.log"
+  }
+]

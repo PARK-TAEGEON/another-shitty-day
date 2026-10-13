@@ -109,7 +109,7 @@ func _test_roster_and_idle() -> void:
 		if not solid_hits.is_empty():
 			overlaps.append({"name": name_value, "actor_position": _xyz(actor.global_position), "hits": solid_hits})
 		roster.append({"name": name_value, "affiliation": affiliation, "activity": actor.get("work_activity"), "position": _xyz(actor.global_position)})
-	check(department == 5 and other == 2 and names.size() == 7, "expanded roster is not exactly five department employees and two other staff")
+	check(department == 5 and other == 2 and names.size() == 8, "protected five department employees and two other staff plus temporary CEO were not created")
 	check(names.has("정 인턴") and not names.has("정 대리"), "intern rename was not applied to the live roster")
 	check(overlaps.is_empty(), "one or more initial worker capsules overlap solid furniture before physics recovery")
 	for actor: Node3D in world.get("npcs"):
@@ -118,7 +118,8 @@ func _test_roster_and_idle() -> void:
 	var idle_state: Array[Dictionary] = []
 	for actor: Node3D in world.get("npcs"):
 		idle_state.append({"name": actor.get("display_name"), "health": actor.get("health"), "state": actor.get("state"), "working": actor.call("is_working"), "position": _xyz(actor.global_position)})
-		check(is_equal_approx(float(actor.get("health")), 40.0) and bool(actor.call("is_working")), "ordinary idle office injured or interrupted " + str(actor.get("display_name")))
+		var initial_health: float = 90.0 if actor.get("affiliation") == "executive" else 40.0
+		check(is_equal_approx(float(actor.get("health")), initial_health) and bool(actor.call("is_working")), "ordinary idle office injured or interrupted " + str(actor.get("display_name")))
 	check(int(game.get("score")) == 0 and is_zero_approx(float(game.get("response_heat"))) and int(game.get("phase")) == 0, "idle office generated money or response heat")
 	check(not bool(world.get("_disturbed")), "idle office became disturbed without player action")
 	observations["initial_roster_and_idle"] = {"roster": roster, "initial_overlaps": overlaps, "after_ten_seconds": idle_state, "score": game.get("score"), "response_heat": game.get("response_heat")}

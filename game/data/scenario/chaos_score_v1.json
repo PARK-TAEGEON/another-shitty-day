@@ -1,0 +1,19 @@
+{
+  "scenario_id": "office",
+  "ruleset_version": "scenario_v0_2",
+  "chaos_version": "chaos_v1",
+  "general_cap": 400,
+  "special_cap": 600,
+  "action_points": 40,
+  "actions": ["slam", "punch", "kick", "throw"],
+  "npc_reaction_points": 30,
+  "npc_reaction_limit": 4,
+  "escalation_points": 40,
+  "escalation_facts": ["work_interrupted", "guard_warning", "police_arrived"],
+  "route_id": "office_ceo",
+  "intervention_points": 100,
+  "intervention_limit": 2,
+  "interventions": ["authority_reversal", "supported_reversal"],
+  "terminal_points": 400,
+  "outcomes": ["A", "B"]
+}

@@ -1,0 +1,189 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+OFFICE_SCENARIO_BEGIN actual MainScript integration
+OFFICE_SCENARIO_READY
+OFFICE_SCENARIO_IDLE_DONE
+OFFICE_SCENARIO_A_DONE
+OFFICE_SCENARIO_B_DONE
+{
+	"ConfigFile_record_namespaces": {
+		"A_and_B": {
+			"A": true,
+			"B": true
+		},
+		"chaos_best": 777,
+		"legacy_krw": 24680000,
+		"legacy_points": 98765,
+		"scope": "actual result writer / in-memory ConfigFile; automated test does not write user settings"
+	},
+	"actor_departure": {
+		"fixture_log": [
+			"actor departure fixture: CEO removed and freed before another route tick"
+		],
+		"sandbox_playing": true,
+		"status": "failed"
+	},
+	"actual_A_and_frozen_result": {
+		"ceo_position": "(10.58105, -0.019, -1.131289)",
+		"chaos": {
+			"actions": 0,
+			"escalation": 40,
+			"general": 70,
+			"interventions": 0,
+			"max_score": 1000,
+			"npc_reactions": 30,
+			"special": 400,
+			"terminal": 400,
+			"total": 470
+		},
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"loose-prop placement: 대표 기념패",
+			"player placement (12.0, 0.08, 0.15)",
+			"player placement (10.0, 0.08, 0.4)"
+		],
+		"outcome": "A",
+		"status": "resolved"
+	},
+	"actual_B": {
+		"ceo_position": "(12.54008, -0.019, -0.037394)",
+		"chair_position": "(13.62854, -0.025584, 0.735528)",
+		"chaos": {
+			"actions": 0,
+			"escalation": 40,
+			"general": 70,
+			"interventions": 0,
+			"max_score": 1000,
+			"npc_reactions": 30,
+			"special": 400,
+			"terminal": 400,
+			"total": 470
+		},
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"loose-prop placement: 대표 의자",
+			"player placement (13.5, 0.08, -1.65)",
+			"player placement (13.5, 0.08, 2.0)"
+		],
+		"outcome": "B"
+	},
+	"actual_saved_scene_restart": {
+		"new_game_id": 1318269749083,
+		"old_event_rejected": true,
+		"old_game_id": 31658608089,
+		"scene_path": "res://scenes/main.tscn"
+	},
+	"autonomy_90_game_seconds": {
+		"special_after": 100,
+		"special_before": 100,
+		"status": "active"
+	},
+	"blocked_candidate": {
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"loose-prop placement: 대표 기념패",
+			"player placement (12.0, 0.08, 0.15)",
+			"player placement (10.0, 0.08, 0.4)",
+			"blocked locomotion fixture: CEO physics disabled after real A proposal"
+		],
+		"outcome": "",
+		"status": "active"
+	},
+	"direct_B_real_kicks": {
+		"chaos": {
+			"actions": 40,
+			"escalation": 40,
+			"general": 170,
+			"interventions": 0,
+			"max_score": 1000,
+			"npc_reactions": 90,
+			"special": 400,
+			"terminal": 400,
+			"total": 570
+		},
+		"fixture_log": [
+			"player placement (13.5, 0.08, -1.2)"
+		],
+		"outcome": "B"
+	},
+	"exit_resume_and_fresh_action": {
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"loose-prop placement: 대표 기념패",
+			"player placement (12.0, 0.08, 0.15)",
+			"player placement (10.0, 0.08, 0.4)",
+			"player placement (5.7, 0.08, 0.0)",
+			"player placement (10.0, 0.08, 0.4)",
+			"loose-prop placement: 대표 기념패",
+			"player placement (11.7, 0.08, 0.65)",
+			"player placement (10.0, 0.08, 0.4)"
+		],
+		"outcome": "A",
+		"status": "resolved"
+	},
+	"expiry_destination_down": {
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"incapacity fixture: actual CEO receive_hit with lethal damage"
+		],
+		"sandbox_playing": true,
+		"status": "failed"
+	},
+	"failures": [],
+	"fixture_policy": "Player and loose-prop positions may be arranged before real actions. CEO motion is real except explicitly named blocked/destination-change fixtures. No route status/outcome writes.",
+	"nonterminal_motion_required": {
+		"fixture_log": [
+			"no-motion fixture: CEO starts at visitor destination; used only to test nonterminal movement proof",
+			"player placement (12.7, 0.08, -3.0)"
+		],
+		"interventions": 0
+	},
+	"observe_90_game_seconds": {
+		"chaos": 0,
+		"seconds": 92.1000000000008,
+		"status": "available"
+	},
+	"physical_east_door_connection": {
+		"action": "held move_forward+sprint only; short detour around existing shelf; no teleport during crossing",
+		"end": "(9.506946, -0.019126, 0.092543)",
+		"route_status": "available",
+		"samples": [
+			"(6.5, 0.08, 0.0)",
+			"(6.5, -0.019922, -0.0625)",
+			"(6.5, -0.019127, -0.1875)",
+			"(6.5, -0.019125, -0.375)",
+			"(6.5, -0.019125, -0.625)",
+			"(6.5, -0.019125, -0.915)",
+			"(6.5625, -0.019126, -1.440339)",
+			"(6.6875, -0.019125, -1.430677)",
+			"(6.875, -0.019124, -1.421016)",
+			"(7.125, -0.019125, -1.411355)",
+			"(7.414839, -0.019124, -1.401694)",
+			"(7.704678, -0.019125, -1.392033)",
+			"(7.994516, -0.019124, -1.382371)",
+			"(8.284356, -0.019125, -1.37271)",
+			"(8.574196, -0.019125, -1.363049)",
+			"(8.864036, -0.019124, -1.353388)",
+			"(9.420103, -0.019125, -1.290888)",
+			"(9.441814, -0.019125, -1.165888)",
+			"(9.463525, -0.019124, -0.978388)",
+			"(9.485235, -0.019125, -0.728388)",
+			"(9.506946, -0.019124, -0.439202)"
+		],
+		"start": "(6.5, 0.08, 0.0)"
+	},
+	"prebroken_command_not_recredited": {
+		"fixture_log": [
+			"prebroken command fixture: chair receive_hit outside player-contact context before route selection",
+			"player placement (13.5, 0.08, -1.2)"
+		],
+		"outcome": "",
+		"terminal": 0
+	},
+	"restart_old_round_original_office": {
+		"new_round": "2784663",
+		"opening_started": true,
+		"route_status": "available"
+	}
+}
+OFFICE_SCENARIO_REGRESSION_OK

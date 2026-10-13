@@ -1,0 +1,21 @@
+name: Office scenario v0.2
+on:
+  pull_request:
+    paths: ['game/**', 'tools/**', '.github/workflows/office-scenario.yml']
+  workflow_dispatch:
+jobs:
+  windows-gameplay:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Godot
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_win64.exe.zip' -OutFile "$env:RUNNER_TEMP/godot.zip"
+          Expand-Archive "$env:RUNNER_TEMP/godot.zip" "$env:RUNNER_TEMP/godot"
+      - name: Existing and scenario regressions
+        shell: pwsh
+        run: |
+          $godot = "$env:RUNNER_TEMP/godot/Godot_v4.7.2-stable_win64_console.exe"
+          ./tools/test.ps1 -GodotPath $godot
+          ./tools/test-scenario.ps1 -GodotPath $godot

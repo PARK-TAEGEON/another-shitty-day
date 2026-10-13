@@ -4,6 +4,14 @@ const WorldScript = preload("res://scripts/world.gd")
 const PlayerScript = preload("res://scripts/player.gd")
 const SoundScript = preload("res://scripts/audio.gd")
 const SocialDamageScript = preload("res://scripts/social_damage.gd")
+const ChaosScript = preload("res://scripts/scenario/chaos_score.gd")
+const PoliceArrivalScript = preload("res://scripts/scenario/police_arrival.gd")
+var chaos: RefCounted = ChaosScript.new()
+var chaos_high_score: int = 0
+var police_arrival: Node
+var _result_chaos: Label
+var _result_route: Label
+var _caption_priority: int = 0
 const RESPONSE_THRESHOLDS: Array[float] = [0.0, 0.0, 8.0, 18.0, 32.0]
 const RESPONSE_DELAYS: Array[float] = [0.0, 0.0, 0.0, 8.0, 10.0]
 const FONT = preload("res://assets/fonts/KoreanUI.ttf")
@@ -62,6 +70,7 @@ func _ready() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	_automated_run = args.has("--smoke-test") or args.has("--capture-demo") or args.has("--capture-opening") or args.has("--capture-lecture") or args.has("--capture-office") or args.has("--capture-ui")
 	_settings.load("user://settings.cfg")
+	chaos_high_score = maxi(0, int(_settings.get_value(ChaosScript.RECORD_SECTION, ChaosScript.RECORD_KEY, 0)))
 	high_score = maxi(0, int(_settings.get_value(SocialDamageScript.RECORD_SECTION, SocialDamageScript.RECORD_KEY, 0)))
 	if _automated_run:
 		high_score = 0
@@ -77,6 +86,13 @@ func _ready() -> void:
 	player.sensitivity = float(_settings.get_value("options", "sensitivity", 0.0024))
 	player.shake_scale = float(_settings.get_value("options", "shake", 0.55))
 	world.player_target = player
+	world.scenario_line_can_start = func(priority: int) -> bool: return _caption_timer <= 0.0 or _caption_priority < priority
+	chaos.reset(world.events.round_id)
+	police_arrival = PoliceArrivalScript.new()
+	add_child(police_arrival)
+	world.scenario_event.connect(_on_scenario_event)
+	world.scenario_dialogue.connect(_scenario_caption)
+	world.responder_arrived.connect(_on_responder_arrived)
 	sound = SoundScript.new()
 	add_child(sound)
 	world.impact_event.connect(_on_impact)
@@ -92,6 +108,8 @@ func _ready() -> void:
 	player.activity_started.connect(world.notify_player_activity)
 	player.focus_changed.connect(_set_focus)
 	player.desk_requested.connect(_slam)
+	player.contact_started.connect(world.begin_player_contact)
+	player.contact_finished.connect(world.end_player_contact)
 	_build_ui()
 	_open_menu(true)
 	if args.has("--smoke-test"):
@@ -307,6 +325,11 @@ func _build_ui() -> void:
 	_result_panel = VBoxContainer.new()
 	_result_panel.add_theme_constant_override("separation", 7)
 	col.add_child(_result_panel)
+	_result_chaos = _label("", 25, INK)
+	_result_panel.add_child(_result_chaos)
+	_result_route = _label("", 16, INK)
+	_result_route.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_result_panel.add_child(_result_route)
 	_result_total = _label("", 36, INK)
 	_result_panel.add_child(_result_total)
 	var result_grid: GridContainer = GridContainer.new()
@@ -403,6 +426,8 @@ func _save_option(key: String, value: float) -> void:
 		_settings.save("user://settings.cfg")
 
 func _open_menu(first: bool) -> void:
+	if is_instance_valid(police_arrival):
+		police_arrival.cancel()
 	_menu.visible = true
 	_hud.visible = false
 	player.set_active(false)
@@ -414,7 +439,7 @@ func _open_menu(first: bool) -> void:
 	_menu_pages.visible = not ended
 	if not ended:
 		_show_menu_page("settings")
-	var menu_height: float = 500.0 if ended else 620.0
+	var menu_height: float = 580.0 if ended else 620.0
 	_centered(_menu_card, -menu_height * 0.5, 652.0, menu_height)
 	if not first and not ended:
 		_menu_title.text = "잠깐 쉬어갑니다"
@@ -432,6 +457,10 @@ func _restart() -> void:
 	if _restarting:
 		return
 	_restarting = true
+	police_arrival.cancel()
+	world.events.frozen = true
+	world.office_route.finish()
+	chaos.freeze()
 	get_tree().paused = false
 	player.set_active(false)
 	get_tree().reload_current_scene.call_deferred()
@@ -526,6 +555,7 @@ func _ambient_caption(speaker: String, text: String, duration: float, source: No
 	if _caption_timer > 0.0 and (_caption_is_scene or not responder):
 		return
 	_caption_is_scene = false
+	_caption_priority = 90 if responder else 15
 	_caption_source = source
 	_caption_speaker.text = speaker
 	_caption_speaker.visible = true
@@ -540,6 +570,7 @@ func _scene_caption(speaker: String, text: String, duration: float, source: Node
 		return
 	_caption_source = source
 	_caption_is_scene = true
+	_caption_priority = 70
 	_caption_speaker.text = speaker
 	_caption_speaker.visible = true
 	_caption_speaker.add_theme_color_override("font_color", Color("e9c17d") if str(source.get("role")) == "boss" else Color("b6dcd0"))
@@ -551,6 +582,7 @@ func _scene_caption(speaker: String, text: String, duration: float, source: Node
 func _clear_caption() -> void:
 	_caption_timer = 0.0
 	_caption_is_scene = false
+	_caption_priority = 0
 	_caption_source = null
 	if is_instance_valid(_caption_panel):
 		_caption_panel.visible = false
@@ -572,11 +604,21 @@ func _end_run() -> void:
 	if ended:
 		return
 	ended = true
+	police_arrival.cancel()
+	world.office_route.finish()
+	world.events.frozen = true
+	chaos.freeze()
 	damage_ledger.freeze()
 	world.cancel_opening_scene()
 	_clear_caption()
 	_refresh_damage_ui()
 	high_score = maxi(high_score, score)
+	chaos_high_score = maxi(chaos_high_score, chaos.total())
+	_settings.set_value(ChaosScript.RECORD_SECTION, ChaosScript.RECORD_KEY, chaos_high_score)
+	if world.office_route.status == "resolved":
+		var records: Dictionary = _settings.get_value(ChaosScript.RECORD_SECTION, ChaosScript.ROUTE_RECORD_KEY, {})
+		records[world.office_route.outcome] = true
+		_settings.set_value(ChaosScript.RECORD_SECTION, ChaosScript.ROUTE_RECORD_KEY, records)
 	_settings.set_value(SocialDamageScript.RECORD_SECTION, SocialDamageScript.RECORD_KEY, high_score)
 	if not _automated_run:
 		_settings.save("user://settings.cfg")
@@ -587,6 +629,12 @@ func _end_run() -> void:
 		var value_label: Label = _result_values[category] as Label
 		value_label.text = SocialDamageScript.format_currency(int(categories[category]))
 	_result_record.text = "최고 기록 %s  ·  게임 내 추산액" % SocialDamageScript.format_currency(high_score)
+	var detail: Dictionary = chaos.breakdown()
+	_result_chaos.text = "Chaos Score %d / 1,000 · 최고 %d" % [chaos.total(), chaos_high_score]
+	var route_text: String = {"available": "미선택", "failed": "사장 행동 불능", "interrupted": "중단"}.get(world.office_route.status, "미결")
+	if world.office_route.status == "resolved":
+		route_text = "A · 대표자 현장 배치" if world.office_route.outcome == "A" else "B · 사장실 영업 종료"
+	_result_route.text = "일반 %d · 특별 %d\n오늘의 사건: %s" % [detail.general, detail.special, route_text]
 	_open_menu(false)
 	_menu_title.text = "오늘 발생한 피해"
 	_menu_subtitle.text = "제압되었습니다."
@@ -596,6 +644,8 @@ func _reset_run_state() -> void:
 	# Scene reload also reconstructs this state. Keeping the reset explicit permits
 	# checking world resets without importing an old point record into the currency.
 	damage_ledger.reset()
+	chaos.reset(world.events.round_id)
+	police_arrival.reset_round()
 	score = 0
 	response_heat = 0.0
 	_response_changed_at = 0.0
@@ -608,6 +658,32 @@ func _reset_run_state() -> void:
 	_clear_caption()
 	_result_panel.visible = false
 	_refresh_damage_ui()
+
+func _on_scenario_event(event: Dictionary) -> void:
+	if playing and not ended and not get_tree().paused:
+		chaos.consume(event)
+
+func _on_responder_arrived(actor: Node3D) -> void:
+	if playing and not ended:
+		_clear_caption()
+		var online: bool = multiplayer.multiplayer_peer != null and not multiplayer.multiplayer_peer is OfflineMultiplayerPeer
+		police_arrival.begin(player, actor.global_position, online)
+
+func _scenario_caption(speaker: String, text: String, duration: float, source: Node3D, priority: int) -> void:
+	if not playing or ended or get_tree().paused or not _speaker_available(source) or world.opening_active or world.boss_lecture_active:
+		return
+	if _caption_timer > 0.0 and _caption_priority >= priority:
+		return
+	_caption_is_scene = false
+	_caption_priority = priority
+	_caption_source = source
+	_caption_speaker.text = speaker
+	_caption_speaker.visible = true
+	_caption_speaker.add_theme_color_override("font_color", Color("e9c17d"))
+	_caption_label.text = text
+	_caption_label.add_theme_font_size_override("font_size", 26)
+	_caption_timer = duration
+	_caption_panel.visible = true
 
 func _check(condition: bool, message: String, failures: Array[String]) -> void:
 	if not condition:

@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"actual_dispatch_and_return": {
+		"accepted_action": "swing",
+		"dispatch_assessments": 2,
+		"duration": 1.85,
+		"finished_count": 1
+	},
+	"cancellation_nonblocking_pause_skip_ownership": "checked",
+	"failures": [],
+	"production_dispatch_menu_results_reset": {
+		"checked": true,
+		"original_response_cost": 600000
+	}
+}
+POLICE_ARRIVAL_REGRESSION_OK
+WARNING: 7 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

@@ -4,6 +4,8 @@ signal scored(kind: String, points: int, at: Vector3)
 signal noise(at: Vector3, strength: float)
 signal damage_assessed(category: String, total: int, label: String)
 signal incident(kind: String, weight: float, at: Vector3)
+signal contact_started(source: Node3D, target: Node3D)
+signal contact_finished(source: Node3D, target: Node3D)
 
 ## Fictional balance amounts. Each entry is the cumulative damaged/unusable cost,
 ## not two separate invoices. The world ledger adds only the increase.
@@ -475,6 +477,7 @@ func _on_body_entered(body: Node) -> void:
 	if speed < MIN_COLLISION_SPEED:
 		return
 	var was_thrown: bool = _thrown
+	contact_started.emit(self, body as Node3D)
 	# Consume the activated landing before forwarding a hit. The same object may
 	# contact a wall, desk and floor in one frame without three incident emissions.
 	_impact_armed = false
@@ -493,3 +496,4 @@ func _on_body_entered(body: Node) -> void:
 			body.receive_collision_hit(hit_impulse, global_position, 25.0)
 		elif body.has_method("receive_hit"):
 			body.receive_hit(hit_impulse, global_position, 25.0)
+	contact_finished.emit(self, body as Node3D)

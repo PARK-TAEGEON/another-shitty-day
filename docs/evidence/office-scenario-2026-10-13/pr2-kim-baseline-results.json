@@ -1,0 +1,52 @@
+[
+  {
+    "name": "wall_throw_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-wall_throw_regression.log"
+  },
+  {
+    "name": "opening_reaction_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-opening_reaction_regression.log"
+  },
+  {
+    "name": "boss_approach_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-boss_approach_regression.log"
+  },
+  {
+    "name": "boss_lecture_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-boss_lecture_regression.log"
+  },
+  {
+    "name": "hand_motion_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-hand_motion_regression.log"
+  },
+  {
+    "name": "npc_office_behavior_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-npc_office_behavior_regression.log"
+  },
+  {
+    "name": "property_damage_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-property_damage_regression.log"
+  },
+  {
+    "name": "social_damage_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-social_damage_regression.log"
+  },
+  {
+    "name": "office_layout_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-office_layout_regression.log"
+  },
+  {
+    "name": "minimal_hud_regression",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation\\pr2-kim-minimal_hud_regression.log"
+  }
+]
