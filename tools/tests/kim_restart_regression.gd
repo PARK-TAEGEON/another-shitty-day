@@ -1,0 +1,47 @@
+extends SceneTree
+## Reload the actual packed main scene with active and pending physical takeover.
+var failures: Array[String]=[]
+func _initialize() -> void:
+	call_deferred("run")
+func check(ok: bool, message: String) -> void:
+	if not ok:
+		failures.append(message)
+		push_error("KIM_RESTART_CHECK: "+message)
+func run() -> void:
+	ProjectSettings.set_setting("asd/characters/kim_rig_enabled",true)
+	var first=load("res://scenes/main.tscn").instantiate()
+	root.add_child(first)
+	current_scene=first
+	for round_index in range(5):
+		var game=current_scene
+		game._automated_run=true
+		game._resume()
+		await physics_frame
+		var boss=game.world.opening_boss
+		check(boss._rig_adapter != null and not boss._rig_adapter.ragdoll_active,"new round inherited physical state")
+		check(game.score==0,"new round inherited money")
+		boss.receive_hit(Vector3(13,2,0),boss.position+Vector3(0,1.3,0),28)
+		var score: int=game.score
+		check(boss.state=="down" and score>0,"heavy hit did not reach main ledger")
+		if round_index%2==0:
+			for f in range(90):await physics_frame
+			# Nearby employees may legitimately stop work after delayed reactions.
+			# Snapshot immediately before the synchronous repeated-hit boundary.
+			score=game.score
+			var bone=boss._rig_adapter.bodies[0]
+			for hit in range(3):bone.receive_hit(Vector3(0,2,7),bone.global_position,20)
+			check(game.score==score,"repeat physical hits changed main ledger")
+			check(boss._rig_adapter.contact_sound_count>0,"landing did not trigger contact audio")
+		# Odd rounds restart in the same turn as deferred physical activation.
+		var old_id: int=game.get_instance_id()
+		game._restart()
+		for f in range(5):await process_frame
+		check(current_scene != null and current_scene.get_instance_id()!=old_id,"actual reload failed")
+		check(get_nodes_in_group("office_npc").size()==7,"restart leaked NPCs")
+	paused=false
+	current_scene.sound.stop_all()
+	current_scene.queue_free()
+	await process_frame
+	await process_frame
+	print("KIM_RESTART_REGRESSION_OK: 5 actual reloads, pending/active takeover, ledger, contact audio" if failures.is_empty() else "KIM_RESTART_FAILED")
+	quit(0 if failures.is_empty() else 1)

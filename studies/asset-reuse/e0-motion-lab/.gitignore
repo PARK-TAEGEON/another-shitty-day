@@ -1,0 +1,7 @@
+# Downloaded third-party assets and locally generated evidence, never commit
+third_party/
+.godot/
+e0-import-report.json
+e0-import.log
+e0-playback.log
+e0-source-sha256.txt

@@ -1,0 +1,401 @@
+{
+	"engine": "4.7.2-stable (official)",
+	"failures": [],
+	"trials": [
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.93801355361938,
+			"pelvis_height": 0.196344047784805,
+			"spread": 0.924757480621338,
+			"travel": 0.543893933296204,
+			"trial": 0
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.76545596122742,
+			"pelvis_height": 0.197268024086952,
+			"spread": 0.948324680328369,
+			"travel": 0.490720123052597,
+			"trial": 1
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.76670241355896,
+			"pelvis_height": 0.19651959836483,
+			"spread": 0.946767270565033,
+			"travel": 0.49581053853035,
+			"trial": 2
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.75877404212952,
+			"pelvis_height": 0.197702199220657,
+			"spread": 0.95986008644104,
+			"travel": 0.493660300970078,
+			"trial": 3
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.75941801071167,
+			"pelvis_height": 0.197606772184372,
+			"spread": 0.951279878616333,
+			"travel": 0.491347074508667,
+			"trial": 4
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.93250203132629,
+			"pelvis_height": 0.195952117443085,
+			"spread": 0.930689513683319,
+			"travel": 0.527016222476959,
+			"trial": 5
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.93739676475525,
+			"pelvis_height": 0.193699419498444,
+			"spread": 0.920316755771637,
+			"travel": 0.542771875858307,
+			"trial": 6
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.76675796508789,
+			"pelvis_height": 0.196967124938965,
+			"spread": 0.949329912662506,
+			"travel": 0.498211175203323,
+			"trial": 7
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.75721526145935,
+			"pelvis_height": 0.197041809558868,
+			"spread": 0.943530797958374,
+			"travel": 0.491948932409287,
+			"trial": 8
+		},
+		{
+			"direction": "(0.0, 0.15, 1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.7549774646759,
+			"pelvis_height": 0.196956738829613,
+			"spread": 0.931492686271667,
+			"travel": 0.487790435552597,
+			"trial": 9
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.78937101364136,
+			"pelvis_height": 0.192379921674728,
+			"spread": 1.17418706417084,
+			"travel": 1.07158827781677,
+			"trial": 10
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.78083515167236,
+			"pelvis_height": 0.192196175456047,
+			"spread": 1.17511260509491,
+			"travel": 1.07137334346771,
+			"trial": 11
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.67308568954468,
+			"pelvis_height": 0.192444339394569,
+			"spread": 1.15594160556793,
+			"travel": 1.07187652587891,
+			"trial": 12
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.50819253921509,
+			"pelvis_height": 0.193090125918388,
+			"spread": 1.11480474472046,
+			"travel": 1.07130467891693,
+			"trial": 13
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.41318321228027,
+			"pelvis_height": 0.19287970662117,
+			"spread": 1.10873603820801,
+			"travel": 1.07477164268494,
+			"trial": 14
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.27837181091309,
+			"pelvis_height": 0.193809673190117,
+			"spread": 0.962022125720978,
+			"travel": 1.12197017669678,
+			"trial": 15
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.28116798400879,
+			"pelvis_height": 0.193888768553734,
+			"spread": 0.955404579639435,
+			"travel": 1.12170624732971,
+			"trial": 16
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.68164968490601,
+			"pelvis_height": 0.191906839609146,
+			"spread": 1.12480247020721,
+			"travel": 1.078444480896,
+			"trial": 17
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.28311824798584,
+			"pelvis_height": 0.193935811519623,
+			"spread": 0.976315498352051,
+			"travel": 1.12200307846069,
+			"trial": 18
+		},
+		{
+			"direction": "(1.0, 0.15, 0.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 6.27446269989014,
+			"pelvis_height": 0.193933546543121,
+			"spread": 0.957944393157959,
+			"travel": 1.12164270877838,
+			"trial": 19
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.70815205574036,
+			"pelvis_height": 0.197637140750885,
+			"spread": 0.946335136890411,
+			"travel": 0.730180144309998,
+			"trial": 20
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.70732021331787,
+			"pelvis_height": 0.198051825165749,
+			"spread": 0.943145573139191,
+			"travel": 0.731418907642365,
+			"trial": 21
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.71452260017395,
+			"pelvis_height": 0.189407199621201,
+			"spread": 0.947624742984772,
+			"travel": 0.729397416114807,
+			"trial": 22
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.70893454551697,
+			"pelvis_height": 0.197295978665352,
+			"spread": 0.944709777832031,
+			"travel": 0.731688976287842,
+			"trial": 23
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 4.05063819885254,
+			"pelvis_height": 0.206335574388504,
+			"spread": 0.946891605854034,
+			"travel": 0.726316213607788,
+			"trial": 24
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 4.05039119720459,
+			"pelvis_height": 0.2072733938694,
+			"spread": 0.935133159160614,
+			"travel": 0.72477251291275,
+			"trial": 25
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 4.02857255935669,
+			"pelvis_height": 0.211220309138298,
+			"spread": 0.953049659729004,
+			"travel": 0.732547581195831,
+			"trial": 26
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 4.0491361618042,
+			"pelvis_height": 0.206120163202286,
+			"spread": 0.947448790073395,
+			"travel": 0.72332638502121,
+			"trial": 27
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 4.02891874313354,
+			"pelvis_height": 0.210935235023499,
+			"spread": 0.952224016189575,
+			"travel": 0.731050550937653,
+			"trial": 28
+		},
+		{
+			"direction": "(0.0, 0.15, -1.0)",
+			"events": {
+				"assault": 1,
+				"care": 1,
+				"knockdown": 1
+			},
+			"max_speed": 3.95374035835266,
+			"pelvis_height": 0.191846817731857,
+			"spread": 0.950291872024536,
+			"travel": 0.800103425979614,
+			"trial": 29
+		},
+		{
+			"chair_contact": true,
+			"chair_travel": 0.196242913603783,
+			"table_contact": true
+		}
+	]
+}

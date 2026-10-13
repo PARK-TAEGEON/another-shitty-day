@@ -1,0 +1,14 @@
+{
+	"damage_total": 585000,
+	"fps": 30,
+	"frames": 840,
+	"gestures": [
+		"question",
+		"admonish",
+		"insist"
+	],
+	"player_impacts": 2,
+	"ragdoll": true,
+	"state": "down",
+	"type": "real Godot Windows Compatibility Movie Maker replay"
+}

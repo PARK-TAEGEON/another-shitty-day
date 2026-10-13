@@ -1,0 +1,17 @@
+14:38:10 | INFO: Data are loaded, start creating Blender stuff
+14:38:10 | INFO: Blender create Mesh node Mannequin
+14:38:11 | INFO: glTF import finished in 1.19s
+C:\Users\Admin\Documents\Codex\2026-10-13\another-shitty-day-3d-another-shitty\outputs\another-shitty-day\blender\build_boss_kim.py:40: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m.use_nodes=True; bs=m.node_tree.nodes.get('Principled BSDF'); bs.inputs['Base Color'].default_value=m.diffuse_color; bs.inputs['Roughness'].default_value=rough
+Info: Saved as "boss_kim.blend"
+INFO Draco is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at C:\Program Files\Blender Foundation\Blender 5.2\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+14:38:12 | INFO: Starting glTF 2.0 export
+14:38:12 | INFO: Extracting primitive: Jacket / weighted torso
+14:38:12 | INFO: Primitives created: 12
+14:38:13 | INFO: Finished glTF 2.0 export in 0.9994757175445557 s
+
+KIM_BUILD_OK {"height_m": 2.22, "bones": 31, "mesh_parts": 70, "vertices": 7092, "triangles": 13884, "clips": ["Idle", "Walk", "Idle_Talking", "Hit_Head", "Hit_Chest"], "reference": "art/references/approved/five-staff-unlikable-approved.png", "max_weight_error": 2.9802322387695312e-08}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+
+Blender quit
