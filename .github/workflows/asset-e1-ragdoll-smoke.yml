@@ -1,0 +1,75 @@
+name: E1 - Jolt ragdoll directional stability
+
+on:
+  push:
+    branches:
+      - research/asset-reuse-2026-10-13
+    paths:
+      - '.github/workflows/asset-e1-ragdoll-smoke.yml'
+      - 'studies/asset-reuse/e1-ragdoll-lab/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ragdoll-jolt:
+    name: Godot 4.7.2 / Jolt / 15 directional impulses
+    runs-on: ubuntu-22.04
+    timeout-minutes: 18
+    steps:
+      - name: Checkout Another Shitty Day test branch
+        uses: actions/checkout@v4
+
+      - name: Fetch pinned official Godot ragdoll sample in temporary workspace
+        uses: actions/checkout@v4
+        with:
+          repository: godotengine/godot-demo-projects
+          ref: b761b4cd5718a7118f2c95eb55f181d0a5f004f1
+          path: .e1-source
+          persist-credentials: false
+          sparse-checkout: |
+            3d/ragdoll_physics
+          sparse-checkout-cone-mode: true
+
+      - name: Install Godot 4.7.2 non-.NET
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: '4.7.2'
+          use-dotnet: false
+          include-templates: false
+
+      - name: Prepare sample in Compatibility renderer with Jolt
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .e1-source/3d/ragdoll_physics/characters/mannequiny.LICENSE.md
+          test -f .e1-source/3d/ragdoll_physics/characters/mannequiny_ragdoll.tscn
+          demo='.e1-source/3d/ragdoll_physics'
+          printf '\nrenderer/rendering_method="gl_compatibility"\nrenderer/rendering_method.mobile="gl_compatibility"\n' >> "$demo/project.godot"
+          cp studies/asset-reuse/e1-ragdoll-lab/verify_physics.gd "$demo/e1_verify.gd"
+          godot --version
+
+      - name: Headless editor asset import
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path .e1-source/3d/ragdoll_physics --editor --import 2>&1 | tee e1-import.log
+
+      - name: Physics proof 3 directions x 5 repeats
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path .e1-source/3d/ragdoll_physics --script res://e1_verify.gd 2>&1 | tee e1-test.log
+
+      - name: Upload diagnostics, never original licensed source assets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e1-jolt-ragdoll-diagnostics
+          if-no-files-found: warn
+          path: |
+            .e1-source/3d/ragdoll_physics/e1-physics-report.json
+            e1-import.log
+            e1-test.log
+          retention-days: 14
