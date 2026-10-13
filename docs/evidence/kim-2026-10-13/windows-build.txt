@@ -1,0 +1,78 @@
+4.7.2.stable.official.ed1daf0bf
+Importing project resources...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] first_scan_filesystem | Started 프로젝트 초기화 (5 steps)
+[   0% ] first_scan_filesystem | 파일 구조 스캔 중...
+[  16% ] first_scan_filesystem | 전역 클래스 이름을 불러오는 중...
+[  33% ] first_scan_filesystem | GDExtensions 검증 중...
+[  50% ] first_scan_filesystem | 오토로드 스크립트를 만드는 중...
+[  66% ] first_scan_filesystem | 플러그인을 초기화 중...
+[  83% ] first_scan_filesystem | 파일 스캔 시작 중...
+[ DONE ] first_scan_filesystem
+
+[   0% ] loading_editor_layout | Started 편집기를 불러오는 중 (5 steps)
+[   0% ] loading_editor_layout | 편집기 레이아웃을 불러오는 중...
+[  16% ] loading_editor_layout | 독을 불러오는 중...
+[ DONE ] loading_editor_layout
+
+Exporting Windows Desktop release...
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] first_scan_filesystem | Started 프로젝트 초기화 (5 steps)
+[   0% ] first_scan_filesystem | 파일 구조 스캔 중...
+[  16% ] first_scan_filesystem | 전역 클래스 이름을 불러오는 중...
+[  33% ] first_scan_filesystem | GDExtensions 검증 중...
+[  50% ] first_scan_filesystem | 오토로드 스크립트를 만드는 중...
+[  66% ] first_scan_filesystem | 플러그인을 초기화 중...
+[  83% ] first_scan_filesystem | 파일 스캔 시작 중...
+[ DONE ] first_scan_filesystem
+
+[   0% ] savepack | Started 패킹 중 (102 steps)
+[   1% ] savepack | 파일 저장 중: res://.godot/imported/impactSoft_heavy_000.ogg-3edbcbdfd69008a261d1bd37813ca4f4.oggvorbisstr
+[   1% ] savepack | 파일 저장 중: res://assets/audio/kenney/impactSoft_heavy_000.ogg.import
+[   6% ] savepack | 파일 저장 중: res://.godot/imported/impactWood_medium_000.ogg-6a8ff9aeac018de8ccee667462f51727.oggvorbisstr
+[   6% ] savepack | 파일 저장 중: res://assets/audio/kenney/impactWood_medium_000.ogg.import
+[  11% ] savepack | 파일 저장 중: res://.godot/imported/boss_kim.glb-9b4471f41755d7525cc263b468574a45.scn
+[  11% ] savepack | 파일 저장 중: res://assets/characters/boss_kim/boss_kim.glb.import
+[  16% ] savepack | 파일 저장 중: res://.godot/imported/KoreanUI.ttf-b9cafaf55f8f9f3ae6e40066c6f7f32d.fontdata
+[  16% ] savepack | 파일 저장 중: res://assets/fonts/KoreanUI.ttf.import
+[  22% ] savepack | 파일 저장 중: res://.godot/imported/icon.svg-56083ea2a1f1a4f1e49773bdc6d7826c.ctex
+[  22% ] savepack | 파일 저장 중: res://assets/icon.svg.import
+[  27% ] savepack | 파일 저장 중: res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
+[  32% ] savepack | 파일 저장 중: res://scripts/characters/kim_physical_bone.gdc
+[  36% ] savepack | 파일 저장 중: res://scripts/characters/kim_visual_adapter.gdc
+[  42% ] savepack | 파일 저장 중: res://scripts/audio.gdc
+[  47% ] savepack | 파일 저장 중: res://scripts/hand_model.gdc
+[  52% ] savepack | 파일 저장 중: res://scripts/main.gdc
+[  57% ] savepack | 파일 저장 중: res://scripts/office_capture.gdc
+[  63% ] savepack | 파일 저장 중: res://scripts/office_npc.gdc
+[  67% ] savepack | 파일 저장 중: res://scripts/player.gdc
+[  72% ] savepack | 파일 저장 중: res://scripts/prop.gdc
+[  77% ] savepack | 파일 저장 중: res://scripts/social_damage.gdc
+[  83% ] savepack | 파일 저장 중: res://scripts/world.gdc
+[  88% ] savepack | 파일 저장 중: res://tests/ragdoll_lab.gdc
+[  93% ] savepack | 파일 저장 중: res://.godot/exported/133200997/export-3601dd07600a922fbb20996da48ab1da-ragdoll_lab.scn
+[  93% ] savepack | 파일 저장 중: res://scenes/main.tscn.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/characters/kim_physical_bone.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/characters/kim_visual_adapter.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/audio.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/hand_model.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/main.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/office_capture.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/office_npc.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/player.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/prop.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/social_damage.gd.remap
+[  93% ] savepack | 파일 저장 중: res://scripts/world.gd.remap
+[  93% ] savepack | 파일 저장 중: res://tests/ragdoll_lab.gd.remap
+[  93% ] savepack | 파일 저장 중: res://tests/ragdoll_lab.tscn.remap
+[  93% ] savepack | 파일 저장 중: res://.godot/global_script_class_cache.cfg
+[  93% ] savepack | 파일 저장 중: res://assets/icon.svg
+[  93% ] savepack | 파일 저장 중: res://.godot/uid_cache.bin
+[  93% ] savepack | 파일 저장 중: res://project.binary
+[ DONE ] savepack
+
+Created: C:\Users\Admin\Documents\Codex\2026-10-13\another-shitty-day-3d-another-shitty\outputs\windows\AnotherShittyDay.exe (110783528 bytes)
+SHA256: FB76037483A44DCB1A56CE5D5A04CEBB1270655C61376ACFD23E577145D897F4
+Export succeeded. Launch the executable on Windows for the platform playtest.

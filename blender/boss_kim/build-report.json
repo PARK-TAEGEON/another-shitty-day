@@ -1,0 +1,16 @@
+{
+  "height_m": 2.22,
+  "bones": 31,
+  "mesh_parts": 70,
+  "vertices": 7092,
+  "triangles": 13884,
+  "clips": [
+    "Idle",
+    "Walk",
+    "Idle_Talking",
+    "Hit_Head",
+    "Hit_Chest"
+  ],
+  "reference": "art/references/approved/five-staff-unlikable-approved.png",
+  "max_weight_error": 2.9802322387695312e-08
+}
