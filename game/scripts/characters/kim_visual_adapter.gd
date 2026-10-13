@@ -21,6 +21,11 @@ var physics_impulses: int = 0
 var takeover_error: float = 0.0
 var _pending_impulses: Array[Dictionary] = []
 var _starting: bool = false
+var contact_sound_count: int = 0
+var _contact_cooldown: float = 0.0
+var _impact_audio: AudioStreamPlayer3D
+const SOFT_IMPACT = preload("res://assets/audio/kenney/impactSoft_heavy_000.ogg")
+const WOOD_IMPACT = preload("res://assets/audio/kenney/impactWood_medium_000.ogg")
 
 func _ready() -> void:
 	var model: Node3D = MODEL.instantiate()
@@ -41,6 +46,32 @@ func _ready() -> void:
 		animation.get_animation(name).loop_mode = Animation.LOOP_LINEAR
 	animation.play("Idle")
 	animation.advance(0.0)
+	_impact_audio = AudioStreamPlayer3D.new()
+	_impact_audio.max_distance = 16.0
+	_impact_audio.max_polyphony = 1
+	add_child(_impact_audio)
+
+func _physics_process(delta: float) -> void:
+	_contact_cooldown = maxf(_contact_cooldown-delta,0.0)
+
+func _exit_tree() -> void:
+	if is_instance_valid(_impact_audio):
+		_impact_audio.stop()
+		_impact_audio.stream = null
+
+func contact_sound(at: Vector3, speed: float, furniture: bool) -> void:
+	if _contact_cooldown > 0.0 or not ragdoll_active:
+		return
+	_contact_cooldown = .22
+	contact_sound_count += 1
+	# Headless checks validate the contact event, not an audio device. Running
+	# hundreds of simulated seconds faster than the mixer queues stale playbacks.
+	if DisplayServer.get_name() == "headless":
+		return
+	_impact_audio.global_position = at
+	_impact_audio.stream = WOOD_IMPACT if furniture else SOFT_IMPACT
+	_impact_audio.volume_db = clampf(-17.0+speed*1.4,-15.0,-8.0)
+	_impact_audio.play()
 
 func _body(bone_name: String, length: float, radius: float, mass_value: float, swing: float, twist: float, box: Vector3 = Vector3.ZERO) -> void:
 	var body: PhysicalBone3D = PHYSICAL_BONE.new()
@@ -72,6 +103,8 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 		capsule.height = maxf(length, radius * 2.0)
 		shape.shape = capsule
 	body.add_child(shape)
+	if bone_name in ["Pelvis","Chest","Head"]:
+		PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(),4)
 	bodies.append(body)
 
 func _build_physics() -> void:
