@@ -2,6 +2,8 @@
 
 2026-10-13 KST. `implementation/office-scenario-v03`, 기존 v0.2 PR #7의 코드/씬/증거를 보존한 후 별도 브랜치에서 수정했다. 최신 main `a71d996`의 v0.3 문서만 이 feature 브랜치에 통합했다. main 또는 PR #1/#2를 병합·덮어쓰지 않았다. 최초 작업 트리는 깨끗했다.
 
+제출: [Draft PR #8](https://github.com/PARK-TAEGEON/another-shitty-day/pull/8), base=main. 코드/증거 커밋 `0895d6daafd76a8a5200d54e686d474e53baee6c`. #7의 교체안이며 두 PR을 함께 병합하지 않는다. [증분 수정 비교](https://github.com/PARK-TAEGEON/another-shitty-day/compare/implementation/office-scenario-v02...implementation/office-scenario-v03). Windows CI의 최종 상태는 PR의 체크에서 확인한다.
+
 ## 확인한 차이와 실제 변경
 
 | 분류 | 처리 |
