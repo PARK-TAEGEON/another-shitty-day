@@ -1,0 +1,78 @@
+name: E0 - Free animation import and playback
+
+on:
+  push:
+    branches:
+      - research/asset-reuse-2026-10-13
+    paths:
+      - '.github/workflows/asset-e0-smoke.yml'
+      - 'studies/asset-reuse/e0-motion-lab/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  godot-animation-smoke:
+    name: Godot 4.7.2 / Compatibility / CC0 import
+    runs-on: ubuntu-22.04
+    timeout-minutes: 18
+    env:
+      E0_LAB: studies/asset-reuse/e0-motion-lab
+
+    steps:
+      - name: Checkout test branch
+        uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2 non-.NET
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: '4.7.2'
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify engine version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version
+
+      - name: Download free Quaternius UAL Standard without committing assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$E0_LAB/third_party/ual"
+          curl --fail --location --silent --show-error --retry 3 --connect-timeout 20 --max-time 240 \
+            --output /tmp/quaternius-ual-standard.zip \
+            'https://store.godotengine.org/asset/quaternius/universal-animation-library/download/44/'
+          unzip -t /tmp/quaternius-ual-standard.zip >/dev/null
+          sha256sum /tmp/quaternius-ual-standard.zip > "$E0_LAB/e0-source-sha256.txt"
+          unzip -q /tmp/quaternius-ual-standard.zip -d "$E0_LAB/third_party/ual"
+          find "$E0_LAB/third_party/ual" -type f | grep -Ei '\.(glb|gltf)$' | head -30
+          echo "Installed archive size:"
+          du -sh "$E0_LAB/third_party/ual"
+
+      - name: Godot headless editor import
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path "$E0_LAB" --editor --import 2>&1 | tee "$E0_LAB/e0-import.log"
+
+      - name: E0 inspect skeletons, animation tracks and sample playback
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path "$E0_LAB" --script res://verify_asset.gd 2>&1 | tee "$E0_LAB/e0-playback.log"
+
+      - name: Preserve reproducible evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e0-godot-import-evidence
+          if-no-files-found: warn
+          path: |
+            studies/asset-reuse/e0-motion-lab/e0-import-report.json
+            studies/asset-reuse/e0-motion-lab/e0-source-sha256.txt
+            studies/asset-reuse/e0-motion-lab/e0-import.log
+            studies/asset-reuse/e0-motion-lab/e0-playback.log
+          retention-days: 14
