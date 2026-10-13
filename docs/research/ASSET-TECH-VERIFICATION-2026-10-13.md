@@ -23,16 +23,19 @@ Source: https://github.com/godotengine/godot-demo-projects/tree/master/3d/ragdol
 Pinned upstream source commit: `b761b4cd5718a7118f2c95eb55f181d0a5f004f1`.
 Action: https://github.com/PARK-TAEGEON/another-shitty-day/actions/runs/38349124791
 
-**Status: automated run in progress at time of this note.** Do not mark E1 as PASS until its diagnostic JSON proves the 3 directions × 5 repeats completed.
+**Status: PASS.** GitHub Actions run completed successfully (2026-10-13 KST), with uploaded reproducible JSON and log evidence.
 
 - Script: `studies/asset-reuse/e1-ragdoll-lab/verify_physics.gd`.
 - Renderer: forced Compatibility; physics engine: Jolt; 170 physics frames per trial.
-- Success criteria: 15 bodies spawned with ≥12 bone colliders, physics actually moves and falls, positions/velocities finite, no deep floor penetration, no extreme uncontrolled speed.
+- Result: **15/15 passed** (front 5 / side 5 / back 5), **18 PhysicalBone3D per character**, **15/15 physically fell**, **15/15 horizontally displaced**, **15/15 finite positions/velocities**, **0 failures**.
+- Simulation: 170 physics frames in each parallel scenario, duration 2,872 ms on GitHub-hosted Ubuntu test; this is not a Windows game FPS benchmark.
+- Observed horizontal travel: about 1.98–2.84 m across all 15 runs, with pelvis drop of about 3.71–3.97 m. Max sample speed about 7.86 m/s. These are initial test-fixture values, **not recommended final gameplay forces**.
+- E1 evidence artifact: `e1-jolt-ragdoll-diagnostics` contains `e1-physics-report.json`, import and test console logs.
 
 **License correction:** Although Godot Foundation's ragdoll sample code is labeled MIT, `characters/mannequiny.glb` inside the demo is GDQuest's **CC BY 4.0** asset per its own `characters/mannequiny.LICENSE.md`. The sample model is loaded **only in a temporary CI checkout**, is **not imported to the shipping game**, and must not be falsely labeled CC0/MIT. Using it for release would require a separate attribution/rights assessment.
 
 ## Code integration boundary
 
-Both E0 and E1 are isolated benchmarks and do not modify `game/`, `office_npc.gd`, physics config, NPC counts, approved art or dialogue timing. Next production step is a disabled-by-default render/rig adapter for **one** character, with existing hit/damage events preserved, not a mass replacement of current NPC visuals.
+Both E0 and E1 **passed their respective headless technical criteria** as isolated benchmarks and do not modify `game/`, `office_npc.gd`, physics config, NPC counts, approved art or dialogue timing. Next production step is a disabled-by-default render/rig adapter for **one** character, with existing hit/damage events preserved, not a mass replacement of current NPC visuals.
 
 Human review only after a real Kim-manager playable scene and motion video exist. See `docs/ROADMAP-AND-GATES.md`.
