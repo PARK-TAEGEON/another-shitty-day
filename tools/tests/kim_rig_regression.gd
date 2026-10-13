@@ -53,11 +53,17 @@ func run() -> void:
 	for name_value: String in ["Idle","Walk","Idle_Talking","Hit_Head","Hit_Chest","QA_Arms_Raised","QA_Knees_90","QA_Head_Turn","QA_Torso_Bend"]:
 		var player: AnimationPlayer=actor._rig_adapter.animation
 		player.play(name_value)
+		player.advance(0.0)
+		var before_rotations: Array[Quaternion]=[]
+		for i in range(skeleton.get_bone_count()):before_rotations.append(skeleton.get_bone_pose_rotation(i))
 		player.advance(.2)
+		var motion_delta: float=0
 		for i in range(skeleton.get_bone_count()):
 			var pose: Transform3D=skeleton.get_bone_global_pose(i)
 			check(pose.is_finite(),name_value+" non-finite bone")
 			check(absf(pose.basis.determinant()-1.0)<.01,name_value+" scale corruption")
+			motion_delta=maxf(motion_delta,before_rotations[i].angle_to(skeleton.get_bone_pose_rotation(i)))
+		if not name_value.begins_with("QA_"):check(motion_delta>.001,name_value+" contains no sampled motion")
 	actor.health=100
 	actor.receive_hit(Vector3(0,1,7),actor.position+Vector3(0,1.8,0),18)
 	check(actor._rig_adapter.reaction=="Light" and actor.state!="down","Light unexpectedly knocked down")
@@ -89,7 +95,13 @@ func run() -> void:
 		starts.append(a.position)
 		max_speeds.append(0)
 	await step(5)
+	var takeover_positions: Array[Array]=[]
 	for i in range(actors.size()):
+		var rig=actors[i]._rig_adapter
+		var positions: Array[Vector3]=[]
+		for body in rig.bodies:
+			positions.append((rig.skeleton.global_transform*rig.skeleton.get_bone_global_pose(rig.skeleton.find_bone(body.bone_name))*body.body_offset).origin)
+		takeover_positions.append(positions)
 		actors[i].receive_hit(directions[i].normalized()*13,actors[i].global_position+Vector3(0,1.4,0),28)
 	await step(2)
 	for i in range(actors.size()):
@@ -98,6 +110,8 @@ func run() -> void:
 		check(a._rig_adapter.takeover_error<.001,"takeover teleport")
 		check(a._down_rotation==0,"legacy down animation ran")
 		check(a._rig_adapter.physics_impulses==1,"initial impulse duplicate")
+		for body_index in range(a._rig_adapter.bodies.size()):
+			check(a._rig_adapter.bodies[body_index].global_position.distance_to(takeover_positions[i][body_index])<.25,"deferred takeover changed bone pose discontinuously")
 	for f in range(300):
 		await physics_frame
 		for i in range(actors.size()):
@@ -131,18 +145,30 @@ func run() -> void:
 	var contact={"physical_bone":false}
 	chair.body_entered.connect(func(body):
 		if body is PhysicalBone3D:contact.physical_bone=true)
-	floor_at(Vector3(-5,.65,26.5),Vector3(2,.15,.8))
+	var table=floor_at(Vector3(5,.70,25),Vector3(2,.16,1.2))
+	var table_actor=new_actor(Vector3(5,.80,25))
+	for body in table_actor._rig_adapter.bodies:
+		body.record_contacts=true
+		PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(),8)
 	await step(15)
 	var chair_start: Vector3=chair.position
 	furniture_actor.receive_hit(Vector3(0,2,13),Vector3(-5,1.35,25),28)
+	table_actor.receive_hit(Vector3(13,2,0),table_actor.position+Vector3(0,1.3,0),28)
 	await step(240)
 	check(contact.physical_bone,"chair had no real PhysicalBone contact")
 	check(chair.position.distance_to(chair_start)>.02,"chair failed to move")
-	reports.append({"furniture_contact":contact.physical_bone,"chair_travel":chair.position.distance_to(chair_start)})
+	var table_contact: bool=false
+	for body in table_actor._rig_adapter.bodies:
+		table_contact=table_contact or body.contact_ids.has(table.get_instance_id())
+	check(table_contact,"no physical-bone/table contact recorded")
+	reports.append({"chair_contact":contact.physical_bone,"table_contact":table_contact,"chair_travel":chair.position.distance_to(chair_start)})
 	var args=OS.get_cmdline_user_args()
 	if "--report" in args:
 		var path=args[args.find("--report")+1]
 		var file=FileAccess.open(path,FileAccess.WRITE)
 		file.store_string(JSON.stringify({"engine":Engine.get_version_info().string,"trials":reports,"failures":failures},"\t"))
 	if failures.is_empty():print("KIM_RIG_REGRESSION_OK: 30 directional falls, 3 hit tiers, chair contact, accounting")
+	stage.queue_free()
+	await process_frame
+	await process_frame
 	quit(0 if failures.is_empty() else 1)

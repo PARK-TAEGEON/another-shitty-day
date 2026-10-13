@@ -10,6 +10,7 @@ $null=New-Item -ItemType Directory -Force $EvidencePath
 $null=Invoke-DeskBreakerGodot -Executable $executable -Arguments @('--headless','--path',$projectPath,'--editor','--import')
 foreach ($check in @(
     @{File='kim_rig_regression.gd'; Marker='KIM_RIG_REGRESSION_OK'},
+    @{File='kim_restart_regression.gd'; Marker='KIM_RESTART_REGRESSION_OK'},
     @{File='wall_throw_regression.gd'; Marker='WALL_THROW_REGRESSION_OK'},
     @{File='opening_reaction_regression.gd'; Marker='OPENING_REACTION_REGRESSION_OK'},
     @{File='boss_approach_regression.gd'; Marker='BOSS_APPROACH_REGRESSION_OK'},

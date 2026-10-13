@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 617.14 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1660 SUPER
+
+Movie Maker mode enabled, recording movie in 1280×720 @ 30 FPS...
+KIM_SLICE_CAPTURE {"damage_total":585000,"fps":30,"frames":840,"gestures":["question","admonish","insist"],"player_impacts":2,"ragdoll":true,"state":"down","type":"real Godot Windows Compatibility Movie Maker replay"}
+--------------------------------------------------------------------------------
+Done recording movie at path: C:/Users/Admin/Documents/Codex/2026-10-13/another-shitty-day-3d-another-shitty/work/kim-office.avi
+840 frames at 30 FPS (movie length: 00:00:28:00), recorded in 00:00:21 (133% of real-time speed).
+CPU render time: 3.10 seconds (average: 3.69 ms/frame)
+GPU render time: 2.35 seconds (average: 2.80 ms/frame)
+Encoding time: 8.66 seconds (average: 10.31 ms/frame)
+--------------------------------------------------------------------------------

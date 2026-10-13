@@ -1,0 +1,97 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"actor_specific_interruption": {
+		"dialogue": [
+			{
+				"duration": 1.35,
+				"scene_time": 0.266666666666667,
+				"source_id": 165876342448,
+				"speaker": "박 대리 · 옆자리",
+				"text": "왜 그래?"
+			},
+			{
+				"duration": 1.8,
+				"scene_time": 1.91666666666666,
+				"source_id": 160406969774,
+				"speaker": "김 팀장 · 가림막 너머",
+				"text": "뭐야 무슨 소리야?"
+			},
+			{
+				"duration": 2.2,
+				"scene_time": 3.86666666666666,
+				"source_id": 160406969774,
+				"speaker": "김 팀장",
+				"text": "이게 무슨 짓이지?"
+			}
+		],
+		"speaker_invalidated": true
+	},
+	"downed_future_speaker_and_reset": {
+		"pending_boss_lines_suppressed": true,
+		"post_reset_dialogue_count": 0
+	},
+	"earlier_disturbance": {
+		"staged_dialogue_count": 0
+	},
+	"explicit_cancel": {
+		"post_cancel_dialogue_count": 0
+	},
+	"failures": [],
+	"first_slam_repeat_pause_and_route": {
+		"boss_end": [
+			-0.802511155605316,
+			-0.0199894960969687,
+			0.692339301109314
+		],
+		"boss_reached_speaking_range": true,
+		"boss_start": [
+			-0.649999976158142,
+			-0.0200000032782555,
+			-2.15000009536743
+		],
+		"dialogue": [
+			{
+				"duration": 1.35,
+				"scene_time": 0.266666666666667,
+				"source_id": 74742501382,
+				"speaker": "박 대리 · 옆자리",
+				"text": "왜 그래?"
+			},
+			{
+				"duration": 1.8,
+				"scene_time": 1.91666666666666,
+				"source_id": 67343748836,
+				"speaker": "김 팀장 · 가림막 너머",
+				"text": "뭐야 무슨 소리야?"
+			},
+			{
+				"duration": 2.2,
+				"scene_time": 3.86666666666666,
+				"source_id": 67343748836,
+				"speaker": "김 팀장",
+				"text": "이게 무슨 짓이지?"
+			}
+		],
+		"pause_scene_time": 1.0,
+		"player_after_move": [
+			1.11252307891846,
+			-0.0191242061555386,
+			0.442220360040665
+		],
+		"player_before_move": [
+			0.0,
+			-0.019166674464941,
+			0.649999976158142
+		],
+		"player_damage": 0.0,
+		"route_samples": [
+			[
+				-0.802511155605316,
+				-0.0199894960969687,
+				0.692339301109314
+			]
+		]
+	}
+}
+OPENING_REACTION_REGRESSION_OK
