@@ -4,6 +4,7 @@ const WorldScript = preload("res://scripts/world.gd")
 const PlayerScript = preload("res://scripts/player.gd")
 const SoundScript = preload("res://scripts/audio.gd")
 const SocialDamageScript = preload("res://scripts/social_damage.gd")
+const JuiceScript = preload("res://scripts/juice.gd")
 const RESPONSE_THRESHOLDS: Array[float] = [0.0, 0.0, 8.0, 18.0, 32.0]
 const RESPONSE_DELAYS: Array[float] = [0.0, 0.0, 0.0, 8.0, 10.0]
 const FONT = preload("res://assets/fonts/KoreanUI.ttf")
@@ -15,6 +16,7 @@ var world: Node3D
 var player: CharacterBody3D
 var sound: Node
 var damage_ledger: RefCounted = SocialDamageScript.new()
+var juice: Node3D
 var score: int = 0
 var response_heat: float = 0.0
 var _response_changed_at: float = 0.0
@@ -79,6 +81,12 @@ func _ready() -> void:
 	world.player_target = player
 	sound = SoundScript.new()
 	add_child(sound)
+	juice = JuiceScript.new()
+	juice.process_mode = Node.PROCESS_MODE_PAUSABLE
+	# Automated checks keep exact frame timing: no hitstop or puffs there.
+	juice.enabled = not _automated_run
+	add_child(juice)
+	world.npc_struck.connect(_on_npc_struck)
 	world.impact_event.connect(_on_impact)
 	world.damage_assessed.connect(_on_damage_assessed)
 	world.incident_event.connect(_on_incident)
@@ -432,6 +440,7 @@ func _restart() -> void:
 	if _restarting:
 		return
 	_restarting = true
+	juice.cancel()
 	get_tree().paused = false
 	player.set_active(false)
 	get_tree().reload_current_scene.call_deferred()
@@ -441,13 +450,24 @@ func _set_focus(text: String) -> void:
 		_focus_label.text = text
 		_focus_label.visible = not text.is_empty()
 
-func _on_action(kind: String, _at: Vector3) -> void:
+func _on_action(kind: String, at: Vector3) -> void:
 	sound.play(kind)
+	if kind == "impact":
+		juice.puff(at, 0.45)
+
+func _on_npc_struck(at: Vector3, power: float, knocked_down: bool) -> void:
+	if not playing or ended:
+		return
+	juice.puff(at, power)
+	juice.hitstop(0.11 if knocked_down else (0.06 if power > 0.5 else 0.0))
+	player.add_shake(0.65 if knocked_down else 0.35)
 
 func _slam(origin: Vector3) -> void:
 	if world.slam_desk(origin):
 		player.confirm_desk_slam()
 		sound.play("slam")
+		for side: float in [-0.25, 0.25]:
+			juice.puff(world.desk_position + Vector3(side, 0.08, 0.35), 0.35)
 		player.add_shake(1.0)
 	else:
 		sound.play("swing")
@@ -572,6 +592,7 @@ func _end_run() -> void:
 	if ended:
 		return
 	ended = true
+	juice.cancel()
 	damage_ledger.freeze()
 	world.cancel_opening_scene()
 	_clear_caption()

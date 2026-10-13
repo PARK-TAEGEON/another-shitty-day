@@ -1,4 +1,6 @@
 extends Node3D
+
+const Toon = preload("res://scripts/toon.gd")
 ## An authored miniature office assembled from reusable meshes.
 signal impact_event(kind: String, points: int, position: Vector3)
 signal dialogue(text: String)
@@ -7,6 +9,7 @@ signal scene_dialogue(speaker: String, text: String, duration: float, source: No
 signal scene_speaker_invalidated(source: Node3D)
 signal first_disturbance
 signal player_hit(damage: float)
+signal npc_struck(at: Vector3, power: float, knocked_down: bool)
 signal damage_assessed(target_id: String, category: String, total: int, label: String)
 signal incident_event(kind: String, weight: float, at: Vector3)
 signal ambient_dialogue(speaker: String, text: String, duration: float, source: Node3D)
@@ -79,6 +82,8 @@ func _material(color: Color, emission: float = 0.0) -> StandardMaterial3D:
 	var mat: StandardMaterial3D = StandardMaterial3D.new()
 	mat.albedo_color = color
 	mat.roughness = 0.83
+	if emission <= 0.0:
+		Toon.apply(mat, 0.0)
 	if emission > 0.0:
 		mat.emission_enabled = true
 		mat.emission = color
@@ -495,6 +500,7 @@ func _npc(name_value: String, role_value: String, at: Vector3, color: Color, yaw
 	npc.connect("noise", _on_noise)
 	npc.connect("damage_assessed", _on_damage_assessed.bind(npc))
 	npc.connect("incident", _on_incident)
+	npc.connect("struck", func(at: Vector3, power: float, knocked_down: bool) -> void: npc_struck.emit(at, power, knocked_down))
 	npcs.append(npc)
 	return npc
 

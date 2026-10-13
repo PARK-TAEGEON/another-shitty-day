@@ -1,4 +1,6 @@
 extends RigidBody3D
+
+const Toon = preload("res://scripts/toon.gd")
 ## Small authored rigid props: gameplay mass and bounds stay deliberately simple.
 signal scored(kind: String, points: int, at: Vector3)
 signal noise(at: Vector3, strength: float)
@@ -70,6 +72,7 @@ func _mat(color: Color, rough: float = 0.75) -> StandardMaterial3D:
 	var mat: StandardMaterial3D = StandardMaterial3D.new()
 	mat.albedo_color = color
 	mat.roughness = rough
+	Toon.apply(mat, 0.12)
 	return mat
 
 func _box(size: Vector3, at: Vector3, color: Color, rot: Vector3 = Vector3.ZERO, parent: Node3D = null) -> MeshInstance3D:

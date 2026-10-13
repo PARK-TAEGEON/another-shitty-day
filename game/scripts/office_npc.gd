@@ -1,4 +1,6 @@
 extends CharacterBody3D
+
+const Toon = preload("res://scripts/toon.gd")
 ## Procedural caricature study: articulated poses, readable eyes, and a single-body fall.
 ## This is an in-engine first pass, not the finished sculpted/rigged character asset.
 signal scored(kind: String, points: int, at: Vector3)
@@ -7,6 +9,9 @@ signal player_hit(damage: float)
 signal noise(at: Vector3, strength: float)
 signal damage_assessed(category: String, total: int, label: String)
 signal incident(kind: String, weight: float, at: Vector3)
+## Presentation-only hook for comic feedback (puffs, hitstop). Emitted after the
+## real hit has been resolved; nothing in the simulation listens to it.
+signal struck(at: Vector3, power: float, knocked_down: bool)
 
 var display_name: String = "Coworker"
 var role: String = "observer"
@@ -113,6 +118,13 @@ var _guard_push_active: bool = false
 var _guard_push_age: float = 0.0
 var _guard_push_contact: bool = false
 var _guard_palm_blend: float = 0.0
+# Cartoon hit feedback. Visual scale and floating stars only; collision, height
+# probes and AI never read these.
+const DIZZY_SECONDS: float = 6.0
+var _hit_squash: float = 0.0
+var _hit_squash_age: float = 0.0
+var _dizzy_age: float = -1.0
+var _dizzy_stars: Array[MeshInstance3D] = []
 # The short-legged boss needs a brisk cadence, with each cycle advanced by real
 # post-collision travel. A blocked character must not keep marching in place.
 const BOSS_APPROACH_SPEED: float = 1.95
@@ -219,8 +231,7 @@ func _mat(color: Color) -> StandardMaterial3D:
 		return _materials[key] as StandardMaterial3D
 	var mat: StandardMaterial3D = StandardMaterial3D.new()
 	mat.albedo_color = color
-	mat.roughness = 1.0
-	mat.metallic_specular = 0.06
+	Toon.apply(mat)
 	_materials[key] = mat
 	return mat
 
@@ -348,6 +359,11 @@ func _form(parent: Node3D, rings: Array[Vector3], at: Vector3, color: Color, for
 	smooth_node.material_override = _mat(color)
 	smooth_node.position = at
 	parent.add_child(smooth_node)
+	var thinnest: float = INF
+	for ring: Vector3 in rings:
+		thinnest = minf(thinnest, minf(ring.x, ring.z))
+	if thinnest > 0.02:
+		Toon.outline(smooth_node, thinnest < 0.09)
 	return smooth_node
 
 const FORM_END_ROUNDING: float = 0.32 # Share of the end section's smaller side.
@@ -1113,6 +1129,8 @@ func receive_hit(impulse: Vector3, _point: Vector3, damage: float) -> void:
 	_cancel_opening()
 	if state == "down":
 		velocity += impulse * 0.17
+		_squash_on_hit(0.16)
+		struck.emit(_head.global_position, 0.4, false)
 		return
 	_reaction_pending = false
 	_guard_push_active = false
@@ -1133,9 +1151,76 @@ func receive_hit(impulse: Vector3, _point: Vector3, damage: float) -> void:
 		_collision.set_deferred("shape", fallen)
 		_collision.set_deferred("position", Vector3(-_fall_side * 0.72, 0.24, 0))
 		scored.emit("KNOCKDOWN", 100 if role == "police" else (75 if role == "guard" else 50), global_position)
+		_squash_on_hit(0.34)
+		_dizzy_age = 0.0
+		struck.emit(_head.global_position, 1.0, true)
 	else:
 		_apply_reaction(global_position, 2.0)
 		_cooldown = 1.0
+		_squash_on_hit(0.24)
+		struck.emit(_head.global_position, 0.75, false)
+
+func _squash_on_hit(amount: float) -> void:
+	_hit_squash = maxf(_hit_squash, amount)
+	_hit_squash_age = 0.0
+
+func _star_mesh() -> ArrayMesh:
+	var surface: SurfaceTool = SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for index: int in range(10):
+		var a: float = PI * 0.5 + float(index) * TAU / 10.0
+		var b: float = PI * 0.5 + float(index + 1) * TAU / 10.0
+		var ra: float = 0.075 if index % 2 == 0 else 0.032
+		var rb: float = 0.075 if (index + 1) % 2 == 0 else 0.032
+		surface.add_vertex(Vector3.ZERO)
+		surface.add_vertex(Vector3(cos(a) * ra, sin(a) * ra, 0))
+		surface.add_vertex(Vector3(cos(b) * rb, sin(b) * rb, 0))
+	return surface.commit()
+
+func _update_hit_cartoon(delta: float) -> void:
+	# Squash-and-stretch: a quick flattening that wobbles back to rest.
+	if _hit_squash > 0.0:
+		_hit_squash_age += delta
+		var decay: float = exp(-_hit_squash_age * 6.0)
+		var wobble: float = _hit_squash * decay * cos(_hit_squash_age * 34.0)
+		if decay < 0.02:
+			_hit_squash = 0.0
+			wobble = 0.0
+		_visual.scale = Vector3(1.0 + wobble * 0.5, 1.0 - wobble, 1.0 + wobble * 0.5)
+	elif _visual.scale != Vector3.ONE:
+		_visual.scale = Vector3.ONE
+	# Orbiting stars over a knocked-down head, for a few seconds.
+	if _dizzy_age < 0.0:
+		return
+	_dizzy_age += delta
+	if _dizzy_stars.is_empty():
+		var mesh: ArrayMesh = _star_mesh()
+		var material: StandardMaterial3D = StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		material.albedo_color = Color("f6cf4e")
+		for index: int in range(4):
+			var star: MeshInstance3D = MeshInstance3D.new()
+			star.name = "DizzyStar"
+			star.mesh = mesh
+			star.material_override = material
+			star.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			add_child(star)
+			_dizzy_stars.append(star)
+	var fade: float = clampf((DIZZY_SECONDS - _dizzy_age) / 0.6, 0.0, 1.0)
+	var ring: Vector3 = _head.global_position + Vector3.UP * 0.30
+	for index: int in range(_dizzy_stars.size()):
+		var star: MeshInstance3D = _dizzy_stars[index]
+		var angle: float = _dizzy_age * 4.2 + float(index) * TAU / float(_dizzy_stars.size())
+		star.global_position = ring + Vector3(cos(angle) * 0.28, sin(angle * 2.0) * 0.03, sin(angle) * 0.28)
+		star.scale = Vector3.ONE * fade * (1.0 + sin(_dizzy_age * 9.0 + float(index)) * 0.15)
+		star.visible = fade > 0.0
+	if fade <= 0.0:
+		for star: MeshInstance3D in _dizzy_stars:
+			star.queue_free()
+		_dizzy_stars.clear()
+		_dizzy_age = -1.0
 
 func _path_direction(destination: Vector3, delta: float) -> Vector3:
 	_repath_time -= delta
@@ -1630,6 +1715,7 @@ func _animate_pose(delta: float, walking: float) -> void:
 		brow.rotation.z = side * brow_angle + asymmetry
 	_mouth.scale.y = _mouth_open
 	_lower_lip.position.y = _mouth.position.y - 0.008 - _mouth_open * 0.055
+	_update_hit_cartoon(delta)
 	_update_height_collision()
 
 func _physics_process(delta: float) -> void:
@@ -1650,6 +1736,7 @@ func _physics_process(delta: float) -> void:
 		_down_rotation = move_toward(_down_rotation, _fall_side * PI * 0.5, delta * 7.5)
 		_visual.rotation.z = _down_rotation
 		_visual.position.y = absf(sin(_down_rotation)) * 0.22
+		_update_hit_cartoon(delta)
 		velocity.x = move_toward(velocity.x, 0.0, delta * 5.0)
 		velocity.z = move_toward(velocity.z, 0.0, delta * 5.0)
 	else:

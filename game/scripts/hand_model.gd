@@ -1,4 +1,6 @@
 extends Node3D
+
+const Toon = preload("res://scripts/toon.gd")
 ## Original procedural adult fist for the desk-slam timing study.
 ## Local coordinates: wrist at origin; +Y toward knuckles; +Z hand back.
 ## Anatomical right hand: thumb on -X; left hand: thumb on +X.
@@ -142,6 +144,7 @@ func _material(color: Color, roughness: float) -> StandardMaterial3D:
 	material.albedo_color = color
 	material.roughness = roughness
 	material.metallic = 0.0
+	Toon.apply(material, 0.18)
 	return material
 
 func _finger(label: String, x: float, knuckle_y: float, radius: float) -> void:
@@ -268,6 +271,8 @@ func _mesh(label: String, vertices: PackedVector3Array, normals: PackedVector3Ar
 	node.mesh = mesh
 	node.material_override = material
 	add_child(node)
+	if material == _skin or material == _cloth or material == _cuff:
+		Toon.outline(node, true)
 	_points.append_array(vertices)
 	return node
 
