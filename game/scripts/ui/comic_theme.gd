@@ -30,16 +30,11 @@ func _init() -> void:
 	myeongjo = load("res://assets/fonts/NanumMyeongjo-Regular.ttf")
 	myeongjo_bold = load("res://assets/fonts/NanumMyeongjo-Bold.ttf")
 	fraktur = load("res://assets/fonts/UnifrakturMaguntia-Book.ttf")
-	var noto: Font = load("res://assets/fonts/NotoSerifKR-Variable.ttf")
-	noto700 = _weight(noto, 700)
-	noto900 = _weight(noto, 900)
+	# Static instances of the OFL variable font. Godot's variable-font loader
+	# stalls the Windows import on this CJK file.
+	noto700 = load("res://assets/fonts/NotoSerifKR-Bold.ttf")
+	noto900 = load("res://assets/fonts/NotoSerifKR-Black.ttf")
 	grabber = _circle_tex(18, ORANGE, INK)
-
-func _weight(base: Font, weight: int) -> Font:
-	var varied := FontVariation.new()
-	varied.base_font = base
-	varied.variation_opentype = {"wght": float(weight)}
-	return varied
 
 func label(text: String, font: Font, size: int, color: Color) -> Label:
 	var node := Label.new()

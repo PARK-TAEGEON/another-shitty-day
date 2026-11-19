@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dqec6xxjn1da4"
-path="res://.godot/imported/NotoSerifKR-Variable.ttf-8be1bc4abd928b0b5332a2cc7cc4d5d6.fontdata"
+uid="uid://diqj8u28lwoco"
+path="res://.godot/imported/NotoSerifKR-Black.ttf-d3a47e52502928f0ac0145c3cd013490.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/NotoSerifKR-Variable.ttf"
-dest_files=["res://.godot/imported/NotoSerifKR-Variable.ttf-8be1bc4abd928b0b5332a2cc7cc4d5d6.fontdata"]
+source_file="res://assets/fonts/NotoSerifKR-Black.ttf"
+dest_files=["res://.godot/imported/NotoSerifKR-Black.ttf-d3a47e52502928f0ac0145c3cd013490.fontdata"]
 
 [params]
 
