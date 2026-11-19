@@ -4,6 +4,11 @@ const WorldScript = preload("res://scripts/world.gd")
 const PlayerScript = preload("res://scripts/player.gd")
 const SoundScript = preload("res://scripts/audio.gd")
 const SocialDamageScript = preload("res://scripts/social_damage.gd")
+const PlayScoreScript = preload("res://scripts/ui/play_score.gd")
+const WantedScript = preload("res://scripts/ui/wanted_level.gd")
+const RoundCopyScript = preload("res://scripts/ui/round_copy.gd")
+const ThemeScript = preload("res://scripts/ui/comic_theme.gd")
+const HudBuilderScript = preload("res://scripts/ui/hud_builder.gd")
 const CeoHoldScript = preload("res://scripts/scenario/ceo_hold.gd")
 const PoliceArrivalScript = preload("res://scripts/scenario/police_arrival.gd")
 var ceo_hold: Node
@@ -20,7 +25,12 @@ var world: Node3D
 var player: CharacterBody3D
 var sound: Node
 var damage_ledger: RefCounted = SocialDamageScript.new()
+## `score` stays the dollar ledger total so existing checks keep their meaning.
+## `play_score` is the separate action score and is never added to the ledger.
 var score: int = 0
+var play_score = PlayScoreScript.new()
+var round_copy = RoundCopyScript.new()
+var theme = ThemeScript.new()
 var response_heat: float = 0.0
 var _response_changed_at: float = 0.0
 var high_score: int = 0
@@ -41,12 +51,12 @@ var _hud: Control
 var _score_label: Label
 var _focus_label: Label
 var _caption_label: Label
-var _caption_panel: PanelContainer
+var _caption_panel: Control
 var _caption_speaker: Label
 var _caption_source: Node3D
 var _caption_is_scene: bool = false
 var _menu: Control
-var _menu_card: PanelContainer
+var _menu_card: Control
 var _menu_title: Label
 var _menu_subtitle: Label
 var _menu_tabs: HBoxContainer
@@ -54,18 +64,38 @@ var _menu_pages: Control
 var _settings_button: Button
 var _controls_button: Button
 var _options_panel: VBoxContainer
-var _controls_panel: GridContainer
-var _result_panel: VBoxContainer
+var _controls_panel: VBoxContainer
+var _result_panel: Control
 var _result_total: Label
 var _result_record: Label
 var _result_values: Dictionary = {}
 var _start_button: Button
 var _restart_button: Button
+var _star_row: Control
+var _pause_stars: Control
+var _pause_points: Label
+var _pause_money: Label
+var _pause_heading: Label
+var _pause_badge: Label
+var _continue_button: Button
+var _play_score_label: Label
+var _result_points: Label
+var _title_card: Control
+var _pause_card: Control
+var _result_root: Control
+var _shade: ColorRect
+var _focus_row: Control
+var _focus_key: Control
+var _focus_verb: Label
+var _title_bubble: Control
+var _title_credit: Control
+var _title_version: Control
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var args: PackedStringArray = OS.get_cmdline_user_args()
-	_automated_run = args.has("--smoke-test") or args.has("--capture-demo") or args.has("--capture-opening") or args.has("--capture-lecture") or args.has("--capture-office") or args.has("--capture-ui")
+	_automated_run = args.has("--smoke-test") or args.has("--capture-demo") or args.has("--capture-opening") or args.has("--capture-lecture") or args.has("--capture-office") or args.has("--capture-ui") or args.has("--capture-ui-boards")
+	DisplayServer.window_set_title("Another Shitty Day")
 	_settings.load("user://settings.cfg")
 	high_score = maxi(0, int(_settings.get_value(SocialDamageScript.RECORD_SECTION, SocialDamageScript.RECORD_KEY, 0)))
 	if _automated_run:
@@ -127,6 +157,8 @@ func _ready() -> void:
 		call_deferred("_capture_opening", true)
 	elif args.has("--capture-office"):
 		call_deferred("_capture_office")
+	elif args.has("--capture-ui-boards"):
+		call_deferred("_capture_ui_boards")
 
 func _process(delta: float) -> void:
 	if playing and not ended and not get_tree().paused:
@@ -188,252 +220,7 @@ func _centered(control: Control, y: float, width: float, height: float) -> void:
 	control.offset_bottom = y + height
 
 func _build_ui() -> void:
-	var layer: CanvasLayer = CanvasLayer.new()
-	layer.layer = 10
-	add_child(layer)
-	var root: Control = Control.new()
-	_full(root)
-	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	layer.add_child(root)
-	_hud = Control.new()
-	_full(_hud)
-	_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(_hud)
-	var panel: PanelContainer = PanelContainer.new()
-	panel.position = Vector2(24, 24)
-	panel.custom_minimum_size = Vector2(252, 86)
-	var score_style: StyleBoxFlat = _style(Color("eee5d2"), 10, Color("b7c8ba"))
-	score_style.content_margin_left = 16
-	score_style.content_margin_right = 16
-	score_style.content_margin_top = 10
-	score_style.content_margin_bottom = 10
-	panel.add_theme_stylebox_override("panel", score_style)
-	_hud.add_child(panel)
-	var stack: VBoxContainer = VBoxContainer.new()
-	stack.add_theme_constant_override("separation", 3)
-	panel.add_child(stack)
-	stack.add_child(_label("누적 피해액", 14, Color("497574")))
-	_score_label = _label(SocialDamageScript.format_currency(0), 30, INK)
-	stack.add_child(_score_label)
-	var crosshair: Label = _label("·", 35)
-	_centered(crosshair, -24, 24, 40)
-	crosshair.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	crosshair.add_theme_constant_override("outline_size", 4)
-	crosshair.add_theme_color_override("font_outline_color", INK)
-	_hud.add_child(crosshair)
-	_focus_label = _label("", 15)
-	_centered(_focus_label, 34, 500, 28)
-	_focus_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_focus_label.add_theme_constant_override("outline_size", 5)
-	_focus_label.add_theme_color_override("font_outline_color", Color("163035"))
-	_focus_label.visible = false
-	_hud.add_child(_focus_label)
-	_caption_panel = PanelContainer.new()
-	_caption_panel.anchor_left = 0.5
-	_caption_panel.anchor_right = 0.5
-	_caption_panel.anchor_top = 1.0
-	_caption_panel.anchor_bottom = 1.0
-	_caption_panel.offset_left = -400
-	_caption_panel.offset_right = 400
-	_caption_panel.offset_top = -152
-	_caption_panel.offset_bottom = -46
-	_caption_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_caption_panel.add_theme_stylebox_override("panel", _style(Color(0.035, 0.06, 0.075, 0.95), 9, Color(0.75, 0.80, 0.77, 0.3)))
-	_hud.add_child(_caption_panel)
-	var caption_stack: VBoxContainer = VBoxContainer.new()
-	caption_stack.add_theme_constant_override("separation", 5)
-	caption_stack.alignment = BoxContainer.ALIGNMENT_CENTER
-	_caption_panel.add_child(caption_stack)
-	_caption_speaker = _label("", 16, Color("b6dcd0"))
-	_caption_speaker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	caption_stack.add_child(_caption_speaker)
-	_caption_label = _label("", 28, Color("fffaf0"))
-	_caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_caption_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_caption_label.add_theme_constant_override("outline_size", 2)
-	_caption_label.add_theme_color_override("font_outline_color", Color("101a20"))
-	caption_stack.add_child(_caption_label)
-	_caption_panel.visible = false
-	_menu = Control.new()
-	_full(_menu)
-	root.add_child(_menu)
-	var shade: ColorRect = ColorRect.new()
-	shade.color = Color(0.055, 0.14, 0.16, 0.88)
-	_full(shade)
-	_menu.add_child(shade)
-	var card: PanelContainer = PanelContainer.new()
-	_menu_card = card
-	_centered(card, -310, 652, 620)
-	card.add_theme_stylebox_override("panel", _style(Color("eee5d2"), 20, Color("b8c9ba")))
-	_menu.add_child(card)
-	var col: VBoxContainer = VBoxContainer.new()
-	col.add_theme_constant_override("separation", 10)
-	card.add_child(col)
-	_menu_title = _label("DESK BREAKER", 38, INK)
-	col.add_child(_menu_title)
-	_menu_subtitle = _label("평범한 회사 운영지원팀.\n오늘도 급한 일은 전부 내 책상으로 온다.", 16, INK)
-	_menu_subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	col.add_child(_menu_subtitle)
-	_menu_tabs = HBoxContainer.new()
-	_menu_tabs.add_theme_constant_override("separation", 8)
-	col.add_child(_menu_tabs)
-	var tabs: ButtonGroup = ButtonGroup.new()
-	_settings_button = _tab_button("설정", tabs)
-	_settings_button.pressed.connect(_show_menu_page.bind("settings"))
-	_menu_tabs.add_child(_settings_button)
-	_controls_button = _tab_button("조작법", tabs)
-	_controls_button.pressed.connect(_show_menu_page.bind("controls"))
-	_menu_tabs.add_child(_controls_button)
-	_menu_pages = Control.new()
-	_menu_pages.custom_minimum_size.y = 216
-	col.add_child(_menu_pages)
-	_options_panel = VBoxContainer.new()
-	_full(_options_panel)
-	_options_panel.alignment = BoxContainer.ALIGNMENT_CENTER
-	_options_panel.add_theme_constant_override("separation", 20)
-	_menu_pages.add_child(_options_panel)
-	_add_option(_options_panel, "음량", 0.0, 1.0, _volume, func(value: float) -> void:
-		_volume = value
-		AudioServer.set_bus_volume_db(0, linear_to_db(maxf(value, 0.001)))
-		_save_option("volume", value))
-	_add_option(_options_panel, "마우스 감도", 0.001, 0.005, player.sensitivity, func(value: float) -> void:
-		player.sensitivity = value
-		_save_option("sensitivity", value))
-	_add_option(_options_panel, "화면 흔들림", 0.0, 1.0, player.shake_scale, func(value: float) -> void:
-		player.shake_scale = value
-		_save_option("shake", value))
-	var police_row: HBoxContainer = HBoxContainer.new()
-	police_row.add_child(_label("경찰 등장 연출", 16, INK))
-	var police_modes: OptionButton = OptionButton.new()
-	police_modes.add_theme_font_override("font", FONT)
-	police_modes.add_theme_font_size_override("font_size", 16)
-	for title: String in ["전체", "짧게", "끄기"]:
-		police_modes.add_item(title)
-	var selected_mode: int = clampi(int(_settings.get_value("options", "police_intro", 0)), 0, 2)
-	police_modes.select(selected_mode)
-	police_arrival.mode = ["full", "short", "off"][selected_mode]
-	police_modes.item_selected.connect(func(index: int) -> void:
-		police_arrival.mode = ["full", "short", "off"][index]
-		_save_option("police_intro", index))
-	police_row.add_child(police_modes)
-	_options_panel.add_child(police_row)
-	_controls_panel = GridContainer.new()
-	_full(_controls_panel)
-	_controls_panel.columns = 2
-	_controls_panel.add_theme_constant_override("h_separation", 28)
-	_controls_panel.add_theme_constant_override("v_separation", 5)
-	_menu_pages.add_child(_controls_panel)
-	var controls: Array[Array] = [
-		["W A S D", "이동"],
-		["마우스 이동", "둘러보기"],
-		["Shift", "달리기"],
-		["마우스 왼쪽", "주먹질 · 들고 있는 물건 던지기"],
-		["E", "물건 집기·놓기 / 사장 붙잡기·놓기"],
-		["Q", "발차기"],
-		["F", "양손으로 책상 내려치기"],
-		["R", "새 판 시작"],
-		["Esc", "일시정지 · 계속하기"]
-	]
-	for binding: Array in controls:
-		var key_label: Label = _label(str(binding[0]), 16, INK)
-		key_label.custom_minimum_size.x = 150
-		_controls_panel.add_child(key_label)
-		var action_label: Label = _label(str(binding[1]), 16, Color("4b7472"))
-		action_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		_controls_panel.add_child(action_label)
-	_show_menu_page("settings")
-	_result_panel = VBoxContainer.new()
-	_result_panel.add_theme_constant_override("separation", 7)
-	col.add_child(_result_panel)
-	_result_total = _label("", 36, INK)
-	_result_panel.add_child(_result_total)
-	var result_grid: GridContainer = GridContainer.new()
-	result_grid.columns = 2
-	result_grid.add_theme_constant_override("h_separation", 18)
-	result_grid.add_theme_constant_override("v_separation", 4)
-	_result_panel.add_child(result_grid)
-	var category_labels: Dictionary = {"property": "기물 피해", "care": "치료·수습 비용", "work": "노동 손실", "response": "대응 비용"}
-	for category: String in SocialDamageScript.CATEGORIES:
-		var name_label: Label = _label(str(category_labels[category]), 16, INK)
-		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		result_grid.add_child(name_label)
-		var amount_label: Label = _label("", 17, INK)
-		amount_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		result_grid.add_child(amount_label)
-		_result_values[category] = amount_label
-	_result_record = _label("", 14, Color("4b7472"))
-	_result_panel.add_child(_result_record)
-	_result_panel.visible = false
-	var divider: HSeparator = HSeparator.new()
-	col.add_child(divider)
-	var actions: HBoxContainer = HBoxContainer.new()
-	actions.add_theme_constant_override("separation", 10)
-	col.add_child(actions)
-	_start_button = _button("출근하기  →", ORANGE)
-	_start_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_start_button.pressed.connect(_resume)
-	actions.add_child(_start_button)
-	_restart_button = _button("새 판 시작", Color("b8cec1"))
-	_restart_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_restart_button.pressed.connect(_restart)
-	actions.add_child(_restart_button)
-	var quit: Button = _button("게임 종료", Color("d5d9ca"))
-	quit.custom_minimum_size.y = 37
-	quit.pressed.connect(func() -> void: get_tree().quit())
-	col.add_child(quit)
-
-func _tab_button(text: String, group: ButtonGroup) -> Button:
-	var button: Button = _button(text, Color("d5d9ca"))
-	button.custom_minimum_size.y = 38
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.toggle_mode = true
-	button.button_group = group
-	for state: String in ["normal", "hover", "pressed", "hover_pressed"]:
-		var background: Color = INK if state == "pressed" or state == "hover_pressed" else Color("d5d9ca")
-		var tab_style: StyleBoxFlat = _style(background.lightened(0.08) if state == "hover" or state == "hover_pressed" else background, 8)
-		tab_style.content_margin_top = 7
-		tab_style.content_margin_bottom = 7
-		button.add_theme_stylebox_override(state, tab_style)
-	button.add_theme_color_override("font_pressed_color", CREAM)
-	button.add_theme_color_override("font_hover_pressed_color", CREAM)
-	return button
-
-func _show_menu_page(page: String) -> void:
-	var show_controls: bool = page == "controls"
-	_options_panel.visible = not show_controls
-	_controls_panel.visible = show_controls
-	_settings_button.set_pressed_no_signal(not show_controls)
-	_controls_button.set_pressed_no_signal(show_controls)
-
-func _button(text: String, color: Color) -> Button:
-	var button: Button = Button.new()
-	button.text = text
-	button.custom_minimum_size.y = 49
-	button.add_theme_font_override("font", FONT)
-	button.add_theme_font_size_override("font_size", 18)
-	button.add_theme_color_override("font_color", INK)
-	button.add_theme_color_override("font_hover_color", INK)
-	button.add_theme_color_override("font_pressed_color", INK)
-	button.add_theme_stylebox_override("normal", _style(color, 9))
-	button.add_theme_stylebox_override("hover", _style(color.lightened(0.12), 9))
-	button.add_theme_stylebox_override("pressed", _style(color.darkened(0.08), 9))
-	return button
-
-func _add_option(parent: VBoxContainer, caption: String, low: float, high: float, current: float, callback: Callable) -> void:
-	var row: HBoxContainer = HBoxContainer.new()
-	row.custom_minimum_size.y = 32
-	parent.add_child(row)
-	var label: Label = _label(caption, 16, INK)
-	label.custom_minimum_size.x = 150
-	row.add_child(label)
-	var slider: HSlider = HSlider.new()
-	slider.min_value = low
-	slider.max_value = high
-	slider.step = (high - low) / 100.0
-	slider.value = current
-	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	slider.value_changed.connect(callback)
-	row.add_child(slider)
+	HudBuilderScript.new().build(self)
 
 func _save_option(key: String, value: float) -> void:
 	_settings.set_value("options", key, value)
@@ -447,19 +234,70 @@ func _open_menu(first: bool) -> void:
 	_hud.visible = false
 	player.set_active(false)
 	get_tree().paused = not first
-	_restart_button.visible = not first
-	_start_button.visible = not ended
-	_result_panel.visible = ended
-	_menu_tabs.visible = not ended
-	_menu_pages.visible = not ended
-	if not ended:
-		_show_menu_page("settings")
-	var menu_height: float = 500.0 if ended else 620.0
-	_centered(_menu_card, -menu_height * 0.5, 652.0, menu_height)
-	if not first and not ended:
-		_menu_title.text = "잠깐 쉬어갑니다"
-		_menu_subtitle.text = "다시 들어가면 하던 상황이 이어집니다."
-		_start_button.text = "계속하기  →"
+	if ended:
+		_show_result()
+	elif first:
+		_show_title()
+	else:
+		_show_pause_board()
+
+func _show_title() -> void:
+	_shade.color = Color(theme.INK, 0.28)
+	_title_card.visible = true
+	_title_bubble.visible = true
+	_title_credit.visible = true
+	_title_version.visible = true
+	_pause_card.visible = false
+	_result_root.visible = false
+	_menu_card = _title_card
+	_menu_pages.visible = false
+	_options_panel.visible = false
+	_controls_panel.visible = false
+	_menu_tabs.visible = false
+
+func _open_settings_from_title() -> void:
+	_show_board("출근하기 →", "설정 · 조작법", "시작 전")
+
+func _show_pause_board() -> void:
+	_show_board("계속하기", "잠깐 숨 좀 돌리고…", "일시정지")
+
+func _show_board(action: String, heading: String, badge: String) -> void:
+	_shade.color = Color(theme.INK, 0.62)
+	_title_card.visible = false
+	_title_bubble.visible = false
+	_title_credit.visible = false
+	_title_version.visible = false
+	_result_root.visible = false
+	_pause_card.visible = true
+	_menu_card = _pause_card
+	_menu_pages.visible = true
+	_options_panel.visible = true
+	_controls_panel.visible = true
+	_menu_tabs.visible = false
+	_pause_heading.text = heading
+	_pause_badge.text = badge
+	_continue_button.text = action
+	_refresh_damage_ui()
+	_refresh_play_score_ui()
+	_refresh_stars(false)
+
+func _show_result() -> void:
+	_shade.color = Color(theme.INK, 0.62)
+	_title_card.visible = false
+	_title_bubble.visible = false
+	_title_credit.visible = false
+	_title_version.visible = false
+	_pause_card.visible = false
+	_result_root.visible = true
+	_menu_card = _result_root
+	_menu_pages.visible = false
+	_options_panel.visible = false
+	_controls_panel.visible = false
+	_menu_tabs.visible = false
+
+func _settle_result_presentation() -> void:
+	if is_instance_valid(_result_root):
+		_result_root.call("settle")
 
 func _resume() -> void:
 	playing = true
@@ -485,9 +323,22 @@ func _restart() -> void:
 	get_tree().reload_current_scene.call_deferred()
 
 func _set_focus(text: String) -> void:
-	if is_instance_valid(_focus_label):
-		_focus_label.text = text
-		_focus_label.visible = not text.is_empty()
+	if not is_instance_valid(_focus_label):
+		return
+	var mark := "  ·  E "
+	var name := text
+	var verb := ""
+	var show_key := false
+	if mark in text:
+		var parts: PackedStringArray = text.split(mark, true, 1)
+		name = parts[0]
+		verb = parts[1] if parts.size() > 1 else ""
+		show_key = true
+	_focus_label.text = name
+	_focus_verb.text = verb
+	_focus_key.visible = show_key
+	_focus_verb.visible = show_key
+	_focus_row.visible = not name.is_empty()
 
 func _on_action(kind: String, _at: Vector3) -> void:
 	sound.play(kind)
@@ -500,10 +351,15 @@ func _slam(origin: Vector3) -> void:
 	else:
 		sound.play("swing")
 
-func _on_impact(_kind: String, _points: int, _at: Vector3) -> void:
-	# Legacy impact events still serve existing physics regressions. They carry neither
-	# money nor escalation; those arrive through explicit assessment/incident signals.
-	pass
+func _on_impact(kind: String, _points: int, _at: Vector3) -> void:
+	# Legacy impact events still carry neither money nor escalation.
+	# A knockdown only adds the separate action-score bonus.
+	if kind != "KNOCKDOWN":
+		return
+	if not playing or ended or (get_tree().paused and not police_arrival.owns_world_pause()):
+		return
+	play_score.award_knockdown()
+	_refresh_play_score_ui()
 
 func _on_damage_assessed(target_id: String, category: String, cumulative_amount: int, _label_text: String) -> void:
 	# The triggering hit can emit its incident before its care/work assessment.
@@ -512,6 +368,7 @@ func _on_damage_assessed(target_id: String, category: String, cumulative_amount:
 	if not playing or ended or (get_tree().paused and not police_arrival.owns_world_pause()):
 		return
 	var increase: int = damage_ledger.assess(target_id, category, cumulative_amount)
+	round_copy.note_label(_label_text)
 	if increase <= 0:
 		return
 	_refresh_damage_ui()
@@ -519,8 +376,25 @@ func _on_damage_assessed(target_id: String, category: String, cumulative_amount:
 
 func _refresh_damage_ui() -> void:
 	score = damage_ledger.total()
+	var money := SocialDamageScript.format_currency(score)
 	if is_instance_valid(_score_label):
-		_score_label.text = SocialDamageScript.format_currency(score)
+		_score_label.text = money
+	if is_instance_valid(_pause_money):
+		_pause_money.text = money
+
+func _refresh_play_score_ui() -> void:
+	var points := PlayScoreScript.format_points(play_score.total)
+	if is_instance_valid(_play_score_label):
+		_play_score_label.text = points
+	if is_instance_valid(_pause_points):
+		_pause_points.text = points
+
+func _refresh_stars(animate: bool) -> void:
+	var halves: int = WantedScript.halves_for_heat(response_heat)
+	if is_instance_valid(_star_row):
+		_star_row.call("set_halves", halves, animate)
+	if is_instance_valid(_pause_stars):
+		_pause_stars.call("set_halves", halves, false)
 
 func _on_incident(_kind: String, weight: float, _at: Vector3) -> void:
 	# A thrown object's contact may start Full before its receiver emits ASSAULT.
@@ -530,6 +404,10 @@ func _on_incident(_kind: String, weight: float, _at: Vector3) -> void:
 	_first_disturbance()
 	response_heat += weight
 	_update_response()
+	if _kind == "ASSAULT" or _kind == "THROW":
+		play_score.award_hit(_kind, elapsed)
+		_refresh_play_score_ui()
+	_refresh_stars(true)
 
 func _first_disturbance() -> void:
 	if disturbed or not playing or ended:
@@ -552,6 +430,9 @@ func _set_phase(value: int) -> void:
 	phase = clampi(value, 0, 4)
 	_response_changed_at = elapsed
 	world.escalate(phase)
+	round_copy.note_phase(phase)
+	if play_score.award_stage(phase) > 0:
+		_refresh_play_score_ui()
 	if phase > 1:
 		world.cancel_opening_scene()
 		_clear_caption()
@@ -583,9 +464,7 @@ func _ambient_caption(speaker: String, text: String, duration: float, source: No
 	_caption_source = source
 	_caption_speaker.text = speaker
 	_caption_speaker.visible = true
-	_caption_speaker.add_theme_color_override("font_color", Color("b6dcd0"))
 	_caption_label.text = text
-	_caption_label.add_theme_font_size_override("font_size", 26)
 	_caption_timer = clampf(duration, 1.5, 4.0)
 	_caption_panel.visible = true
 
@@ -597,9 +476,7 @@ func _scene_caption(speaker: String, text: String, duration: float, source: Node
 	_caption_priority = 70
 	_caption_speaker.text = speaker
 	_caption_speaker.visible = true
-	_caption_speaker.add_theme_color_override("font_color", Color("e9c17d") if str(source.get("role")) == "boss" else Color("b6dcd0"))
 	_caption_label.text = text
-	_caption_label.add_theme_font_size_override("font_size", 28)
 	_caption_timer = duration
 	_caption_panel.visible = true
 
@@ -636,21 +513,18 @@ func _end_run() -> void:
 	world.cancel_opening_scene()
 	_clear_caption()
 	_refresh_damage_ui()
+	var previous_record: int = high_score
 	high_score = maxi(high_score, score)
 	_settings.set_value(SocialDamageScript.RECORD_SECTION, SocialDamageScript.RECORD_KEY, high_score)
 	if not _automated_run:
 		_settings.save("user://settings.cfg")
 	player.release_held()
 	var categories: Dictionary = damage_ledger.breakdown()
-	_result_total.text = SocialDamageScript.format_currency(score)
-	for category: String in SocialDamageScript.CATEGORIES:
-		var value_label: Label = _result_values[category] as Label
-		value_label.text = SocialDamageScript.format_currency(int(categories[category]))
-	_result_record.text = "최고 기록 %s  ·  게임 내 추산액" % SocialDamageScript.format_currency(high_score)
+	var record_text := "최고 기록 %s%s  ·  게임 내 추산액" % [SocialDamageScript.format_currency(high_score), " (신기록)" if score > previous_record else ""]
+	if is_instance_valid(_result_root):
+		_result_root.call("present", round_copy, categories, score, record_text, PlayScoreScript.format_points(play_score.total), _capture_viewport())
 	_open_menu(false)
-	_menu_title.text = "오늘 발생한 피해"
-	_menu_subtitle.text = "제압되었습니다."
-	_restart_button.text = "새로운 하루  →"
+	_restart_button.text = "새로운 하루 →"
 
 func _reset_run_state() -> void:
 	# Scene reload also reconstructs this state. Keeping the reset explicit permits
@@ -658,6 +532,8 @@ func _reset_run_state() -> void:
 	damage_ledger.reset()
 	ceo_hold.reset_round()
 	police_arrival.reset_round()
+	play_score.reset()
+	round_copy.reset()
 	score = 0
 	response_heat = 0.0
 	_response_changed_at = 0.0
@@ -670,6 +546,8 @@ func _reset_run_state() -> void:
 	_clear_caption()
 	_result_panel.visible = false
 	_refresh_damage_ui()
+	_refresh_play_score_ui()
+	_refresh_stars(false)
 
 func _on_hold_changed(actor: CharacterBody3D, held: bool, reason: String) -> void:
 	if not is_instance_valid(actor) or not actor.is_inside_tree():
@@ -699,9 +577,7 @@ func _scenario_caption(speaker: String, text: String, duration: float, source: N
 	_caption_source = source
 	_caption_speaker.text = speaker
 	_caption_speaker.visible = true
-	_caption_speaker.add_theme_color_override("font_color", Color("e9c17d"))
 	_caption_label.text = text
-	_caption_label.add_theme_font_size_override("font_size", 26)
 	_caption_timer = duration
 	_caption_panel.visible = true
 
@@ -867,3 +743,54 @@ func _capture_office() -> void:
 	# An opt-in real-input review replay; no camera control is used in ordinary play.
 	var replay: RefCounted = load("res://scripts/office_capture.gd").new()
 	await replay.run(self)
+
+func _capture_viewport() -> Image:
+	if DisplayServer.get_name() == "headless":
+		return null
+	var texture: ViewportTexture = get_viewport().get_texture()
+	if texture == null:
+		return null
+	var image: Image = texture.get_image()
+	if image == null or image.is_empty():
+		return null
+	return image.duplicate()
+
+func _capture_ui_boards() -> void:
+	var directory: String = "user://ui-boards"
+	var args: PackedStringArray = OS.get_cmdline_user_args()
+	for i: int in range(args.size() - 1):
+		if args[i] == "--capture-dir":
+			directory = args[i + 1]
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
+	_menu.visible = false
+	_hud.visible = false
+	await get_tree().create_timer(0.4, false).timeout
+	await _save_frame(directory.path_join("office-bg.png"))
+	_show_title()
+	_menu.visible = true
+	await get_tree().process_frame
+	await _save_frame(directory.path_join("title.png"))
+	_resume()
+	await get_tree().create_timer(0.3, false).timeout
+	world.emit_signal("damage_assessed", "ui-board-monitor", "property", 585000, "모니터 사용 불능")
+	play_score.total = 12450
+	_refresh_play_score_ui()
+	response_heat = 13.0
+	_refresh_stars(false)
+	var boss: Node3D = world.get("opening_boss") as Node3D
+	if is_instance_valid(boss):
+		_scene_caption("김 팀장", "지금 뭐 하는 거야? 여기가 집이야?", 8.0, boss)
+	await get_tree().process_frame
+	await _save_frame(directory.path_join("hud.png"))
+	_open_menu(false)
+	await get_tree().process_frame
+	await _save_frame(directory.path_join("pause.png"))
+	_resume()
+	_on_player_hit(100.0)
+	# The result opens while the tree is paused, so a process timer would never elapse.
+	_settle_result_presentation()
+	await get_tree().process_frame
+	await _save_frame(directory.path_join("result.png"))
+	sound.stop_all()
+	print("DESK_BREAKER_UI_BOARDS_FAILED" if _capture_failed else "DESK_BREAKER_UI_BOARDS_OK: " + directory)
+	get_tree().quit(1 if _capture_failed else 0)
