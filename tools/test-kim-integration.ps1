@@ -13,6 +13,7 @@ foreach($mode in @('default','health-only','legacy')) {
     if($mode -eq 'health-only') {$flags=@('--kim-health-only')}
     if($mode -eq 'legacy') {$flags=@('--kim-legacy')}
     foreach($test in $checks) {
+        Write-Host ("RUN {0} {1}" -f $mode, $test)
         $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments (@('--headless','--fixed-fps','60','--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--')+$flags)
         $result | Set-Content -LiteralPath (Join-Path $EvidencePath "$mode-$test.txt") -Encoding utf8
         $marker=$test.ToUpper()+'_OK'
@@ -21,6 +22,7 @@ foreach($mode in @('default','health-only','legacy')) {
     }
 }
 foreach($test in @('kim_rig_regression','kim_restart_regression')) {
+    Write-Host ("RUN default {0}" -f $test)
     $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments @('--headless','--fixed-fps','60','--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--','--report',(Join-Path $EvidencePath 'physics.json'))
     $result | Set-Content -LiteralPath (Join-Path $EvidencePath "$test.txt") -Encoding utf8
     if($result -notmatch ($test.ToUpper()+'_OK')) {throw "Missing marker $test"}

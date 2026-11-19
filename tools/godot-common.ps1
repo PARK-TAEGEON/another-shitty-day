@@ -12,17 +12,23 @@ function Invoke-DeskBreakerGodot {
     # Native stderr can contain harmless Godot warnings on Windows PowerShell.
     # Inspect the process exit code and Godot error prefixes explicitly instead.
     $previousPreference = $ErrorActionPreference
+    $lines = New-Object System.Collections.Generic.List[string]
     try {
         $ErrorActionPreference = 'Continue'
-        $lines = @(& $Executable @Arguments 2>&1)
+        # Stream both pipes while the process runs. Collecting 2>&1 only after
+        # exit can fill the pipe and leave Godot blocked on a long log.
+        & $Executable @Arguments 2>&1 | ForEach-Object {
+            $line = $_.ToString()
+            $lines.Add($line)
+            Write-Host $line
+        }
         $nativeExitCode = $LASTEXITCODE
     }
     finally {
         $ErrorActionPreference = $previousPreference
     }
 
-    $text = ($lines | ForEach-Object { $_.ToString() }) -join "`n"
-    if ($text) { Write-Host $text }
+    $text = $lines -join "`n"
     if ($nativeExitCode -ne 0) {
         throw "Godot exited with code $nativeExitCode. See the output above."
     }

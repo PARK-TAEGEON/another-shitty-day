@@ -39,6 +39,7 @@ func step(frames: int) -> void:
 		await physics_frame
 
 func run() -> void:
+	print("KIM_RIG_BEGIN")
 	stage=Node3D.new()
 	root.add_child(stage)
 	floor_at(Vector3(0,-.15,0),Vector3(200,.3,200))
@@ -112,14 +113,21 @@ func run() -> void:
 		check(a._rig_adapter.physics_impulses==1,"initial impulse duplicate")
 		for body_index in range(a._rig_adapter.bodies.size()):
 			check(a._rig_adapter.bodies[body_index].global_position.distance_to(takeover_positions[i][body_index])<.25,"deferred takeover changed bone pose discontinuously")
+	print("KIM_RIG_FALLS")
+	var nonfinite := false
+	var penetrated: PackedStringArray = PackedStringArray()
 	for f in range(300):
 		await physics_frame
 		for i in range(actors.size()):
 			var rig=actors[i]._rig_adapter
 			for body: PhysicalBone3D in rig.bodies:
 				max_speeds[i]=maxf(max_speeds[i],body.linear_velocity.length())
-				check(body.global_position.is_finite() and body.linear_velocity.is_finite(),"physics nonfinite")
-				check(body.global_position.y>-.35,"floor penetration "+body.bone_name)
+				if not body.global_position.is_finite() or not body.linear_velocity.is_finite():
+					nonfinite = true
+				elif body.global_position.y <= -0.35 and penetrated.size() < 8:
+					penetrated.append(body.bone_name)
+	check(not nonfinite, "physics nonfinite")
+	check(penetrated.is_empty(), "floor penetration " + " ".join(penetrated))
 	for i in range(actors.size()):
 		var a=actors[i]
 		var rig=a._rig_adapter
