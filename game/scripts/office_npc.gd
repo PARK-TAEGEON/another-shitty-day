@@ -136,6 +136,13 @@ var _foot_swing_start_phases: Array[float] = []
 var _foot_yaws: Array[float] = []
 var _foot_swing_yaws: Array[float] = []
 var _foot_planted: Array[bool] = []
+const HitFeelScript = preload("res://scripts/hit_feel.gd")
+var _last_player_strike_msec: int = -1000000
+var _launch_time: float = 0.0
+var _launch_airborne: bool = false
+var _launch_bounced: bool = false
+var impact_thuds: int = 0
+var _thud_audio: AudioStreamPlayer3D
 
 func _ready() -> void:
 	collision_layer = 4
@@ -958,8 +965,10 @@ func _choose_flee_destination() -> Vector3:
 			best = candidate
 	return best
 
-func receive_hit(impulse: Vector3, _point: Vector3, damage: float) -> void:
-	# Cancel before the synchronous noise signal: even a nonlethal hit ends the beat.
+func receive_hit(impulse: Vector3, _point: Vector3, damage: float, kind: String = "") -> void:
+	# Snapshot before cancellation: a hit still ends the beat, but that same hit
+	# must not knock Kim out while the nagging opening is unfinished.
+	var blocked: bool = opening_blocks_knockdown()
 	interrupt_work()
 	_cancel_opening()
 	if state == "down":
@@ -968,37 +977,113 @@ func receive_hit(impulse: Vector3, _point: Vector3, damage: float) -> void:
 		else:
 			velocity += impulse * 0.17
 		return
+	var combo: bool = kind == "punch" and _combo_ready()
+	var launch: bool = _wants_launch(impulse, damage, kind, combo, blocked)
 	_reaction_pending = false
 	_guard_push_active = false
 	incident.emit("ASSAULT", 3.0, global_position)
 	noise.emit(global_position, 2.0)
 	health -= maxf(damage, 18.0)
-	var physical_down: bool = is_instance_valid(_rig_adapter) and (health <= 0.0 or _rig_adapter.should_knock_down(impulse))
-	if physical_down:
+	if blocked:
+		health = maxf(health, 1.0)
+		launch = false
+	elif launch or health <= 0.0:
+		launch = true
 		health = minf(health, 0.0)
-	else:
-		velocity += impulse * 0.42
-		velocity.y = maxf(velocity.y, 1.2)
-		if is_instance_valid(_rig_adapter):
-			_rig_adapter.react_to_hit(impulse, _point)
-	if health <= 0.0:
+	if (kind == "punch" or kind == "kick") and not launch:
+		_mark_strike()
+	if launch:
 		state = "down"
 		_talk_time = 0.0
 		damage_assessed.emit("care", 300000, "%s 치료·수습" % display_name)
 		if not _is_responder():
 			damage_assessed.emit("work", 200000, "%s 업무 복귀 불가" % display_name)
-		if physical_down:
+		if is_instance_valid(_rig_adapter):
+			_rig_adapter.launching = true
 			_rig_adapter.start_ragdoll(impulse, _point)
 		else:
-			_fall_side = -1.0 if impulse.x > 0.0 else 1.0
-			var fallen: BoxShape3D = BoxShape3D.new()
-			fallen.size = Vector3(1.75, 0.42, 0.66 if _broad else 0.48)
-			_collision.set_deferred("shape", fallen)
-			_collision.set_deferred("position", Vector3(-_fall_side * 0.72, 0.24, 0))
+			_begin_procedural_launch(impulse)
 		scored.emit("KNOCKDOWN", 100 if role == "police" else (75 if role == "guard" else 50), global_position)
 	else:
+		velocity += impulse * 0.42
+		velocity.y = maxf(velocity.y, 1.2)
+		if is_instance_valid(_rig_adapter):
+			_rig_adapter.react_to_hit(impulse, _point)
+		_speak_stagger()
 		_apply_reaction(global_position, 2.0)
 		_cooldown = 1.0
+
+func opening_blocks_knockdown() -> bool:
+	if opening_role != "boss" or opening_cancelled:
+		return false
+	var host: Node = get_parent()
+	if host == null or not bool(host.get("opening_started")) or bool(host.get("boss_lecture_finished")):
+		return false
+	return true
+
+func _wants_launch(impulse: Vector3, damage: float, kind: String, combo: bool, blocked: bool) -> bool:
+	if blocked:
+		return false
+	if health - maxf(damage, 18.0) <= 0.0:
+		return true
+	if is_instance_valid(_rig_adapter) and _rig_adapter.should_knock_down(impulse):
+		return true
+	if kind != "kick" and not combo:
+		return false
+	# Kim's legacy mesh and the health-only comparison keep the old one-kick result.
+	if _broad and not is_instance_valid(_rig_adapter):
+		return false
+	if is_instance_valid(_rig_adapter) and "--kim-health-only" in OS.get_cmdline_user_args():
+		return false
+	return true
+
+func _combo_ready() -> bool:
+	var window_ms: int = int(round(_hit_feel().second_hit_window * 1000.0))
+	return Time.get_ticks_msec() - _last_player_strike_msec <= window_ms
+
+func _mark_strike() -> void:
+	_last_player_strike_msec = Time.get_ticks_msec()
+
+func _hit_feel() -> Resource:
+	return HitFeelScript.load_settings()
+
+func _speak_stagger() -> void:
+	_talk_time = 1.5
+	_reaction_spoken = true
+	said.emit("%s  |  %s" % [display_name, _hit_feel().stagger_line])
+
+func _begin_procedural_launch(impulse: Vector3) -> void:
+	_fall_side = -1.0 if impulse.x > 0.0 else 1.0
+	var fallen: BoxShape3D = BoxShape3D.new()
+	fallen.size = Vector3(1.75, 0.42, 0.66 if _broad else 0.48)
+	_collision.set_deferred("shape", fallen)
+	_collision.set_deferred("position", Vector3(-_fall_side * 0.72, 0.24, 0))
+	var feel: Resource = _hit_feel()
+	var horizontal: Vector3 = Vector3(impulse.x, 0.0, impulse.z)
+	if horizontal.length_squared() > 0.0001:
+		horizontal = horizontal.normalized() * feel.procedural_launch_speed
+		velocity.x = horizontal.x
+		velocity.z = horizontal.z
+	velocity.y = feel.procedural_launch_up
+	_launch_time = feel.procedural_slide
+	_launch_airborne = false
+	_launch_bounced = false
+
+func _thud(speed: float) -> void:
+	impact_thuds += 1
+	var players: Array[Node] = get_tree().get_nodes_in_group("player")
+	if not players.is_empty() and players[0].has_method("add_shake"):
+		players[0].add_shake(_hit_feel().shake_impact)
+	if DisplayServer.get_name() == "headless":
+		return
+	if not is_instance_valid(_thud_audio):
+		_thud_audio = AudioStreamPlayer3D.new()
+		_thud_audio.max_distance = 18.0
+		_thud_audio.stream = preload("res://assets/audio/kenney/impactSoft_heavy_000.ogg")
+		add_child(_thud_audio)
+	_thud_audio.global_position = global_position
+	_thud_audio.volume_db = clampf(-3.0 + speed * 0.25, -6.0, -1.0)
+	_thud_audio.play()
 
 func _path_direction(destination: Vector3, delta: float) -> Vector3:
 	_repath_time -= delta
@@ -1515,8 +1600,21 @@ func _physics_process(delta: float) -> void:
 		_down_rotation = move_toward(_down_rotation, _fall_side * PI * 0.5, delta * 7.5)
 		_visual.rotation.z = _down_rotation
 		_visual.position.y = absf(sin(_down_rotation)) * 0.22
-		velocity.x = move_toward(velocity.x, 0.0, delta * 5.0)
-		velocity.z = move_toward(velocity.z, 0.0, delta * 5.0)
+		if _launch_time > 0.0:
+			_launch_time = maxf(_launch_time - delta, 0.0)
+			if is_on_floor():
+				if _launch_airborne and not _launch_bounced:
+					_launch_bounced = true
+					var feel: Resource = _hit_feel()
+					velocity.y = feel.procedural_bounce
+					_thud(feel.procedural_launch_speed)
+				velocity.x = move_toward(velocity.x, 0.0, delta * 2.2)
+				velocity.z = move_toward(velocity.z, 0.0, delta * 2.2)
+			else:
+				_launch_airborne = true
+		else:
+			velocity.x = move_toward(velocity.x, 0.0, delta * 5.0)
+			velocity.z = move_toward(velocity.z, 0.0, delta * 5.0)
 	else:
 		if target_valid:
 			var offset: Vector3 = player_target.global_position - global_position

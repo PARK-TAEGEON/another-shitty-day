@@ -26,6 +26,14 @@ var _contact_cooldown: float = 0.0
 var _impact_audio: AudioStreamPlayer3D
 const SOFT_IMPACT = preload("res://assets/audio/kenney/impactSoft_heavy_000.ogg")
 const WOOD_IMPACT = preload("res://assets/audio/kenney/impactWood_medium_000.ogg")
+const HitFeelScript = preload("res://scripts/hit_feel.gd")
+var launching: bool = false
+var _boost_done: bool = false
+var _boost_armed: bool = false
+var _boost_wait: float = 0.0
+var _boost_impulse: Vector3 = Vector3.ZERO
+var _joints_relaxed: bool = false
+var _joint_rest: Dictionary = {}
 
 func _ready() -> void:
 	var model: Node3D = MODEL.instantiate()
@@ -52,7 +60,22 @@ func _ready() -> void:
 	add_child(_impact_audio)
 
 func _physics_process(delta: float) -> void:
-	_contact_cooldown = maxf(_contact_cooldown-delta,0.0)
+	_contact_cooldown = maxf(_contact_cooldown - delta, 0.0)
+	if not ragdoll_active:
+		return
+	if _boost_armed:
+		_boost_wait = maxf(_boost_wait - delta, 0.0)
+		if _boost_wait <= 0.0:
+			_boost_armed = false
+			_apply_torso_boost(_boost_impulse)
+			_set_joints_relaxed(true)
+	elif _joints_relaxed and not bodies.is_empty() and bodies[0].linear_velocity.length() < 0.8:
+		_set_joints_relaxed(false)
+	var limit: float = HitFeelScript.load_settings().max_body_speed
+	for body: PhysicalBone3D in bodies:
+		var velocity: Vector3 = body.linear_velocity
+		if velocity.length() > limit:
+			body.linear_velocity = velocity.limit_length(limit)
 
 func _exit_tree() -> void:
 	if is_instance_valid(_impact_audio):
@@ -70,8 +93,20 @@ func contact_sound(at: Vector3, speed: float, furniture: bool) -> void:
 		return
 	_impact_audio.global_position = at
 	_impact_audio.stream = WOOD_IMPACT if furniture else SOFT_IMPACT
-	_impact_audio.volume_db = clampf(-17.0+speed*1.4,-15.0,-8.0)
+	if speed >= 3.0:
+		_impact_audio.volume_db = clampf(-5.0 + speed * 0.45, -6.0, -0.5)
+	else:
+		_impact_audio.volume_db = clampf(-17.0 + speed * 1.4, -15.0, -8.0)
 	_impact_audio.play()
+
+func notify_impact(speed: float) -> void:
+	var feel: Resource = HitFeelScript.load_settings()
+	if speed < feel.impact_speed:
+		return
+	var players: Array[Node] = get_tree().get_nodes_in_group("player")
+	if players.is_empty() or not players[0].has_method("add_shake"):
+		return
+	players[0].add_shake(feel.shake_impact)
 
 func _body(bone_name: String, length: float, radius: float, mass_value: float, swing: float, twist: float, box: Vector3 = Vector3.ZERO) -> void:
 	var body: PhysicalBone3D = PHYSICAL_BONE.new()
@@ -257,6 +292,38 @@ func apply_hit(impulse: Vector3, point: Vector3) -> void:
 	var force: Vector3 = impulse.limit_length(22.0) * 2.5
 	nearest.apply_impulse(force, (point - nearest.global_position).limit_length(.25))
 	physics_impulses += 1
+	if launching and not _boost_done:
+		_boost_done = true
+		_boost_impulse = impulse
+		_boost_wait = HitFeelScript.load_settings().boost_delay
+		_boost_armed = true
+		launching = false
+
+func _apply_torso_boost(impulse: Vector3) -> void:
+	var feel: Resource = HitFeelScript.load_settings()
+	var horizontal: Vector3 = Vector3(impulse.x, 0.0, impulse.z)
+	if horizontal.length_squared() < 0.0001:
+		horizontal = Vector3(impulse.x, 0.0, 1.0)
+	horizontal = horizontal.normalized()
+	var delta_v: Vector3 = horizontal * feel.launch_speed + Vector3.UP * feel.launch_up
+	for body: PhysicalBone3D in bodies:
+		if body.bone_name in ["Pelvis", "Chest", "Head"]:
+			body.apply_central_impulse(delta_v * body.mass)
+
+func _set_joints_relaxed(relaxed: bool) -> void:
+	var scale: float = HitFeelScript.load_settings().fly_joint_scale if relaxed else 1.0
+	for body: PhysicalBone3D in bodies:
+		if body.bone_name == "Pelvis":
+			continue
+		if not _joint_rest.has(body.bone_name):
+			_joint_rest[body.bone_name] = {
+				"swing": float(body.get("joint_constraints/swing_span")),
+				"twist": float(body.get("joint_constraints/twist_span")),
+			}
+		var rest: Dictionary = _joint_rest[body.bone_name]
+		body.set("joint_constraints/swing_span", float(rest["swing"]) * scale)
+		body.set("joint_constraints/twist_span", float(rest["twist"]) * scale)
+	_joints_relaxed = relaxed
 
 func pelvis_position() -> Vector3:
 	return bodies[0].global_position

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/hit_feel.gd" id="1_feel"]
+
+[resource]
+script = ExtResource("1_feel")
+punch_power = 7.0
+kick_power = 13.0
+punch_lift = 2.0
+kick_lift = 2.0
+boost_delay = 0.08
+launch_speed = 6.2
+launch_up = 3.0
+max_body_speed = 16.0
+fly_joint_scale = 1.28
+procedural_launch_speed = 5.6
+procedural_launch_up = 2.3
+procedural_bounce = 1.7
+procedural_slide = 0.42
+second_hit_window = 0.75
+hitstop_seconds = 0.045
+slowmo_scale = 0.36
+slowmo_seconds = 0.16
+shake_punch = 0.62
+shake_launch = 1.05
+shake_impact = 0.85
+impact_speed = 1.2
+impact_bounce = 0.16
+stagger_line = "꾸엑! 뭐, 뭐야!"

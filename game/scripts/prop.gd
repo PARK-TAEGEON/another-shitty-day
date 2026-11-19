@@ -419,7 +419,7 @@ func mark_player_throw() -> void:
 	_collision_cooldown = 0.0
 	continuous_cd = true
 
-func receive_hit(impulse: Vector3, _point: Vector3, damage: float) -> void:
+func receive_hit(impulse: Vector3, _point: Vector3, damage: float, _kind: String = "") -> void:
 	_receive_impulse_hit(impulse, damage, true)
 
 func receive_collision_hit(impulse: Vector3, _point: Vector3, damage: float) -> void:

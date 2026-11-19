@@ -1,6 +1,9 @@
 extends CharacterBody3D
 ## First-person controller and deliberately authored four-action viewmodel.
 const HandModel = preload("res://scripts/hand_model.gd")
+const HitFeelScript = preload("res://scripts/hit_feel.gd")
+const HitPresenterScript = preload("res://scripts/hit_presenter.gd")
+const HitTuneScript = preload("res://scripts/hit_tune_panel.gd")
 const MOTION_FPS: float = 30.0
 const SLAM_PHASES: Dictionary = {
 	"A": {"lift": 6, "down": 3, "hold": 2, "recover": 9},
@@ -52,6 +55,8 @@ var _shake: float = 0.0
 var _bob: float = 0.0
 var _last_focus: String = ""
 var _security_push_velocity: Vector3 = Vector3.ZERO
+var _hit_presenter: Node
+var _hit_tune: Node
 
 func _ready() -> void:
 	_register_inputs()
@@ -84,9 +89,12 @@ func _ready() -> void:
 	_foot.visible = false
 	_update_viewmodel(0.0)
 	add_to_group("player")
+	_hit_presenter = HitPresenterScript.new()
+	_hit_presenter.name = "HitPresenter"
+	add_child(_hit_presenter)
 
 func _register_inputs() -> void:
-	var keys: Dictionary = {"move_forward": KEY_W, "move_back": KEY_S, "move_left": KEY_A, "move_right": KEY_D, "sprint": KEY_SHIFT, "pickup": KEY_E, "kick": KEY_Q, "slam": KEY_F, "restart": KEY_R}
+	var keys: Dictionary = {"move_forward": KEY_W, "move_back": KEY_S, "move_left": KEY_A, "move_right": KEY_D, "sprint": KEY_SHIFT, "pickup": KEY_E, "kick": KEY_Q, "slam": KEY_F, "restart": KEY_R, "hit_tune": KEY_F8}
 	for action: String in keys:
 		if not InputMap.has_action(action):
 			InputMap.add_action(action)
@@ -141,6 +149,9 @@ func _mesh(parent: Node3D, size: Vector3, at: Vector3, tint: Color) -> void:
 	parent.add_child(visual)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("hit_tune"):
+		_toggle_hit_tune()
+		return
 	if not enabled:
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -338,15 +349,29 @@ func _commit_hit_later(kind: String, serial: int) -> void:
 	var hit: Dictionary = _ray(range_m)
 	var target: Node = hit.get("collider") as Node
 	if target != null and target.has_method("receive_hit"):
-		var power: float = 13.0 if kind == "kick" else 7.0
-		var impulse: Vector3 = -camera.global_basis.z * power + Vector3.UP * 2.0
+		var feel: Resource = HitFeelScript.load_settings()
+		var power: float = feel.kick_power if kind == "kick" else feel.punch_power
+		var lift: float = feel.kick_lift if kind == "kick" else feel.punch_lift
+		var impulse: Vector3 = -camera.global_basis.z * power + Vector3.UP * lift
 		contact_started.emit(kind, target)
-		target.receive_hit(impulse, hit["position"], 28.0 if kind == "kick" else 20.0)
+		target.receive_hit(impulse, hit["position"], 28.0 if kind == "kick" else 20.0, kind)
 		contact_finished.emit(kind, target)
-		add_shake(0.45)
+		var launched: bool = str(target.get("state")) == "down"
+		add_shake(feel.shake_launch if launched else feel.shake_punch)
+		if is_instance_valid(_hit_presenter) and _hit_presenter.has_method("play"):
+			_hit_presenter.play(kind)
 		action_performed.emit("impact", hit["position"])
 	else:
 		action_performed.emit("swing", camera.global_position)
+
+func _toggle_hit_tune() -> void:
+	if is_instance_valid(_hit_tune):
+		_hit_tune.queue_free()
+		_hit_tune = null
+		return
+	_hit_tune = HitTuneScript.new()
+	_hit_tune.name = "HitTune"
+	add_child(_hit_tune)
 
 func _ray(distance: float) -> Dictionary:
 	var start: Vector3 = camera.global_position
