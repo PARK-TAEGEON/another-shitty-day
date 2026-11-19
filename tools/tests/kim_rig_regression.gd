@@ -34,6 +34,13 @@ func new_actor(at: Vector3) -> CharacterBody3D:
 	stage.add_child(actor)
 	return actor
 
+func _report_path(raw: String) -> String:
+	if raw.is_absolute_path():
+		return raw
+	# CI passes a repo-root relative path. This project's res:// is the game/ directory.
+	var game_root := ProjectSettings.globalize_path("res://").trim_suffix("/").trim_suffix("\\")
+	return game_root.get_base_dir().path_join(raw)
+
 func step(frames: int) -> void:
 	for i in range(frames):
 		await physics_frame
@@ -183,9 +190,15 @@ func run() -> void:
 	reports.append({"chair_contact":contact.physical_bone,"table_contact":table_contact,"chair_travel":chair.position.distance_to(chair_start)})
 	var args=OS.get_cmdline_user_args()
 	if "--report" in args:
-		var path=args[args.find("--report")+1]
-		var file=FileAccess.open(path,FileAccess.WRITE)
-		file.store_string(JSON.stringify({"engine":Engine.get_version_info().string,"trials":reports,"failures":failures},"\t"))
+		var path := _report_path(str(args[args.find("--report") + 1]))
+		DirAccess.make_dir_recursive_absolute(path.get_base_dir())
+		var file := FileAccess.open(path, FileAccess.WRITE)
+		# A failed open used to call store_string on null and abort run() before quit(),
+		# so the headless process stayed up until the job timeout.
+		if file == null:
+			failures.append("rig report was not written: %s" % path)
+		else:
+			file.store_string(JSON.stringify({"engine":Engine.get_version_info().string,"trials":reports,"failures":failures},"\t"))
 	if failures.is_empty():print("KIM_RIG_REGRESSION_OK: 30 directional falls, 3 hit tiers, chair contact, accounting")
 	stage.queue_free()
 	await process_frame
