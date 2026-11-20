@@ -72,6 +72,19 @@ func run() -> void:
 	var coworker_arc: Dictionary = await _sample_flight(kicked, false)
 	check(float(coworker_arc.far) >= 3.0, "coworker kick did not travel 3m, got %s" % str(coworker_arc.far))
 	check(float(coworker_arc.rise) >= 1.0, "coworker kick did not rise 1m, got %s" % str(coworker_arc.rise))
+	var late := _actor(stage, "guard", false)
+	var late_lines: Array[String] = []
+	late.said.connect(func(text: String) -> void: late_lines.append(text))
+	late.receive_hit(Vector3(7, 2, 0), late.global_position + Vector3(0, 1.3, 0), 20.0, "punch")
+	check(late.state != "down", "late-window setup punch knocked the guard out")
+	var window_ms: int = int(round(preload("res://scripts/hit_feel.gd").load_settings().second_hit_window * 1000.0))
+	var waited_from: int = Time.get_ticks_msec()
+	while Time.get_ticks_msec() - waited_from < window_ms + 120:
+		await process_frame
+	late_lines.clear()
+	late.receive_hit(Vector3(7, 2, 0), late.global_position + Vector3(0, 1.3, 0), 20.0, "punch")
+	check(late.state != "down" and late.health > 0.0, "punch after the combo window still knocked the guard out")
+	check(_has_line(late_lines), "punch after the combo window did not stagger")
 	stage.queue_free()
 	await step(2)
 	var game: Node = MAIN.instantiate()
