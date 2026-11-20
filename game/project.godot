@@ -28,3 +28,7 @@ common/physics_ticks_per_second=60
 
 [audio]
 driver/enable_input=false
+
+[asd]
+characters/kim_rig_enabled=true
+characters/kim_heavy_knockdown=true

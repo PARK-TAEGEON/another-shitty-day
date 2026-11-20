@@ -39,6 +39,8 @@ var opening_head_top: float:
 		return global_position.y + _pose_height + _head_drop + _standing_height
 
 var _visual: Node3D
+var _rig_adapter: Node3D
+@export var use_kim_rig: bool = false
 var _upper_body: Node3D
 var _head: Node3D
 var _left_arm: Node3D
@@ -184,6 +186,15 @@ func _ready() -> void:
 		state = "pursue"
 		health = 65.0 if role == "police" else 48.0
 	add_to_group("office_npc")
+	# Explicit rollback wins over the build default and per-instance opt-in.
+	var kim_enabled: bool = use_kim_rig or bool(ProjectSettings.get_setting("asd/characters/kim_rig_enabled", false)) or "--kim-rig" in OS.get_cmdline_user_args()
+	if _broad and kim_enabled and not "--kim-legacy" in OS.get_cmdline_user_args():
+		_rig_adapter = load("res://scripts/characters/kim_visual_adapter.gd").new()
+		_rig_adapter.name = "KimVisualAdapter"
+		_rig_adapter.actor = self
+		add_child(_rig_adapter)
+		_visual.hide()
+		_rig_adapter.update_pose(0.0)
 
 func _is_responder() -> bool:
 	return affiliation == "security" or role in ["guard", "police"]
@@ -952,26 +963,38 @@ func receive_hit(impulse: Vector3, _point: Vector3, damage: float) -> void:
 	interrupt_work()
 	_cancel_opening()
 	if state == "down":
-		velocity += impulse * 0.17
+		if is_instance_valid(_rig_adapter) and _rig_adapter.ragdoll_active:
+			_rig_adapter.apply_hit(impulse, _point)
+		else:
+			velocity += impulse * 0.17
 		return
 	_reaction_pending = false
 	_guard_push_active = false
 	incident.emit("ASSAULT", 3.0, global_position)
 	noise.emit(global_position, 2.0)
 	health -= maxf(damage, 18.0)
-	velocity += impulse * 0.42
-	velocity.y = maxf(velocity.y, 1.2)
+	var physical_down: bool = is_instance_valid(_rig_adapter) and (health <= 0.0 or _rig_adapter.should_knock_down(impulse))
+	if physical_down:
+		health = minf(health, 0.0)
+	else:
+		velocity += impulse * 0.42
+		velocity.y = maxf(velocity.y, 1.2)
+		if is_instance_valid(_rig_adapter):
+			_rig_adapter.react_to_hit(impulse, _point)
 	if health <= 0.0:
 		state = "down"
 		_talk_time = 0.0
 		damage_assessed.emit("care", 300000, "%s 치료·수습" % display_name)
 		if not _is_responder():
 			damage_assessed.emit("work", 200000, "%s 업무 복귀 불가" % display_name)
-		_fall_side = -1.0 if impulse.x > 0.0 else 1.0
-		var fallen: BoxShape3D = BoxShape3D.new()
-		fallen.size = Vector3(1.75, 0.42, 0.66 if _broad else 0.48)
-		_collision.set_deferred("shape", fallen)
-		_collision.set_deferred("position", Vector3(-_fall_side * 0.72, 0.24, 0))
+		if physical_down:
+			_rig_adapter.start_ragdoll(impulse, _point)
+		else:
+			_fall_side = -1.0 if impulse.x > 0.0 else 1.0
+			var fallen: BoxShape3D = BoxShape3D.new()
+			fallen.size = Vector3(1.75, 0.42, 0.66 if _broad else 0.48)
+			_collision.set_deferred("shape", fallen)
+			_collision.set_deferred("position", Vector3(-_fall_side * 0.72, 0.24, 0))
 		scored.emit("KNOCKDOWN", 100 if role == "police" else (75 if role == "guard" else 50), global_position)
 	else:
 		_apply_reaction(global_position, 2.0)
@@ -1473,6 +1496,8 @@ func _animate_pose(delta: float, walking: float) -> void:
 	_update_height_collision()
 
 func _physics_process(delta: float) -> void:
+	if is_instance_valid(_rig_adapter) and _rig_adapter.ragdoll_active:
+		return
 	_clock += delta
 	_cue_age += delta
 	_reaction_age += delta
@@ -1565,3 +1590,5 @@ func _physics_process(delta: float) -> void:
 	if global_position.y < -8.0:
 		global_position = Vector3(_home.x, 0.1, _home.z)
 		velocity = Vector3.ZERO
+	if is_instance_valid(_rig_adapter):
+		_rig_adapter.update_pose(delta)

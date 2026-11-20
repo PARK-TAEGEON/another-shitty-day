@@ -1,0 +1,237 @@
+[
+  {
+    "result": "PASS",
+    "test": "wall_throw_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "opening_reaction_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "boss_approach_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "boss_lecture_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "hand_motion_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "npc_office_behavior_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "property_damage_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "social_damage_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "office_layout_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "minimal_hud_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "ceo_hold_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "police_hold_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "police_arrival_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "police_arrival_damage_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "kim_demo_integration",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "wall_throw_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "opening_reaction_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "boss_approach_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "boss_lecture_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "hand_motion_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "npc_office_behavior_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "property_damage_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "social_damage_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "office_layout_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "minimal_hud_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "ceo_hold_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "police_hold_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "police_arrival_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "police_arrival_damage_regression",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "kim_demo_integration",
+    "mode": "health-only"
+  },
+  {
+    "result": "PASS",
+    "test": "wall_throw_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "opening_reaction_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "boss_approach_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "boss_lecture_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "hand_motion_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "npc_office_behavior_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "property_damage_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "social_damage_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "office_layout_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "minimal_hud_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "ceo_hold_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "police_hold_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "police_arrival_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "police_arrival_damage_regression",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "kim_demo_integration",
+    "mode": "legacy"
+  },
+  {
+    "result": "PASS",
+    "test": "kim_rig_regression",
+    "mode": "default"
+  },
+  {
+    "result": "PASS",
+    "test": "kim_restart_regression",
+    "mode": "default"
+  }
+]

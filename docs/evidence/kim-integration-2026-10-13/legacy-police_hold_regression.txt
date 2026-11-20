@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"accepted_windup_preserved": true,
+	"both_bodies_props_range_and_once": true,
+	"failures": [],
+	"guard_unchanged": true,
+	"invalid_provider_down_and_freed_target": true,
+	"missing_relation_properties_boolean_and_holder_null_safety": true,
+	"new_push_standoff_release": {
+		"held_distance": 2.53666496276855,
+		"resumed_hits": 1
+	},
+	"per_police_solid_camera_independence": true
+}
+POLICE_HOLD_REGRESSION_OK

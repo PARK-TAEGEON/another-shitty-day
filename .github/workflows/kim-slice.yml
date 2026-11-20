@@ -1,0 +1,29 @@
+name: Kim vertical slice
+on:
+  pull_request:
+    paths: ['game/**', 'tools/**', 'blender/**', '.github/workflows/kim-slice.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regressions:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: '4.7.2'
+          use-dotnet: false
+          include-templates: false
+      - name: Default, health-only and legacy integration matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p validation/kim
+          pwsh -File tools/test-kim-integration.ps1 -GodotPath "$(command -v godot)" -EvidencePath validation/kim 2>&1 | tee validation/kim/matrix.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kim-slice-headless-evidence
+          path: validation/kim
