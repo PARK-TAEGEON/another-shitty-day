@@ -21,7 +21,7 @@ foreach($mode in @('default','health-only','legacy')) {
         $summary+=@{mode=$mode;test=$test;result='PASS'}
     }
 }
-foreach($test in @('kim_rig_regression','kim_restart_regression')) {
+foreach($test in @('kim_rig_regression','kim_restart_regression','hit_flight_obstacle_regression')) {
     Write-Host ("RUN default {0}" -f $test)
     $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments @('--headless','--fixed-fps','60','--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--','--report',(Join-Path $EvidencePath 'physics.json'))
     $result | Set-Content -LiteralPath (Join-Path $EvidencePath "$test.txt") -Encoding utf8

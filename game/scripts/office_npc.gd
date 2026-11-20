@@ -1083,27 +1083,68 @@ func _begin_procedural_launch(impulse: Vector3) -> void:
 
 func _flight_clearance(origin: Vector3, direction: Vector3, wanted: float) -> float:
 	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var from: Vector3 = origin + Vector3.UP * 1.1
-	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, from + direction * wanted, 1)
+	var from: Vector3 = origin + Vector3.UP * 1.05
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, from + direction * wanted, 3)
 	var hit: Dictionary = space.intersect_ray(query)
 	if hit.is_empty():
 		return wanted
-	return clampf(origin.distance_to(hit.position) - 0.55, 1.5, wanted)
+	return maxf(origin.distance_to(hit.position) - 0.42, 0.05)
 
 func _advance_procedural_flight(delta: float) -> void:
 	_flight_elapsed += delta
 	var u: float = clampf(_flight_elapsed / _flight_duration, 0.0, 1.0)
-	var height: float = 4.0 * _flight_peak * u * (1.0 - u)
-	global_position = _flight_origin + _flight_dir * (_flight_distance * u) + Vector3.UP * height
+	var desired: Vector3 = _flight_origin + _flight_dir * (_flight_distance * u) + Vector3.UP * (4.0 * _flight_peak * u * (1.0 - u))
+	if desired.y < 0.02:
+		desired.y = 0.02
+	var motion: Vector3 = desired - global_position
+	var blocked: Dictionary = _sweep_body(global_position + Vector3.UP * 1.0, motion)
+	if not blocked.is_empty():
+		global_position += motion * float(blocked.fraction) + (blocked.normal as Vector3) * 0.08
+		if global_position.y < 0.02:
+			global_position.y = 0.02
+		_finish_procedural_flight(blocked.normal)
+		return
+	global_position = desired
 	velocity = Vector3.ZERO
 	_down_rotation = _fall_side * lerpf(0.2, PI * 0.42, smoothstep(0.55, 1.0, u))
 	_visual.rotation.z = _down_rotation
 	_visual.position.y = absf(sin(_down_rotation)) * 0.22
 	if u < 1.0:
 		return
+	_finish_procedural_flight(-Vector3.UP)
+
+func _sweep_body(from: Vector3, motion: Vector3) -> Dictionary:
+	if motion.length_squared() < 0.000001:
+		return {}
+	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var shape := SphereShape3D.new()
+	shape.radius = 0.38
+	var params := PhysicsShapeQueryParameters3D.new()
+	params.shape = shape
+	params.transform = Transform3D(Basis.IDENTITY, from)
+	params.motion = motion
+	params.collision_mask = 3
+	params.exclude = [get_rid()]
+	var fractions: PackedFloat32Array = space.cast_motion(params)
+	if fractions.size() < 1 or fractions[0] >= 0.995:
+		return {}
+	var probe_from: Vector3 = from + motion * maxf(fractions[0] - 0.2, 0.0)
+	var ray := PhysicsRayQueryParameters3D.create(probe_from, probe_from + motion.normalized() * 0.5, 3)
+	ray.exclude = [get_rid()]
+	var hit: Dictionary = space.intersect_ray(ray)
+	var normal: Vector3 = -motion.normalized()
+	if not hit.is_empty():
+		normal = hit.normal
+	if normal.y > 0.72 and motion.y >= -0.05:
+		return {}
+	return {"fraction": maxf(fractions[0] - 0.05, 0.0), "normal": normal}
+
+func _finish_procedural_flight(normal: Vector3) -> void:
 	_flight_active = false
 	collision_mask = _flight_saved_mask if _flight_saved_mask != 0 else 15
-	velocity = _flight_dir * _hit_feel().launch_speed + Vector3.DOWN * 1.8
+	if normal.length_squared() < 0.0001:
+		normal = Vector3.UP
+	velocity = (normal * 0.4 + Vector3.DOWN * 1.6).limit_length(6.0)
 	_thud(6.0)
 
 func _thud(speed: float) -> void:
