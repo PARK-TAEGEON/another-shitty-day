@@ -853,7 +853,7 @@ func _build_ceo_room() -> void:
 	_prop("chair", "대표 의자", Vector3(13.5, 0.04, -2.8), INK, PI)
 	_prop("paper", "밀린 공용 서류", Vector3(9.9, 1.1, -2.5), CREAM)
 	_prop("mug", "대표 커피잔", Vector3(13.3, 1.16, 2.4), ORANGE)
-	ceo = _npc("사장 · 임시 모델", "ceo", Vector3(12.7, 0.04, -2.8), Color("634e46"), PI, "", {"affiliation": "executive", "personality": "dumping", "health": 90.0, "work_activity": "papers"})
+	ceo = _npc("사장", "ceo", Vector3(12.7, 0.04, -2.8), Color("634e46"), PI, "", {"affiliation": "executive", "personality": "dumping", "health": 90.0, "work_activity": "papers"})
 
 func record_scenario_fact(origin: Dictionary, fact: String, target: Node3D = null, extra: Dictionary = {}) -> Dictionary:
 	var event: Dictionary = events.fact(origin, fact, target, extra)

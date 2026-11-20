@@ -7,12 +7,13 @@ $projectPath=Join-Path (Split-Path -Parent $PSScriptRoot) 'game'
 $null=New-Item -ItemType Directory -Force $EvidencePath
 $summary=@()
 $null=Invoke-DeskBreakerGodot -Executable $executable -Arguments @('--headless','--path',$projectPath,'--editor','--import')
-$checks=@('wall_throw_regression','opening_reaction_regression','boss_approach_regression','boss_lecture_regression','hand_motion_regression','npc_office_behavior_regression','property_damage_regression','social_damage_regression','office_layout_regression','minimal_hud_regression','ceo_hold_regression','police_hold_regression','police_arrival_regression','police_arrival_damage_regression','kim_demo_integration')
+$checks=@('wall_throw_regression','opening_reaction_regression','boss_approach_regression','boss_lecture_regression','hand_motion_regression','npc_office_behavior_regression','property_damage_regression','social_damage_regression','office_layout_regression','minimal_hud_regression','ui_stars_result_regression','star_pill_alignment_regression','ceo_hold_regression','police_hold_regression','police_arrival_regression','police_arrival_damage_regression','kim_demo_integration')
 foreach($mode in @('default','health-only','legacy')) {
     $flags=@()
     if($mode -eq 'health-only') {$flags=@('--kim-health-only')}
     if($mode -eq 'legacy') {$flags=@('--kim-legacy')}
     foreach($test in $checks) {
+        Write-Host ("RUN {0} {1}" -f $mode, $test)
         $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments (@('--headless','--fixed-fps','60','--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--')+$flags)
         $result | Set-Content -LiteralPath (Join-Path $EvidencePath "$mode-$test.txt") -Encoding utf8
         $marker=$test.ToUpper()+'_OK'
@@ -21,6 +22,7 @@ foreach($mode in @('default','health-only','legacy')) {
     }
 }
 foreach($test in @('kim_rig_regression','kim_restart_regression')) {
+    Write-Host ("RUN default {0}" -f $test)
     $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments @('--headless','--fixed-fps','60','--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--','--report',(Join-Path $EvidencePath 'physics.json'))
     $result | Set-Content -LiteralPath (Join-Path $EvidencePath "$test.txt") -Encoding utf8
     if($result -notmatch ($test.ToUpper()+'_OK')) {throw "Missing marker $test"}

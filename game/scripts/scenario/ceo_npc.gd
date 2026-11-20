@@ -1,6 +1,6 @@
 extends "res://scripts/office_npc.gd"
 signal grab_invalidated
-## Temporary adult CEO, reusing the existing face, walking, hits and fall model.
+## CEO actor. Uses the office NPC face, walk, hits and fall.
 var can_be_grabbed: bool = true
 var grabbed_by: CharacterBody3D
 

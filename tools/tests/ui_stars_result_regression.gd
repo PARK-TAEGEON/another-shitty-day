@@ -1,0 +1,92 @@
+extends SceneTree
+## Wanted-star steps, the separate action score, and the newspaper result.
+## godot --headless --path game --script <this file>
+
+const WantedScript: Script = preload("res://scripts/ui/wanted_level.gd")
+const PlayScript: Script = preload("res://scripts/ui/play_score.gd")
+const CopyScript: Script = preload("res://scripts/ui/round_copy.gd")
+const LedgerScript: Script = preload("res://scripts/social_damage.gd")
+const MainScript: Script = preload("res://scripts/main.gd")
+
+var failures: Array[String] = []
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func check(condition: bool, message: String) -> void:
+	if not condition:
+		failures.append(message)
+		push_error("UI_STARS_RESULT: " + message)
+
+func _run() -> void:
+	check(WantedScript.halves_for_heat(0.0) == 0, "quiet heat drew a star")
+	check(WantedScript.halves_for_heat(7.9) == 0, "heat below the guard threshold drew a star")
+	check(WantedScript.halves_for_heat(8.0) == 2, "guard threshold was not one full star")
+	check(WantedScript.halves_for_heat(12.9) == 2, "guard stage gained a half star too early")
+	check(WantedScript.halves_for_heat(13.0) == 3, "guard midpoint was not a half star")
+	check(WantedScript.halves_for_heat(18.0) == 4, "police threshold was not two stars")
+	check(WantedScript.halves_for_heat(25.0) == 5, "police midpoint was not a half star")
+	check(WantedScript.halves_for_heat(32.0) == 6, "backup threshold was not three stars")
+	check(WantedScript.halves_for_heat(1000.0) == 6, "stars continued past backup police")
+	check(is_equal_approx(float(WantedScript.stars_for_heat(13.0)), 1.5), "13 heat was not 1.5 stars")
+	var score: RefCounted = PlayScript.new()
+	check(int(score.award_hit("ASSAULT", 0.0)) == 100, "first hit was not the flat 100")
+	check(int(score.award_hit("THROW", 1.0)) == 250, "a chained throw was not 200 plus 50")
+	check(int(score.award_knockdown()) == 400, "knockdown bonus changed")
+	check(int(score.award_stage(4)) == 1200, "backup stage points changed")
+	check(int(score.award_stage(1)) == 0, "attention awarded stage points")
+	check(int(score.total) == 1950, "action score total drifted")
+	var copy: RefCounted = CopyScript.new()
+	copy.note_label("김 팀장 치료·수습")
+	copy.note_label("박 대리 업무 중단")
+	copy.note_phase(3)
+	var article: String = str(copy.article("$10"))
+	check("김 팀장" in article and "박 대리" in article and "경찰이 출동했다" in article and "$10" in article, "newspaper copy ignored the round's events")
+	check(not ("사내 경비, 현장에서 제압" in article), "newspaper used the sample article instead of the round")
+	var game: Node = MainScript.new()
+	root.add_child(game)
+	game.set("_automated_run", true)
+	await process_frame
+	game.call("_resume")
+	var ledger: RefCounted = game.get("damage_ledger")
+	var world: Node = game.get("world")
+	world.emit_signal("damage_assessed", "ui-star-monitor", "property", 300000, "모니터 사용 불능")
+	var money: int = int(ledger.total())
+	game.set("response_heat", 13.0)
+	game.call("_refresh_stars", true)
+	check(int(game.get("_star_row").get("_shown")) == 3, "live stars did not show one and a half")
+	game.set("response_heat", 32.0)
+	game.call("_refresh_stars", true)
+	check(int(game.get("_star_row").get("_shown")) == 6, "live stars did not reach the cap")
+	game.set("response_heat", 10.0)
+	game.call("_refresh_stars", true)
+	check(int(game.get("_star_row").get("_shown")) == 2, "lowering heat did not remove the extra halves")
+	game.set("response_heat", 80.0)
+	game.call("_refresh_stars", false)
+	check(int(game.get("_star_row").get("_shown")) == 6, "heat above the last threshold opened a fourth star")
+	var actions: RefCounted = game.get("play_score")
+	var before: int = int(actions.get("total"))
+	actions.award_hit("ASSAULT", 3.0)
+	actions.award_knockdown()
+	check(int(ledger.total()) == money and int(game.get("score")) == money, "action score was added to the damage ledger")
+	check(int(actions.get("total")) == before + 500, "hit plus knockdown was not 500 on top of the earlier score")
+	game.call("_refresh_play_score_ui")
+	check(str(game.get("_play_score_label").text) != LedgerScript.format_currency(money), "the big HUD number is the dollar amount")
+	game.call("_end_run")
+	check(bool(game.get("ended")) and paused and bool(game.get("_menu").visible) and ledger.is_frozen(), "ending the round did not open a paused result")
+	check(str(game.get("_result_total").text) == LedgerScript.format_currency(money), "result total disagreed with the frozen ledger")
+	game.call("_settle_result_presentation")
+	var paper: Node = game.get("_result_root")
+	check(paper.visible and is_equal_approx((paper.get("paper") as Control).scale.x, 1.0), "newspaper did not settle on screen")
+	check(str(game.get("_restart_button").text).contains("새로운 하루"), "result is missing the new-day button")
+	check(str(game.get("_result_points").text).contains("점수"), "result hid the separate score")
+	check(int(ledger.total()) == money, "opening the result changed the ledger")
+	var sound: Node = game.get("sound")
+	sound.call("stop_all")
+	paused = false
+	game.queue_free()
+	await process_frame
+	print("UI_STARS_RESULT_REGRESSION_OK" if failures.is_empty() else "UI_STARS_RESULT_REGRESSION_FAILED")
+	if not failures.is_empty():
+		print(JSON.stringify(failures))
+	quit(0 if failures.is_empty() else 1)

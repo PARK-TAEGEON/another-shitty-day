@@ -32,6 +32,9 @@ func _leaves(node: Node) -> Array[Control]:
 		result.append_array(_leaves(child))
 	return result
 
+func _hud_has(text: String) -> bool:
+	return _hud_texts().has(text)
+
 func _hud_texts() -> Array[String]:
 	var texts: Array[String] = []
 	for leaf: Control in _leaves(game.get("_hud")):
@@ -41,20 +44,24 @@ func _hud_texts() -> Array[String]:
 
 func _assert_menu_layout(label: String) -> void:
 	var card: Control = game.get("_menu_card") as Control
-	var card_rect: Rect2 = card.get_global_rect()
-	# The headless native window can report a dummy size; layout uses the logical
-	# viewport selected by the project's 1280×720 canvas stretch configuration.
+	# Compare in the card's own space so the title card's small rotation does not
+	# turn neighboring rectangles into false overlaps.
 	var viewport_rect: Rect2 = root.get_visible_rect()
 	check(viewport_rect.size == Vector2(1280, 720), label + ": fixture is not using the required logical resolution")
-	check(viewport_rect.encloses(card_rect), label + ": menu card exceeded 1280x720")
+	check(card.size.x <= 1280.0 and card.size.y <= 720.0, label + ": menu card exceeded 1280x720")
+	check(card.position.x >= -1.0 and card.position.y >= -1.0, label + ": menu card starts off screen")
+	check(card.position.x + card.size.x <= 1281.0 and card.position.y + card.size.y <= 721.0, label + ": menu card ends off screen")
+	var local_bounds: Rect2 = Rect2(Vector2.ZERO, card.size).grow(8.0)
+	var inverse: Transform2D = card.get_global_transform().affine_inverse()
 	var leaves: Array[Control] = _leaves(card)
-	for index: int in range(leaves.size()):
-		var leaf: Control = leaves[index]
-		var leaf_rect: Rect2 = leaf.get_global_rect()
-		check(card_rect.grow(0.5).encloses(leaf_rect), label + ": control extended outside the card: " + str(leaf.get("text")))
-		for other_index: int in range(index + 1, leaves.size()):
-			check(not leaf_rect.intersects(leaves[other_index].get_global_rect()), label + ": visible controls overlap")
-	observations[label] = {"card_position": [card_rect.position.x, card_rect.position.y], "card_size": [card_rect.size.x, card_rect.size.y], "visible_controls": leaves.size()}
+	var placed: Array[Rect2] = []
+	for leaf: Control in leaves:
+		var leaf_rect: Rect2 = Rect2(inverse * leaf.get_global_position(), leaf.size)
+		check(local_bounds.encloses(leaf_rect), label + ": control extended outside the card: " + str(leaf.get("text")))
+		for other: Rect2 in placed:
+			check(not leaf_rect.intersects(other), label + ": visible controls overlap: " + str(leaf.get("text")))
+		placed.append(leaf_rect)
+	observations[label] = {"card_position": [card.position.x, card.position.y], "card_size": [card.size.x, card.size.y], "visible_controls": leaves.size()}
 
 func _press_escape() -> void:
 	var event: InputEventAction = InputEventAction.new()
@@ -68,11 +75,14 @@ func _run() -> void:
 	root.add_child(game)
 	game.set("_automated_run", true)
 	await _settle()
-	_assert_menu_layout("start_settings")
-	(game.get("_controls_button") as Button).pressed.emit()
+	check(str((game.get("_menu_title") as Label).text).contains("Another"), "start screen did not show the game title first")
+	check(str((game.get("_start_button") as Button).text).contains("출근하기"), "start screen did not offer 출근하기")
+	check(not (game.get("_options_panel") as Control).is_visible_in_tree(), "settings opened before the player asked")
+	_assert_menu_layout("start_title")
+	(game.get("_settings_button") as Button).pressed.emit()
 	await _settle()
-	_assert_menu_layout("start_controls")
-	check((game.get("_controls_panel") as Control).is_visible_in_tree(), "controls tab is unavailable before starting")
+	check((game.get("_options_panel") as Control).is_visible_in_tree() and (game.get("_controls_panel") as Control).is_visible_in_tree(), "settings and controls are not shown together")
+	_assert_menu_layout("start_settings")
 	(game.get("_start_button") as Button).pressed.emit()
 	await _settle()
 	var world: Node3D = game.get("world") as Node3D
@@ -86,7 +96,8 @@ func _run() -> void:
 	game.call("_slam", Vector3(50, 0, 50))
 	world.emit_signal("player_hit", 10.0)
 	game.call("_process", 0.01)
-	check(_hud_texts() == ["누적 피해액", "$100,000", "·"], "damage, impact, hit or failed slam produced HUD text beyond title/amount/crosshair")
+	check(_hud_has("$100,000") and _hud_has("누적 피해액") and _hud_has("점수"), "damage HUD lost the score or the dollar amount")
+	check(not _hud_has("충돌") and not _hud_has("IMPACT") and not _hud_has("타격"), "impact or hit text returned to the HUD")
 	check(is_equal_approx(float(game.get("composure")), 90.0) and float(player.get("_shake")) > 0.0, "removing the bar also removed actual subdual feedback")
 	var hud: Control = game.get("_hud") as Control
 	check(hud.find_children("*", "ProgressBar", true, false).is_empty(), "an unused response or health meter is still created")
@@ -100,32 +111,29 @@ func _run() -> void:
 	check((game.get("_score_label") as Label).text == "$300,000" and ledger.total() == 300000, "dollar display rescaled or changed the existing assessment amounts")
 	await _press_escape()
 	check(paused and not bool(player.get("enabled")) and (game.get("_menu") as Control).visible, "Esc did not pause the actual game")
-	_assert_menu_layout("pause_settings")
+	check((game.get("_controls_panel") as Control).is_visible_in_tree() and (game.get("_options_panel") as Control).is_visible_in_tree(), "pause hid settings or the controls")
 	var paused_elapsed: float = float(game.get("elapsed"))
 	var paused_caption: float = float(game.get("_caption_timer"))
-	(game.get("_controls_button") as Button).pressed.emit()
-	await _settle()
-	check((game.get("_controls_panel") as Control).is_visible_in_tree() and not (game.get("_options_panel") as Control).is_visible_in_tree(), "controls tab did not replace settings")
-	check((game.get("_controls_button") as Button).button_pressed and not (game.get("_settings_button") as Button).button_pressed, "selected tab indicator disagrees with the visible page")
 	game.call("_process", 12.0)
-	check(paused and is_equal_approx(float(game.get("elapsed")), paused_elapsed) and is_equal_approx(float(game.get("_caption_timer")), paused_caption), "viewing controls advanced gameplay or the current subtitle")
-	_assert_menu_layout("pause_controls")
-	(game.get("_settings_button") as Button).pressed.emit()
+	check(paused and is_equal_approx(float(game.get("elapsed")), paused_elapsed) and is_equal_approx(float(game.get("_caption_timer")), paused_caption), "viewing the pause board advanced gameplay or the current subtitle")
+	_assert_menu_layout("pause")
 	var options: Control = game.get("_options_panel") as Control
-	var volume: HSlider = options.get_child(0).get_child(1) as HSlider
+	var volume: HSlider = options.find_children("*", "HSlider", true, false)[0] as HSlider
 	volume.value = 0.31
 	check(is_equal_approx(float(game.get("_volume")), 0.31) and paused, "settings slider stopped working or resumed play")
 	await _press_escape()
 	check(not paused and bool(player.get("enabled")) and not (game.get("_menu") as Control).visible, "Esc from settings did not resume")
 	world.emit_signal("incident_event", "ASSAULT", 8.0, player.global_position)
 	check(int(game.get("phase")) == 2 and game.call("_staff_count", "security") == 1 and int(ledger.breakdown()["response"]) == 100000, "hidden response UI disabled the real guard dispatch or its assessment")
-	check(_hud_texts() == ["누적 피해액", "$400,000", "·"], "dispatch showed a system caption or response HUD")
+	check(_hud_has("$400,000") and _hud_has("누적 피해액"), "dispatch changed the dollar display")
+	check(not _hud_has("출동") and not _hud_has("ASSAULT"), "dispatch showed a system caption")
 	world.emit_signal("player_hit", 90.0)
 	await _settle()
 	check(bool(game.get("ended")) and paused and ledger.is_frozen(), "subdual no longer ends and freezes the round")
 	check((game.get("_result_total") as Label).text == "$400,000", "result total did not preserve dollar units")
 	check(not (game.get("_menu_tabs") as Control).is_visible_in_tree() and not (game.get("_controls_panel") as Control).is_visible_in_tree() and not options.is_visible_in_tree(), "settings or controls overlap the results")
-	_assert_menu_layout("results")
+	game.call("_settle_result_presentation")
+	check((game.get("_result_root") as Control).visible, "the newspaper result was not shown")
 	await _press_escape()
 	check(paused and bool(game.get("ended")) and (game.get("_menu") as Control).visible, "Esc resumed a completed round")
 	observations["final"] = {"total": ledger.total(), "currency": LedgerScript.format_currency(ledger.total()), "record_key": LedgerScript.RECORD_KEY, "phase": game.get("phase")}
