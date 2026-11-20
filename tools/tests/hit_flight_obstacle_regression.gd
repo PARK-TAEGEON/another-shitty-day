@@ -112,7 +112,9 @@ func _desk(stage: Node) -> void:
 	await step(2)
 	actor.receive_hit(Vector3(13, 2, 0), actor.global_position + Vector3.UP, 28.0, "kick")
 	await _watch(actor, func(at: Vector3) -> bool: return at.x < 1.22, "desk")
-	check(actor._rig_adapter.pelvis_position().x < 1.05, "desk was crossed")
+	# Desk center x=1.2, size 0.55, so the front face the body flies into is x=0.925.
+	for body: PhysicalBone3D in actor._rig_adapter.bodies:
+		check(body.global_position.x < 0.925, "desk face crossed by %s at %s" % [body.name, str(body.global_position)])
 	actor.queue_free()
 	desk.queue_free()
 	await step(2)

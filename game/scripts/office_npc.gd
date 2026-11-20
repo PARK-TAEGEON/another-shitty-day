@@ -149,6 +149,7 @@ var _flight_distance: float = 4.5
 var _flight_peak: float = 1.45
 var _flight_duration: float = 0.70
 var _flight_saved_mask: int = 15
+var _clamp_flight_to_room: bool = false
 var impact_thuds: int = 0
 var _thud_audio: AudioStreamPlayer3D
 
@@ -1072,6 +1073,7 @@ func _begin_procedural_launch(impulse: Vector3) -> void:
 		horizontal = -global_basis.z
 	_flight_dir = horizontal.normalized()
 	_flight_origin = global_position
+	_clamp_flight_to_room = clamp_to_room(_flight_origin).distance_squared_to(_flight_origin) < 0.0004
 	_flight_peak = feel.flight_peak
 	_flight_duration = maxf(feel.flight_time, 0.2)
 	_flight_distance = _flight_clearance(global_position, _flight_dir, feel.flight_distance)
@@ -1090,18 +1092,36 @@ func _flight_clearance(origin: Vector3, direction: Vector3, wanted: float) -> fl
 		return wanted
 	return maxf(origin.distance_to(hit.position) - 0.42, 0.05)
 
+func clamp_to_room(point: Vector3) -> Vector3:
+	# Inner faces from world.gd: office walls, the east opening into the CEO room, and the south alcove.
+	var office := Vector3(clampf(point.x, -7.995, 7.995), point.y, clampf(point.z, -9.995, 7.995))
+	var ceo := Vector3(clampf(point.x, 7.995, 15.8), point.y, clampf(point.z, -5.7, 3.7))
+	var alcove := Vector3(clampf(point.x, -1.51, 1.51), point.y, clampf(point.z, 7.995, 10.05))
+	var best := office
+	var best_distance := Vector2(office.x - point.x, office.z - point.z).length_squared()
+	for candidate: Vector3 in [ceo, alcove]:
+		var distance := Vector2(candidate.x - point.x, candidate.z - point.z).length_squared()
+		if distance < best_distance:
+			best = candidate
+			best_distance = distance
+	return best
+
 func _advance_procedural_flight(delta: float) -> void:
 	_flight_elapsed += delta
 	var u: float = clampf(_flight_elapsed / _flight_duration, 0.0, 1.0)
 	var desired: Vector3 = _flight_origin + _flight_dir * (_flight_distance * u) + Vector3.UP * (4.0 * _flight_peak * u * (1.0 - u))
 	if desired.y < 0.02:
 		desired.y = 0.02
+	if _clamp_flight_to_room:
+		desired = clamp_to_room(desired)
 	var motion: Vector3 = desired - global_position
 	var blocked: Dictionary = _sweep_body(global_position + Vector3.UP * 1.0, motion)
 	if not blocked.is_empty():
 		global_position += motion * float(blocked.fraction) + (blocked.normal as Vector3) * 0.08
 		if global_position.y < 0.02:
 			global_position.y = 0.02
+		if _clamp_flight_to_room:
+			global_position = clamp_to_room(global_position)
 		_finish_procedural_flight(blocked.normal)
 		return
 	global_position = desired

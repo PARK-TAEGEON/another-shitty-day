@@ -28,7 +28,7 @@ func _boot() -> Node:
 		await process_frame
 	return game
 
-func _shot(game: Node, boss_at: Vector3, impulse: Vector3, camera_at: Vector3, look_at: Vector3, file_name: String, want: Callable) -> void:
+func _shot(game: Node, boss_at: Vector3, impulse: Vector3, camera_at: Vector3, look_at: Vector3, file_name: String, want: Callable, eye_y: float = 1.7) -> void:
 	var boss: CharacterBody3D = game.world.opening_boss
 	boss._cancel_opening()
 	game.world.boss_lecture_finished = true
@@ -37,14 +37,14 @@ func _shot(game: Node, boss_at: Vector3, impulse: Vector3, camera_at: Vector3, l
 	var player: CharacterBody3D = game.player
 	player.set_process(false)
 	player.global_position = camera_at
-	player.camera.position.y = 1.7
+	player.camera.position.y = eye_y
 	for _i in range(3):
 		await physics_frame
 	boss.receive_hit(impulse, boss.global_position + Vector3.UP * 1.2, 28.0, "kick")
 	var saved := false
 	for frame in range(90):
 		player.global_position = camera_at
-		player.camera.position.y = 1.7
+		player.camera.position.y = eye_y
 		_look(player, look_at)
 		await process_frame
 		if frame >= 6 and frame <= 70 and frame % 2 == 0:
@@ -75,9 +75,15 @@ func run() -> void:
 	await process_frame
 	Engine.time_scale = 1.0
 	game = await _boot()
-	# Desk top is about y=1 at (4.15, 0, -5.5). Kick him south into the front edge.
-	await _shot(game, Vector3(4.15, 0.02, -3.4), Vector3(0, 2, -13), Vector3(1.7, 0.02, -4.7), Vector3(4.15, 1.2, -5.1), "kick-desk.png", func(pelvis: Vector3, frame: int) -> bool:
-		return pelvis.z < -4.55 and pelvis.y > 0.75 and frame > 6
-	)
+	# Keep coworkers out of the evidence frame. The desk front face is z=-4.85.
+	for npc in game.world.npcs:
+		if npc == game.world.opening_boss:
+			continue
+		npc.set_physics_process(false)
+		npc.set_process(false)
+		npc.global_position = Vector3(-12, 0.02, 12)
+	await _shot(game, Vector3(4.15, 0.02, -3.4), Vector3(0, 2, -13), Vector3(2.55, 0.02, -3.95), Vector3(4.25, 0.55, -4.85), "kick-desk.png", func(pelvis: Vector3, frame: int) -> bool:
+		return pelvis.z < -4.35 and frame > 8
+	, 1.15)
 	print("HIT_OBSTACLE_CAPTURE_OK")
 	quit(0)
