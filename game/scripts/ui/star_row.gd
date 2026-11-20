@@ -15,9 +15,21 @@ var _shake_ready: bool = false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	alignment = BoxContainer.ALIGNMENT_CENTER
 	add_theme_constant_override("separation", gap)
 	for index: int in range(5):
 		add_child(_make_star())
+	# Keep the row at the stars' own size. A parent panel must not be what
+	# centers them by stretching this box and leaving the stars on the left.
+	var row_size := Vector2(5.0 * star_px + 4.0 * float(gap), star_px)
+	custom_minimum_size = row_size
+	size = row_size
+	size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
+func set_rest_position(at: Vector2) -> void:
+	_shake_origin = at
+	_shake_ready = true
 
 func set_halves(next: int, animate: bool) -> void:
 	next = clampi(next, 0, 6)

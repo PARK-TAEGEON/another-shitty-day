@@ -62,28 +62,48 @@ func _hud(game, root: Control, theme) -> void:
 	badge.position = Vector2(16, 0)
 	badge.z_index = 2
 	block.add_child(badge)
+	# Final-HUD: 40px stars, 4px gaps, padding 12px x 8px, 24px from the right edge.
+	var star_px := 40.0
+	var star_gap := 4
+	var pad_x := 12
+	var pad_y := 8
+	var row_w := 5.0 * star_px + 4.0 * float(star_gap)
+	var pill_w := row_w + float(pad_x) * 2.0
+	var pill_h := star_px + float(pad_y) * 2.0
 	var pill := PanelContainer.new()
 	pill.anchor_left = 1.0
 	pill.anchor_right = 1.0
 	pill.anchor_top = 0.0
-	pill.offset_left = -288
-	pill.offset_right = -24
-	pill.offset_top = 26
-	pill.offset_bottom = 82
+	pill.offset_left = -24.0 - pill_w
+	pill.offset_right = -24.0
+	pill.offset_top = 26.0
+	pill.offset_bottom = 26.0 + pill_h
 	pill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var pill_box := StyleBoxFlat.new()
 	pill_box.bg_color = Color(theme.INK, 0.55)
 	pill_box.set_corner_radius_all(28)
-	pill_box.content_margin_left = 12
-	pill_box.content_margin_right = 12
-	pill_box.content_margin_top = 8
-	pill_box.content_margin_bottom = 8
+	pill_box.content_margin_left = pad_x
+	pill_box.content_margin_right = pad_x
+	pill_box.content_margin_top = pad_y
+	pill_box.content_margin_bottom = pad_y
 	pill.add_theme_stylebox_override("panel", pill_box)
 	hud.add_child(pill)
+	# The panel fills its one child. Keep the stars in a plain control so the
+	# row can sit in the middle, and so the stamp shake does not move the pill.
+	var holder := Control.new()
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pill.add_child(holder)
 	var stars = StarRowScript.new()
 	stars.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pill.add_child(stars)
-	stars.shake_host = pill
+	holder.add_child(stars)
+	stars.shake_host = stars
+	var center_stars := func() -> void:
+		var row := stars as Control
+		var at := (holder.size - row.size) * 0.5
+		row.position = at
+		row.call("set_rest_position", at)
+	holder.resized.connect(center_stars)
+	center_stars.call()
 	game._star_row = stars
 	var dot := Panel.new()
 	dot.anchor_left = 0.5
