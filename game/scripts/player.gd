@@ -93,8 +93,13 @@ func _ready() -> void:
 	_hit_presenter.name = "HitPresenter"
 	add_child(_hit_presenter)
 
+func _hit_tune_enabled() -> bool:
+	return OS.is_debug_build()
+
 func _register_inputs() -> void:
-	var keys: Dictionary = {"move_forward": KEY_W, "move_back": KEY_S, "move_left": KEY_A, "move_right": KEY_D, "sprint": KEY_SHIFT, "pickup": KEY_E, "kick": KEY_Q, "slam": KEY_F, "restart": KEY_R, "hit_tune": KEY_F8}
+	var keys: Dictionary = {"move_forward": KEY_W, "move_back": KEY_S, "move_left": KEY_A, "move_right": KEY_D, "sprint": KEY_SHIFT, "pickup": KEY_E, "kick": KEY_Q, "slam": KEY_F, "restart": KEY_R}
+	if _hit_tune_enabled():
+		keys["hit_tune"] = KEY_F8
 	for action: String in keys:
 		if not InputMap.has_action(action):
 			InputMap.add_action(action)
@@ -149,7 +154,7 @@ func _mesh(parent: Node3D, size: Vector3, at: Vector3, tint: Color) -> void:
 	parent.add_child(visual)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("hit_tune"):
+	if _hit_tune_enabled() and InputMap.has_action("hit_tune") and event.is_action_pressed("hit_tune"):
 		_toggle_hit_tune()
 		return
 	if not enabled:
@@ -365,6 +370,8 @@ func _commit_hit_later(kind: String, serial: int) -> void:
 		action_performed.emit("swing", camera.global_position)
 
 func _toggle_hit_tune() -> void:
+	if not _hit_tune_enabled():
+		return
 	if is_instance_valid(_hit_tune):
 		_hit_tune.queue_free()
 		_hit_tune = null
