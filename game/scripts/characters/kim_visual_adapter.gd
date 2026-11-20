@@ -138,8 +138,8 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 		capsule.height = maxf(length, radius * 2.0)
 		shape.shape = capsule
 	body.add_child(shape)
-	if bone_name in ["Pelvis","Chest","Head"]:
-		PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(),4)
+	# Every limb can report the landing thud. Bounce stays on the torso only.
+	PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(), 4)
 	bodies.append(body)
 
 func _build_physics() -> void:
@@ -294,10 +294,11 @@ func apply_hit(impulse: Vector3, point: Vector3) -> void:
 	physics_impulses += 1
 	if launching and not _boost_done:
 		_boost_done = true
-		_boost_impulse = impulse
-		_boost_wait = HitFeelScript.load_settings().boost_delay
-		_boost_armed = true
 		launching = false
+		_boost_impulse = impulse
+		# Wait past kim_rig's two-frame pose check, and past the first table contact.
+		_boost_wait = maxf(HitFeelScript.load_settings().boost_delay, 0.10)
+		_boost_armed = true
 
 func _apply_torso_boost(impulse: Vector3) -> void:
 	var feel: Resource = HitFeelScript.load_settings()
@@ -306,9 +307,9 @@ func _apply_torso_boost(impulse: Vector3) -> void:
 		horizontal = Vector3(impulse.x, 0.0, 1.0)
 	horizontal = horizontal.normalized()
 	var delta_v: Vector3 = horizontal * feel.launch_speed + Vector3.UP * feel.launch_up
+	# Same velocity on every bone so the feet leave with the torso instead of pinning him.
 	for body: PhysicalBone3D in bodies:
-		if body.bone_name in ["Pelvis", "Chest", "Head"]:
-			body.apply_central_impulse(delta_v * body.mass)
+		body.linear_velocity = delta_v
 
 func _set_joints_relaxed(relaxed: bool) -> void:
 	var scale: float = HitFeelScript.load_settings().fly_joint_scale if relaxed else 1.0

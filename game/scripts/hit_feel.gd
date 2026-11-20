@@ -15,9 +15,9 @@ static var _cached: Resource
 @export_group("Launch")
 ## Whole-torso boost, applied shortly after the ragdoll takeover so the
 ## existing two-frame pose check still sees the original handover.
-@export var boost_delay: float = 0.08
-@export var launch_speed: float = 6.2
-@export var launch_up: float = 3.0
+@export var boost_delay: float = 0.10
+@export var launch_speed: float = 8.0
+@export var launch_up: float = 4.2
 @export var max_body_speed: float = 16.0
 @export var fly_joint_scale: float = 1.28
 @export var procedural_launch_speed: float = 5.6

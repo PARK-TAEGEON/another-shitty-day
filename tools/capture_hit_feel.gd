@@ -20,7 +20,7 @@ func _aim(player: CharacterBody3D, at: Vector3) -> void:
 
 func _wall(parent: Node) -> void:
 	var body := StaticBody3D.new()
-	body.position = Vector3(0.0, 1.15, 1.55)
+	body.position = Vector3(0.0, 1.15, -0.6)
 	body.collision_layer = 1
 	body.collision_mask = 0
 	parent.add_child(body)
@@ -54,12 +54,14 @@ func _place(game: Node) -> CharacterBody3D:
 	boss.velocity = Vector3.ZERO
 	game.player.global_position = Vector3(0.0, 0.02, 5.15)
 	game.player.velocity = Vector3.ZERO
-	# The seated capsule is shorter than the mesh. Step in until the real ray hits it.
-	for _step in range(8):
+	# Physics bodies keep their old pose until a few ticks. Step in after that sync.
+	for _step in range(10):
+		for _frame in range(2):
+			await physics_frame
 		_aim(game.player, boss.global_position + Vector3.UP * 1.15)
 		if _hits_boss(game.player, boss, 1.9):
 			break
-		game.player.global_position.z -= 0.12
+		game.player.global_position.z -= 0.1
 	print("HIT_CAPTURE_RANGE ", game.player.global_position, " ", _hits_boss(game.player, boss, 1.9))
 	return boss
 
@@ -87,15 +89,22 @@ func run() -> void:
 	var frame_dir := "/tmp/hit-001-frames"
 	DirAccess.make_dir_recursive_absolute(frame_dir)
 	var game: Node = await _boot()
-	var boss: CharacterBody3D = _place(game)
+	var boss: CharacterBody3D = await _place(game)
 	var stand: Vector3 = game.player.global_position
 	var punch_line := {"text": ""}
 	boss.said.connect(func(text: String) -> void: punch_line.text = text)
 	game.player.perform_action("punch")
-	for _frame in range(40):
+	var punch_frames := 0
+	while punch_frames < 50 and str(punch_line.text).find("꾸엑") < 0:
 		game.player.global_position = stand
 		game.player.velocity = Vector3.ZERO
 		_aim(game.player, boss.global_position + Vector3.UP * 1.15)
+		await process_frame
+		punch_frames += 1
+	for _extra in range(8):
+		game.player.global_position = stand
+		game.player.velocity = Vector3.ZERO
+		_aim(game.player, boss.global_position + Vector3.UP * 1.2)
 		await process_frame
 	await _save(directory.path_join("punch-stagger.png"))
 	var punch_state: String = str(boss.state)
@@ -104,7 +113,7 @@ func run() -> void:
 	await process_frame
 	Engine.time_scale = 1.0
 	game = await _boot()
-	boss = _place(game)
+	boss = await _place(game)
 	stand = game.player.global_position
 	boss.set_physics_process(false)
 	var seen_contact: int = 0
@@ -112,18 +121,20 @@ func run() -> void:
 	var fly_saved := false
 	var impact_saved := false
 	for frame in range(150):
-		game.player.global_position = stand
+		var launched: bool = boss.state == "down"
+		game.player.global_position = stand + (Vector3(0.0, 0.0, 1.45) if launched else Vector3.ZERO)
 		game.player.velocity = Vector3.ZERO
-		var focus: Vector3 = boss.global_position + Vector3.UP * 1.1
-		if boss.state == "down" and is_instance_valid(boss._rig_adapter) and boss._rig_adapter.ragdoll_active:
-			focus = boss._rig_adapter.pelvis_position() + Vector3.UP * 0.35
-		_aim(game.player, focus)
+		if launched:
+			_aim(game.player, Vector3(0.0, 1.05, 2.2))
+		else:
+			_aim(game.player, boss.global_position + Vector3.UP * 1.15)
 		await process_frame
 		if frame >= 10 and frame <= 78:
 			await _save(frame_dir.path_join("kick-%03d.png" % frame))
-		if not fly_saved and boss.state == "down" and is_instance_valid(boss._rig_adapter) and frame >= 16:
+		if not fly_saved and boss.state == "down" and is_instance_valid(boss._rig_adapter) and frame >= 8:
+			var pelvis: Vector3 = boss._rig_adapter.pelvis_position()
 			var speed: float = boss._rig_adapter.bodies[0].linear_velocity.length()
-			if speed > 2.0:
+			if speed > 1.4 or pelvis.y > 0.85 or pelvis.distance_to(Vector3(0.0, pelvis.y, 4.0)) > 0.7:
 				await _save(directory.path_join("kick-fly.png"))
 				fly_saved = true
 		var contacts: int = boss._rig_adapter.contact_sound_count if is_instance_valid(boss._rig_adapter) else 0
