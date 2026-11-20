@@ -13,11 +13,14 @@ static var _cached: Resource
 @export var kick_lift: float = 2.0
 
 @export_group("Launch")
-## Whole-torso boost, applied shortly after the ragdoll takeover so the
-## existing two-frame pose check still sees the original handover.
+## Scripted arc. Real rigid-body speed stays under kim_rig's 30 cap; this
+## window only moves the posed body and keeps simulated velocity at zero.
 @export var boost_delay: float = 0.10
-@export var launch_speed: float = 8.0
-@export var launch_up: float = 4.2
+@export var flight_distance: float = 4.5
+@export var flight_peak: float = 1.45
+@export var flight_time: float = 0.70
+@export var launch_speed: float = 3.5
+@export var launch_up: float = 0.0
 @export var max_body_speed: float = 16.0
 @export var fly_joint_scale: float = 1.28
 @export var procedural_launch_speed: float = 5.6

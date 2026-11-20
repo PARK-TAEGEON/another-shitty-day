@@ -20,7 +20,7 @@ func _aim(player: CharacterBody3D, at: Vector3) -> void:
 
 func _wall(parent: Node) -> void:
 	var body := StaticBody3D.new()
-	body.position = Vector3(0.0, 1.15, -0.6)
+	body.position = Vector3(0.0, 1.2, -0.35)
 	body.collision_layer = 1
 	body.collision_mask = 0
 	parent.add_child(body)
@@ -120,28 +120,36 @@ func run() -> void:
 	game.player.perform_action("kick")
 	var fly_saved := false
 	var impact_saved := false
-	for frame in range(150):
+	var launch_base_y: float = -1.0
+	var best_rise: float = 0.0
+	for frame in range(180):
 		var launched: bool = boss.state == "down"
-		game.player.global_position = stand + (Vector3(0.0, 0.0, 1.45) if launched else Vector3.ZERO)
 		game.player.velocity = Vector3.ZERO
 		if launched:
-			_aim(game.player, Vector3(0.0, 1.05, 2.2))
+			game.player.set_process(false)
+			game.player.global_position = Vector3(5.4, 0.02, 3.2)
+			game.player.camera.position.y = 2.55
+			_aim(game.player, Vector3(0.0, 1.55, 2.0))
 		else:
+			game.player.global_position = stand
 			_aim(game.player, boss.global_position + Vector3.UP * 1.15)
 		await process_frame
-		if frame >= 10 and frame <= 78:
+		if frame >= 8 and frame <= 140:
 			await _save(frame_dir.path_join("kick-%03d.png" % frame))
-		if not fly_saved and boss.state == "down" and is_instance_valid(boss._rig_adapter) and frame >= 8:
+		if boss.state == "down" and is_instance_valid(boss._rig_adapter) and boss._rig_adapter.bodies.size() > 0:
 			var pelvis: Vector3 = boss._rig_adapter.pelvis_position()
-			var speed: float = boss._rig_adapter.bodies[0].linear_velocity.length()
-			if speed > 1.4 or pelvis.y > 0.85 or pelvis.distance_to(Vector3(0.0, pelvis.y, 4.0)) > 0.7:
+			if launch_base_y < 0.0:
+				launch_base_y = pelvis.y
+			var rise: float = pelvis.y - launch_base_y
+			if rise > best_rise and rise > 1.0:
+				best_rise = rise
 				await _save(directory.path_join("kick-fly.png"))
 				fly_saved = true
-		var contacts: int = boss._rig_adapter.contact_sound_count if is_instance_valid(boss._rig_adapter) else 0
-		if not impact_saved and contacts > seen_contact:
-			await _save(directory.path_join("kick-impact.png"))
-			impact_saved = true
-			seen_contact = contacts
+			var contacts: int = boss._rig_adapter.contact_sound_count
+			if not impact_saved and fly_saved and rise < best_rise - 0.35 and contacts > seen_contact:
+				await _save(directory.path_join("kick-impact.png"))
+				impact_saved = true
+				seen_contact = contacts
 	var report: Dictionary = {
 		"punch_state": punch_state,
 		"punch_line": punch_line.text,

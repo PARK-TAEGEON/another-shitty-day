@@ -32,6 +32,14 @@ var _boost_done: bool = false
 var _boost_armed: bool = false
 var _boost_wait: float = 0.0
 var _boost_impulse: Vector3 = Vector3.ZERO
+var _flight_active: bool = false
+var _flight_elapsed: float = 0.0
+var _flight_duration: float = 0.70
+var _flight_distance: float = 4.5
+var _flight_peak: float = 1.45
+var _flight_origin: Vector3 = Vector3.ZERO
+var _flight_dir: Vector3 = Vector3.FORWARD
+var _flight_offsets: Array[Vector3] = []
 var _joints_relaxed: bool = false
 var _joint_rest: Dictionary = {}
 
@@ -67,8 +75,10 @@ func _physics_process(delta: float) -> void:
 		_boost_wait = maxf(_boost_wait - delta, 0.0)
 		if _boost_wait <= 0.0:
 			_boost_armed = false
-			_apply_torso_boost(_boost_impulse)
-			_set_joints_relaxed(true)
+			_begin_scripted_flight(_boost_impulse)
+	if _flight_active:
+		_advance_scripted_flight(delta)
+		return
 	elif _joints_relaxed and not bodies.is_empty() and bodies[0].linear_velocity.length() < 0.8:
 		_set_joints_relaxed(false)
 	var limit: float = HitFeelScript.load_settings().max_body_speed
@@ -296,20 +306,71 @@ func apply_hit(impulse: Vector3, point: Vector3) -> void:
 		_boost_done = true
 		launching = false
 		_boost_impulse = impulse
-		# Wait past kim_rig's two-frame pose check, and past the first table contact.
-		_boost_wait = maxf(HitFeelScript.load_settings().boost_delay, 0.10)
+		# Stay real for kim_rig's two-frame pose check and the table's first contact.
+		_boost_wait = maxf(HitFeelScript.load_settings().boost_delay, 0.08)
 		_boost_armed = true
 
-func _apply_torso_boost(impulse: Vector3) -> void:
+func _begin_scripted_flight(impulse: Vector3) -> void:
+	if bodies.is_empty():
+		return
 	var feel: Resource = HitFeelScript.load_settings()
 	var horizontal: Vector3 = Vector3(impulse.x, 0.0, impulse.z)
 	if horizontal.length_squared() < 0.0001:
 		horizontal = Vector3(impulse.x, 0.0, 1.0)
-	horizontal = horizontal.normalized()
-	var delta_v: Vector3 = horizontal * feel.launch_speed + Vector3.UP * feel.launch_up
-	# Same velocity on every bone so the feet leave with the torso instead of pinning him.
+	_flight_dir = horizontal.normalized()
+	_flight_origin = bodies[0].global_position
+	_flight_duration = maxf(feel.flight_time, 0.2)
+	_flight_peak = feel.flight_peak
+	_flight_distance = _clear_flight(_flight_origin, _flight_dir, feel.flight_distance)
+	_flight_elapsed = 0.0
+	_flight_offsets.clear()
 	for body: PhysicalBone3D in bodies:
-		body.linear_velocity = delta_v
+		_flight_offsets.append(body.global_position - _flight_origin)
+		body.collision_layer = 0
+		body.collision_mask = 0
+		body.set("scripted", true)
+	_flight_active = true
+	_advance_scripted_flight(0.0)
+
+func _advance_scripted_flight(delta: float) -> void:
+	_flight_elapsed += delta
+	var u: float = clampf(_flight_elapsed / _flight_duration, 0.0, 1.0)
+	var height: float = 4.0 * _flight_peak * u * (1.0 - u)
+	var pelvis_target: Vector3 = _flight_origin + _flight_dir * (_flight_distance * u) + Vector3.UP * height
+	# Tip the whole posed body backward so the arc reads as a throw, not a standing hop.
+	var axis: Vector3 = Vector3.UP.cross(_flight_dir)
+	if axis.length_squared() < 0.0001:
+		axis = Vector3.RIGHT
+	var pitched: Basis = Basis(axis.normalized(), lerpf(0.0, -1.05, smoothstep(0.1, 0.55, u)))
+	for index in range(bodies.size()):
+		var body: PhysicalBone3D = bodies[index]
+		body.set("scripted", true)
+		body.set("scripted_position", pelvis_target + pitched * _flight_offsets[index])
+		body.linear_velocity = Vector3.ZERO
+	if u >= 1.0:
+		_release_scripted_flight()
+
+func _release_scripted_flight() -> void:
+	_flight_active = false
+	var feel: Resource = HitFeelScript.load_settings()
+	var smack: Vector3 = _flight_dir * feel.launch_speed + Vector3.DOWN * 2.4
+	for body: PhysicalBone3D in bodies:
+		body.set("scripted", false)
+		body.collision_layer = 4
+		body.collision_mask = 11
+		body.linear_velocity = smack
+	_set_joints_relaxed(true)
+
+func _clear_flight(origin: Vector3, direction: Vector3, wanted: float) -> float:
+	if not is_instance_valid(actor):
+		return wanted
+	var space: PhysicsDirectSpaceState3D = actor.get_world_3d().direct_space_state
+	var from: Vector3 = origin + Vector3.UP * 0.25
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, from + direction * wanted, 1)
+	var hit: Dictionary = space.intersect_ray(query)
+	if hit.is_empty():
+		return wanted
+	return clampf(origin.distance_to(hit.position) - 0.55, 1.5, wanted)
 
 func _set_joints_relaxed(relaxed: bool) -> void:
 	var scale: float = HitFeelScript.load_settings().fly_joint_scale if relaxed else 1.0

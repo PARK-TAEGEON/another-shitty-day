@@ -48,6 +48,9 @@ func run() -> void:
 		check(int(bill.care) == 300000 and int(bill.work) == 200000 and int(bill.down) == 1, "knockdown ledger changed")
 		if kick._rig_adapter != null:
 			check(kick._rig_adapter.ragdoll_active, "kick did not hand the hybrid rig to physics")
+			var kicked_arc: Dictionary = await _sample_flight(kick, true)
+			check(float(kicked_arc.far) >= 3.0, "kick did not travel 3m, got %s" % str(kicked_arc.far))
+			check(float(kicked_arc.rise) >= 1.0, "kick did not rise 1m, got %s" % str(kicked_arc.rise))
 	else:
 		check(is_equal_approx(kick.health, 12.0) and int(bill.care) == 0 and int(bill.down) == 0, "comparison kick changed health or billed a knockdown")
 	var combo := _actor(stage, "guard", false)
@@ -55,6 +58,9 @@ func run() -> void:
 	check(combo.state != "down" and is_equal_approx(combo.health, 28.0), "guard punch should only stagger")
 	combo.receive_hit(Vector3(7, 2, 0), combo.global_position + Vector3(0, 1.3, 0), 20.0, "punch")
 	check(combo.state == "down" and is_equal_approx(combo.health, 0.0), "second punch inside the window did not launch the guard")
+	var combo_arc: Dictionary = await _sample_flight(combo, false)
+	check(float(combo_arc.far) >= 3.0, "second hit did not travel 3m, got %s" % str(combo_arc.far))
+	check(float(combo_arc.rise) >= 1.0, "second hit did not rise 1m, got %s" % str(combo_arc.rise))
 	var coworker := _actor(stage, "observer", false)
 	var coworker_lines: Array[String] = []
 	coworker.said.connect(func(text: String) -> void: coworker_lines.append(text))
@@ -63,6 +69,9 @@ func run() -> void:
 	var kicked := _actor(stage, "observer", false)
 	kicked.receive_hit(Vector3(13, 2, 0), kicked.global_position + Vector3(0, 1.3, 0), 28.0, "kick")
 	check(kicked.state == "down", "coworker kick did not launch")
+	var coworker_arc: Dictionary = await _sample_flight(kicked, false)
+	check(float(coworker_arc.far) >= 3.0, "coworker kick did not travel 3m, got %s" % str(coworker_arc.far))
+	check(float(coworker_arc.rise) >= 1.0, "coworker kick did not rise 1m, got %s" % str(coworker_arc.rise))
 	stage.queue_free()
 	await step(2)
 	var game: Node = MAIN.instantiate()
@@ -97,6 +106,21 @@ func run() -> void:
 	else:
 		print("HIT_FEEL_REGRESSION_FAILED: ", failures)
 	quit(0 if failures.is_empty() else 1)
+
+func _sample_flight(actor: CharacterBody3D, use_pelvis: bool) -> Dictionary:
+	var start: Vector3 = actor.global_position
+	if use_pelvis and actor._rig_adapter != null:
+		start = actor._rig_adapter.pelvis_position()
+	var peak: float = start.y
+	var far: float = 0.0
+	for _i in range(80):
+		await physics_frame
+		var now: Vector3 = actor.global_position
+		if use_pelvis and actor._rig_adapter != null and actor._rig_adapter.bodies.size() > 0:
+			now = actor._rig_adapter.pelvis_position()
+		peak = maxf(peak, now.y)
+		far = maxf(far, Vector2(now.x - start.x, now.z - start.z).length())
+	return {"far": far, "rise": peak - start.y}
 
 func _actor(stage: Node, role_name: String, kim: bool) -> CharacterBody3D:
 	var actor = NPC.new()

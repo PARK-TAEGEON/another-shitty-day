@@ -6,8 +6,19 @@ var record_contacts: bool = false
 var contact_ids: Dictionary = {}
 var _was_touching: bool = false
 var _previous_speed: float = 0.0
+var scripted: bool = false
+var scripted_position: Vector3 = Vector3.ZERO
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	if scripted:
+		var posed: Transform3D = state.transform
+		posed.origin = scripted_position
+		state.transform = posed
+		state.linear_velocity = Vector3.ZERO
+		state.angular_velocity = Vector3.ZERO
+		_was_touching = false
+		_previous_speed = 0.0
+		return
 	if record_contacts:
 		for i in range(state.get_contact_count()):
 			contact_ids[state.get_contact_collider_id(i)] = true

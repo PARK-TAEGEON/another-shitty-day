@@ -141,6 +141,14 @@ var _last_player_strike_msec: int = -1000000
 var _launch_time: float = 0.0
 var _launch_airborne: bool = false
 var _launch_bounced: bool = false
+var _flight_active: bool = false
+var _flight_elapsed: float = 0.0
+var _flight_origin: Vector3 = Vector3.ZERO
+var _flight_dir: Vector3 = Vector3.FORWARD
+var _flight_distance: float = 4.5
+var _flight_peak: float = 1.45
+var _flight_duration: float = 0.70
+var _flight_saved_mask: int = 15
 var impact_thuds: int = 0
 var _thud_audio: AudioStreamPlayer3D
 
@@ -1060,14 +1068,43 @@ func _begin_procedural_launch(impulse: Vector3) -> void:
 	_collision.set_deferred("position", Vector3(-_fall_side * 0.72, 0.24, 0))
 	var feel: Resource = _hit_feel()
 	var horizontal: Vector3 = Vector3(impulse.x, 0.0, impulse.z)
-	if horizontal.length_squared() > 0.0001:
-		horizontal = horizontal.normalized() * feel.procedural_launch_speed
-		velocity.x = horizontal.x
-		velocity.z = horizontal.z
-	velocity.y = feel.procedural_launch_up
-	_launch_time = feel.procedural_slide
-	_launch_airborne = false
-	_launch_bounced = false
+	if horizontal.length_squared() < 0.0001:
+		horizontal = -global_basis.z
+	_flight_dir = horizontal.normalized()
+	_flight_origin = global_position
+	_flight_peak = feel.flight_peak
+	_flight_duration = maxf(feel.flight_time, 0.2)
+	_flight_distance = _flight_clearance(global_position, _flight_dir, feel.flight_distance)
+	_flight_elapsed = 0.0
+	_flight_active = true
+	_flight_saved_mask = collision_mask
+	collision_mask = 0
+	velocity = Vector3.ZERO
+
+func _flight_clearance(origin: Vector3, direction: Vector3, wanted: float) -> float:
+	var space: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var from: Vector3 = origin + Vector3.UP * 1.1
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, from + direction * wanted, 1)
+	var hit: Dictionary = space.intersect_ray(query)
+	if hit.is_empty():
+		return wanted
+	return clampf(origin.distance_to(hit.position) - 0.55, 1.5, wanted)
+
+func _advance_procedural_flight(delta: float) -> void:
+	_flight_elapsed += delta
+	var u: float = clampf(_flight_elapsed / _flight_duration, 0.0, 1.0)
+	var height: float = 4.0 * _flight_peak * u * (1.0 - u)
+	global_position = _flight_origin + _flight_dir * (_flight_distance * u) + Vector3.UP * height
+	velocity = Vector3.ZERO
+	_down_rotation = _fall_side * lerpf(0.2, PI * 0.42, smoothstep(0.55, 1.0, u))
+	_visual.rotation.z = _down_rotation
+	_visual.position.y = absf(sin(_down_rotation)) * 0.22
+	if u < 1.0:
+		return
+	_flight_active = false
+	collision_mask = _flight_saved_mask if _flight_saved_mask != 0 else 15
+	velocity = _flight_dir * _hit_feel().launch_speed + Vector3.DOWN * 1.8
+	_thud(6.0)
 
 func _thud(speed: float) -> void:
 	impact_thuds += 1
@@ -1597,10 +1634,13 @@ func _physics_process(delta: float) -> void:
 	if state == "down":
 		stop_boss_lecture_gesture()
 		_lecture_blend = 0.0
-		_down_rotation = move_toward(_down_rotation, _fall_side * PI * 0.5, delta * 7.5)
-		_visual.rotation.z = _down_rotation
-		_visual.position.y = absf(sin(_down_rotation)) * 0.22
-		if _launch_time > 0.0:
+		if _flight_active:
+			_advance_procedural_flight(delta)
+		else:
+			_down_rotation = move_toward(_down_rotation, _fall_side * PI * 0.5, delta * 7.5)
+			_visual.rotation.z = _down_rotation
+			_visual.position.y = absf(sin(_down_rotation)) * 0.22
+		if not _flight_active and _launch_time > 0.0:
 			_launch_time = maxf(_launch_time - delta, 0.0)
 			if is_on_floor():
 				if _launch_airborne and not _launch_bounced:
