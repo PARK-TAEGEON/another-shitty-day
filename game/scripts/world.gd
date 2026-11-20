@@ -10,6 +10,23 @@ signal player_hit(damage: float)
 signal damage_assessed(target_id: String, category: String, total: int, label: String)
 signal incident_event(kind: String, weight: float, at: Vector3)
 signal ambient_dialogue(speaker: String, text: String, duration: float, source: Node3D)
+signal scenario_event(event: Dictionary)
+signal scenario_dialogue(speaker: String, text: String, duration: float, source: Node3D, priority: int)
+signal responder_arrived(actor: Node3D)
+signal world_resetting
+const EventStream = preload("res://scripts/scenario/event_stream.gd")
+const CeoScript = preload("res://scripts/scenario/ceo_npc.gd")
+const PoliceScript = preload("res://scripts/scenario/police_npc.gd")
+var events: RefCounted = EventStream.new()
+var ceo: CharacterBody3D
+var ceo_hold: Node
+var scenario_time: float = 0.0
+var _contact: Dictionary = {}
+var _last_cause: Dictionary = {}
+var _scenario_line: Dictionary = {}
+var _pending_reactions: Dictionary = {}
+var _scenario_spoken: Dictionary = {}
+var scenario_line_can_start: Callable
 
 const PROP_SCRIPT: Script = preload("res://scripts/prop.gd")
 const NPC_SCRIPT: Script = preload("res://scripts/office_npc.gd")
@@ -64,14 +81,16 @@ var _boss_lecture_gap: float = 0.0
 var _lecture_activity_serial: int = 0
 const NAV_CELL: float = 0.2
 const NAV_CLEARANCE: float = 0.38
-const NAV_REGION: Rect2i = Rect2i(-40, -50, 81, 101)
+const NAV_REGION: Rect2i = Rect2i(-40, -50, 122, 101)
 
 func _ready() -> void:
+	events.reset()
 	_furniture = Node3D.new()
 	_furniture.name = "OfficeSet"
 	add_child(_furniture)
 	_build_room()
 	_build_furniture()
+	_build_ceo_room()
 	_build_navigation()
 	_build_people()
 
@@ -287,7 +306,10 @@ func _build_room() -> void:
 			_box(Vector3(1.985, 0.008, 1.985), Vector3(x * 2 + 1, -0.01, z * 2 + 1), color)
 	_box(Vector3(2.25, 0.018, 5.5), Vector3(0, 0.005, 5.1), Color("acb8a6"))
 	_box(Vector3(0.25, 4.3, 18), Vector3(-8.12, 2.12, -1), CREAM, true)
-	_box(Vector3(0.25, 4.3, 18), Vector3(8.12, 2.12, -1), CREAM, true)
+	# Wide east opening connects the temporary CEO room without moving the office.
+	_box(Vector3(0.25, 4.3, 7.8), Vector3(8.12, 2.12, -6.1), CREAM, true)
+	_box(Vector3(0.25, 4.3, 5.8), Vector3(8.12, 2.12, 5.1), CREAM, true)
+	_box(Vector3(0.25, 0.9, 4.4), Vector3(8.12, 3.9, 0), CREAM, true)
 	_box(Vector3(16.4, 4.3, 0.25), Vector3(0, 2.12, -10.12), CREAM, true)
 	_box(Vector3(6.5, 4.3, 0.25), Vector3(-4.75, 2.12, 8.12), CREAM, true)
 	_box(Vector3(6.5, 4.3, 0.25), Vector3(4.75, 2.12, 8.12), CREAM, true)
@@ -351,6 +373,8 @@ func _prop(type_value: String, name_value: String, at: Vector3, color: Color = O
 	prop.connect("noise", _on_noise)
 	prop.connect("damage_assessed", _on_damage_assessed.bind(prop))
 	prop.connect("incident", _on_incident)
+	prop.connect("contact_started", begin_prop_contact)
+	prop.connect("contact_finished", end_prop_contact)
 	props.append(prop)
 	return prop
 
@@ -472,7 +496,7 @@ func _build_office_zones() -> void:
 	_label("잠깐만 부탁해요", Vector3(-5.8, 2.06, 7.80), 0.0031, TEAL, PI)
 
 func _npc(name_value: String, role_value: String, at: Vector3, color: Color, yaw: float = 0.0, opening_role: String = "", profile: Dictionary = {}) -> Node3D:
-	var npc: CharacterBody3D = NPC_SCRIPT.new() as CharacterBody3D
+	var npc: CharacterBody3D = (CeoScript if role_value == "ceo" else (PoliceScript if role_value == "police" else NPC_SCRIPT)).new() as CharacterBody3D
 	npc.set("display_name", name_value)
 	npc.set("role", role_value)
 	npc.set("opening_role", opening_role)
@@ -495,6 +519,9 @@ func _npc(name_value: String, role_value: String, at: Vector3, color: Color, yaw
 	npc.connect("noise", _on_noise)
 	npc.connect("damage_assessed", _on_damage_assessed.bind(npc))
 	npc.connect("incident", _on_incident)
+	if role_value == "police":
+		npc.set("hold_provider", Callable(self, "_hold_relation"))
+		npc.connect("hold_observed", _on_police_observed)
 	npcs.append(npc)
 	return npc
 
@@ -508,8 +535,24 @@ func _build_people() -> void:
 	_npc("타 부서 직원 · 회의실", "observer", Vector3(4.45, 0.06, 3.75), Color("897887"), PI, "", {"affiliation": "other", "personality": "spectator", "work_activity": "papers", "reaction_line": "어… 저쪽 무슨 일이야?"})
 
 func slam_desk(origin: Vector3, strength: float = 1.0) -> bool:
+	if origin.distance_to(Vector3(12.7, 1.0, -4.2)) < 2.15:
+		var object: Node3D
+		for item: Node3D in props:
+			if is_instance_valid(item) and item.get("display_name") == "대표 기념패":
+				object = item
+				break
+		if not is_instance_valid(object):
+			return false
+		begin_player_contact("slam", object)
+		object.receive_hit(Vector3.UP * 2.0, object.global_position, 8.0)
+		incident_event.emit("DESK_SLAM", 0.75, object.global_position)
+		_disturb(object.global_position, 1.0)
+		end_player_contact("slam", object)
+		return true
 	if origin.distance_to(desk_position) > 2.15:
 		return false
+	var desk_target: Node3D = props[0]
+	begin_player_contact("slam", desk_target)
 	for prop: Node3D in props:
 		if not is_instance_valid(prop) or bool(prop.get("held")):
 			continue
@@ -530,6 +573,7 @@ func slam_desk(origin: Vector3, strength: float = 1.0) -> bool:
 		impact_event.emit("DESK SLAM", 75, desk_position)
 	incident_event.emit("DESK_SLAM", 0.75, desk_position)
 	_disturb(desk_position, 1.0)
+	end_player_contact("slam", desk_target)
 	return true
 
 func _actor_available(actor: Node3D) -> bool:
@@ -551,6 +595,7 @@ func _start_opening_scene() -> void:
 	if _actor_available(opening_coworker):
 		opening_coworker.call("interrupt_work")
 		opening_coworker.call("opening_cue", "startle")
+		record_scenario_fact(_contact, "npc_reaction", opening_coworker)
 	if _actor_available(opening_boss):
 		opening_boss.call("opening_cue", "listen")
 
@@ -681,10 +726,14 @@ func _disturb(at: Vector3, strength: float) -> void:
 		if obscured and distance > radius * 0.8:
 			continue
 		npc.call("react", at, strength * (0.75 if obscured else 1.0))
+		if not _contact.is_empty() and bool(npc.get("_reaction_pending")):
+			_pending_reactions[npc.get_instance_id()] = {"actor": npc, "origin": _contact.duplicate(true), "expires": scenario_time + 1.5}
 
 func _on_damage_assessed(category: String, total: int, label_text: String, source: Node3D) -> void:
 	if is_instance_valid(source):
 		damage_assessed.emit(str(source.get_instance_id()), category, total, label_text)
+		if category == "work" and not _contact.is_empty():
+			record_scenario_fact(_contact, "work_interrupted", source)
 
 func _on_incident(kind: String, weight: float, at: Vector3) -> void:
 	incident_event.emit(kind, weight, at)
@@ -699,6 +748,7 @@ func _on_noise(at: Vector3, strength: float) -> void:
 		_disturb(at, strength)
 
 func _on_said(text_value: String, source: Node3D) -> void:
+	_record_applied_reaction(source)
 	# The accepted opening has a separate priority channel; drop stale background lines.
 	if opening_active or boss_lecture_active or not _actor_living(source):
 		return
@@ -706,6 +756,8 @@ func _on_said(text_value: String, source: Node3D) -> void:
 	if "|" in words:
 		words = words.substr(words.find("|") + 1).strip_edges()
 	ambient_dialogue.emit(str(source.get("display_name")), words, 2.8, source)
+	if source.get("affiliation") == "security" and not _last_cause.is_empty():
+		record_scenario_fact(_last_cause, "guard_warning" if source.get("role") == "guard" else "responder_warning", source)
 
 func _advance_work_dialogue(delta: float) -> void:
 	if _disturbed or not is_instance_valid(player_target) or not bool(player_target.get("enabled")):
@@ -750,12 +802,26 @@ func escalate(level: int) -> void:
 		var police: Node3D = _npc("출동 경찰", "police", Vector3(0.6, 0.08, 7.4), Color("354f70"), PI)
 		if is_instance_valid(police):
 			damage_assessed.emit("dispatch:police", "response", 500000, "경찰 출동 · 사건 처리")
+			record_scenario_fact(_last_cause, "police_arrived", police)
+			responder_arrived.emit(police)
 	if level >= 4 and previous < 4:
 		var backup: Node3D = _npc("지원 경찰", "police", Vector3(-0.65, 0.08, 8.0), Color("354f70"), PI)
 		if is_instance_valid(backup):
 			damage_assessed.emit("dispatch:reinforcement", "response", 800000, "경찰 추가 출동")
 
 func _physics_process(delta: float) -> void:
+	scenario_time += delta
+	_advance_scenario_line()
+	for id: int in _pending_reactions.keys():
+		var item: Dictionary = _pending_reactions[id]
+		if not is_instance_valid(item["actor"]):
+			_pending_reactions.erase(id)
+			continue
+		var actor: Node3D = item["actor"]
+		if not _actor_living(actor) or scenario_time > float(item["expires"]):
+			_pending_reactions.erase(id)
+		elif not bool(actor.get("_reaction_pending")) and float(actor.get("_reaction_age")) < 0.10:
+			_record_applied_reaction(actor)
 	_reaction_cooldown = maxf(0.0, _reaction_cooldown - delta)
 	_navigation_age = maxf(0.0, _navigation_age - delta)
 	_advance_opening_scene(delta)
@@ -765,7 +831,151 @@ func _physics_process(delta: float) -> void:
 		if is_instance_valid(npc):
 			npc.set("player_target", player_target)
 
+func _build_ceo_room() -> void:
+	_box(Vector3(7.7, 0.3, 9.6), Vector3(12, -0.17, -1), Color("6a7068"), true)
+	_box(Vector3(0.2, 4.3, 9.6), Vector3(15.9, 2.12, -1), CREAM, true)
+	_box(Vector3(7.7, 4.3, 0.2), Vector3(12, 2.12, -5.8), CREAM, true)
+	_box(Vector3(7.7, 4.3, 0.2), Vector3(12, 2.12, 3.8), TEAL, true)
+	_box(Vector3(7.7, 0.19, 9.6), Vector3(12, 4.22, -1), CREAM, true)
+	_box(Vector3(3.5, 0.02, 2.7), Vector3(12.7, 0.005, -3.5), Color("87816b"))
+	# Keep the original east bookshelf; indicate the clear side aisle beside it.
+	_box(Vector3(2.6, 0.014, 1.25), Vector3(8.1, 0.0, -1.35), Color("acb8a6"))
+	_desk(Vector3(12.7, 0, -4.2), 3.0)
+	_desk(Vector3(9.9, 0, -2.5), 1.7)
+	_desk(Vector3(13.3, 0, 2.4), 1.7)
+	_label("대표이사", Vector3(8.02, 2.7, -1.35), 0.006, CREAM, -PI * 0.5)
+	_label("결재는 여기서. 책임은 현장에서.", Vector3(12.5, 2.3, -5.68), 0.003, TEAL)
+	_label("공용 서류", Vector3(9.9, 1.55, -2.5), 0.0028, CREAM)
+	_label("방문객", Vector3(13.3, 1.55, 2.4), 0.0028, CREAM)
+	_light(Vector3(12.0, 3.7, -1.0), 1.2, Color("ffecd0"), 8.0)
+	_prop("binder", "대표 기념패", Vector3(12.0, 1.13, -4.0), ORANGE)
+	_prop("paper", "대표 결재함", Vector3(13.4, 1.1, -4.0), CREAM)
+	_prop("chair", "대표 의자", Vector3(13.5, 0.04, -2.8), INK, PI)
+	_prop("paper", "밀린 공용 서류", Vector3(9.9, 1.1, -2.5), CREAM)
+	_prop("mug", "대표 커피잔", Vector3(13.3, 1.16, 2.4), ORANGE)
+	ceo = _npc("사장 · 임시 모델", "ceo", Vector3(12.7, 0.04, -2.8), Color("634e46"), PI, "", {"affiliation": "executive", "personality": "dumping", "health": 90.0, "work_activity": "papers"})
+
+func record_scenario_fact(origin: Dictionary, fact: String, target: Node3D = null, extra: Dictionary = {}) -> Dictionary:
+	var event: Dictionary = events.fact(origin, fact, target, extra)
+	if not event.is_empty():
+		scenario_event.emit(event)
+	return event
+
+func begin_player_contact(kind: String, target: Node3D) -> void:
+	_contact = events.action(kind, target, scenario_time)
+	if not _contact.is_empty():
+		_contact["state_before"] = _target_state(target)
+		if target.has_method("mark_player_impulse") and kind in ["punch", "kick", "throw"]:
+			target.set_meta("scenario_origin", _contact.duplicate(true))
+			target.set_meta("scenario_origin_time", scenario_time)
+			target.set_meta("scenario_hops", 0)
+
+func _target_state(target: Node3D) -> Dictionary:
+	if target.has_method("set_held"):
+		return {"damage": target.get("damage_stage"), "held": target.get("held"), "position": target.global_position}
+	if target.has_method("receive_hit"):
+		return {"state": target.get("state"), "health": target.get("health"), "position": target.global_position}
+	return {"position": target.global_position}
+
+func end_player_contact(kind: String, target: Node3D) -> void:
+	if _contact.is_empty() or not is_instance_valid(target):
+		_contact.clear()
+		return
+	var origin: Dictionary = _contact.duplicate(true)
+	var fact: String = "actor_held" if kind == "actor_grab" else ("action_contact" if kind in ["punch", "kick", "slam"] else "prop_manipulated")
+	var event: Dictionary = record_scenario_fact(origin, fact, target, {"state_after": _target_state(target)})
+	if fact == "action_contact":
+		_last_cause = origin
+		if target.has_method("react") and _actor_living(target):
+			record_scenario_fact(origin, "npc_reaction", target)
+	if kind == "actor_grab" and not event.is_empty():
+		_last_cause = origin
+		incident_event.emit("ACTOR_GRAB", float(ceo_hold.rules.grab_incident_weight), target.global_position)
+		_disturb(target.global_position, 1.8)
+	_contact.clear()
+
+func begin_prop_contact(source: Node3D, target: Node3D) -> void:
+	_contact.clear()
+	if events.frozen or not source.has_meta("scenario_origin") or scenario_time - float(source.get_meta("scenario_origin_time", -10.0)) > 2.0 or int(source.get_meta("scenario_hops", 0)) >= 3:
+		return
+	_contact = (source.get_meta("scenario_origin") as Dictionary).duplicate(true)
+	if str(_contact.get("round_id", "")) != events.round_id:
+		_contact.clear()
+		return
+	if is_instance_valid(target):
+		_contact["state_before"] = _target_state(target)
+		if target.has_method("mark_player_impulse"):
+			target.set_meta("scenario_origin", _contact.duplicate(true))
+			target.set_meta("scenario_origin_time", source.get_meta("scenario_origin_time"))
+			target.set_meta("scenario_hops", int(source.get_meta("scenario_hops", 0)) + 1)
+
+func end_prop_contact(source: Node3D, target: Node3D) -> void:
+	if _contact.is_empty():
+		return
+	var origin: Dictionary = _contact.duplicate(true)
+	_last_cause = origin
+	record_scenario_fact(origin, "action_contact", target if is_instance_valid(target) else source)
+	_contact.clear()
+
+func _record_applied_reaction(actor: Node3D) -> void:
+	if not is_instance_valid(actor) or not _pending_reactions.has(actor.get_instance_id()):
+		return
+	var pending: Dictionary = _pending_reactions[actor.get_instance_id()]
+	_pending_reactions.erase(actor.get_instance_id())
+	if _actor_living(actor) and actor.get("state") not in ["idle", "pursue"]:
+		record_scenario_fact(pending["origin"], "npc_reaction", actor)
+		if bool(actor.get("_work_interrupted")):
+			record_scenario_fact(pending["origin"], "work_interrupted", actor)
+
+func queue_scenario_line(beat: String, actor: Node3D, text: String, priority: int) -> void:
+	if not _actor_living(actor):
+		return
+	var once_key: String = "%d:%s" % [actor.get_instance_id(), beat]
+	if _scenario_spoken.has(once_key):
+		return
+	if not _scenario_line.is_empty() and int(_scenario_line["priority"]) > priority:
+		return
+	_scenario_spoken[once_key] = true
+	_scenario_line = {"beat": beat, "actor": actor, "text": text, "priority": priority, "due": scenario_time + 0.2, "expires": scenario_time + 3.2}
+
+func cancel_scenario_speaker(actor: Node3D) -> void:
+	if not _scenario_line.is_empty() and _scenario_line["actor"] == actor:
+		_scenario_line.clear()
+	scene_speaker_invalidated.emit(actor)
+
+func _advance_scenario_line() -> void:
+	if _scenario_line.is_empty():
+		return
+	if not is_instance_valid(_scenario_line["actor"]):
+		_scenario_line.clear()
+		return
+	var actor: Node3D = _scenario_line["actor"]
+	if not _actor_living(actor) or scenario_time > float(_scenario_line["expires"]) or not is_instance_valid(player_target) or actor.global_position.distance_to(player_target.global_position) > 8.0:
+		_scenario_line.clear()
+		return
+	if scenario_time < float(_scenario_line["due"]) or opening_active or boss_lecture_active:
+		return
+	if scenario_line_can_start.is_valid() and not bool(scenario_line_can_start.call(int(_scenario_line["priority"]))):
+		return
+	scenario_dialogue.emit(str(actor.get("display_name")), str(_scenario_line["text"]), 2.8, actor, int(_scenario_line["priority"]))
+	actor.set("_talk_time", 2.8)
+	_scenario_line.clear()
+
+func _hold_relation() -> Node:
+	return ceo_hold if is_instance_valid(ceo_hold) else null
+
+func _on_police_observed(actor: CharacterBody3D) -> void:
+	if _actor_living(actor):
+		queue_scenario_line("ceo-police-seen", actor, "봤지? 대표가 있어야 말을 듣잖아.", 60)
+
 func reset_world() -> void:
+	world_resetting.emit()
+	_pending_reactions.clear()
+	_scenario_spoken.clear()
+	_contact.clear()
+	_last_cause.clear()
+	_scenario_line.clear()
+	scenario_time = 0.0
 	cancel_opening_scene()
 	for prop: Node3D in props:
 		if is_instance_valid(prop):

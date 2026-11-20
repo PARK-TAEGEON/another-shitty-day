@@ -1,0 +1,94 @@
+[
+  {
+    "name": "ceo_hold_regression",
+    "kim_rig": "off",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-v03-off-ceo_hold_regression.log"
+  },
+  {
+    "name": "police_hold_regression",
+    "kim_rig": "off",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-v03-off-police_hold_regression.log"
+  },
+  {
+    "name": "police_arrival_regression",
+    "kim_rig": "off",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-v03-off-police_arrival_regression.log"
+  },
+  {
+    "name": "ceo_hold_regression",
+    "kim_rig": "on",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-v03-on-ceo_hold_regression.log"
+  },
+  {
+    "name": "police_hold_regression",
+    "kim_rig": "on",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-v03-on-police_hold_regression.log"
+  },
+  {
+    "name": "police_arrival_regression",
+    "kim_rig": "on",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-v03-on-police_arrival_regression.log"
+  },
+  {
+    "name": "social_damage_regression",
+    "kim_rig": "off",
+    "phase": "arrival_damage_transaction_fix",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-transaction-fix-off-social_damage_regression.log"
+  },
+  {
+    "name": "police_arrival_regression",
+    "kim_rig": "off",
+    "phase": "arrival_damage_transaction_fix",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-transaction-fix-off-police_arrival_regression.log"
+  },
+  {
+    "name": "police_arrival_damage_regression",
+    "kim_rig": "off",
+    "phase": "arrival_damage_transaction_fix",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-transaction-fix-off-police_arrival_damage_regression.log"
+  },
+  {
+    "name": "social_damage_regression",
+    "kim_rig": "on",
+    "phase": "arrival_damage_transaction_fix",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-transaction-fix-on-social_damage_regression.log"
+  },
+  {
+    "name": "police_arrival_regression",
+    "kim_rig": "on",
+    "phase": "arrival_damage_transaction_fix",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-transaction-fix-on-police_arrival_regression.log"
+  },
+  {
+    "name": "police_arrival_damage_regression",
+    "kim_rig": "on",
+    "phase": "arrival_damage_transaction_fix",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-transaction-fix-on-police_arrival_damage_regression.log"
+  },
+  {
+    "name": "police_arrival_damage_regression",
+    "kim_rig": "off",
+    "phase": "arrival_incident_transaction_fix",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-incident-fix-off-police_arrival_damage_regression.log"
+  },
+  {
+    "name": "police_arrival_damage_regression",
+    "kim_rig": "on",
+    "phase": "arrival_incident_transaction_fix",
+    "exit_code": 0,
+    "log": "C:\\Users\\Admin\\Documents\\Codex\\2026-10-13\\another-shitty-day-office-scenario-v0\\work\\validation-v03\\pr2-incident-fix-on-police_arrival_damage_regression.log"
+  }
+]

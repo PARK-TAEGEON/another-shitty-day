@@ -1,0 +1,373 @@
+4.7.2.stable.official.ed1daf0bf
+Running the optional isolated legacy Chaos experiment. This does not enable it in the game.
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+CEO_HOLD_REGRESSION_BEGIN
+{
+	"E_hold_release_no_farming": {
+		"changes": [
+			{
+				"actor": 154501390499,
+				"held": true,
+				"reason": "input"
+			},
+			{
+				"actor": 154501390499,
+				"held": false,
+				"reason": "input"
+			}
+		],
+		"facts": [
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e2",
+				"fact": "npc_reaction",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "183693747673",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e3",
+				"fact": "work_interrupted",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "183693747673",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			},
+			{
+				"action_kind": "actor_grab",
+				"event_id": "519477:e1",
+				"fact": "actor_held",
+				"instigator_id": "player",
+				"root_action_id": "519477:a1",
+				"round_id": "519477",
+				"state_after": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "stunned"
+				},
+				"state_before": {
+					"health": 90.0,
+					"position": "(12.0, -0.01918, -0.95)",
+					"state": "concern"
+				},
+				"target_id": "154501390499",
+				"time": 1.7,
+				"validated": true
+			}
+		],
+		"heat_after": 3.0,
+		"heat_before": 0.0,
+		"money_after": 10000,
+		"money_before": 0
+	},
+	"E_precedence_readiness_distance_only_CEO": true,
+	"actual_scene_restart_and_old_metadata": {
+		"fresh_E_works": true,
+		"new_round": "2048921"
+	},
+	"failures": [],
+	"fixture_scope": "Free actor/prop placements and stress obstacles are fixtures. All successful holds/releases use E input; live movement/turns use normal input. Specialized police LOS/windup tests are separate.",
+	"normal_hit_missing_actor_result_release": true,
+	"pause_timeout_cooldown": {
+		"changes": [
+			{
+				"actor": 873639972817,
+				"held": true,
+				"reason": "input"
+			},
+			{
+				"actor": 873639972817,
+				"held": false,
+				"reason": "timeout"
+			},
+			{
+				"actor": 873639972817,
+				"held": true,
+				"reason": "input"
+			}
+		],
+		"hold_seconds": 12.0,
+		"regrab_seconds": 6.0
+	},
+	"real_pair_walk_wall_rapid_rotation": {
+		"barrier_z": 2.59600007534027,
+		"ceo": "(12.55, -0.019125, 1.47974)",
+		"player": "(12.0, -0.0191, 2.16419)",
+		"still_held": true
+	},
+	"torso_occlusion_occupied_alignment_unsupported_floor": true
+}
+CEO_HOLD_REGRESSION_OK
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"accepted_windup_preserved": true,
+	"both_bodies_props_range_and_once": true,
+	"failures": [],
+	"guard_unchanged": true,
+	"invalid_provider_down_and_freed_target": true,
+	"missing_relation_properties_boolean_and_holder_null_safety": true,
+	"new_push_standoff_release": {
+		"held_distance": 2.53666496276855,
+		"resumed_hits": 1
+	},
+	"per_police_solid_camera_independence": true
+}
+POLICE_HOLD_REGRESSION_OK
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{
+	"actual_dispatch_and_return": {
+		"accepted_action": "impact",
+		"dispatch_assessments": 2,
+		"duration": 3.0,
+		"finished_count": 1
+	},
+	"actual_held_pair_freeze_resume": {
+		"game_time_during_cut": 8.18333333333332,
+		"held_age_during_cut": 0.0833333333333333,
+		"real_E_released": true,
+		"same_pair_resumed": true
+	},
+	"cancellation_nonblocking_pause_skip_ownership": "checked",
+	"failures": [],
+	"production_dispatch_menu_results_reset": {
+		"checked": true,
+		"original_response_cost": 600000
+	}
+}
+POLICE_ARRIVAL_REGRESSION_OK
+WARNING: 7 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+CHAOS_SCORE_RESULT {"failures":[],"observations":{"combined_cap":{"actions":160,"escalation":120,"general":400,"interventions":200,"max_score":1000,"npc_reactions":120,"special":600,"terminal":400,"total":1000},"freeze_reset":{"actions":0,"escalation":0,"general":0,"interventions":0,"max_score":1000,"npc_reactions":0,"special":400,"terminal":400,"total":400},"general_cap":{"actions":160,"escalation":120,"general":400,"interventions":0,"max_score":1000,"npc_reactions":120,"special":0,"terminal":0,"total":400},"preserve_other_root":{"actions":0,"escalation":0,"general":0,"interventions":100,"max_score":1000,"npc_reactions":0,"special":500,"terminal":400,"total":500},"repeat_chair":{"actions":40,"escalation":40,"general":110,"interventions":0,"max_score":1000,"npc_reactions":30,"special":0,"terminal":0,"total":110},"same_root_promotion":{"actions":0,"escalation":0,"general":0,"interventions":0,"max_score":1000,"npc_reactions":0,"special":400,"terminal":400,"total":400},"three_distinct_roots":{"actions":0,"escalation":0,"general":0,"interventions":200,"max_score":1000,"npc_reactions":0,"special":600,"terminal":400,"total":600},"validated_contact_and_reaction":{"actions":40,"escalation":0,"general":70,"interventions":0,"max_score":1000,"npc_reactions":30,"special":0,"terminal":0,"total":70}},"passed":true}
+CHAOS_SCORE_REGRESSION_OK
+All v0.3 scenario regressions passed. Native display and human play quality remain separate gates.

@@ -16,6 +16,8 @@ signal action_performed(kind: String, at: Vector3)
 signal activity_started(kind: String)
 signal focus_changed(text: String)
 signal desk_requested(origin: Vector3)
+signal contact_started(kind: String, target: Node3D)
+signal contact_finished(kind: String, target: Node3D)
 
 var camera: Camera3D
 var enabled: bool = false
@@ -23,6 +25,7 @@ var activity_serial: int = 0
 var sensitivity: float = 0.0024
 var shake_scale: float = 0.55
 var held_prop: RigidBody3D
+var actor_hold: Node
 var _hands: Node3D
 var _left: Node3D
 var _right: Node3D
@@ -141,7 +144,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not enabled:
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		rotate_y(-event.relative.x * sensitivity)
+		var requested_yaw: float = rotation.y - event.relative.x * sensitivity
+		rotation.y = actor_hold.limit_yaw(requested_yaw) if is_instance_valid(actor_hold) and actor_hold.active else requested_yaw
 		_pitch = clampf(_pitch - event.relative.y * sensitivity, -1.2, 1.15)
 	if event.is_action_pressed("pickup"):
 		_pickup_or_drop()
@@ -157,7 +161,8 @@ func _physics_process(delta: float) -> void:
 	if enabled:
 		var input: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 		var direction: Vector3 = transform.basis * Vector3(input.x, 0, input.y)
-		var speed: float = 5.8 if Input.is_action_pressed("sprint") else 3.8
+		var holding_actor: bool = is_instance_valid(actor_hold) and actor_hold.active
+		var speed: float = 3.8 * actor_hold.movement_scale() if holding_actor else (5.8 if Input.is_action_pressed("sprint") else 3.8)
 		velocity.x = move_toward(velocity.x, direction.x * speed + _security_push_velocity.x, delta * 25.0)
 		velocity.z = move_toward(velocity.z, direction.z * speed + _security_push_velocity.z, delta * 25.0)
 		_bob += Vector2(velocity.x, velocity.z).length() * delta * 2.2
@@ -169,6 +174,10 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= 18.0 * delta
 	else:
 		velocity.y = -0.1
+	if is_instance_valid(actor_hold) and actor_hold.active:
+		var limited: Vector3 = actor_hold.limit_motion(Vector3(velocity.x, 0, velocity.z) * delta)
+		velocity.x = limited.x / maxf(delta, 0.001)
+		velocity.z = limited.z / maxf(delta, 0.001)
 	move_and_slide()
 	if global_position.y < -5.0:
 		global_position = Vector3(0, 0.1, START_Z)
@@ -213,6 +222,12 @@ func _update_viewmodel(_delta: float) -> void:
 	_left.call("set_grip", 0.55)
 	_right.call("set_grip", 0.55)
 	_foot.visible = false
+	if is_instance_valid(actor_hold) and actor_hold.active:
+		var grip: Node3D = _right if actor_hold.side > 0.0 else _left
+		grip.position = Vector3(actor_hold.side * 0.35, -0.16, -0.55)
+		grip.rotation = Vector3(-0.2, -actor_hold.side * 0.15, actor_hold.side * 0.25)
+		grip.call("set_grip", 0.9)
+		return
 	if is_instance_valid(held_prop):
 		_left.position += Vector3(-0.05, -0.05, -0.09)
 		_right.position += Vector3(0.05, -0.05, -0.09)
@@ -287,7 +302,7 @@ func _pose_slam(elapsed: float) -> void:
 		hands[index].call("set_grip", grip)
 
 func perform_action(kind: String) -> void:
-	if _cooldown > 0.0 or not enabled:
+	if _cooldown > 0.0 or not enabled or (is_instance_valid(actor_hold) and actor_hold.active):
 		return
 	_record_activity(kind)
 	if kind == "slam" and is_instance_valid(held_prop):
@@ -325,7 +340,9 @@ func _commit_hit_later(kind: String, serial: int) -> void:
 	if target != null and target.has_method("receive_hit"):
 		var power: float = 13.0 if kind == "kick" else 7.0
 		var impulse: Vector3 = -camera.global_basis.z * power + Vector3.UP * 2.0
+		contact_started.emit(kind, target)
 		target.receive_hit(impulse, hit["position"], 28.0 if kind == "kick" else 20.0)
+		contact_finished.emit(kind, target)
 		add_shake(0.45)
 		action_performed.emit("impact", hit["position"])
 	else:
@@ -338,15 +355,27 @@ func _ray(distance: float) -> Dictionary:
 	return get_world_3d().direct_space_state.intersect_ray(params)
 
 func _pickup_or_drop() -> void:
+	if not enabled or get_tree().paused:
+		return
 	_record_activity("interact")
+	if is_instance_valid(actor_hold) and actor_hold.active:
+		actor_hold.release("input")
+		return
 	if is_instance_valid(held_prop):
 		_drop(false)
 		return
 	var result: Dictionary = _ray(2.7)
+	var actor: CharacterBody3D = result.get("collider") as CharacterBody3D
+	if actor != null and actor.has_method("set_grabbed"):
+		if is_instance_valid(actor_hold):
+			actor_hold.try_grab(actor)
+		return
 	var body: RigidBody3D = result.get("collider") as RigidBody3D
 	if body != null and body.has_method("set_held"):
+		contact_started.emit("pickup", body)
 		held_prop = body
 		held_prop.set_held(true)
+		contact_finished.emit("pickup", body)
 		action_performed.emit("pickup", body.global_position)
 
 func _update_held(delta: float) -> void:
@@ -409,6 +438,7 @@ func _drop(throw_item: bool) -> void:
 		held_prop = null
 		return
 	var item: RigidBody3D = held_prop
+	contact_started.emit("throw" if throw_item else "drop", item)
 	held_prop = null
 	item.set_held(false)
 	# Release at the last collision-checked position; never teleport through scenery.
@@ -420,15 +450,20 @@ func _drop(throw_item: bool) -> void:
 			item.call("mark_player_throw")
 	else:
 		item.linear_velocity = -camera.global_basis.z * 0.5
+	contact_finished.emit("throw" if throw_item else "drop", item)
 
 func _update_focus() -> void:
 	var text: String = ""
-	if is_instance_valid(held_prop):
+	if is_instance_valid(actor_hold) and actor_hold.active:
+		pass # Existing focus hint is reused only for a Free target.
+	elif is_instance_valid(held_prop):
 		text = str(held_prop.get("display_name"))
 	elif enabled:
 		var hit: Dictionary = _ray(2.7)
 		var body: Node = hit.get("collider") as Node
-		if body != null and body.has_method("set_held"):
+		if body != null and body.has_method("set_grabbed"):
+			text = "%s  ·  E 붙잡기" % body.get("display_name")
+		elif body != null and body.has_method("set_held"):
 			text = "%s  ·  E 집기" % body.get("display_name")
 	if text != _last_focus:
 		_last_focus = text
@@ -440,6 +475,8 @@ func add_shake(amount: float) -> void:
 func receive_security_push(direction: Vector3, strength: float = 2.4) -> void:
 	if not enabled:
 		return
+	if is_instance_valid(actor_hold):
+		actor_hold.release("player_hit")
 	var horizontal: Vector3 = Vector3(direction.x, 0, direction.z)
 	if horizontal.length_squared() < 0.001:
 		return

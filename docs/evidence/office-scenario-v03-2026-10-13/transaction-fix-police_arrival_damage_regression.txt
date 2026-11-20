@@ -1,0 +1,418 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+POLICE_ARRIVAL_DAMAGE_REGRESSION_BEGIN
+{
+	"failures": [],
+	"full_native_throw_receiver": {
+		"after": {
+			"care": 0,
+			"property": 160000,
+			"response": 600000,
+			"work": 0
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"receiver_damage": 150000,
+		"signals": [
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "커피잔 파손",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "프린터 손상",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "source same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "receiver same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "source same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "receiver same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "source same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "receiver same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "source same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "receiver same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "source same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "receiver same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "source same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "receiver same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "source same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "receiver same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 10000,
+				"category": "property",
+				"id": "330309830724",
+				"label": "source same assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 150000,
+				"category": "property",
+				"id": "345778424384",
+				"label": "receiver same assessment replay",
+				"paused_at_emit": true
+			}
+		],
+		"source_damage": 10000
+	},
+	"full_real_punch_down": {
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "73131888529",
+				"label": "same real assessment replay",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 12345,
+				"category": "property",
+				"id": "review-menu-ghost",
+				"label": "menu invalid assessment",
+				"paused_at_emit": true
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "review-after-result",
+				"label": "result invalid assessment",
+				"paused_at_emit": true
+			}
+		]
+	},
+	"off_real_punch_down": {
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "264677363514",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "264677363514",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "264677363514",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": false
+			}
+		]
+	},
+	"short_real_punch_down": {
+		"after": {
+			"care": 300000,
+			"property": 0,
+			"response": 600000,
+			"work": 200000
+		},
+		"before": {
+			"care": 0,
+			"property": 0,
+			"response": 100000,
+			"work": 0
+		},
+		"signals": [
+			{
+				"amount": 10000,
+				"category": "work",
+				"id": "169466662761",
+				"label": "사장 · 임시 모델 업무 중단",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 500000,
+				"category": "response",
+				"id": "dispatch:police",
+				"label": "경찰 출동 · 사건 처리",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 300000,
+				"category": "care",
+				"id": "169466662761",
+				"label": "사장 · 임시 모델 치료·수습",
+				"paused_at_emit": false
+			},
+			{
+				"amount": 200000,
+				"category": "work",
+				"id": "169466662761",
+				"label": "사장 · 임시 모델 업무 복귀 불가",
+				"paused_at_emit": false
+			}
+		]
+	}
+}
+POLICE_ARRIVAL_DAMAGE_REGRESSION_OK
+WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

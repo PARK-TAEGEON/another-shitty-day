@@ -1,0 +1,145 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+OFFICE_SCENARIO_BEGIN actual MainScript integration
+OFFICE_SCENARIO_READY
+OFFICE_SCENARIO_IDLE_DONE
+A fixture starts
+A actual pickup complete
+A actual carry/drop complete, candidate={ "result": "A", "event": { "round_id": "1432232", "root_action_id": "1432232:a3", "instigator_id": "player", "action_kind": "drop", "target_id": "184146731066", "time": 0.95, "state_before": { "damage": 0, "held": true, "position": (10.13026, 1.143665, -0.664847) }, "command_before": { "damage": 0, "held": false, "position": (13.50001, -0.040016, -2.8) }, "event_id": "1432232:e5", "fact": "prop_manipulated", "validated": true, "state_after": { "damage": 0, "held": false, "position": (10.13026, 1.143665, -0.664847) } }, "destination": (9.9, 0.02, -0.8), "expires": 4.95, "progress_at": 0.95, "distance": 3.06139612197876, "start": (12.60398, -0.019, -2.234963) }
+OFFICE_SCENARIO_A_DONE
+OFFICE_SCENARIO_B_DONE
+A fixture starts
+A actual pickup complete
+A actual carry/drop complete, candidate={ "result": "A", "event": { "round_id": "1740171", "root_action_id": "1740171:a3", "instigator_id": "player", "action_kind": "drop", "target_id": "418004340219", "time": 0.85, "state_before": { "damage": 0, "held": true, "position": (10.13026, 1.143665, -0.664847) }, "command_before": { "damage": 0, "held": false, "position": (13.50005, -0.027403, -2.800001) }, "event_id": "1740171:e5", "fact": "prop_manipulated", "validated": true, "state_after": { "damage": 0, "held": false, "position": (10.13026, 1.143665, -0.664847) } }, "destination": (9.9, 0.02, -0.8), "expires": 4.85, "progress_at": 0.85, "distance": 3.06139636039734, "start": (12.60398, -0.019, -2.234964) }
+A fixture starts
+A actual pickup complete
+A actual carry/drop complete, candidate={ "result": "A", "event": { "round_id": "2001226", "root_action_id": "2001226:a3", "instigator_id": "player", "action_kind": "drop", "target_id": "501907201908", "time": 0.85, "state_before": { "damage": 0, "held": true, "position": (10.13026, 1.143665, -0.664847) }, "command_before": { "damage": 0, "held": false, "position": (13.50005, -0.027403, -2.800001) }, "event_id": "2001226:e5", "fact": "prop_manipulated", "validated": true, "state_after": { "damage": 0, "held": false, "position": (10.13026, 1.143665, -0.664847) } }, "destination": (9.9, 0.02, -0.8), "expires": 4.85, "progress_at": 0.85, "distance": 3.06139612197876, "start": (12.60398, -0.019, -2.234963) }
+A fixture starts
+A actual pickup complete
+A actual carry/drop complete, candidate={ "result": "A", "event": { "round_id": "2166193", "root_action_id": "2166193:a3", "instigator_id": "player", "action_kind": "drop", "target_id": "582572052853", "time": 0.85, "state_before": { "damage": 0, "held": true, "position": (10.13026, 1.143665, -0.664847) }, "command_before": { "damage": 0, "held": false, "position": (13.50005, -0.027403, -2.800001) }, "event_id": "2166193:e5", "fact": "prop_manipulated", "validated": true, "state_after": { "damage": 0, "held": false, "position": (10.13026, 1.143665, -0.664847) } }, "destination": (9.9, 0.02, -0.8), "expires": 4.85, "progress_at": 0.85, "distance": 3.06139612197876, "start": (12.60398, -0.019, -2.234963) }
+A fixture starts
+A actual pickup complete
+A actual carry/drop complete, candidate={ "result": "A", "event": { "round_id": "2262695", "root_action_id": "2262695:a3", "instigator_id": "player", "action_kind": "drop", "target_id": "659747250870", "time": 0.85, "state_before": { "damage": 0, "held": true, "position": (10.13026, 1.143665, -0.664847) }, "command_before": { "damage": 0, "held": false, "position": (13.50005, -0.027403, -2.800001) }, "event_id": "2262695:e5", "fact": "prop_manipulated", "validated": true, "state_after": { "damage": 0, "held": false, "position": (10.13026, 1.143665, -0.664847) } }, "destination": (9.9, 0.02, -0.8), "expires": 4.85, "progress_at": 0.85, "distance": 3.06139612197876, "start": (12.60398, -0.019, -2.234963) }
+A fixture starts
+A actual pickup complete
+A actual carry/drop complete, candidate={ "result": "A", "event": { "round_id": "2348075", "root_action_id": "2348075:a3", "instigator_id": "player", "action_kind": "drop", "target_id": "737039879414", "time": 0.85, "state_before": { "damage": 0, "held": true, "position": (10.13026, 1.143665, -0.664847) }, "command_before": { "damage": 0, "held": false, "position": (13.50005, -0.027403, -2.800001) }, "event_id": "2348075:e5", "fact": "prop_manipulated", "validated": true, "state_after": { "damage": 0, "held": false, "position": (10.13026, 1.143665, -0.664847) } }, "destination": (9.9, 0.02, -0.8), "expires": 4.85, "progress_at": 0.85, "distance": 3.06139612197876, "start": (12.60398, -0.019, -2.234963) }
+A fixture starts
+A actual pickup complete
+A actual carry/drop complete, candidate={ "result": "A", "event": { "round_id": "2519827", "root_action_id": "2519827:a3", "instigator_id": "player", "action_kind": "drop", "target_id": "891004391879", "time": 0.85, "state_before": { "damage": 0, "held": true, "position": (10.13026, 1.143665, -0.664847) }, "command_before": { "damage": 0, "held": false, "position": (13.50005, -0.027403, -2.800001) }, "event_id": "2519827:e5", "fact": "prop_manipulated", "validated": true, "state_after": { "damage": 0, "held": false, "position": (10.13026, 1.143665, -0.664847) } }, "destination": (9.9, 0.02, -0.8), "expires": 4.85, "progress_at": 0.85, "distance": 3.04191184043884, "start": (12.60375, -0.019001, -2.193365) }
+{
+	"actual_A_and_frozen_result": {
+		"ceo_position": "(10.58105, -0.019, -1.131289)",
+		"chaos": {
+			"actions": 0,
+			"escalation": 40,
+			"general": 70,
+			"interventions": 0,
+			"max_score": 1000,
+			"npc_reactions": 30,
+			"special": 400,
+			"terminal": 400,
+			"total": 470
+		},
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"loose-prop placement: 대표 기념패",
+			"player placement (12.0, 0.08, 0.15)",
+			"player placement (10.0, 0.08, 0.4)"
+		],
+		"outcome": "A",
+		"status": "resolved"
+	},
+	"actual_B": {
+		"ceo_position": "(12.54008, -0.019, -0.037394)",
+		"chair_position": "(13.62855, -0.026972, 0.734738)",
+		"chaos": {
+			"actions": 0,
+			"escalation": 40,
+			"general": 70,
+			"interventions": 0,
+			"max_score": 1000,
+			"npc_reactions": 30,
+			"special": 400,
+			"terminal": 400,
+			"total": 470
+		},
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"loose-prop placement: 대표 의자",
+			"player placement (13.5, 0.08, -1.65)",
+			"player placement (13.5, 0.08, 2.0)"
+		],
+		"outcome": "B"
+	},
+	"autonomy_90_game_seconds": {
+		"special_after": 100,
+		"special_before": 100,
+		"status": "active"
+	},
+	"blocked_candidate": {
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"loose-prop placement: 대표 기념패",
+			"player placement (12.0, 0.08, 0.15)",
+			"player placement (10.0, 0.08, 0.4)",
+			"blocked locomotion fixture: CEO physics disabled after real A proposal"
+		],
+		"outcome": "",
+		"status": "active"
+	},
+	"direct_B_real_kicks": {
+		"chaos": {
+			"actions": 40,
+			"escalation": 40,
+			"general": 170,
+			"interventions": 0,
+			"max_score": 1000,
+			"npc_reactions": 90,
+			"special": 400,
+			"terminal": 400,
+			"total": 570
+		},
+		"fixture_log": [
+			"player placement (13.5, 0.08, -1.2)"
+		],
+		"outcome": "B"
+	},
+	"exit_resume_and_fresh_action": {
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"loose-prop placement: 대표 기념패",
+			"player placement (12.0, 0.08, 0.15)",
+			"player placement (10.0, 0.08, 0.4)",
+			"player placement (5.7, 0.08, 0.0)",
+			"player placement (10.0, 0.08, 0.4)",
+			"loose-prop placement: 대표 기념패",
+			"player placement (11.7, 0.08, 0.65)",
+			"player placement (10.0, 0.08, 0.4)"
+		],
+		"outcome": "A",
+		"status": "resolved"
+	},
+	"expiry_destination_down": {
+		"fixture_log": [
+			"player placement (12.7, 0.08, -3.0)",
+			"incapacity fixture: actual CEO receive_hit with lethal damage"
+		],
+		"sandbox_playing": true,
+		"status": "failed"
+	},
+	"failures": [],
+	"fixture_policy": "Player and loose-prop positions may be arranged before real actions. CEO motion is real except explicitly named blocked/destination-change fixtures. No route status/outcome writes.",
+	"observe_90_game_seconds": {
+		"chaos": 0,
+		"seconds": 90.2000000000007,
+		"status": "available"
+	},
+	"restart_old_round_original_office": {
+		"new_round": "2611140",
+		"opening_started": true,
+		"route_status": "available"
+	}
+}
+OFFICE_SCENARIO_REGRESSION_OK
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

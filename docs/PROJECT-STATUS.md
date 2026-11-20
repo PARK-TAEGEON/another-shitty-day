@@ -1,6 +1,20 @@
-> **2026-10-13 시나리오 v0.3 동기화:** [현 구현 기준](design/SCENARIO-V0.3-BASELINE.md). 기존 특별 퀘스트 A/B와 Chaos Score 필수는 제거. **사장 잡기/야구 방망이/새 시나리오/연출은 아직 구현 확인되지 않았다.** 아래 초기 감사 문구 중 v0.2를 전제로 한 담당 지시는 역사 정보로 읽는다.
+> **2026-10-13 회사원 v0.3 구현 브랜치:** `implementation/office-scenario-v03`에서 기존 v0.2 결과물을 간소화했다. 사장 E 붙잡기/같은 층 물리 이동/목격 경찰 거리 유지/안전 해제, 경찰 Full·Short·Off와 기존 피해액 결과를 구현·검증했다. [실제 범위와 검증](implementation/OFFICE-SCENARIO-v0.3-2026-10-13.md). main 통합·최상층 접근·야구·다른 신규 시나리오·장시간 재미 검수는 완료하지 않았다. 아래 v0.2와 초기 main 감사는 해당 시점의 역사 정보다.
 
 # Another Shitty Day | 실제 개발 현황 (Living Status)
+
+## 2026-10-13 회사원 시나리오 구현 브랜치
+
+최신: [Draft PR #8](https://github.com/PARK-TAEGEON/another-shitty-day/pull/8), `implementation/office-scenario-v03`, base=main. #7을 대체하는 독립 수정안이며 둘을 함께 병합하지 않는다. A/B 퀘스트/결과 후보/보상 UI를 제거하고 사장 한 명의 Free/Held 관계로 교체했다. 범용 사건 스트림과 NPC 대사 우선순위·TTL·once/reset, 원본 책상/전투/소품/경비/피해액은 재사용한다. Chaos 모듈과 단위 검사는 독립 선택 실험으로 보존하며 게임의 의존성·저장·결과에서 분리했다. 사장·경찰 전용 서브클래스로 `office_npc.gd`와 PR #2 캐릭터 작업을 보호한다. 코드/증거 커밋 `0895d6d`, 기존 회귀10+신규4 PASS 및 독립 리뷰 수정 후 미해결 P1/P2 없음.
+
+실제 Windows GPU 31.6초 시연에서 기본 사장 위치의 E 잡기, 기존 가구를 우회하는 연결 통로 이동, 최초 경찰 Full, 목격 거리 유지, E 해제 후 정상 물리 제압과 기존 달러 결과를 확인했다. 자동 시연은 시작 위치·경찰 배치/출동을 구성했으며 인간의 자발적 자유 플레이 승인과 구분한다. 출시 목표 2026-11-30은 유지한다. 최상층/층간 접근과 건물 핵심 구역은 다음 구현 과제다.
+
+### 이전 v0.2 구현 이력
+
+제출: [Draft PR #7](https://github.com/PARK-TAEGEON/another-shitty-day/pull/7), base=main. 코드/증거 검토용이며 자동 병합하지 않는다.
+
+`implementation/office-scenario-v02`에 기존 사무실과 연결된 임시 사장실, O-30~38 A/B 실제 행동 분기, 최소 공통 사건 연결, 별도 결과 Chaos/최고 기록, 최초 경찰 입구 카메라를 **IMPLEMENTED**했다. Godot4.7.2 Windows에서 기존 회귀10+신규3, 실제42초 렌더/제압 결과, standalone Windows smoke를 **VERIFIED**했다. [상세 범위·증거·변경 파일](implementation/OFFICE-SCENARIO-v0.2-2026-10-13.md).
+
+PR #2는 미병합 그대로다. 임시 로컬 결합의 OFF/ON 회귀·native smoke 통과, 기존 Kim 재시작 검사의 NPC7→8 기대치 조정 필요를 기록했다. 최종 아트/인간 재미·장시간 성능 승인, 전체 회사 건물/신고·수색/상위 대응은 남아 있다. **main에 병합되었다거나 Release-P2가 완료됐다는 의미가 아니다.** 11월30일 목표 및 기존 출시 범위는 유지한다. 아래 표는 이번 구현 브랜치 이전 main 감사 이력이다.
 
 **최초 감사일:** 2026-10-13 KST · **GitHub 연결: Private / main**
 **상태 정의:** `IMPLEMENTED`=코드/자산 존재, `VERIFIED`=명시된 환경·범위에서 검사 성공, `APPROVED CONCEPT`=사용자가 기획 방향 결정, `PROPOSED`=미구현 설계안, `BLOCKED`=선행 조건 미충족.

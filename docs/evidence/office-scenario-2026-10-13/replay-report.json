@@ -1,0 +1,146 @@
+{
+	"capture": "native automated gameplay replay with staged starting positions and explicit police dispatch fixture",
+	"evidence": [
+		{
+			"attitude": "authority",
+			"caption": "뭐야 무슨 소리야?",
+			"ceo": "(12.7, -0.019375, -2.8)",
+			"chaos": {
+				"actions": 40,
+				"escalation": 40,
+				"general": 200,
+				"interventions": 0,
+				"max_score": 1000,
+				"npc_reactions": 120,
+				"special": 0,
+				"terminal": 0,
+				"total": 200
+			},
+			"label": "01-golden-opening",
+			"money": 95000,
+			"outcome": "",
+			"status": "available"
+		},
+		{
+			"attitude": "conciliatory",
+			"caption": "여기가 누구 방인 줄 알아?",
+			"ceo": "(12.53845, -0.019375, 0.571291)",
+			"chaos": {
+				"actions": 40,
+				"escalation": 40,
+				"general": 200,
+				"interventions": 100,
+				"max_score": 1000,
+				"npc_reactions": 120,
+				"special": 100,
+				"terminal": 0,
+				"total": 300
+			},
+			"label": "02-ceo-confrontation",
+			"money": 105000,
+			"outcome": "",
+			"status": "active"
+		},
+		{
+			"attitude": "conciliatory",
+			"caption": "내가 직접 정리할 테니까 다들 일단 퇴근해.",
+			"ceo": "(10.15924, -0.019375, -1.028643)",
+			"chaos": {
+				"actions": 40,
+				"escalation": 40,
+				"general": 200,
+				"interventions": 100,
+				"max_score": 1000,
+				"npc_reactions": 120,
+				"special": 500,
+				"terminal": 400,
+				"total": 700
+			},
+			"label": "03-route-A",
+			"money": 105000,
+			"outcome": "A",
+			"status": "resolved"
+		},
+		{
+			"attitude": "authority",
+			"caption": "사장실은 오늘부로… 임시 재택이야!",
+			"ceo": "(12.53845, -0.019375, 0.571291)",
+			"chaos": {
+				"actions": 40,
+				"escalation": 40,
+				"general": 170,
+				"interventions": 0,
+				"max_score": 1000,
+				"npc_reactions": 90,
+				"special": 400,
+				"terminal": 400,
+				"total": 570
+			},
+			"label": "04-route-B",
+			"money": 150000,
+			"outcome": "B",
+			"status": "resolved"
+		},
+		{
+			"attitude": "authority",
+			"caption": "사장실은 오늘부로… 임시 재택이야!",
+			"ceo": "(12.53845, -0.019375, 0.571291)",
+			"chaos": {
+				"actions": 40,
+				"escalation": 80,
+				"general": 210,
+				"interventions": 0,
+				"max_score": 1000,
+				"npc_reactions": 90,
+				"special": 400,
+				"terminal": 400,
+				"total": 610
+			},
+			"label": "05-police-arrival",
+			"money": 750000,
+			"outcome": "B",
+			"status": "resolved"
+		},
+		{
+			"attitude": "authority",
+			"caption": "사장실은 오늘부로… 임시 재택이야!",
+			"ceo": "(12.53845, -0.019375, 0.571291)",
+			"chaos": {
+				"actions": 40,
+				"escalation": 80,
+				"general": 210,
+				"interventions": 0,
+				"max_score": 1000,
+				"npc_reactions": 90,
+				"special": 400,
+				"terminal": 400,
+				"total": 610
+			},
+			"label": "06-camera-restored",
+			"money": 750000,
+			"outcome": "B",
+			"status": "resolved"
+		},
+		{
+			"attitude": "authority",
+			"caption": "그만하시고 뒤로 물러나세요.",
+			"ceo": "(12.53845, -0.019375, 0.571291)",
+			"chaos": {
+				"actions": 40,
+				"escalation": 120,
+				"general": 250,
+				"interventions": 0,
+				"max_score": 1000,
+				"npc_reactions": 90,
+				"special": 400,
+				"terminal": 400,
+				"total": 650
+			},
+			"label": "07-result",
+			"money": 750000,
+			"outcome": "B",
+			"status": "resolved"
+		}
+	],
+	"failures": []
+}

@@ -100,6 +100,9 @@ func _test_main_boundary() -> void:
 	game.call("_update_response")
 	check(int(game.get("phase")) == 3 and game.call("_staff_count", "security") == 2, "qualified pending police did not dispatch after its minimum delay")
 	check(int(ledger.breakdown()["response"]) == 600000 and float(game.get("response_heat")) == 18.0, "police expense changed heat or was not booked")
+	# This ledger fixture explicitly skips the new Full presentation before its
+	# synthetic next incidents. Camera/pause ownership has its own regression.
+	game.get("police_arrival").call("cancel")
 	world.emit_signal("incident_event", "ASSAULT", 14.0, Vector3.ZERO)
 	check(int(game.get("phase")) == 3, "reinforcement ignored the minimum stage delay")
 	game.set("elapsed", float(game.get("elapsed")) + 10.1)
