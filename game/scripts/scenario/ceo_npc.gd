@@ -4,9 +4,9 @@ signal grab_invalidated
 var can_be_grabbed: bool = true
 var grabbed_by: CharacterBody3D
 
-func receive_hit(impulse: Vector3, point: Vector3, damage: float) -> void:
+func receive_hit(impulse: Vector3, point: Vector3, damage: float, kind: String = "") -> void:
 	grab_invalidated.emit()
-	super.receive_hit(impulse, point, damage)
+	super.receive_hit(impulse, point, damage, kind)
 
 func set_grabbed(holder: CharacterBody3D) -> void:
 	grabbed_by = holder

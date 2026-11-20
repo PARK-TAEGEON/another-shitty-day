@@ -70,7 +70,9 @@ foreach ($check in @(
     @{ File = 'office_layout_regression.gd'; Marker = 'OFFICE_LAYOUT_REGRESSION_OK' },
     @{ File = 'minimal_hud_regression.gd'; Marker = 'MINIMAL_HUD_REGRESSION_OK' },
     @{ File = 'ui_stars_result_regression.gd'; Marker = 'UI_STARS_RESULT_REGRESSION_OK' },
-    @{ File = 'star_pill_alignment_regression.gd'; Marker = 'STAR_PILL_ALIGNMENT_REGRESSION_OK' }
+    @{ File = 'star_pill_alignment_regression.gd'; Marker = 'STAR_PILL_ALIGNMENT_REGRESSION_OK' },
+    @{ File = 'hit_feel_regression.gd'; Marker = 'HIT_FEEL_REGRESSION_OK' },
+    @{ File = 'hit_flight_obstacle_regression.gd'; Marker = 'HIT_FLIGHT_OBSTACLE_REGRESSION_OK' }
 )) {
     Write-Host ('Running ' + $check.File + '...')
     $checkPath = Join-Path (Join-Path $PSScriptRoot 'tests') $check.File

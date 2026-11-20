@@ -26,6 +26,23 @@ var _contact_cooldown: float = 0.0
 var _impact_audio: AudioStreamPlayer3D
 const SOFT_IMPACT = preload("res://assets/audio/kenney/impactSoft_heavy_000.ogg")
 const WOOD_IMPACT = preload("res://assets/audio/kenney/impactWood_medium_000.ogg")
+const HitFeelScript = preload("res://scripts/hit_feel.gd")
+var launching: bool = false
+var _boost_done: bool = false
+var _boost_armed: bool = false
+var _boost_wait: float = 0.0
+var _boost_impulse: Vector3 = Vector3.ZERO
+var _flight_active: bool = false
+var _flight_elapsed: float = 0.0
+var _flight_duration: float = 0.70
+var _flight_distance: float = 4.5
+var _flight_peak: float = 1.45
+var _flight_origin: Vector3 = Vector3.ZERO
+var _flight_dir: Vector3 = Vector3.FORWARD
+var _flight_offsets: Array[Vector3] = []
+var _clamp_flight_to_room: bool = false
+var _joints_relaxed: bool = false
+var _joint_rest: Dictionary = {}
 
 func _ready() -> void:
 	var model: Node3D = MODEL.instantiate()
@@ -52,7 +69,24 @@ func _ready() -> void:
 	add_child(_impact_audio)
 
 func _physics_process(delta: float) -> void:
-	_contact_cooldown = maxf(_contact_cooldown-delta,0.0)
+	_contact_cooldown = maxf(_contact_cooldown - delta, 0.0)
+	if not ragdoll_active:
+		return
+	if _boost_armed:
+		_boost_wait = maxf(_boost_wait - delta, 0.0)
+		if _boost_wait <= 0.0:
+			_boost_armed = false
+			_begin_scripted_flight(_boost_impulse)
+	if _flight_active:
+		_advance_scripted_flight(delta)
+		return
+	elif _joints_relaxed and not bodies.is_empty() and bodies[0].linear_velocity.length() < 0.8:
+		_set_joints_relaxed(false)
+	var limit: float = HitFeelScript.load_settings().max_body_speed
+	for body: PhysicalBone3D in bodies:
+		var velocity: Vector3 = body.linear_velocity
+		if velocity.length() > limit:
+			body.linear_velocity = velocity.limit_length(limit)
 
 func _exit_tree() -> void:
 	if is_instance_valid(_impact_audio):
@@ -70,8 +104,20 @@ func contact_sound(at: Vector3, speed: float, furniture: bool) -> void:
 		return
 	_impact_audio.global_position = at
 	_impact_audio.stream = WOOD_IMPACT if furniture else SOFT_IMPACT
-	_impact_audio.volume_db = clampf(-17.0+speed*1.4,-15.0,-8.0)
+	if speed >= 3.0:
+		_impact_audio.volume_db = clampf(-5.0 + speed * 0.45, -6.0, -0.5)
+	else:
+		_impact_audio.volume_db = clampf(-17.0 + speed * 1.4, -15.0, -8.0)
 	_impact_audio.play()
+
+func notify_impact(speed: float) -> void:
+	var feel: Resource = HitFeelScript.load_settings()
+	if speed < feel.impact_speed:
+		return
+	var players: Array[Node] = get_tree().get_nodes_in_group("player")
+	if players.is_empty() or not players[0].has_method("add_shake"):
+		return
+	players[0].add_shake(feel.shake_impact)
 
 func _body(bone_name: String, length: float, radius: float, mass_value: float, swing: float, twist: float, box: Vector3 = Vector3.ZERO) -> void:
 	var body: PhysicalBone3D = PHYSICAL_BONE.new()
@@ -103,8 +149,8 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 		capsule.height = maxf(length, radius * 2.0)
 		shape.shape = capsule
 	body.add_child(shape)
-	if bone_name in ["Pelvis","Chest","Head"]:
-		PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(),4)
+	# Every limb can report the landing thud. Bounce stays on the torso only.
+	PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(), 4)
 	bodies.append(body)
 
 func _build_physics() -> void:
@@ -257,6 +303,396 @@ func apply_hit(impulse: Vector3, point: Vector3) -> void:
 	var force: Vector3 = impulse.limit_length(22.0) * 2.5
 	nearest.apply_impulse(force, (point - nearest.global_position).limit_length(.25))
 	physics_impulses += 1
+	if launching and not _boost_done:
+		_boost_done = true
+		launching = false
+		_boost_impulse = impulse
+		# Stay real for kim_rig's two-frame pose check and the table's first contact.
+		_boost_wait = maxf(HitFeelScript.load_settings().boost_delay, 0.08)
+		_boost_armed = true
+
+func _begin_scripted_flight(impulse: Vector3) -> void:
+	if bodies.is_empty():
+		return
+	var feel: Resource = HitFeelScript.load_settings()
+	var horizontal: Vector3 = Vector3(impulse.x, 0.0, impulse.z)
+	if horizontal.length_squared() < 0.0001:
+		horizontal = Vector3(impulse.x, 0.0, 1.0)
+	_flight_dir = horizontal.normalized()
+	_flight_origin = bodies[0].global_position
+	_clamp_flight_to_room = _started_inside_room(_flight_origin)
+	_flight_duration = maxf(feel.flight_time, 0.2)
+	_flight_peak = feel.flight_peak
+	_flight_distance = _clear_flight(_flight_origin, _flight_dir, feel.flight_distance)
+	_flight_elapsed = 0.0
+	_flight_offsets.clear()
+	for body: PhysicalBone3D in bodies:
+		_flight_offsets.append(body.global_position - _flight_origin)
+		body.collision_layer = 0
+		body.collision_mask = 0
+		body.set("scripted", true)
+	_flight_active = true
+	_advance_scripted_flight(0.0)
+
+func _advance_scripted_flight(delta: float) -> void:
+	_flight_elapsed += delta
+	var u: float = clampf(_flight_elapsed / _flight_duration, 0.0, 1.0)
+	var desired: Vector3 = _flight_pose_pelvis(u)
+	var motion: Vector3 = desired - bodies[0].global_position
+	var blocked: Dictionary = _sweep_flight(bodies[0].global_position, motion)
+	if blocked.is_empty():
+		blocked = _pose_hits_solid(desired, u)
+	if blocked.is_empty():
+		blocked = _planned_burial(desired, u)
+	if not blocked.is_empty():
+		var stop: Vector3 = bodies[0].global_position
+		if blocked.has("fraction"):
+			stop = bodies[0].global_position + motion * float(blocked.fraction)
+		stop += (blocked.normal as Vector3) * 0.1
+		_place_flight_pose(_above_floor(stop), u)
+		_crash_flight(blocked.normal, bool(blocked.furniture))
+		return
+	_place_flight_pose(_above_floor(desired), u)
+	if u >= 1.0:
+		_release_scripted_flight(false)
+
+func _flight_pose_pelvis(u: float) -> Vector3:
+	var height: float = 4.0 * _flight_peak * u * (1.0 - u)
+	return _flight_origin + _flight_dir * (_flight_distance * u) + Vector3.UP * height
+
+func _place_flight_pose(pelvis_target: Vector3, u: float) -> void:
+	pelvis_target += _room_shift(_flight_pose_points(pelvis_target, u))
+	var axis: Vector3 = Vector3.UP.cross(_flight_dir)
+	if axis.length_squared() < 0.0001:
+		axis = Vector3.RIGHT
+	var pitched: Basis = Basis(axis.normalized(), lerpf(0.0, -1.05, smoothstep(0.1, 0.55, u)))
+	for index in range(bodies.size()):
+		var body: PhysicalBone3D = bodies[index]
+		body.set("scripted", true)
+		body.set("scripted_position", pelvis_target + pitched * _flight_offsets[index])
+		body.linear_velocity = Vector3.ZERO
+
+func _flight_pose_points(pelvis_target: Vector3, u: float) -> Array[Vector3]:
+	var axis: Vector3 = Vector3.UP.cross(_flight_dir)
+	if axis.length_squared() < 0.0001:
+		axis = Vector3.RIGHT
+	var pitched: Basis = Basis(axis.normalized(), lerpf(0.0, -1.05, smoothstep(0.1, 0.55, u)))
+	var points: Array[Vector3] = [pelvis_target]
+	for offset: Vector3 in _flight_offsets:
+		points.append(pelvis_target + pitched * offset)
+	return points
+
+func _pose_hits_solid(pelvis_target: Vector3, u: float) -> Dictionary:
+	if not is_instance_valid(actor) or bodies.is_empty():
+		return {}
+	var axis: Vector3 = Vector3.UP.cross(_flight_dir)
+	if axis.length_squared() < 0.0001:
+		axis = Vector3.RIGHT
+	var pitched: Basis = Basis(axis.normalized(), lerpf(0.0, -1.05, smoothstep(0.1, 0.55, u)))
+	var samples: Array[Vector3] = [pelvis_target]
+	for offset: Vector3 in _flight_offsets:
+		samples.append(pelvis_target + pitched * offset)
+	var space: PhysicsDirectSpaceState3D = actor.get_world_3d().direct_space_state
+	var exclude: Array[RID] = [actor.get_rid()]
+	for body: PhysicalBone3D in bodies:
+		exclude.append(body.get_rid())
+	var origin: Vector3 = bodies[0].global_position
+	for point: Vector3 in samples:
+		var end: Vector3 = point + _flight_dir * 0.34
+		var ray := PhysicsRayQueryParameters3D.create(origin, end, 3)
+		ray.exclude = exclude
+		ray.hit_from_inside = true
+		var hit: Dictionary = space.intersect_ray(ray)
+		if hit.is_empty():
+			continue
+		var normal: Vector3 = hit.normal
+		if normal.y > 0.72:
+			continue
+		var furniture: bool = false
+		var collider: Object = hit.collider
+		if collider is CollisionObject3D and (collider.collision_layer & 2) != 0:
+			furniture = true
+		return {"fraction": 0.0, "normal": normal, "furniture": furniture}
+	return {}
+
+func _above_floor(pelvis_target: Vector3) -> Vector3:
+	var lowest: float = pelvis_target.y
+	for offset: Vector3 in _flight_offsets:
+		lowest = minf(lowest, (pelvis_target + offset).y)
+	if lowest < 0.06:
+		pelvis_target.y += 0.06 - lowest
+	return pelvis_target
+
+func _sweep_flight(from: Vector3, motion: Vector3) -> Dictionary:
+	if motion.length_squared() < 0.000001 or not is_instance_valid(actor):
+		return {}
+	var space: PhysicsDirectSpaceState3D = actor.get_world_3d().direct_space_state
+	var shape := SphereShape3D.new()
+	shape.radius = 0.38
+	var exclude: Array[RID] = []
+	for body: PhysicalBone3D in bodies:
+		exclude.append(body.get_rid())
+	exclude.append(actor.get_rid())
+	var closest: float = 1.0
+	var origin: Vector3 = from
+	for drop: float in [0.0, 0.5]:
+		var params := PhysicsShapeQueryParameters3D.new()
+		params.shape = shape
+		params.transform = Transform3D(Basis.IDENTITY, from + Vector3.DOWN * drop)
+		params.motion = motion
+		params.collision_mask = 3
+		params.exclude = exclude
+		var fractions: PackedFloat32Array = space.cast_motion(params)
+		if fractions.size() > 0 and fractions[0] < closest:
+			closest = fractions[0]
+			origin = params.transform.origin
+	if closest >= 0.995:
+		return {}
+	var probe_from: Vector3 = origin + motion * maxf(closest - 0.2, 0.0)
+	var probe_to: Vector3 = probe_from + motion.normalized() * 0.5
+	var ray := PhysicsRayQueryParameters3D.create(probe_from, probe_to, 3)
+	ray.exclude = exclude
+	var hit: Dictionary = space.intersect_ray(ray)
+	var normal: Vector3 = -motion.normalized()
+	var furniture: bool = false
+	if not hit.is_empty():
+		normal = hit.normal
+		var collider: Object = hit.collider
+		if collider is CollisionObject3D and (collider.collision_layer & 2) != 0:
+			furniture = true
+	# A floor under a body that is still rising is not the crash. A face is.
+	if normal.y > 0.72 and motion.y >= -0.05:
+		return {}
+	return {"fraction": maxf(closest - 0.05, 0.0), "normal": normal, "furniture": furniture}
+
+func _crash_flight(normal: Vector3, furniture: bool) -> void:
+	_flight_active = false
+	_separate_from_solids(normal)
+	var slide: Vector3 = Vector3.DOWN * 2.2 + normal * 0.45
+	slide = slide.limit_length(6.0)
+	for body: PhysicalBone3D in bodies:
+		body.set("scripted", false)
+		body.collision_layer = 4
+		body.collision_mask = 11
+		body.linear_velocity = slide
+	_set_joints_relaxed(true)
+	_impact_feedback(furniture)
+
+func _release_scripted_flight(crashed: bool) -> void:
+	if crashed:
+		return
+	_flight_active = false
+	_separate_from_solids(_flight_dir)
+	var smack: Vector3 = (_flight_dir * HitFeelScript.load_settings().launch_speed + Vector3.DOWN * 2.2).limit_length(6.0)
+	for body: PhysicalBone3D in bodies:
+		body.set("scripted", false)
+		body.collision_layer = 4
+		body.collision_mask = 11
+		body.linear_velocity = smack
+	_set_joints_relaxed(true)
+
+func _separate_from_solids(preferred: Vector3) -> void:
+	if not is_instance_valid(actor) or bodies.is_empty():
+		return
+	var space: PhysicsDirectSpaceState3D = actor.get_world_3d().direct_space_state
+	var shape := SphereShape3D.new()
+	var exclude: Array[RID] = []
+	for body: PhysicalBone3D in bodies:
+		exclude.append(body.get_rid())
+	exclude.append(actor.get_rid())
+	for _attempt in range(14):
+		if not _push_buried_bone(space, shape, exclude, preferred):
+			break
+	_pull_bones_inside_room()
+	var lifted: Vector3 = _above_floor(bodies[0].global_position)
+	_shift_bones(lifted - bodies[0].global_position)
+	_pull_bones_inside_room()
+
+func _push_buried_bone(space: PhysicsDirectSpaceState3D, shape: SphereShape3D, exclude: Array[RID], preferred: Vector3) -> bool:
+	for body: PhysicalBone3D in bodies:
+		var probe: Dictionary = _bone_probe(body)
+		shape.radius = float(probe.radius)
+		for point: Vector3 in probe.points:
+			var params := PhysicsShapeQueryParameters3D.new()
+			params.shape = shape
+			params.transform = Transform3D(Basis.IDENTITY, point)
+			params.collision_mask = 3
+			params.exclude = exclude
+			if not space.intersect_shape(params, 1).is_empty():
+				var info: Dictionary = space.get_rest_info(params)
+				var away: Vector3 = preferred if info.is_empty() else info.normal
+				if away.length_squared() < 0.0001:
+					away = -_flight_dir
+				# A floor holds the body up. The underside of a desktop is not a floor:
+				# come back out through the face we flew into.
+				if away.y <= 0.72:
+					if away.y < -0.72:
+						away = Vector3(-_flight_dir.x, 0.0, -_flight_dir.z)
+					if away.length_squared() < 0.0001:
+						away = Vector3.BACK
+					_shift_bones(away.normalized() * 0.1)
+					return true
+			if body.bone_name == "Head" or body.bone_name == "Chest":
+				var under: Vector3 = _underside_exit(space, point, exclude, 1)
+				if under.length_squared() > 0.0001:
+					_shift_bones(under * 0.1)
+					return true
+	return false
+
+func _bone_probe(body: PhysicalBone3D) -> Dictionary:
+	var radius := 0.16
+	var points: Array[Vector3] = [body.global_position]
+	if body.get_child_count() == 0 or not (body.get_child(0) is CollisionShape3D):
+		return {"radius": radius, "points": points}
+	var shape: Shape3D = (body.get_child(0) as CollisionShape3D).shape
+	if shape is CapsuleShape3D:
+		var capsule := shape as CapsuleShape3D
+		radius = capsule.radius
+		var reach: float = maxf(capsule.height * 0.5 - radius, 0.0)
+		if reach > 0.01:
+			var axis: Vector3 = body.global_transform.basis.y
+			points.append(body.global_position + axis * reach)
+			points.append(body.global_position - axis * reach)
+	elif shape is BoxShape3D:
+		var size: Vector3 = (shape as BoxShape3D).size
+		var half := size * 0.5
+		radius = 0.06
+		var basis := body.global_transform.basis
+		var origin: Vector3 = body.global_position
+		for sx: float in [-1.0, 1.0]:
+			for sy: float in [-1.0, 1.0]:
+				for sz: float in [-1.0, 1.0]:
+					points.append(origin + basis * Vector3(half.x * sx, half.y * sy, half.z * sz))
+	return {"radius": radius, "points": points}
+
+func _started_inside_room(point: Vector3) -> bool:
+	if not is_instance_valid(actor) or not actor.has_method("clamp_to_room"):
+		return false
+	return actor.clamp_to_room(point).distance_squared_to(point) < 0.0004
+
+func _planned_burial(pelvis_target: Vector3, u: float) -> Dictionary:
+	if not is_instance_valid(actor) or bodies.is_empty():
+		return {}
+	var space: PhysicsDirectSpaceState3D = actor.get_world_3d().direct_space_state
+	var exclude: Array[RID] = [actor.get_rid()]
+	for body: PhysicalBone3D in bodies:
+		exclude.append(body.get_rid())
+	var shape := SphereShape3D.new()
+	shape.radius = 0.22
+	# Only the bones leading the pelvis can stop the arc. A trailing hand under
+	# a desk behind him must not cancel the flight on the first frame.
+	for point: Vector3 in _flight_pose_points(pelvis_target, u):
+		if (point - pelvis_target).dot(_flight_dir) < 0.05:
+			continue
+		var params := PhysicsShapeQueryParameters3D.new()
+		params.shape = shape
+		params.transform = Transform3D(Basis.IDENTITY, point)
+		params.collision_mask = 1
+		params.exclude = exclude
+		if not space.intersect_shape(params, 1).is_empty():
+			var info: Dictionary = space.get_rest_info(params)
+			if info.is_empty() or (info.normal as Vector3).y > 0.72:
+				continue
+			var away: Vector3 = info.normal
+			if away.y < -0.45:
+				away = Vector3(-_flight_dir.x, 0.0, -_flight_dir.z)
+			if away.length_squared() < 0.0001:
+				continue
+			var furniture := false
+			var collider: Object = info.get("collider")
+			if collider is CollisionObject3D and (collider.collision_layer & 2) != 0:
+				furniture = true
+			return {"fraction": 0.0, "normal": away.normalized(), "furniture": furniture}
+		var under: Vector3 = _underside_exit(space, point, exclude, 1)
+		if under.length_squared() > 0.0001:
+			return {"fraction": 0.0, "normal": under, "furniture": true}
+	return {}
+
+func _underside_exit(space: PhysicsDirectSpaceState3D, point: Vector3, exclude: Array[RID], mask: int = 1) -> Vector3:
+	var ray := PhysicsRayQueryParameters3D.create(point, point + Vector3.UP * 0.85, mask)
+	ray.exclude = exclude
+	ray.hit_from_inside = true
+	var hit: Dictionary = space.intersect_ray(ray)
+	if hit.is_empty() or (hit.normal as Vector3).y > -0.45:
+		return Vector3.ZERO
+	var out := Vector3(-_flight_dir.x, 0.0, -_flight_dir.z)
+	if out.length_squared() < 0.0001:
+		return Vector3.ZERO
+	return out.normalized()
+
+func _room_shift(points: Array[Vector3]) -> Vector3:
+	if not _clamp_flight_to_room or not is_instance_valid(actor) or not actor.has_method("clamp_to_room"):
+		return Vector3.ZERO
+	var shift := Vector3.ZERO
+	for _pass in range(3):
+		var extra := Vector3.ZERO
+		for point: Vector3 in points:
+			var delta: Vector3 = actor.clamp_to_room(point + shift) - (point + shift)
+			if absf(delta.x) > absf(extra.x):
+				extra.x = delta.x
+			if absf(delta.z) > absf(extra.z):
+				extra.z = delta.z
+		if extra.length_squared() < 0.000001:
+			break
+		shift += extra
+	return shift
+
+func _pull_bones_inside_room() -> void:
+	var points: Array[Vector3] = []
+	for body: PhysicalBone3D in bodies:
+		points.append(body.global_position)
+	var shift: Vector3 = _room_shift(points)
+	if shift.length_squared() > 0.000001:
+		_shift_bones(shift)
+
+func _shift_bones(delta: Vector3) -> void:
+	for body: PhysicalBone3D in bodies:
+		var xf: Transform3D = body.global_transform
+		xf.origin += delta
+		PhysicsServer3D.body_set_state(body.get_rid(), PhysicsServer3D.BODY_STATE_TRANSFORM, xf)
+		body.global_transform = xf
+		if bool(body.get("scripted")):
+			body.set("scripted_position", xf.origin)
+
+func _impact_feedback(furniture: bool) -> void:
+	if bodies.is_empty():
+		return
+	contact_sound(bodies[0].global_position, 6.5, furniture)
+	var players: Array[Node] = get_tree().get_nodes_in_group("player")
+	if players.is_empty():
+		return
+	if players[0].has_method("add_shake"):
+		players[0].add_shake(HitFeelScript.load_settings().shake_impact)
+	var presenter: Node = players[0].get_node_or_null("HitPresenter")
+	if presenter != null and presenter.has_method("play"):
+		presenter.play("crash")
+
+func _clear_flight(origin: Vector3, direction: Vector3, wanted: float) -> float:
+	if not is_instance_valid(actor):
+		return wanted
+	var space: PhysicsDirectSpaceState3D = actor.get_world_3d().direct_space_state
+	var from: Vector3 = origin + Vector3.UP * 0.2
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, from + direction * wanted, 3)
+	var hit: Dictionary = space.intersect_ray(query)
+	if hit.is_empty():
+		return wanted
+	# Body radius, not a 1.5m minimum. A wall 0.8m away must stop the arc.
+	return maxf(origin.distance_to(hit.position) - 0.42, 0.05)
+
+func _set_joints_relaxed(relaxed: bool) -> void:
+	var scale: float = HitFeelScript.load_settings().fly_joint_scale if relaxed else 1.0
+	for body: PhysicalBone3D in bodies:
+		if body.bone_name == "Pelvis":
+			continue
+		if not _joint_rest.has(body.bone_name):
+			_joint_rest[body.bone_name] = {
+				"swing": float(body.get("joint_constraints/swing_span")),
+				"twist": float(body.get("joint_constraints/twist_span")),
+			}
+		var rest: Dictionary = _joint_rest[body.bone_name]
+		body.set("joint_constraints/swing_span", float(rest["swing"]) * scale)
+		body.set("joint_constraints/twist_span", float(rest["twist"]) * scale)
+	_joints_relaxed = relaxed
 
 func pelvis_position() -> Vector3:
 	return bodies[0].global_position
