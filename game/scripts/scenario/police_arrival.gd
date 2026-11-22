@@ -7,6 +7,7 @@ signal finished
 
 const DURATION: float = 3.0
 const SHORT_DURATION: float = 1.0
+const OFFICE_CAMERA_OFFSET: Vector3 = Vector3(-0.85, 1.48, -2.65)
 const FONT: Font = preload("res://assets/fonts/KoreanUI.ttf")
 
 var presented: bool = false
@@ -30,7 +31,7 @@ func _ready() -> void:
 	set_process(false)
 	set_process_input(false)
 
-func begin(player: Node3D, arrival_position: Vector3, nonblocking: bool = false) -> void:
+func begin(player: Node3D, arrival_position: Vector3, nonblocking: bool = false, camera_offset: Vector3 = OFFICE_CAMERA_OFFSET) -> void:
 	if presented or not is_inside_tree():
 		return
 	presented = true
@@ -76,7 +77,7 @@ func begin(player: Node3D, arrival_position: Vector3, nonblocking: bool = false)
 	_cut_camera.near = 0.08
 	add_child(_cut_camera)
 	# A static view inside the office entrance; no vehicle or invisible new actor.
-	_cut_camera.global_position = arrival_position + Vector3(-0.85, 1.48, -2.65)
+	_cut_camera.global_position = arrival_position + camera_offset
 	_cut_camera.look_at(arrival_position + Vector3.UP * 1.10, Vector3.UP)
 	_cut_camera.make_current()
 	_skip.visible = true

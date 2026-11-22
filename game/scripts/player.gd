@@ -29,6 +29,7 @@ var sensitivity: float = 0.0024
 var shake_scale: float = 0.55
 var held_prop: RigidBody3D
 var actor_hold: Node
+var office_world: Node3D
 var _hands: Node3D
 var _left: Node3D
 var _right: Node3D
@@ -397,6 +398,8 @@ func _pickup_or_drop() -> void:
 		_drop(false)
 		return
 	var result: Dictionary = _ray(2.7)
+	if is_instance_valid(office_world) and office_world.try_use_elevator(self, result.get("collider")):
+		return
 	var actor: CharacterBody3D = result.get("collider") as CharacterBody3D
 	if actor != null and actor.has_method("set_grabbed"):
 		if is_instance_valid(actor_hold):
@@ -497,6 +500,8 @@ func _update_focus() -> void:
 			text = "%s  ·  E 붙잡기" % body.get("display_name")
 		elif body != null and body.has_method("set_held"):
 			text = "%s  ·  E 집기" % body.get("display_name")
+		elif is_instance_valid(office_world):
+			text = office_world.elevator_hint(self, body)
 	if text != _last_focus:
 		_last_focus = text
 		focus_changed.emit(text)
@@ -515,16 +520,35 @@ func receive_security_push(direction: Vector3, strength: float = 2.4) -> void:
 	_security_push_velocity = horizontal.normalized() * clampf(strength, 0.0, 3.5)
 	add_shake(0.30)
 
+func place_at(at: Vector3, yaw: float, pitch: float) -> void:
+	_cancel_action()
+	velocity = Vector3.ZERO
+	_shake = 0.0
+	_bob = 0.0
+	_pitch = pitch
+	global_position = at
+	rotation.y = yaw
+	_update_viewmodel(0.0)
+	reset_physics_interpolation()
+
+func reset_position(at: Vector3) -> void:
+	release_held()
+	_slam_confirmed = false
+	place_at(at, 0.0, START_PITCH)
+
+func _cancel_action() -> void:
+	_security_push_velocity = Vector3.ZERO
+	_action_serial += 1
+	_slam_pending = false
+	_anim = 0.0
+	_cooldown = 0.0
+	_anim_kind = ""
+
 func set_active(active: bool) -> void:
 	enabled = active
 	if not active:
-		_security_push_velocity = Vector3.ZERO
 		# Pausing or ending a run must not release an old delayed attack on resume.
-		_action_serial += 1
-		_slam_pending = false
-		_anim = 0.0
-		_cooldown = 0.0
-		_anim_kind = ""
+		_cancel_action()
 		_update_viewmodel(0.0)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if active else Input.MOUSE_MODE_VISIBLE
 

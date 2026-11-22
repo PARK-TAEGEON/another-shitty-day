@@ -106,12 +106,14 @@ func _ready() -> void:
 	world.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(world)
 	player = PlayerScript.new()
-	player.position = Vector3(0, 0.08, 0.65)
+	player.position = WorldScript.PLAYER_SPAWN
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(player)
 	player.sensitivity = float(_settings.get_value("options", "sensitivity", 0.0024))
 	player.shake_scale = float(_settings.get_value("options", "shake", 0.55))
 	world.player_target = player
+	player.office_world = world
+	world.floor_changed.connect(_clear_caption)
 	world.scenario_line_can_start = func(priority: int) -> bool: return _caption_timer <= 0.0 or _caption_priority < priority
 	ceo_hold = CeoHoldScript.new()
 	ceo_hold.holder = player
@@ -126,6 +128,8 @@ func _ready() -> void:
 	world.world_resetting.connect(ceo_hold.reset_round)
 	police_arrival = PoliceArrivalScript.new()
 	add_child(police_arrival)
+	world.world_resetting.connect(police_arrival.reset_round)
+	world.world_resetting.connect(_clear_caption)
 	world.scenario_dialogue.connect(_scenario_caption)
 	world.responder_arrived.connect(_on_responder_arrived)
 	sound = SoundScript.new()
@@ -443,6 +447,8 @@ func _set_phase(value: int) -> void:
 func _speaker_available(source: Node3D, scene_only: bool = false) -> bool:
 	if not is_instance_valid(source) or not source.is_inside_tree():
 		return false
+	if world.floor_index(source.global_position) != world.floor_index(player.global_position):
+		return false
 	if scene_only:
 		return source.has_method("can_opening_react") and bool(source.call("can_opening_react"))
 	# Other employees and responders have no authored opening_role, and frightened
@@ -565,7 +571,10 @@ func _on_responder_arrived(actor: Node3D) -> void:
 	if playing and not ended:
 		_clear_caption()
 		var online: bool = multiplayer.multiplayer_peer != null and not multiplayer.multiplayer_peer is OfflineMultiplayerPeer
-		police_arrival.begin(player, actor.global_position, online)
+		var camera_offset: Vector3 = PoliceArrivalScript.OFFICE_CAMERA_OFFSET
+		if world.floor_index(actor.global_position) == 1:
+			camera_offset = Vector3(-0.30, 1.48, 2.65)
+		police_arrival.begin(player, actor.global_position, online, camera_offset)
 
 func _scenario_caption(speaker: String, text: String, duration: float, source: Node3D, priority: int) -> void:
 	if not playing or ended or get_tree().paused or not _speaker_available(source) or world.opening_active or world.boss_lecture_active:

@@ -14,6 +14,7 @@ signal scenario_event(event: Dictionary)
 signal scenario_dialogue(speaker: String, text: String, duration: float, source: Node3D, priority: int)
 signal responder_arrived(actor: Node3D)
 signal world_resetting
+signal floor_changed
 const EventStream = preload("res://scripts/scenario/event_stream.gd")
 const CeoScript = preload("res://scripts/scenario/ceo_npc.gd")
 const PoliceScript = preload("res://scripts/scenario/police_npc.gd")
@@ -48,9 +49,11 @@ var _reaction_cooldown: float = 0.0
 var _ambient_cooldown: float = 2.5
 var _ambient_spoken: Dictionary = {}
 var _furniture: Node3D
-var _navigation: AStarGrid2D = AStarGrid2D.new()
-var _navigation_obstacles: Array[Rect2] = []
-var _navigation_footprints: Array[Rect2] = []
+var _navigation: Array[AStarGrid2D] = [AStarGrid2D.new(), AStarGrid2D.new()]
+var _navigation_obstacles: Array[Array] = [[], []]
+var _navigation_footprints: Array[Array] = [[], []]
+var _elevator_doors: Array[StaticBody3D] = []
+var _pursuit_transfer_delay: float = 0.0
 var _navigation_age: float = 0.0
 var opening_coworker: Node3D
 var opening_boss: Node3D
@@ -81,7 +84,24 @@ var _boss_lecture_gap: float = 0.0
 var _lecture_activity_serial: int = 0
 const NAV_CELL: float = 0.2
 const NAV_CLEARANCE: float = 0.38
-const NAV_REGION: Rect2i = Rect2i(-40, -50, 122, 101)
+const EXECUTIVE_ELEVATION: float = 4.6
+const FLOOR_HEIGHTS: Array[float] = [0.0, EXECUTIVE_ELEVATION]
+const PLAYER_SPAWN: Vector3 = Vector3(0.0, 0.08, 0.65)
+const CEO_DESK_POSITION: Vector3 = Vector3(2.7, EXECUTIVE_ELEVATION + 1.0, -4.2)
+const NAV_REGIONS: Array[Rect2i] = [Rect2i(-40, -50, 81, 101), Rect2i(-9, -29, 50, 49)]
+const EXECUTIVE_BOUNDS: Array[Rect2] = [Rect2(-1.80, -5.7, 9.795, 9.4)]
+const EXECUTIVE_FLEE_POINTS: Array[Vector2] = [
+	Vector2(-1.15, 2.85), Vector2(4.75, -4.85), Vector2(6.9, -4.8), Vector2(6.9, 2.8),
+]
+const ELEVATOR_DOOR: Vector3 = Vector3(7.91, 1.35, -1.60)
+const ELEVATOR_LANDING: Vector3 = Vector3(6.65, 0.08, -1.60)
+const ELEVATOR_ARRIVAL_YAWS: Array[float] = [PI * 0.50, PI * 0.82]
+const ELEVATOR_RANGE: float = 2.7
+const RESPONSE_ENTRIES: Array[Array] = [
+	[Vector3(-0.5, 0.08, 7.2), Vector3(0.6, 0.08, 7.4), Vector3(-0.65, 0.08, 8.0)],
+	[Vector3(6.9, 0.08, 2.75), Vector3(6.9, 0.08, -4.75), Vector3(6.9, 0.08, -3.5)],
+]
+const PURSUIT_TRANSFER_TIMEOUT: float = 5.0
 
 func _ready() -> void:
 	events.reset()
@@ -91,6 +111,8 @@ func _ready() -> void:
 	_build_room()
 	_build_furniture()
 	_build_ceo_room()
+	for floor_id: int in range(FLOOR_HEIGHTS.size()):
+		_build_elevator(floor_id)
 	_build_navigation()
 	_build_people()
 
@@ -122,35 +144,44 @@ func _box(size: Vector3, at: Vector3, color: Color, solid: bool = false, emissio
 		collision.shape = shape
 		body.add_child(collision)
 		mesh_node.add_child(body)
-		# Only solids intersecting standing bodies block floor navigation.
-		if at.y + size.y * 0.5 > 0.12 and at.y - size.y * 0.5 < 1.75:
-			_navigation_obstacles.append(Rect2(Vector2(at.x - size.x * 0.5, at.z - size.z * 0.5), Vector2(size.x, size.z)).grow(NAV_CLEARANCE))
+		# Only solids intersecting a standing body on that floor block navigation.
+		var half_size: Vector3 = size * 0.5
+		_add_navigation_bounds(at - half_size, at + half_size, _navigation_obstacles)
 	return mesh_node
 
+func floor_index(at: Vector3) -> int:
+	# The split is above the office ceiling and below the executive floor slab.
+	return 1 if at.y >= EXECUTIVE_ELEVATION - 0.27 else 0
+
+func _add_navigation_bounds(lower: Vector3, upper: Vector3, footprints: Array[Array]) -> void:
+	for floor_id: int in range(FLOOR_HEIGHTS.size()):
+		var height: float = FLOOR_HEIGHTS[floor_id]
+		if upper.y > height + 0.12 and lower.y < height + 1.75:
+			var footprint: Rect2 = Rect2(Vector2(lower.x, lower.z), Vector2(upper.x - lower.x, upper.z - lower.z)).grow(NAV_CLEARANCE)
+			footprints[floor_id].append(footprint)
+
 func _build_navigation() -> void:
-	_navigation.region = NAV_REGION
-	_navigation.cell_size = Vector2.ONE * NAV_CELL
-	_navigation.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
-	_navigation.default_compute_heuristic = AStarGrid2D.HEURISTIC_OCTILE
-	_navigation.default_estimate_heuristic = AStarGrid2D.HEURISTIC_OCTILE
-	_navigation.update()
+	for floor_id: int in range(FLOOR_HEIGHTS.size()):
+		var grid: AStarGrid2D = _navigation[floor_id]
+		grid.region = NAV_REGIONS[floor_id]
+		grid.cell_size = Vector2.ONE * NAV_CELL
+		grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
+		grid.default_compute_heuristic = AStarGrid2D.HEURISTIC_OCTILE
+		grid.default_estimate_heuristic = AStarGrid2D.HEURISTIC_OCTILE
+		grid.update()
 	_refresh_navigation()
 
-func _mark_navigation_obstacle(rect: Rect2) -> void:
+func _mark_navigation_obstacle(grid: AStarGrid2D, rect: Rect2) -> void:
 	var start: Vector2i = Vector2i(ceili(rect.position.x / NAV_CELL), ceili(rect.position.y / NAV_CELL))
 	var end: Vector2i = Vector2i(floori(rect.end.x / NAV_CELL), floori(rect.end.y / NAV_CELL))
 	for x: int in range(start.x, end.x + 1):
 		for z: int in range(start.y, end.y + 1):
 			var cell: Vector2i = Vector2i(x, z)
-			if _navigation.is_in_boundsv(cell):
-				_navigation.set_point_solid(cell)
+			if grid.is_in_boundsv(cell):
+				grid.set_point_solid(cell)
 
 func _refresh_navigation() -> void:
-	_navigation.fill_solid_region(_navigation.region, false)
-	_navigation_footprints.clear()
-	for rect: Rect2 in _navigation_obstacles:
-		_navigation_footprints.append(rect)
-		_mark_navigation_obstacle(rect)
+	_navigation_footprints = _navigation_obstacles.duplicate(true)
 	# Large loose props can move; refresh their current footprints periodically.
 	for prop: Node3D in props:
 		if not is_instance_valid(prop) or bool(prop.get("held")) or float(prop.get("mass")) < 3.0:
@@ -170,17 +201,19 @@ func _refresh_navigation() -> void:
 						var point: Vector3 = collider.global_transform * (half_size * Vector3(x, y, z))
 						lower = lower.min(point)
 						upper = upper.max(point)
-			if upper.y > 0.12 and lower.y < 1.75:
-				var footprint: Rect2 = Rect2(Vector2(lower.x, lower.z), Vector2(upper.x - lower.x, upper.z - lower.z)).grow(NAV_CLEARANCE)
-				_navigation_footprints.append(footprint)
-				_mark_navigation_obstacle(footprint)
+			_add_navigation_bounds(lower, upper, _navigation_footprints)
+	for floor_id: int in range(FLOOR_HEIGHTS.size()):
+		var grid: AStarGrid2D = _navigation[floor_id]
+		grid.fill_solid_region(grid.region, false)
+		for footprint: Rect2 in _navigation_footprints[floor_id]:
+			_mark_navigation_obstacle(grid, footprint)
 	_navigation_age = 0.65
 
-func _nearest_navigation_cell(at: Vector3) -> Vector2i:
+func _nearest_navigation_cell(grid: AStarGrid2D, at: Vector3) -> Vector2i:
 	var cell: Vector2i = Vector2i(roundi(at.x / NAV_CELL), roundi(at.z / NAV_CELL))
-	cell.x = clampi(cell.x, NAV_REGION.position.x, NAV_REGION.end.x - 1)
-	cell.y = clampi(cell.y, NAV_REGION.position.y, NAV_REGION.end.y - 1)
-	if not _navigation.is_point_solid(cell):
+	cell.x = clampi(cell.x, grid.region.position.x, grid.region.end.x - 1)
+	cell.y = clampi(cell.y, grid.region.position.y, grid.region.end.y - 1)
+	if not grid.is_point_solid(cell):
 		return cell
 	var best: Vector2i = cell
 	var best_distance: float = INF
@@ -190,7 +223,7 @@ func _nearest_navigation_cell(at: Vector3) -> Vector2i:
 				if absi(x) != radius and absi(z) != radius:
 					continue
 				var candidate: Vector2i = cell + Vector2i(x, z)
-				if not _navigation.is_in_boundsv(candidate) or _navigation.is_point_solid(candidate):
+				if not grid.is_in_boundsv(candidate) or grid.is_point_solid(candidate):
 					continue
 				var distance: float = Vector2(candidate.x * NAV_CELL - at.x, candidate.y * NAV_CELL - at.z).length_squared()
 				if distance < best_distance:
@@ -200,12 +233,12 @@ func _nearest_navigation_cell(at: Vector3) -> Vector2i:
 			return best
 	return best
 
-func _navigation_segment_clear(from: Vector3, to: Vector3) -> bool:
+func _navigation_segment_clear(from: Vector3, to: Vector3, footprints: Array) -> bool:
 	# Test the whole swept centre line against the same body-expanded footprints
 	# used by A*. A clear visual ray alone would cut a shoulder through a desk.
 	var origin: Vector2 = Vector2(from.x, from.z)
 	var direction: Vector2 = Vector2(to.x - from.x, to.z - from.z)
-	for rect: Rect2 in _navigation_footprints:
+	for rect: Rect2 in footprints:
 		var entry: float = 0.0
 		var leave: float = 1.0
 		var intersects: bool = true
@@ -227,23 +260,29 @@ func _navigation_segment_clear(from: Vector3, to: Vector3) -> bool:
 	return true
 
 func find_navigation_path(from: Vector3, destination: Vector3) -> PackedVector3Array:
+	var result: PackedVector3Array = PackedVector3Array()
+	var floor_id: int = floor_index(from)
+	if floor_id != floor_index(destination):
+		return result
 	if _navigation_age <= 0.0:
 		_refresh_navigation()
-	var start: Vector2i = _nearest_navigation_cell(from)
-	var end: Vector2i = _nearest_navigation_cell(destination)
-	var result: PackedVector3Array = PackedVector3Array()
-	if _navigation.is_point_solid(start) or _navigation.is_point_solid(end):
+	var height: float = FLOOR_HEIGHTS[floor_id]
+	var grid: AStarGrid2D = _navigation[floor_id]
+	var footprints: Array = _navigation_footprints[floor_id]
+	var start: Vector2i = _nearest_navigation_cell(grid, from)
+	var end: Vector2i = _nearest_navigation_cell(grid, destination)
+	if grid.is_point_solid(start) or grid.is_point_solid(end):
 		return result
-	var route: PackedVector2Array = _navigation.get_point_path(start, end)
+	var route: PackedVector2Array = grid.get_point_path(start, end)
 	var candidates: PackedVector3Array = PackedVector3Array()
 	for index: int in range(1, route.size()):
-		candidates.append(Vector3(route[index].x, 0, route[index].y))
+		candidates.append(Vector3(route[index].x, height, route[index].y))
 	if candidates.is_empty() and start == end:
-		candidates.append(Vector3(end.x * NAV_CELL, 0, end.y * NAV_CELL))
+		candidates.append(Vector3(end.x * NAV_CELL, height, end.y * NAV_CELL))
 	if candidates.is_empty():
 		return result
-	var exact_destination: Vector3 = Vector3(destination.x, 0, destination.z)
-	if _navigation_segment_clear(candidates[-1], exact_destination):
+	var exact_destination: Vector3 = Vector3(destination.x, height, destination.z)
+	if _navigation_segment_clear(candidates[-1], exact_destination, footprints):
 		candidates.append(exact_destination)
 	# Follow a few clear corners instead of shuffling through every grid centre.
 	var anchor: Vector3 = from
@@ -251,7 +290,7 @@ func find_navigation_path(from: Vector3, destination: Vector3) -> PackedVector3A
 	while index < candidates.size():
 		var farthest: int = index
 		for next: int in range(candidates.size() - 1, index, -1):
-			if _navigation_segment_clear(anchor, candidates[next]):
+			if _navigation_segment_clear(anchor, candidates[next], footprints):
 				farthest = next
 				break
 		result.append(candidates[farthest])
@@ -306,10 +345,7 @@ func _build_room() -> void:
 			_box(Vector3(1.985, 0.008, 1.985), Vector3(x * 2 + 1, -0.01, z * 2 + 1), color)
 	_box(Vector3(2.25, 0.018, 5.5), Vector3(0, 0.005, 5.1), Color("acb8a6"))
 	_box(Vector3(0.25, 4.3, 18), Vector3(-8.12, 2.12, -1), CREAM, true)
-	# Wide east opening connects the temporary CEO room without moving the office.
-	_box(Vector3(0.25, 4.3, 7.8), Vector3(8.12, 2.12, -6.1), CREAM, true)
-	_box(Vector3(0.25, 4.3, 5.8), Vector3(8.12, 2.12, 5.1), CREAM, true)
-	_box(Vector3(0.25, 0.9, 4.4), Vector3(8.12, 3.9, 0), CREAM, true)
+	_box(Vector3(0.25, 4.3, 18), Vector3(8.12, 2.12, -1), CREAM, true)
 	_box(Vector3(16.4, 4.3, 0.25), Vector3(0, 2.12, -10.12), CREAM, true)
 	_box(Vector3(6.5, 4.3, 0.25), Vector3(-4.75, 2.12, 8.12), CREAM, true)
 	_box(Vector3(6.5, 4.3, 0.25), Vector3(4.75, 2.12, 8.12), CREAM, true)
@@ -508,7 +544,8 @@ func _npc(name_value: String, role_value: String, at: Vector3, color: Color, yaw
 		npc.set("work_activity", "idle")
 	if role_value == "coward":
 		npc.set("skin_color", Color("ab795b"))
-	npc.set("player_target", player_target)
+	npc.set("player_target", player_target if is_instance_valid(player_target) and floor_index(at) == floor_index(player_target.global_position) else null)
+	_configure_actor_floor(npc, floor_index(at))
 	npc.set("navigation_provider", Callable(self, "find_navigation_path"))
 	npc.position = at
 	npc.rotation.y = yaw
@@ -535,7 +572,7 @@ func _build_people() -> void:
 	_npc("타 부서 직원 · 회의실", "observer", Vector3(4.45, 0.06, 3.75), Color("897887"), PI, "", {"affiliation": "other", "personality": "spectator", "work_activity": "papers", "reaction_line": "어… 저쪽 무슨 일이야?"})
 
 func slam_desk(origin: Vector3, strength: float = 1.0) -> bool:
-	if origin.distance_to(Vector3(12.7, 1.0, -4.2)) < 2.15:
+	if origin.distance_to(CEO_DESK_POSITION) < 2.15:
 		var object: Node3D
 		for item: Node3D in props:
 			if is_instance_valid(item) and item.get("display_name") == "대표 기념패":
@@ -714,7 +751,7 @@ func _disturb(at: Vector3, strength: float) -> void:
 	_reaction_cooldown = 0.6
 	var radius: float = 4.8 + clampf(strength, 0.0, 3.0) * 2.7
 	for npc: Node3D in npcs:
-		if not is_instance_valid(npc):
+		if not is_instance_valid(npc) or floor_index(at) != floor_index(npc.global_position):
 			continue
 		var distance: float = npc.global_position.distance_to(at)
 		if distance > radius:
@@ -795,17 +832,19 @@ func escalate(level: int) -> void:
 	if level >= 2:
 		cancel_opening_scene()
 	if level >= 2 and previous < 2:
-		var guard: Node3D = _npc("사내 경비", "guard", Vector3(-0.5, 0.08, 7.2), Color("8c947b"), PI)
+		var guard: Node3D = _npc("사내 경비", "guard", _response_entry(0), Color("8c947b"), PI)
 		if is_instance_valid(guard):
 			damage_assessed.emit("dispatch:guard", "response", 100000, "사내 경비 투입")
 	if level >= 3 and previous < 3:
-		var police: Node3D = _npc("출동 경찰", "police", Vector3(0.6, 0.08, 7.4), Color("354f70"), PI)
+		var entry: Vector3 = _response_entry(1)
+		var police: Node3D = _npc("출동 경찰", "police", entry, Color("354f70"), 0.0 if floor_index(entry) == 1 else PI)
 		if is_instance_valid(police):
 			damage_assessed.emit("dispatch:police", "response", 500000, "경찰 출동 · 사건 처리")
 			record_scenario_fact(_last_cause, "police_arrived", police)
 			responder_arrived.emit(police)
 	if level >= 4 and previous < 4:
-		var backup: Node3D = _npc("지원 경찰", "police", Vector3(-0.65, 0.08, 8.0), Color("354f70"), PI)
+		var entry: Vector3 = _response_entry(2)
+		var backup: Node3D = _npc("지원 경찰", "police", entry, Color("354f70"), 0.0 if floor_index(entry) == 1 else PI)
 		if is_instance_valid(backup):
 			damage_assessed.emit("dispatch:reinforcement", "response", 800000, "경찰 추가 출동")
 
@@ -824,36 +863,141 @@ func _physics_process(delta: float) -> void:
 			_record_applied_reaction(actor)
 	_reaction_cooldown = maxf(0.0, _reaction_cooldown - delta)
 	_navigation_age = maxf(0.0, _navigation_age - delta)
+	_update_actor_targets(delta)
 	_advance_opening_scene(delta)
 	_advance_boss_lecture(delta)
 	_advance_work_dialogue(delta)
-	for npc: Node3D in npcs:
-		if is_instance_valid(npc):
-			npc.set("player_target", player_target)
 
 func _build_ceo_room() -> void:
-	_box(Vector3(7.7, 0.3, 9.6), Vector3(12, -0.17, -1), Color("6a7068"), true)
-	_box(Vector3(0.2, 4.3, 9.6), Vector3(15.9, 2.12, -1), CREAM, true)
-	_box(Vector3(7.7, 4.3, 0.2), Vector3(12, 2.12, -5.8), CREAM, true)
-	_box(Vector3(7.7, 4.3, 0.2), Vector3(12, 2.12, 3.8), TEAL, true)
-	_box(Vector3(7.7, 0.19, 9.6), Vector3(12, 4.22, -1), CREAM, true)
-	_box(Vector3(3.5, 0.02, 2.7), Vector3(12.7, 0.005, -3.5), Color("87816b"))
-	# Keep the original east bookshelf; indicate the clear side aisle beside it.
-	_box(Vector3(2.6, 0.014, 1.25), Vector3(8.1, 0.0, -1.35), Color("acb8a6"))
-	_desk(Vector3(12.7, 0, -4.2), 3.0)
-	_desk(Vector3(9.9, 0, -2.5), 1.7)
-	_desk(Vector3(13.3, 0, 2.4), 1.7)
-	_label("대표이사", Vector3(8.02, 2.7, -1.35), 0.006, CREAM, -PI * 0.5)
-	_label("결재는 여기서. 책임은 현장에서.", Vector3(12.5, 2.3, -5.68), 0.003, TEAL)
-	_label("공용 서류", Vector3(9.9, 1.55, -2.5), 0.0028, CREAM)
-	_label("방문객", Vector3(13.3, 1.55, 2.4), 0.0028, CREAM)
-	_light(Vector3(12.0, 3.7, -1.0), 1.2, Color("ffecd0"), 8.0)
-	_prop("binder", "대표 기념패", Vector3(12.0, 1.13, -4.0), ORANGE)
-	_prop("paper", "대표 결재함", Vector3(13.4, 1.1, -4.0), CREAM)
-	_prop("chair", "대표 의자", Vector3(13.5, 0.04, -2.8), INK, PI)
-	_prop("paper", "밀린 공용 서류", Vector3(9.9, 1.1, -2.5), CREAM)
-	_prop("mug", "대표 커피잔", Vector3(13.3, 1.16, 2.4), ORANGE)
-	ceo = _npc("사장", "ceo", Vector3(12.7, 0.04, -2.8), Color("634e46"), PI, "", {"affiliation": "executive", "personality": "dumping", "health": 90.0, "work_activity": "papers"})
+	var top: Vector3 = Vector3.UP * EXECUTIVE_ELEVATION
+	_box(Vector3(10.1, 0.3, 9.6), top + Vector3(3.1, -0.17, -1), Color("6a7068"), true)
+	_box(Vector3(0.25, 4.3, 9.6), top + Vector3(8.12, 2.12, -1), TEAL, true)
+	_box(Vector3(0.2, 4.3, 9.6), top + Vector3(-1.9, 2.12, -1), CREAM, true)
+	_box(Vector3(10.1, 4.3, 0.2), top + Vector3(3.1, 2.12, -5.8), CREAM, true)
+	_box(Vector3(10.1, 4.3, 0.2), top + Vector3(3.1, 2.12, 3.8), TEAL, true)
+	_box(Vector3(10.1, 0.19, 9.6), top + Vector3(3.1, 4.22, -1), CREAM, true)
+	# The east corridor connects the lift to a wide opening in the executive office.
+	_box(Vector3(0.18, 4.3, 4.6), top + Vector3(5.85, 2.12, -3.5), CREAM, true)
+	_box(Vector3(0.18, 4.3, 2.6), top + Vector3(5.85, 2.12, 2.5), CREAM, true)
+	_box(Vector3(0.18, 1.15, 2.4), top + Vector3(5.85, 3.69, 0), TEAL, true)
+	_box(Vector3(0.27, 0.22, 2.55), top + Vector3(5.85, 3.12, 0), INK)
+	_label("대표이사", top + Vector3(6.0, 3.11, 0), 0.005, CREAM, PI * 0.5)
+	_box(Vector3(2.02, 0.014, 9.3), top + Vector3(6.96, -0.008, -1), Color("acb8a6"))
+	_box(Vector3(3.5, 0.02, 2.7), top + Vector3(2.7, 0.005, -3.5), Color("87816b"))
+	_desk(CEO_DESK_POSITION - Vector3.UP, 3.0)
+	_desk(top + Vector3(-0.1, 0, -2.5), 1.7)
+	_desk(top + Vector3(3.3, 0, 2.4), 1.7)
+	_box(Vector3(5.4, 1.65, 0.05), top + Vector3(2.7, 2.65, -5.67), Color("accad0"), false, 0.27)
+	for x: float in [0.03, 1.8, 3.6, 5.37]:
+		_box(Vector3(0.055, 1.70, 0.075), top + Vector3(x, 2.65, -5.62), INK)
+	_box(Vector3(5.44, 0.06, 0.09), top + Vector3(2.7, 1.80, -5.61), WOOD)
+	_label("결재는 여기서. 책임은 현장에서.", top + Vector3(2.7, 1.55, -5.66), 0.003, TEAL)
+	_label("공용 서류", top + Vector3(-0.1, 1.55, -2.5), 0.0028, CREAM)
+	_label("방문객", top + Vector3(3.3, 1.55, 2.4), 0.0028, CREAM)
+	_light(top + Vector3(2.0, 3.7, -1.0), 1.35, Color("ffecd0"), 8.0)
+	_light(top + Vector3(6.9, 3.65, -1.5), 0.9, Color("ffecd0"), 6.5)
+	_prop("binder", "대표 기념패", top + Vector3(2.0, 1.13, -4.0), ORANGE)
+	_prop("paper", "대표 결재함", top + Vector3(3.4, 1.1, -4.0), CREAM)
+	_prop("chair", "대표 의자", top + Vector3(3.5, 0.04, -2.8), INK, PI)
+	_prop("paper", "밀린 공용 서류", top + Vector3(-0.1, 1.1, -2.5), CREAM)
+	_prop("mug", "대표 커피잔", top + Vector3(3.3, 1.16, 2.4), ORANGE)
+	ceo = _npc("사장", "ceo", top + Vector3(2.7, 0.04, -2.8), Color("634e46"), PI, "", {"affiliation": "executive", "personality": "dumping", "health": 90.0, "work_activity": "papers"})
+
+func _build_elevator(floor_id: int) -> void:
+	var base: Vector3 = Vector3.UP * FLOOR_HEIGHTS[floor_id]
+	var door: MeshInstance3D = _box(Vector3(0.12, 2.70, 1.60), base + ELEVATOR_DOOR, INK, true)
+	_elevator_doors.append(door.get_child(0) as StaticBody3D)
+	for side: float in [-1.0, 1.0]:
+		_box(Vector3(0.09, 2.56, 0.74), base + ELEVATOR_DOOR + Vector3(-0.04, -0.025, side * 0.38), Color("638482"))
+		_box(Vector3(0.18, 2.75, 0.075), base + ELEVATOR_DOOR + Vector3(-0.06, 0.03, side * 0.80), WOOD)
+	_box(Vector3(0.22, 0.45, 1.83), base + Vector3(7.84, 2.93, -1.60), INK)
+	_label("엘리베이터   %dF" % (floor_id + 1), base + Vector3(7.72, 2.93, -1.60), 0.004, CREAM, -PI * 0.5)
+	_box(Vector3(0.12, 0.28, 0.16), base + Vector3(7.87, 1.28, -2.48), INK)
+	_box(Vector3(0.028, 0.065, 0.088), base + Vector3(7.799, 1.31, -2.48), Color("ffd89b"), false, 1.0)
+	_box(Vector3(1.2, 0.013, 1.65), base + Vector3(7.32, 0.005, -1.60), WOOD)
+
+func elevator_hint(body: CharacterBody3D, collider: Object) -> String:
+	var floor_id: int = floor_index(body.global_position)
+	if collider != _elevator_doors[floor_id]:
+		return ""
+	return "엘리베이터  ·  E %s" % ("2층 사장실" if floor_id == 0 else "1층 사무실")
+
+func try_use_elevator(body: CharacterBody3D, collider: Object) -> bool:
+	if body != player_target or not body.enabled or get_tree().paused or elevator_hint(body, collider).is_empty():
+		return false
+	if (is_instance_valid(ceo_hold) and ceo_hold.active) or is_instance_valid(body.held_prop):
+		return false
+	var floor_id: int = floor_index(body.global_position)
+	var door_at: Vector3 = ELEVATOR_DOOR + Vector3.UP * FLOOR_HEIGHTS[floor_id]
+	if (body.global_position + Vector3.UP * ELEVATOR_DOOR.y).distance_to(door_at) > ELEVATOR_RANGE + 0.22:
+		return false
+	var destination: int = 1 - floor_id
+	var landing: Vector3 = ELEVATOR_LANDING + Vector3.UP * FLOOR_HEIGHTS[destination]
+	if not _entry_clear(landing, body):
+		return false
+	body.place_at(landing, ELEVATOR_ARRIVAL_YAWS[destination], 0.0)
+	if opening_started:
+		cancel_opening_scene()
+	_pursuit_transfer_delay = PURSUIT_TRANSFER_TIMEOUT
+	floor_changed.emit()
+	return true
+
+func _entry_clear(at: Vector3, except: CharacterBody3D = null) -> bool:
+	# Test the full standing volume, including loose props and other actors.
+	var capsule: CapsuleShape3D = CapsuleShape3D.new()
+	capsule.radius = 0.35
+	capsule.height = 1.85
+	var query: PhysicsShapeQueryParameters3D = PhysicsShapeQueryParameters3D.new()
+	query.shape = capsule
+	query.transform.origin = at + Vector3.UP * capsule.height * 0.5
+	query.collision_mask = 7 | 8
+	if is_instance_valid(except):
+		query.exclude = [except.get_rid()]
+	return get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
+
+func _response_entry(slot: int) -> Vector3:
+	var floor_id: int = floor_index(player_target.global_position) if is_instance_valid(player_target) else 0
+	var at: Vector3 = RESPONSE_ENTRIES[floor_id][slot]
+	return at + Vector3.UP * FLOOR_HEIGHTS[floor_id]
+
+func _configure_actor_floor(npc: Node3D, floor_id: int) -> void:
+	npc.floor_height = FLOOR_HEIGHTS[floor_id]
+	if floor_id == 1:
+		npc.flight_bounds = EXECUTIVE_BOUNDS
+		npc.flee_points = EXECUTIVE_FLEE_POINTS
+	else:
+		npc.flight_bounds = NPC_SCRIPT.OFFICE_FLIGHT_BOUNDS
+		npc.flee_points = NPC_SCRIPT.OFFICE_FLEE_POINTS
+
+func _update_actor_targets(delta: float) -> void:
+	if not is_instance_valid(player_target):
+		return
+	_pursuit_transfer_delay = maxf(0.0, _pursuit_transfer_delay - delta)
+	var target_floor: int = floor_index(player_target.global_position)
+	var used_entries: Array[Vector3] = []
+	for npc: Node3D in npcs:
+		if not is_instance_valid(npc):
+			continue
+		var floor_id: int = floor_index(npc.global_position)
+		npc.player_target = player_target if floor_id == target_floor else null
+		npc.response_exit = Vector3.INF
+		if floor_id == target_floor or npc.get("affiliation") != "security" or not _actor_living(npc):
+			continue
+		var exit: Vector3 = ELEVATOR_LANDING + Vector3.UP * FLOOR_HEIGHTS[floor_id]
+		npc.response_exit = exit
+		# Walk up to the lift. If congestion prevents that, re-enter through a
+		# clear dispatch point upstairs/downstairs with the same actor and health.
+		if npc.global_position.distance_to(exit) > 0.85 and _pursuit_transfer_delay > 0.0:
+			continue
+		for slot: int in range(RESPONSE_ENTRIES[target_floor].size()):
+			var at: Vector3 = _response_entry(slot)
+			if at in used_entries or not _entry_clear(at, npc):
+				continue
+			npc.enter_response_floor(at)
+			_configure_actor_floor(npc, target_floor)
+			npc.player_target = player_target
+			used_entries.append(at)
+			break
 
 func record_scenario_fact(origin: Dictionary, fact: String, target: Node3D = null, extra: Dictionary = {}) -> Dictionary:
 	var event: Dictionary = events.fact(origin, fact, target, extra)
@@ -970,6 +1114,8 @@ func _on_police_observed(actor: CharacterBody3D) -> void:
 
 func reset_world() -> void:
 	world_resetting.emit()
+	if is_instance_valid(player_target):
+		player_target.reset_position(PLAYER_SPAWN)
 	_pending_reactions.clear()
 	_scenario_spoken.clear()
 	_contact.clear()
@@ -1000,5 +1146,8 @@ func reset_world() -> void:
 	_opening_index = 0
 	_opening_invalidated.clear()
 	_reset_boss_lecture()
-	_navigation_obstacles.clear()
+	for obstacles: Array in _navigation_obstacles:
+		obstacles.clear()
+	_elevator_doors.clear()
+	_pursuit_transfer_delay = 0.0
 	_ready()
