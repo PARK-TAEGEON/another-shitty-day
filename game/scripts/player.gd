@@ -30,6 +30,8 @@ var shake_scale: float = 0.55
 var held_prop: RigidBody3D
 var actor_hold: Node
 var office_world: Node3D
+var _rig_study := "--rig-slice" in OS.get_cmdline_user_args()
+var _release_hand := 0.0
 var _hands: Node3D
 var _left: Node3D
 var _right: Node3D
@@ -60,6 +62,7 @@ var _hit_presenter: Node
 var _hit_tune: Node
 
 func _ready() -> void:
+	_rig_study = _rig_study or get_tree().root.has_meta("rig_slice")
 	_register_inputs()
 	collision_layer = 8
 	collision_mask = 7
@@ -82,6 +85,9 @@ func _ready() -> void:
 	_right = _make_arm(1)
 	_left_home = _contact_positions[0] + _study_to_view * Vector3(-0.055, 0.058, 0.240)
 	_right_home = _contact_positions[1] + _study_to_view * Vector3(0.055, 0.058, 0.240)
+	if _rig_study:
+		_left_home = Vector3(-0.265, -0.188, -0.385)
+		_right_home = Vector3(0.265, -0.188, -0.385)
 	_foot = Node3D.new()
 	_hands.add_child(_foot)
 	_mesh(_foot, Vector3(0.17, 0.37, 0.19), Vector3(0, 0.17, 0.03), Color("264b50"))
@@ -116,7 +122,7 @@ func _register_inputs() -> void:
 func _make_arm(side: int) -> Node3D:
 	# Exact v3 geometry: left thumb is local +X, right thumb is local -X.
 	# The original outward sleeve bend and compact clenched fingers are retained.
-	var arm: Node3D = HandModel.new()
+	var arm: Node3D = preload("res://rig_slice/view_arm.gd").new() if _rig_study else HandModel.new()
 	_hands.add_child(arm)
 	arm.call("build", "left" if side < 0 else "right")
 	arm.scale = Vector3.ONE * HAND_VIEW_SCALE
@@ -136,6 +142,8 @@ func _make_arm(side: int) -> Node3D:
 	for point: Vector3 in points:
 		min_y = minf(min_y, (source_basis * point).y * HAND_VIEW_SCALE)
 	var relative_contact: Vector3 = Vector3(float(side) * 0.245, DESK_SURFACE_Y + 0.001 - min_y - CAMERA_HEIGHT, 0.04 - START_Z)
+	if _rig_study:
+		relative_contact.z += 0.055
 	var contact: Vector3 = _study_to_view * relative_contact
 	_contact_positions.append(contact)
 	_lift_positions.append(contact + _study_to_view * Vector3(0, 0.225, 0.138))
@@ -220,6 +228,9 @@ func _process(delta: float) -> void:
 	_anim = maxf(0.0, _anim - delta)
 	_shake = move_toward(_shake, 0.0, delta * 1.8)
 	_update_viewmodel(delta)
+	if _rig_study:
+		var extension := clampf((_right_home.z - _right.position.z) / 0.30, 0.0, 1.0)
+		_right.pose_sleeve(camera, 1.0, extension if _anim_kind != "slam" or _anim <= 0.0 else 0.0)
 	# Emit only after the same rendered pose has reached CONTACT. A frame crossing
 	# the contact threshold is held at contact once, even under a long frame.
 	if _slam_pending and enabled and _anim_kind == "slam" and _anim_duration - _anim + 0.000001 >= _slam_contact_time:
@@ -245,7 +256,17 @@ func _update_viewmodel(_delta: float) -> void:
 		grip.rotation = Vector3(-0.2, -actor_hold.side * 0.15, actor_hold.side * 0.25)
 		grip.call("set_grip", 0.9)
 		return
-	if is_instance_valid(held_prop):
+	if _rig_study and _release_hand > 0.0:
+		_release_hand = maxf(0.0, _release_hand - _delta)
+		_right.call("set_grip", lerpf(0.55, 0.0, minf(_release_hand * 8.0, 1.0)))
+	if _rig_study and is_instance_valid(held_prop):
+		var grip_target := held_prop.global_position
+		if held_prop.get("kind") == "mug":
+			grip_target = held_prop.to_global(Vector3(0.15305, 0.01334, -0.01783))
+		var socket := Vector3(-0.003, 0.084, -0.041)
+		_right.position = camera.to_local(grip_target) - _rest_bases[1] * socket * HAND_VIEW_SCALE
+		_right.call("set_grip", 0.31)
+	elif is_instance_valid(held_prop):
 		_left.position += Vector3(-0.05, -0.05, -0.09)
 		_right.position += Vector3(0.05, -0.05, -0.09)
 	if _anim <= 0.0 and not _slam_pending:
@@ -260,6 +281,12 @@ func _update_viewmodel(_delta: float) -> void:
 	var hit: float = sin(clampf(progress * 1.65, 0, 1) * PI)
 	match _anim_kind:
 		"punch":
+			if _rig_study:
+				var gather := sin(PI * clampf(progress / 0.17, 0.0, 1.0))
+				# Reach full extension at the original hit window after winding up.
+				if progress < 0.30:
+					hit = smoothstep(0.12, 0.30, progress)
+				_right.position += Vector3(0.014, -0.010, 0.052) * gather
 			_right.position += Vector3(-0.13 * hit, 0.1 * hit, -0.42 * hit)
 			_right.quaternion = (Basis(Vector3.RIGHT, -hit * 0.25) * _rest_bases[1]).get_rotation_quaternion()
 			_right.call("set_grip", 1.0)
@@ -288,6 +315,8 @@ func _pose_slam(elapsed: float) -> void:
 	for index: int in range(2):
 		var side: float = -1.0 if index == 0 else 1.0
 		var rest: Vector3 = _left_home if index == 0 else _right_home
+		if _rig_study and (frame <= 1.1 or (_slam_pending and frame >= lift_f + down_f - 0.0001)):
+			_fit_study_contact(index)
 		var contact: Vector3 = _contact_positions[index]
 		var lifted: Vector3 = _lift_positions[index]
 		var position_value: Vector3 = rest
@@ -317,6 +346,21 @@ func _pose_slam(elapsed: float) -> void:
 		hands[index].position = position_value
 		hands[index].quaternion = rotation_value
 		hands[index].call("set_grip", grip)
+
+func _fit_study_contact(index: int) -> void:
+	var surface_y := DESK_SURFACE_Y + 0.001
+	if is_instance_valid(office_world):
+		var desk: Vector3 = office_world.desk_position
+		if global_position.distance_to(desk) > 2.15:
+			return
+	var arm := _left if index == 0 else _right
+	var contact := _contact_positions[index]
+	var world_basis: Basis = camera.global_basis * _contact_bases[index]
+	var contact_vertex: Vector3 = arm.support_vertex(world_basis)
+	var lowest := camera.to_global(contact).y + (world_basis * contact_vertex).y * HAND_VIEW_SCALE
+	contact.y += (surface_y - lowest) / camera.global_basis.y.y
+	_contact_positions[index] = contact
+	_lift_positions[index] = contact + _study_to_view * Vector3(0, 0.225, 0.138)
 
 func perform_action(kind: String) -> void:
 	if _cooldown > 0.0 or not enabled or (is_instance_valid(actor_hold) and actor_hold.active):
@@ -416,7 +460,8 @@ func _pickup_or_drop() -> void:
 func _update_held(delta: float) -> void:
 	if not is_instance_valid(held_prop):
 		return
-	var desired: Vector3 = camera.to_global(Vector3(0.13, -0.14, -1.15))
+	var carry_anchor := Vector3(0.16, -0.13, -0.57) if _rig_study else Vector3(0.13, -0.14, -1.15)
+	var desired: Vector3 = camera.to_global(carry_anchor)
 	desired = _keep_prop_in_front_of_walls(held_prop, camera.global_position, desired)
 	desired = held_prop.global_position.lerp(desired, minf(delta * 18.0, 1.0))
 	# Sweep the item's real collision shape so carrying it cannot cross a wall.
@@ -472,6 +517,8 @@ func _drop(throw_item: bool) -> void:
 	if not is_instance_valid(held_prop):
 		held_prop = null
 		return
+	if _rig_study:
+		_release_hand = 0.28
 	var item: RigidBody3D = held_prop
 	contact_started.emit("throw" if throw_item else "drop", item)
 	held_prop = null
