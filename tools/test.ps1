@@ -68,6 +68,7 @@ foreach ($check in @(
     @{ File = 'property_damage_regression.gd'; Marker = 'PROPERTY_DAMAGE_REGRESSION_OK' },
     @{ File = 'social_damage_regression.gd'; Marker = 'SOCIAL_DAMAGE_REGRESSION_OK' },
     @{ File = 'office_layout_regression.gd'; Marker = 'OFFICE_LAYOUT_REGRESSION_OK' },
+    @{ File = 'floor_transition_regression.gd'; Marker = 'FLOOR_TRANSITION_REGRESSION_OK' },
     @{ File = 'minimal_hud_regression.gd'; Marker = 'MINIMAL_HUD_REGRESSION_OK' },
     @{ File = 'ui_stars_result_regression.gd'; Marker = 'UI_STARS_RESULT_REGRESSION_OK' },
     @{ File = 'star_pill_alignment_regression.gd'; Marker = 'STAR_PILL_ALIGNMENT_REGRESSION_OK' },
@@ -83,4 +84,4 @@ foreach ($check in @(
         throw ('The ' + $check.File + ' check did not report success.')
     }
 }
-Write-Host 'Import, smoke and all ten regressions passed. Visual, audio, native Windows launch and play-feel checks remain separate.'
+Write-Host 'Import, smoke and gameplay regressions passed. Visual, audio, native Windows launch and play-feel checks remain separate.'

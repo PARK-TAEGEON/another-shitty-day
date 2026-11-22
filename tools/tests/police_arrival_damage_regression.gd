@@ -4,6 +4,8 @@ extends SceneTree
 ## Fixture scope: existing phase-2 heat/recovery, low-health living CEO, and a
 ## standard held mug aimed at a frozen but collidable existing printer. Success
 ## uses real punch/throw input, native prop contact and production ledger signals.
+const WorldScript: Script = preload("res://scripts/world.gd")
+const TOP: float = WorldScript.EXECUTIVE_ELEVATION
 const MainScene: PackedScene = preload("res://scenes/main.tscn")
 var game: Node3D
 var world: Node3D
@@ -149,9 +151,9 @@ func _thrown_npc_transaction(mode: String) -> void:
 		return
 	# Place an existing Free observer beside, outside the actual throw trajectory.
 	# It keeps its original delayed reaction, dialogue and work interruption AI.
-	witness.global_position = Vector3(11.5, 0.04, -2.0)
+	witness.global_position = Vector3(1.5, TOP + 0.04, -2.0)
 	witness.velocity = Vector3.ZERO
-	player.global_position = Vector3(12.7, 0.04, 0.0)
+	player.global_position = Vector3(2.7, TOP + 0.04, 0.0)
 	player.velocity = Vector3.ZERO
 	_aim(ceo.global_position + Vector3.UP * 1.35)
 	for i: int in range(8):
@@ -195,7 +197,7 @@ func _thrown_npc_transaction(mode: String) -> void:
 
 func _thrown_prop_transaction() -> void:
 	await _fixture("full")
-	player.global_position = Vector3(12.0, 0.04, 0.0)
+	player.global_position = Vector3(2.0, TOP + 0.04, 0.0)
 	player.velocity = Vector3.ZERO
 	_aim(player.camera.global_position + Vector3(0.0, 0.0, -5.0))
 	for i: int in range(8):
@@ -212,7 +214,7 @@ func _thrown_prop_transaction() -> void:
 		return
 	# Freeze only the intact receiver; its actual collision and hit handler remain.
 	target.freeze = true
-	target.global_position = Vector3(12.13, player.camera.global_position.y - 0.14, -3.0)
+	target.global_position = Vector3(2.13, player.camera.global_position.y - 0.14, -3.0)
 	target.global_basis = Basis.IDENTITY
 	# Standard held-object placement is a fixture. Real LMB launches the mug and
 	# a native body_entered contact causes the source incident plus receiver damage.

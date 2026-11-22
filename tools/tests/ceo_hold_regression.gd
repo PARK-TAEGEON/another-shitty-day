@@ -3,6 +3,8 @@ extends SceneTree
 ## pair movement. Fixtures prepare free actors, loose props and stress obstacles;
 ## they never assign hold.active/target or fabricate successful grab metadata.
 ## Headless assertions are not visual/style/subjective gameplay approval.
+const WorldScript: Script = preload("res://scripts/world.gd")
+const TOP: float = WorldScript.EXECUTIVE_ELEVATION
 const MainScene: PackedScene = preload("res://scenes/main.tscn")
 var game: Node3D
 var world: Node3D
@@ -54,7 +56,7 @@ func _capture_fact(event: Dictionary) -> void:
 func _capture_change(actor: CharacterBody3D, held: bool, reason: String) -> void:
 	changes.append({"held": held, "reason": reason, "actor": actor.get_instance_id() if is_instance_valid(actor) else 0})
 
-func _pair_fixture(at: Vector3 = Vector3(12.0, 0.04, 0.0)) -> void:
+func _pair_fixture(at: Vector3 = Vector3(2.0, TOP + 0.04, 0.0)) -> void:
 	# Placement occurs only while Free. All success must then use real E events.
 	check(not hold.active, "pair fixture was used to move an already held actor")
 	player.global_position = at
@@ -211,7 +213,7 @@ func _test_physical_pair() -> void:
 	check(pair_distance >= 0.60 and pair_distance <= 1.2, "paired locomotion overlapped or lost the CEO capsule")
 	# A new layer-1 wall ahead of both capsules tests the actual swept move path.
 	var barrier_z: float = maxf(player.global_position.z, ceo.global_position.z) + 1.0
-	_box(Vector3(12.0, 1.4, barrier_z), Vector3(4.5, 2.8, 0.2))
+	_box(Vector3(2.0, TOP + 1.4, barrier_z), Vector3(4.5, 2.8, 0.2))
 	await _advance(0.08)
 	Input.action_press("move_back")
 	await _advance(0.9)
@@ -228,7 +230,7 @@ func _test_physical_pair() -> void:
 
 func _test_grab_geometry_rejection() -> void:
 	await _reset()
-	_box(Vector3(12.0, 1.35, -0.48), Vector3(2.0, 2.7, 0.08))
+	_box(Vector3(2.0, TOP + 1.35, -0.48), Vector3(2.0, 2.7, 0.08))
 	await _advance(0.06)
 	_tap("pickup")
 	await _advance(0.06)
@@ -236,15 +238,15 @@ func _test_grab_geometry_rejection() -> void:
 	await _reset()
 	# Both legal lateral alignments are occupied, but the Free subject remains
 	# outside the pillars. This tests refusal, not teleporting into penetration.
-	_box(Vector3(12.55, 1.25, -0.63), Vector3(0.32, 2.5, 0.32))
-	_box(Vector3(11.45, 1.25, -0.63), Vector3(0.32, 2.5, 0.32))
+	_box(Vector3(2.55, TOP + 1.25, -0.63), Vector3(0.32, 2.5, 0.32))
+	_box(Vector3(1.45, TOP + 1.25, -0.63), Vector3(0.32, 2.5, 0.32))
 	await _advance(0.06)
 	var actor_before: Vector3 = ceo.global_position
 	_tap("pickup")
 	await _advance(0.06)
 	check(not hold.active and changes.is_empty() and ceo.global_position.distance_to(actor_before) < 0.05, "unsafe initial alignment grabbed or forced the CEO through occupied space")
 	await _reset()
-	await _pair_fixture(Vector3(12.0, 0.55, 0.0))
+	await _pair_fixture(Vector3(2.0, TOP + 0.55, 0.0))
 	_tap("pickup")
 	check(not hold.active, "midair/unsupported pair was accepted")
 	observations["torso_occlusion_occupied_alignment_unsupported_floor"] = true

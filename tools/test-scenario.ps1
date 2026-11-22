@@ -8,7 +8,8 @@ $checks = @(
     @{ File = 'ceo_hold_regression.gd'; Marker = 'CEO_HOLD_REGRESSION_OK' },
     @{ File = 'police_hold_regression.gd'; Marker = 'POLICE_HOLD_REGRESSION_OK' },
     @{ File = 'police_arrival_regression.gd'; Marker = 'POLICE_ARRIVAL_REGRESSION_OK' },
-    @{ File = 'police_arrival_damage_regression.gd'; Marker = 'POLICE_ARRIVAL_DAMAGE_REGRESSION_OK' }
+    @{ File = 'police_arrival_damage_regression.gd'; Marker = 'POLICE_ARRIVAL_DAMAGE_REGRESSION_OK' },
+    @{ File = 'floor_transition_regression.gd'; Marker = 'FLOOR_TRANSITION_REGRESSION_OK' }
 )
 if ($IncludeLegacyChaos) {
     Write-Host 'Running the optional isolated legacy Chaos experiment. This does not enable it in the game.'

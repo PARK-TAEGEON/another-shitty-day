@@ -23,6 +23,17 @@ var skin_color: Color = Color("dca881")
 var hair_color: Color = Color("393229")
 var player_target: Node3D
 var navigation_provider: Callable
+const OFFICE_FLIGHT_BOUNDS: Array[Rect2] = [
+	Rect2(-7.995, -9.995, 15.99, 17.99),
+	Rect2(-1.51, 7.995, 3.02, 2.055),
+]
+const OFFICE_FLEE_POINTS: Array[Vector2] = [
+	Vector2(-6.2, 5.5), Vector2(6.2, 5.5), Vector2(-6.2, -6.2), Vector2(6.2, -6.2),
+]
+var flight_bounds: Array[Rect2] = OFFICE_FLIGHT_BOUNDS
+var flee_points: Array[Vector2] = OFFICE_FLEE_POINTS
+var floor_height: float = 0.0
+var response_exit: Vector3 = Vector3.INF
 var state: String = "idle"
 var health: float = 40.0
 # The world owns cue timing/dialogue. Assign opening_role before add_child().
@@ -957,13 +968,13 @@ func _advance_reaction(delta: float) -> void:
 			_flee_destination = Vector3.INF
 
 func _choose_flee_destination() -> Vector3:
-	var candidates: Array[Vector3] = [Vector3(-6.2, 0, 5.5), Vector3(6.2, 0, 5.5), Vector3(-6.2, 0, -6.2), Vector3(6.2, 0, -6.2)]
-	var best: Vector3 = candidates[0]
+	var best: Vector3 = global_position
 	var best_value: float = -INF
 	var danger: Vector3 = player_target.global_position if is_instance_valid(player_target) else _reaction_target
 	var to_danger: Vector3 = danger - global_position
 	to_danger.y = 0.0
-	for candidate: Vector3 in candidates:
+	for point: Vector2 in flee_points:
+		var candidate: Vector3 = Vector3(point.x, floor_height, point.y)
 		var travel: Vector3 = candidate - global_position
 		travel.y = 0.0
 		var value: float = candidate.distance_to(danger) - travel.length() * 0.50
@@ -1093,16 +1104,13 @@ func _flight_clearance(origin: Vector3, direction: Vector3, wanted: float) -> fl
 	return maxf(origin.distance_to(hit.position) - 0.42, 0.05)
 
 func clamp_to_room(point: Vector3) -> Vector3:
-	# Inner faces from world.gd: office walls, the east opening into the CEO room, and the south alcove.
-	var office := Vector3(clampf(point.x, -7.995, 7.995), point.y, clampf(point.z, -9.995, 7.995))
-	var ceo := Vector3(clampf(point.x, 7.995, 15.8), point.y, clampf(point.z, -5.7, 3.7))
-	var alcove := Vector3(clampf(point.x, -1.51, 1.51), point.y, clampf(point.z, 7.995, 10.05))
-	var best := office
-	var best_distance := Vector2(office.x - point.x, office.z - point.z).length_squared()
-	for candidate: Vector3 in [ceo, alcove]:
-		var distance := Vector2(candidate.x - point.x, candidate.z - point.z).length_squared()
+	var best: Vector3 = point
+	var best_distance: float = INF
+	for bounds: Rect2 in flight_bounds:
+		var candidate: Vector2 = Vector2(point.x, point.z).clamp(bounds.position, bounds.end)
+		var distance: float = candidate.distance_squared_to(Vector2(point.x, point.z))
 		if distance < best_distance:
-			best = candidate
+			best = Vector3(candidate.x, point.y, candidate.y)
 			best_distance = distance
 	return best
 
@@ -1110,16 +1118,14 @@ func _advance_procedural_flight(delta: float) -> void:
 	_flight_elapsed += delta
 	var u: float = clampf(_flight_elapsed / _flight_duration, 0.0, 1.0)
 	var desired: Vector3 = _flight_origin + _flight_dir * (_flight_distance * u) + Vector3.UP * (4.0 * _flight_peak * u * (1.0 - u))
-	if desired.y < 0.02:
-		desired.y = 0.02
+	desired.y = maxf(desired.y, floor_height + 0.02)
 	if _clamp_flight_to_room:
 		desired = clamp_to_room(desired)
 	var motion: Vector3 = desired - global_position
 	var blocked: Dictionary = _sweep_body(global_position + Vector3.UP * 1.0, motion)
 	if not blocked.is_empty():
 		global_position += motion * float(blocked.fraction) + (blocked.normal as Vector3) * 0.08
-		if global_position.y < 0.02:
-			global_position.y = 0.02
+		global_position.y = maxf(global_position.y, floor_height + 0.02)
 		if _clamp_flight_to_room:
 			global_position = clamp_to_room(global_position)
 		_finish_procedural_flight(blocked.normal)
@@ -1182,6 +1188,16 @@ func _thud(speed: float) -> void:
 	_thud_audio.global_position = global_position
 	_thud_audio.volume_db = clampf(-3.0 + speed * 0.25, -6.0, -1.0)
 	_thud_audio.play()
+
+func enter_response_floor(at: Vector3) -> void:
+	global_position = at
+	_home = at
+	velocity = Vector3.ZERO
+	_repath_time = 0.0
+	_path = PackedVector3Array()
+	_guard_push_active = false
+	response_exit = Vector3.INF
+	reset_physics_interpolation()
 
 func _path_direction(destination: Vector3, delta: float) -> Vector3:
 	_repath_time -= delta
@@ -1768,6 +1784,10 @@ func _physics_process(delta: float) -> void:
 						rotation.y = lerp_angle(rotation.y, atan2(move.x, move.z), minf(delta * 5.0, 1.0))
 				elif state == "concern" and role == "boss" and (distance > 2.2 or not _can_reach_player()):
 					move = _path_direction(player_target.global_position, delta) * 0.7
+		elif response_exit.is_finite():
+			_guard_push_active = false
+			move = _path_direction(response_exit, delta) * (2.35 if role == "police" else 2.0)
+			_turn_toward(global_position + move, delta, 5.0, 9.0)
 		if boss_approaching:
 			var horizontal_velocity: Vector3 = Vector3(velocity.x, 0, velocity.z)
 			var acceleration: float = 9.5 if move.length_squared() < horizontal_velocity.length_squared() else 6.5
@@ -1787,7 +1807,7 @@ func _physics_process(delta: float) -> void:
 		_advance_boss_lecture_gesture(delta)
 		_animate_pose(delta, minf(_walk_speed, 2.0))
 	if global_position.y < -8.0:
-		global_position = Vector3(_home.x, 0.1, _home.z)
+		global_position = Vector3(_home.x, floor_height + 0.1, _home.z)
 		velocity = Vector3.ZERO
 	if is_instance_valid(_rig_adapter):
 		_rig_adapter.update_pose(delta)

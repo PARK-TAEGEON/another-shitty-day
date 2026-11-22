@@ -2,6 +2,7 @@ extends SceneTree
 ## Native rendered replay. Only starting positions and dispatch are staged.
 ## E, movement, police witness/push, damage and results use production gameplay.
 const MainScript = preload("res://scripts/main.gd")
+const Office = preload("res://scripts/world.gd")
 var game: Node3D
 var player: CharacterBody3D
 var world: Node3D
@@ -100,7 +101,7 @@ func _run() -> void:
 	await _still("01b-repeat-desk-A")
 	# Use the default CEO and furniture, rather than relocating the target.
 	await _fixture()
-	player.global_position = Vector3(12.7, 0.05, -1.85)
+	player.global_position = Vector3(2.7, Office.EXECUTIVE_ELEVATION + 0.05, -1.85)
 	player.velocity = Vector3.ZERO
 	_look(world.ceo.global_position + Vector3.UP * 1.1)
 	await _wait(4.0)
@@ -113,12 +114,11 @@ func _run() -> void:
 	await _wait(0.65)
 	_check(game.ceo_hold.active, "default CEO room failed real E grab")
 	await _still("03-real-E-held")
-	# Go around the visitor desk, then north of the original east bookshelf.
-	await _move("move_back", 0.50)
-	await _move("move_left", 1.60)
-	await _move("move_forward", 0.25)
-	await _move("move_left", 0.65)
-	_check(game.ceo_hold.active and player.global_position.x < 8.0 and world.ceo.global_position.x < 8.0, "pair did not traverse real room/office connection")
+	# Keep the pair aligned as they step through the executive-floor doorway.
+	await _move("move_back", 0.66)
+	await _move("move_right", 1.52)
+	_check(game.ceo_hold.active and player.global_position.x > 5.95 and world.ceo.global_position.x > 5.95,
+		"held pair did not enter the executive corridor")
 	await _still("04-pair-crossed-doorway")
 	# Existing finite dispatcher, presentation and accounting. Actor placement is
 	# staged after the cut to make its individual LOS observable within this clip.
@@ -131,9 +131,13 @@ func _run() -> void:
 	for npc: CharacterBody3D in world.npcs:
 		if npc.role == "police":
 			police = npc
+		elif npc.role == "guard":
+			# Stage the guard away from the police-only witness demonstration.
+			npc.global_position = Vector3(-1.0, Office.EXECUTIVE_ELEVATION + 0.08, -4.5)
+			npc.velocity = Vector3.ZERO
 	_check(is_instance_valid(police), "existing dispatch did not create police")
 	if is_instance_valid(police):
-		police.global_position = player.global_position + Vector3(2.5, 0.04, 0)
+		police.global_position = player.global_position + Vector3(0, 0.04, 2.55)
 		police.velocity = Vector3.ZERO
 		police.set("_cooldown", 0.0)
 		police.set("_guard_push_active", false)
