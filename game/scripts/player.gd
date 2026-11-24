@@ -51,6 +51,7 @@ var _action_serial: int = 0
 var _contact_positions: Array[Vector3] = []
 var _lift_positions: Array[Vector3] = []
 var _contact_bases: Array[Basis] = []
+var _carry_basis := Basis.IDENTITY
 var _rest_bases: Array[Basis] = []
 var _lift_bases: Array[Basis] = []
 var _study_to_view: Basis = Basis(Vector3.RIGHT, -START_PITCH)
@@ -134,7 +135,13 @@ func _make_arm(side: int) -> Node3D:
 	var local_x: Vector3 = Vector3(0, 0.984, -0.18).normalized() * -float(side)
 	var source_basis: Basis = Basis(local_x, forward, local_x.cross(forward)).orthonormalized()
 	_contact_bases.append(_study_to_view * source_basis)
-	_rest_bases.append(_study_to_view * Basis(Vector3.RIGHT, -0.13) * source_basis)
+	var rest_basis := _study_to_view * Basis(Vector3.RIGHT, -0.13) * source_basis
+	if _rig_study:
+		if side > 0:
+			_carry_basis = rest_basis
+		# Roll about the hand's long axis so the knuckle ridge faces upward and inward.
+		rest_basis = Basis(Vector3.UP, deg_to_rad(8.0 * side)) * rest_basis * Basis(Vector3.UP, deg_to_rad(-52.0 * side))
+	_rest_bases.append(rest_basis)
 	_lift_bases.append(_study_to_view * Basis(Vector3.UP, -float(side) * 0.08) * Basis(Vector3.RIGHT, 0.62) * Basis(Vector3.BACK, float(side) * 0.04) * source_basis)
 	# Place the authored ulnar contact on the real desktop from the starting view.
 	# Geometry is uniformly sized for the existing 77-degree game camera; no limb stretching.
@@ -265,7 +272,8 @@ func _update_viewmodel(_delta: float) -> void:
 		if held_prop.get("kind") == "mug":
 			grip_target = held_prop.to_global(Vector3(0.15305, 0.01334, -0.01783))
 		var socket := Vector3(-0.003, 0.084, -0.041)
-		_right.position = camera.to_local(grip_target) - _rest_bases[1] * socket * HAND_VIEW_SCALE
+		_right.quaternion = _carry_basis.get_rotation_quaternion()
+		_right.position = camera.to_local(grip_target) - _carry_basis * socket * HAND_VIEW_SCALE
 		_right.call("set_grip", 0.31)
 	elif is_instance_valid(held_prop):
 		_left.position += Vector3(-0.05, -0.05, -0.09)
