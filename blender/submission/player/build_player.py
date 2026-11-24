@@ -34,13 +34,18 @@ def apply(o, mod):
     activate(o)
     bpy.ops.object.modifier_apply(modifier=mod.name)
 
-def make_mesh(name, vs, fs, material, weights, sub=0):
+def make_mesh(name, vs, fs, material, weights, sub=0, accent=None):
     me = bpy.data.meshes.new(name)
     me.from_pydata(vs, [], fs)
     me.update()
     o = bpy.data.objects.new(name, me)
     bpy.context.collection.objects.link(o)
     me.materials.append(material)
+    if accent:
+        extra_material, face_ids = accent
+        me.materials.append(extra_material)
+        for face_id in face_ids:
+            me.polygons[face_id].material_index = 1
     # Wind shells consistently including mirrored hands.
     import bmesh
     bm = bmesh.new()
@@ -113,10 +118,11 @@ def ringmesh(name, rows, convert, mat, weight, sub=1):
 def hand(tag, convert, defs, skin, nail, sub=2):
     """Welded palm with four distal sockets and a radial side socket. Joint support
     rings receive two adjacent phalanges. Thumb opposition has a separate CMC axis."""
-    base = 'Hand' + tag
+    base = 'Metacarpals' + tag
     verts = []
     weights = []
     faces = []
+    nail_faces = []
     nailobjs = []
     digits = []
     idx = {}
@@ -140,7 +146,7 @@ def hand(tag, convert, defs, skin, nail, sub=2):
                 off = -0.013 * q * q - 0.004 * q
                 # Let the radial palm flow into the proximal thumb wall.
                 web = max(0, -q)**2 * math.exp(-((h - 0.041)/0.032)**2)
-                p = (q * rx, h + off * max(0, h / 0.105) ** 2 + 0.007 * web, z - 0.007 * web)
+                p = (q * rx, h + off * max(0, h / 0.105) ** 2 + 0.007 * web, z - 0.007 * web - 0.010 * max(0, q)**2 * max(0, h / 0.105)**2)
                 idx[j, k, side] = vertex(p, {base: 1})
     for j in range(len(hs) - 1):
         for k in range(8):
@@ -156,7 +162,7 @@ def hand(tag, convert, defs, skin, nail, sub=2):
         thumb = i == 4
         if thumb:
             last = [idx[j, 0, s] for j, s in [(3, -1), (4, -1), (5, -1), (5, 1), (4, 1), (3, 1)]]
-            org = V((-0.051, 0.046, -0.019))
+            org = V((-0.054, 0.046, -0.022))
             axis = V((-0.62, 0.67, -0.41)).normalized()
             width = V((0.45, 0.72, 0.18))
             width = (width - axis * width.dot(axis)).normalized()
@@ -165,8 +171,8 @@ def hand(tag, convert, defs, skin, nail, sub=2):
             k = i * 2
             last = [idx[8, k, -1], idx[8, k + 1, -1], idx[8, k + 2, -1], idx[8, k + 2, 1], idx[8, k + 1, 1], idx[8, k, 1]]
             q = (i - 1.5) * 0.5
-            org = V((q * 0.047, 0.105 - 0.013 * q * q - 0.004 * q, 0))
-            axis = V((q * 0.085, 1, -0.035)).normalized()
+            org = V((q * 0.047, 0.105 - 0.013 * q * q - 0.004 * q, -0.010 * max(0, q)**2))
+            axis = V((q * 0.044, 1, -0.035)).normalized()
             width = V((1, 0, 0))
             radius = [0.0134, 0.0138, 0.0131, 0.0116][i]
         dorsal = width.cross(axis).normalized()
@@ -182,6 +188,19 @@ def hand(tag, convert, defs, skin, nail, sub=2):
         digits.append((label, names, org, axis, width, dorsal))
         # Widen the blend across both sides of each hinge for the deep first-person fist.
         p0, p1, d0, d1 = (0.21, 0.61, 0.61, 0.96)
+        def profile_axes(t):
+            if not thumb:
+                return width, dorsal
+            # Orient the distal nail plane toward the outside of the folded fist.
+            distal = V((0.94, 0.25, 0.23)).normalized()
+            outward = V((0, 0, -1))
+            aim = axis.rotation_difference(distal)
+            normal = aim.inverted() @ (outward - distal * outward.dot(distal)).normalized()
+            twist = math.atan2(axis.dot(dorsal.cross(normal)), dorsal.dot(normal))
+            phase = max(0, min(1, (t - 0.18) / 0.58))
+            turn = Q(axis, twist * phase * phase * (3 - 2 * phase))
+            return turn @ width, turn @ dorsal
+
         for t in [0.028, 0.09, 0.2, 0.36, 0.425, 0.45, 0.475, 0.54, 0.66, 0.72, 0.75, 0.78, 0.86, 0.92, 0.965, 0.993, 1.0]:
             center = org + axis * (L * t)
             radius_factor = (1 - 0.23 * t) * (1 + 0.06 * cos((t - 0.45) * 2 * pi / 0.3))
@@ -194,26 +213,55 @@ def hand(tag, convert, defs, skin, nail, sub=2):
                 w = mixbones(names[0], names[1], max(0, min(1, (t - p0) / (p1 - p0))))
             else:
                 w = mixbones(names[1], names[2], max(0, min(1, (t - d0) / (d1 - d0))))
+            breadth, depth = r, r * 0.94
+            if thumb:
+                # Sculpt a tapered proximal wedge, IP knuckle and flattened nail bed.
+                breadth *= (1.04 + 0.50 * math.exp(-((t - 0.18) / 0.20) ** 2)
+                            + 0.18 * math.exp(-((t - 0.73) / 0.075) ** 2))
+                depth *= 1.04 - 0.32 * t
+            else:
+                breadth *= 1 + 0.12 * math.exp(-((t - 0.72) / 0.22) ** 2)
+            ring_width, ring_back = profile_axes(t)
             ring = []
-            for u, v in [(-0.9, -0.64), (0, -1), (0.9, -0.64), (0.9, 0.64), (0, 1), (-0.9, 0.64)]:
-                ring.append(vertex(center + width * (u * r) + dorsal * (v * r * 0.94), w))
-            for k in range(6):
-                faces.append((last[k], last[(k + 1) % 6], ring[(k + 1) % 6], ring[k]))
+            section = [(-0.9, -0.64), (0, -1), (0.9, -0.64), (0.9, 0.64), (0, 1), (-0.9, 0.64)]
+            if thumb:
+                # Two additional longitudinal edges bound the flush thumbnail.
+                nail_radius = 0.46 if t <= 0.78 or t >= 0.965 else 0.64
+                section[4:5] = [(nail_radius, 0.95), (0, 1), (-nail_radius, 0.95)]
+            for u, v in section:
+                # The volar pads fill the inside of the finger curl.
+                pad = 0 if thumb else 0.0007 * (math.exp(-((t - 0.23) / 0.11) ** 2) + math.exp(-((t - 0.62) / 0.10) ** 2))
+                surface = v * depth + min(0, v) * pad
+                ring.append(vertex(center + ring_width * (u * breadth) + ring_back * surface, w))
+            if len(last) != len(ring):
+                # Bridge the six-sided palm socket to both nail support edges.
+                source = [last[i] for i in (0, 1, 2, 3, 3, 4, 5, 5)]
+            else:
+                source = last
+            for k in range(len(ring)):
+                nxt = (k + 1) % len(ring)
+                if thumb and 0.78 < t <= 0.965 and k in (4, 5):
+                    nail_faces.append(len(faces))
+                faces.append(tuple(dict.fromkeys((source[k], source[nxt], ring[nxt], ring[k]))))
             last = ring
         faces.append(last)
+        if thumb:
+            continue
         # Low-profile nail embedded in the dorsal side of the last phalanx.
         nv = []
         nf = []
         for j, t in enumerate([0.795, 0.83, 0.91, 0.945]):
+            nail_width, nail_back = profile_axes(t)
             for k in range(5):
                 a = (k - 2) / 2
                 b = 0.7 if j in [0, 3] else 1
-                nv.append(convert(org + axis * (L * t) + width * (a * b * radius * 0.5) + dorsal * (radius * (0.64 - 0.13 * a * a))))
+                nv.append(convert(org + axis * (L * t) + nail_width * (a * b * radius * 0.5) + nail_back * (radius * (0.64 - 0.13 * a * a))))
                 if j and k:
                     z = j * 5 + k
                     nf.append((z - 6, z - 5, z, z - 1))
         nailobjs.append(make_mesh(label + ' nail' + tag, nv, nf, nail, [{names[2]: 1}] * len(nv), 1))
-    return ([make_mesh('Palm and fingers' + tag, verts, faces, skin, weights, sub)] + nailobjs, digits)
+    palm = make_mesh('Palm and fingers' + tag, verts, faces, skin, weights, sub, (nail, nail_faces))
+    return ([palm] + nailobjs, digits)
 
 def rotbone(rig, n, axis, angle):
     b = rig.data.bones[n]
@@ -246,7 +294,28 @@ def player():
         def cv(p):
             return V((p[0] * side, -p[2], p[1]))
         defs = {'UpperArm' + tag: (cv((0, -0.66, 0.36)), cv((0, -0.32, 0.094)), None), 'Forearm' + tag: (cv((0, -0.32, 0.094)), cv((0, -0.015, 0)), 'UpperArm' + tag), 'Hand' + tag: (cv((0, -0.015, 0)), cv((0, 0.09, 0)), 'Forearm' + tag)}
+        metacarpals = 'Metacarpals' + tag
+        defs[metacarpals] = (*defs['Hand' + tag][:2], 'Hand' + tag)
+        pad_name = 'PalmarPad' + tag
+        defs[pad_name] = (cv((0, 0.06, 0)), cv((0, 0.09, 0)), metacarpals)
         obs, digits = hand(tag, cv, defs, skin, nail)
+        # Let the distal palm bunch beneath the folded proximal phalanges.
+        # It relaxes completely for the open hand and the mug pose.
+        palm = obs[0]
+        hand_group = palm.vertex_groups[metacarpals]
+        pad_group = palm.vertex_groups.new(name=pad_name)
+        for vertex in palm.data.vertices:
+            hand_weight = next((g.weight for g in vertex.groups if g.group == hand_group.index), 0.0)
+            x, volar, height = vertex.co
+            pad = math.exp(-((height - 0.0955) / 0.009) ** 2)
+            pad *= math.exp(-((x * side + 0.031) / 0.012) ** 4) * hand_weight ** 3
+            thenar = math.exp(-((x * side + 0.027) / 0.013) ** 2 - ((height - 0.037) / 0.022) ** 2)
+            pad = max(pad, 0.55 * thenar)
+            pad *= max(0, min(1, (volar - 0.002) / 0.012))
+            weight = hand_weight * pad
+            if weight > 0.0001:
+                hand_group.add([vertex.index], hand_weight - weight, 'REPLACE')
+                pad_group.add([vertex.index], weight, 'REPLACE')
         srows = [(-0.7, 0.081, 0.078, 0.39), (-0.62, 0.084, 0.078, 0.34), (-0.47, 0.079, 0.071, 0.22), (-0.36, 0.077, 0.067, 0.135), (-0.33, 0.077, 0.067, 0.1), (-0.3, 0.07, 0.064, 0.08), (-0.245, 0.06, 0.052, 0.046), (-0.195, 0.054, 0.047, 0.022), (-0.15, 0.049, 0.04, 0.007), (-0.135, 0.052, 0.042, 0.004), (-0.123, 0.045, 0.037, 0.003), (-0.108, 0.047, 0.038, 0.002), (-0.086, 0.039, 0.033, 0), (-0.078, 0.038, 0.032, 0)]
 
         def sleeveweights(z):
@@ -279,12 +348,13 @@ def player():
                             targets[2] = V((0.96, 0.18, 0.20))
                         if pose == 'opposition':
                             targets[1:] = [V((0.51, 0.47, -0.72)), V((0.96, 0.18, 0.31))]
-                        if pose == 'loose':
-                            targets[1:] = [V((0.52, 0.48, -0.72)), V((0.96, 0.18, 0.42))]
                         if pose == 'opposition':
                             targets[0] = V((-0.24, 0.54, -0.81))
-                        if pose == 'fist':
-                            targets[1:] = [V((0.56, 0.53, -0.63)), V((0.96, 0.18, 0.30))]
+                        if pose in ('loose', 'fist'):
+                            targets = [V((0.10, 0.75, -0.66)), V((0.68, 0.50, -0.55)),
+                                       V((0.94, 0.25, 0.23))]
+                        if pose == 'loose':
+                            targets[2] = V((0.94, 0.25, 0.13))
                         target = targets[k]
                         prev = direction if k == 0 else targets[k - 1].normalized()
                         cumulative = cv(direction).rotation_difference(cv(target.normalized()))
@@ -298,6 +368,17 @@ def player():
                         # Mirroring changes axial handedness.
                         rotbone(rig, n, cv((1, 0, 0)), math.radians(-angle) * amount * side)
                     rig.pose.bones[n].keyframe_insert('rotation_quaternion', frame=frame)
+            # Compact the closed grip along palm depth. The open and carry poses
+            # keep their authored proportions. The separate palm bone preserves the wrist IK contract.
+            pad_depth = {'loose': 0.007, 'fist': 0.001}.get(pose, 0.0)
+            pad_bone = rig.pose.bones[pad_name]
+            pad_bone.location = rig.data.bones[pad_name].matrix_local.to_quaternion().inverted() @ cv((0, 0, -pad_depth))
+            pad_bone.keyframe_insert('location', frame=frame)
+            depth = {'loose': 0.80, 'fist': 0.78}.get(pose, 1.0)
+            hand_bone = rig.pose.bones[metacarpals]
+            breadth = {'loose': 1.0515, 'fist': 1.0515}.get(pose, 1.0)
+            hand_bone.scale = (breadth, 1.0, depth)
+            hand_bone.keyframe_insert('scale', frame=frame)
         rig.animation_data.action.name = 'Grip' + tag
         # Export with the authored animation. Godot samples the track at exact key times.
         activate(rig)
@@ -352,8 +433,8 @@ def player():
         o.rotation_euler = (V((0, 0.35, -0.3)) - o.location).to_track_quat('-Z', 'Y').to_euler()
     save('player_arms')
     render('player_projection.png', cam, 100)
-    # Three views of the same tight fist, in the arm's anatomical coordinates.
-    sc.frame_set(30)
+    # Three views of the gameplay guard, in the arm's anatomical coordinates.
+    sc.frame_set(20)
     rig, obs = rigs[1]
     for o in rigs[0][1]:
         o.hide_render = True

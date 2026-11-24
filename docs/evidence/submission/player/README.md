@@ -1,5 +1,15 @@
 # 플레이어 팔 제출 검증 · 2026-11-24
 
+## 기본 주먹 재조형 · 기준 `0a53fb3`
+
+[본편·엄지 측면·손바닥 전후 비교](guard_revision/guard_comparison.jpg) · [펼치기·머그·펀치·책상 접촉](guard_revision/actions.jpg) · [Godot 동작 결과](guard_revision/events.json) · [메시 변형 검사](guard_revision/geometry.json)
+
+비교판의 왼쪽은 기준 커밋, 오른쪽은 새 양손 GLB다. 같은 Windows PC와 Godot 4.7.2에서 1280×720으로 촬영했다. 각 행은 같은 카메라, 조명, 배율을 썼다. 측면에서 검지 안쪽으로 비치던 배경이 가려지고, 손바닥 방향에서 엄지 밑동과 평평한 끝마디가 구분된다. 확대하면 검지 안쪽의 접힌 윤곽은 여전히 보인다. Blender의 `fist_*.png` 역시 기본 주먹 자세를 보여준다.
+
+같은 장면에서 양손·소매 점유율은 전후 각각 3.435%였다. 손을 숨긴 배경·HUD와 머그 단독 프레임은 각각 동일했다. 머그 운반 위치는 카메라 기준 (0.13, −0.14, −1.15) m, 대사창 좌상단은 (150, 574) px였다. 300프레임 실기 재생에서 양손 펼치기, 머그 집기·놓기·재집기·던지기, 오른손 펀치, 책상 첫 B와 반복 A 접촉을 확인했다. 리깅 팔의 손 동작 회귀 8항목을 통과했다.
+
+## 이전 제출 기록 · `0a53fb3`
+
 기준은 `art/kim-and-first-person-rig`의 `a449e6ab2467c65c704358de03e5a92b1e669d01`이다. 제출 브랜치는 `task/submission-player-1124`이다. 본편 시작 위치와 시선에서 팔의 기본 위치, 머그 운반 거리, 엄지의 형태와 굽힘을 조정했다.
 
 [본편 전후 비교](framing.jpg) · [실제 양주먹 확대](guard_close.jpg) · [엄지 측면 전후](thumb_comparison.jpg) · [본편 대사창](native_dialogue.jpg) · [10초 Godot 영상](actions.mp4)

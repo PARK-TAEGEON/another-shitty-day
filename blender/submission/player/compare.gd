@@ -30,6 +30,9 @@ func run() -> void:
 	game._resume()
 	game.police_arrival.mode = "off"
 	p = game.player
+	# Ignore hardware pointer motion while comparing the same spawn camera.
+	p.set_process_input(false)
+	p.set_process_unhandled_input(false)
 	for prop in game.world.props:
 		if prop.kind == "mug":
 			mug = prop
@@ -95,4 +98,8 @@ func run() -> void:
 		await shot("thumb_guard")
 		p._right.set_grip(1.0)
 		await shot("thumb_tight")
+		p._right.set_grip(0.55)
+		inspect.global_position = target + p._right.global_basis * Vector3(0.12,0.16,-0.55)
+		inspect.look_at(target, p._right.global_basis.y.normalized())
+		await shot("palm_guard")
 	quit()
