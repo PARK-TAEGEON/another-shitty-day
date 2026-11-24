@@ -62,7 +62,7 @@ var _hit_presenter: Node
 var _hit_tune: Node
 
 func _ready() -> void:
-	_rig_study = _rig_study or get_tree().root.has_meta("rig_slice")
+	_rig_study = _rig_study or bool(ProjectSettings.get_setting("asd/assets/player_arms_v2_enabled", false)) or get_tree().root.has_meta("rig_slice")
 	_register_inputs()
 	collision_layer = 8
 	collision_mask = 7
@@ -83,6 +83,7 @@ func _ready() -> void:
 	camera.add_child(_hands)
 	_left = _make_arm(-1)
 	_right = _make_arm(1)
+	print("ASD player arms loaded: ", "rigged_v2" if _rig_study else "legacy")
 	_left_home = _contact_positions[0] + _study_to_view * Vector3(-0.055, 0.058, 0.240)
 	_right_home = _contact_positions[1] + _study_to_view * Vector3(0.055, 0.058, 0.240)
 	if _rig_study:

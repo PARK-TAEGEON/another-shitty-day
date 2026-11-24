@@ -28,8 +28,6 @@ func _ready() -> void:
 		DirAccess.make_dir_recursive_absolute(out)
 	game._automated_run = true
 	game._resume()
-	# Keep NPC dialogue clear of the hand contact during review playback.
-	game._caption_panel.position.y = 67
 	game.police_arrival.mode = "off"
 	p.desk_requested.connect(_contact)
 	p.action_performed.connect(func(kind, _point): events.append(kind))
@@ -73,7 +71,7 @@ func _contact(_origin) -> void:
 
 func _stage(s: String) -> void:
 	stage=s
-	caption.text=s
+	caption.text="QA   /   " + s
 
 func _set_mug() -> void:
 	mug.freeze=true
