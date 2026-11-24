@@ -39,3 +39,23 @@ blender -b blender/submission/office/mug.blend --python-exit-code 1 -P "$D/grip_
 ```
 
 본편 smoke 통과. 리플레이의 머그 입력·장부·재시작 9개 검사 통과. 시나리오 리플레이는 김 팀장의 세 접근·대사 제스처, 모니터 투척 파손, 경비 접근과 접촉, 결과 진입을 확인했다. 리그 검증에서 첫 B와 반복 A 순서 및 양손 접촉 높이 통과.
+
+## 추가 묶음
+
+[7종 적용 후 같은 시작 프레임](after-all.jpg). 키보드는 이탈하는 키캡과 스페이스바, 서류는 네 장의 회전·흩어짐·접힘, 바인더는 표지 힌지와 페이지 밀림을 기존 파손 단계에 연결했다.
+
+| GLB | 삼각형 | 재질 | 1단계 → 최종 누적 피해액 |
+| --- | ---: | ---: | ---: |
+| keyboard | 1,672 | 5 | 20,000 → 50,000 |
+| paper | 484 | 5 | 5,000 → 15,000 |
+| binder | 352 | 5 | 10,000 → 30,000 |
+
+3종의 6개 손상 단계 및 부품 상태 검사를 통과했다. 설정 OFF/ON을 각각 적용한 월드에서 정적 충돌 상자 74개, 동적 소품 40개의 질량·충돌·배치·손상 기준, 층별 길찾기 장애물 목록이 일치했다. 두 모드에서 본편 smoke가 통과했다. 기본 모드 smoke의 일부 실행에서 종료 시 ObjectDB 정리 경고가 나왔다.
+
+```sh
+blender -b --python-exit-code 1 -P blender/submission/office/stationery.py
+godot --headless --path game --editor --import
+D="$PWD/docs/evidence/submission/office"
+godot --headless --path game --script "$D/physics_check.gd"
+godot --headless --path game --fixed-fps 30 --script "$D/stationery_check.gd" -- --office-props-v2
+```

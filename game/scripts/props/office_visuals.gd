@@ -1,6 +1,9 @@
 extends RefCounted
 
 const MODELS := {
+	"keyboard": preload("res://assets/submission/office/keyboard.glb"),
+	"paper": preload("res://assets/submission/office/paper.glb"),
+	"binder": preload("res://assets/submission/office/binder.glb"),
 	"desk": preload("res://assets/submission/office/desk.glb"),
 	"partition": preload("res://assets/submission/office/partition.glb"),
 	"monitor": preload("res://assets/submission/office/monitor.glb"),
@@ -26,13 +29,23 @@ static func prop_parts(kind: String, parent: Node3D, tint: Color) -> Dictionary:
 		screen.material_override = screen.get_active_material(0).duplicate()
 		return {"head": model.get_node("Head"), "screen": screen, "stand": model.get_node("Stand"),
 			"rows": model.get_node("Head").find_children("Row*", "MeshInstance3D", false, false)}
+	if kind == "keyboard":
+		var keys: Array[Node] = []
+		for i in 33:
+			keys.append(model.get_node("Key%02d" % i))
+		return {"body": model.get_node("Body"), "keys": keys, "space": model.get_node("Space")}
+	if kind == "paper":
+		return {"sheets": [model.get_node("Sheet0"), model.get_node("Sheet1"),
+			model.get_node("Sheet2"), model.get_node("Sheet3")], "label": model.get_node("Label")}
 	var glaze := StandardMaterial3D.new()
 	glaze.albedo_color = tint
 	glaze.roughness = 0.86
-	for node: MeshInstance3D in model.find_children("*", "MeshInstance3D", false, false):
+	for node: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
 		for surface in node.mesh.get_surface_count():
 			if node.mesh.surface_get_material(surface).resource_name == "teal":
 				node.set_surface_override_material(surface, glaze)
+	if kind == "binder":
+		return {"hinge": model.get_node("Hinge"), "pages": model.get_node("Pages")}
 	return {"body": model.get_node("Body"), "coffee": model.get_node("Coffee"),
 		"handle": [model.get_node("HandleUpper"), model.get_node("HandleGrip"), model.get_node("HandleLower")]}
 

@@ -126,12 +126,15 @@ func _build() -> void:
 			_bounds(Vector3(0.24, 0.22, 0.2))
 		"keyboard":
 			mass = 0.9
-			_parts["body"] = _box(Vector3(0.6, 0.045, 0.22), Vector3.ZERO, cream)
-			_parts["keys"] = []
-			for row: int in range(3):
-				for col: int in range(11):
-					_parts["keys"].append(_box(Vector3(0.039, 0.014, 0.04), Vector3(-0.255 + col * 0.05, 0.03, -0.07 + row * 0.05), ink if col == 10 else Color("c2c7be")))
-			_parts["space"] = _box(Vector3(0.24, 0.012, 0.025), Vector3(0, 0.031, 0.095), Color("c2c7be"))
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				_parts["body"] = _box(Vector3(0.6, 0.045, 0.22), Vector3.ZERO, cream)
+				_parts["keys"] = []
+				for row: int in range(3):
+					for col: int in range(11):
+						_parts["keys"].append(_box(Vector3(0.039, 0.014, 0.04), Vector3(-0.255 + col * 0.05, 0.03, -0.07 + row * 0.05), ink if col == 10 else Color("c2c7be")))
+				_parts["space"] = _box(Vector3(0.24, 0.012, 0.025), Vector3(0, 0.031, 0.095), Color("c2c7be"))
 			_bounds(Vector3(0.6, 0.07, 0.23))
 		"monitor":
 			mass = 3.8
@@ -174,21 +177,27 @@ func _build() -> void:
 			_bounds(Vector3(0.32, 0.6, 0.32), Vector3(0, 0.16, 0))
 		"paper":
 			mass = 0.45
-			_parts["sheets"] = []
-			for n: int in range(4):
-				_parts["sheets"].append(_box(Vector3(0.28, 0.012, 0.35), Vector3(n * 0.012, n * 0.014, 0), cream, Vector3(0, n * 0.07, 0)))
-			_parts["label"] = _box(Vector3(0.15, 0.003, 0.018), Vector3(0.02, 0.064, -0.09), Color("78928e"))
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				_parts["sheets"] = []
+				for n: int in range(4):
+					_parts["sheets"].append(_box(Vector3(0.28, 0.012, 0.35), Vector3(n * 0.012, n * 0.014, 0), cream, Vector3(0, n * 0.07, 0)))
+				_parts["label"] = _box(Vector3(0.15, 0.003, 0.018), Vector3(0.02, 0.064, -0.09), Color("78928e"))
 			_bounds(Vector3(0.34, 0.08, 0.4), Vector3(0.02, 0.02, 0))
 		"binder":
 			mass = 1.1
-			_box(Vector3(0.24, 0.065, 0.32), Vector3.ZERO, tint)
-			_parts["pages"] = _box(Vector3(0.21, 0.043, 0.28), Vector3(0.015, 0, 0.01), cream)
-			var hinge: Node3D = Node3D.new()
-			hinge.position = Vector3(-0.12, 0.036, 0)
-			_visuals.add_child(hinge)
-			_parts["hinge"] = hinge
-			_box(Vector3(0.24, 0.01, 0.32), Vector3(0.12, 0, 0), tint, Vector3.ZERO, hinge)
-			_box(Vector3(0.11, 0.004, 0.055), Vector3(0.12, 0.007, -0.055), cream, Vector3.ZERO, hinge)
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				_box(Vector3(0.24, 0.065, 0.32), Vector3.ZERO, tint)
+				_parts["pages"] = _box(Vector3(0.21, 0.043, 0.28), Vector3(0.015, 0, 0.01), cream)
+				var hinge: Node3D = Node3D.new()
+				hinge.position = Vector3(-0.12, 0.036, 0)
+				_visuals.add_child(hinge)
+				_parts["hinge"] = hinge
+				_box(Vector3(0.24, 0.01, 0.32), Vector3(0.12, 0, 0), tint, Vector3.ZERO, hinge)
+				_box(Vector3(0.11, 0.004, 0.055), Vector3(0.12, 0.007, -0.055), cream, Vector3.ZERO, hinge)
 			_bounds(Vector3(0.25, 0.08, 0.33))
 		"printer":
 			mass = 7.0
