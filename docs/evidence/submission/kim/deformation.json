@@ -1,0 +1,215 @@
+{
+  "source": "game/assets/rig_slice/boss_kim_game.glb",
+  "sha256": "ece7fe126680aa258f4ae4df353b16413da53c05bc17de668c7e8f4abb2bb91a",
+  "blender": "4.3.2",
+  "sample_fps": 30,
+  "glb": {
+    "triangles": 63495,
+    "bones": 50,
+    "materials": 4,
+    "meshes": 1,
+    "max_influences": 4,
+    "max_weight_sum_error": 1.3597309589385986e-07,
+    "clips": [
+      "Idle",
+      "Walk",
+      "Idle_Talking",
+      "Hit_Chest",
+      "Hit_Head",
+      "Joint_review"
+    ]
+  },
+  "rest_height_mm": 2207.14,
+  "measured_edges": 95925,
+  "method": "Imported office GLB, Blender coordinates. Count unique edges per clip with rest length >1 mm, more than 2x stretch and more than 10 mm growth. Peak reports the greatest absolute growth among all measured edges. Shoe heights are measured before NPC placement.",
+  "contact_test": "Triangle BVH overlap of hands and fingers vs torso and trousers. Includes Cloth-material garment triangles whose vertices carry only spine, chest, clavicle, pelvis or leg weights above 0.01. Sleeves and cuffs are excluded.",
+  "limits": "Independent clothing surfaces may slide, separate or interpenetrate without stretching their own edges. This audit samples clip poses and excludes Godot layering and Jolt simulation.",
+  "clips": {
+    "Idle": {
+      "sample_count": 76,
+      "frames_with_hand_torso_or_trouser_intersection": 0,
+      "materially_stretched_edges": 0,
+      "largest_edge_growth": {
+        "frame": 65.0,
+        "nearest_bone_head": "Chest",
+        "rest_mm": 212.28,
+        "posed_mm": 271.63,
+        "growth_mm": 59.35
+      },
+      "peak_edge_growth_within_200mm_of_joint_mm": {
+        "shoulder": 20.98,
+        "elbow": 14.85,
+        "knee": 10.95
+      },
+      "lowest_shoe_per_frame_range_mm": [
+        5.0,
+        5.0
+      ],
+      "shoe_minimum_z_range_mm": {
+        "L": [
+          7.31,
+          7.69
+        ],
+        "R": [
+          5.0,
+          5.0
+        ]
+      }
+    },
+    "Walk": {
+      "sample_count": 41,
+      "frames_with_hand_torso_or_trouser_intersection": 0,
+      "materially_stretched_edges": 0,
+      "largest_edge_growth": {
+        "frame": 28.0,
+        "nearest_bone_head": "Chest",
+        "rest_mm": 212.28,
+        "posed_mm": 265.49,
+        "growth_mm": 53.21
+      },
+      "peak_edge_growth_within_200mm_of_joint_mm": {
+        "shoulder": 23.35,
+        "elbow": 15.23,
+        "knee": 27.53
+      },
+      "lowest_shoe_per_frame_range_mm": [
+        5.0,
+        5.0
+      ],
+      "shoe_minimum_z_range_mm": {
+        "L": [
+          5.0,
+          131.6
+        ],
+        "R": [
+          5.0,
+          124.11
+        ]
+      }
+    },
+    "Idle_Talking": {
+      "sample_count": 89,
+      "frames_with_hand_torso_or_trouser_intersection": 0,
+      "materially_stretched_edges": 0,
+      "largest_edge_growth": {
+        "frame": 28.0,
+        "nearest_bone_head": "Chest",
+        "rest_mm": 212.28,
+        "posed_mm": 271.87,
+        "growth_mm": 59.59
+      },
+      "peak_edge_growth_within_200mm_of_joint_mm": {
+        "shoulder": 23.17,
+        "elbow": 31.25,
+        "knee": 10.88
+      },
+      "lowest_shoe_per_frame_range_mm": [
+        5.0,
+        5.0
+      ],
+      "shoe_minimum_z_range_mm": {
+        "L": [
+          7.35,
+          7.59
+        ],
+        "R": [
+          5.0,
+          5.0
+        ]
+      }
+    },
+    "Hit_Chest": {
+      "sample_count": 11,
+      "frames_with_hand_torso_or_trouser_intersection": 0,
+      "materially_stretched_edges": 0,
+      "largest_edge_growth": {
+        "frame": 8.0,
+        "nearest_bone_head": "Chest",
+        "rest_mm": 212.28,
+        "posed_mm": 271.63,
+        "growth_mm": 59.35
+      },
+      "peak_edge_growth_within_200mm_of_joint_mm": {
+        "shoulder": 20.98,
+        "elbow": 17.13,
+        "knee": 18.49
+      },
+      "lowest_shoe_per_frame_range_mm": [
+        5.0,
+        5.0
+      ],
+      "shoe_minimum_z_range_mm": {
+        "L": [
+          7.68,
+          23.0
+        ],
+        "R": [
+          5.0,
+          5.0
+        ]
+      }
+    },
+    "Hit_Head": {
+      "sample_count": 14,
+      "frames_with_hand_torso_or_trouser_intersection": 0,
+      "materially_stretched_edges": 0,
+      "largest_edge_growth": {
+        "frame": 13.0,
+        "nearest_bone_head": "Chest",
+        "rest_mm": 212.28,
+        "posed_mm": 271.63,
+        "growth_mm": 59.35
+      },
+      "peak_edge_growth_within_200mm_of_joint_mm": {
+        "shoulder": 20.98,
+        "elbow": 14.85,
+        "knee": 10.73
+      },
+      "lowest_shoe_per_frame_range_mm": [
+        5.0,
+        5.0
+      ],
+      "shoe_minimum_z_range_mm": {
+        "L": [
+          6.25,
+          7.68
+        ],
+        "R": [
+          5.0,
+          5.0
+        ]
+      }
+    },
+    "Joint_review": {
+      "sample_count": 60,
+      "frames_with_hand_torso_or_trouser_intersection": 0,
+      "materially_stretched_edges": 0,
+      "largest_edge_growth": {
+        "frame": 40.0,
+        "nearest_bone_head": "Forearm.L",
+        "rest_mm": 80.63,
+        "posed_mm": 99.81,
+        "growth_mm": 19.17
+      },
+      "peak_edge_growth_within_200mm_of_joint_mm": {
+        "shoulder": 11.65,
+        "elbow": 19.17,
+        "knee": 0.0
+      },
+      "lowest_shoe_per_frame_range_mm": [
+        9.5,
+        9.5
+      ],
+      "shoe_minimum_z_range_mm": {
+        "L": [
+          9.5,
+          9.5
+        ],
+        "R": [
+          9.5,
+          9.5
+        ]
+      }
+    }
+  }
+}

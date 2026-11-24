@@ -1,0 +1,112 @@
+{
+  "glb_sha256": "ece7fe126680aa258f4ae4df353b16413da53c05bc17de668c7e8f4abb2bb91a",
+  "runtime_git_blob": "af6104c26aefcfab36cffd696c3f5a1511de7e4e",
+  "valid_rest_edges": 95925,
+  "frames": 380,
+  "phases": {
+    "work": {
+      "samples": 13,
+      "max_positive_edge_growth_p99_mm": 20.1,
+      "max_single_edge_growth_mm": 81.4,
+      "max_qualified_edge_count": 6,
+      "lowest_mesh_y_m": -0.0105,
+      "lowest_shoe_y_m": -0.0105
+    },
+    "listen": {
+      "samples": 14,
+      "max_positive_edge_growth_p99_mm": 20.3,
+      "max_single_edge_growth_mm": 81.4,
+      "max_qualified_edge_count": 7,
+      "lowest_mesh_y_m": -0.0105,
+      "lowest_shoe_y_m": -0.0105
+    },
+    "peek": {
+      "samples": 24,
+      "max_positive_edge_growth_p99_mm": 17.7,
+      "max_single_edge_growth_mm": 71.4,
+      "max_qualified_edge_count": 3,
+      "lowest_mesh_y_m": -0.0121,
+      "lowest_shoe_y_m": -0.0121
+    },
+    "approach": {
+      "samples": 47,
+      "max_positive_edge_growth_p99_mm": 6.6,
+      "max_single_edge_growth_mm": 64.5,
+      "max_qualified_edge_count": 3,
+      "lowest_mesh_y_m": -0.0165,
+      "lowest_shoe_y_m": -0.0165
+    },
+    "question": {
+      "samples": 28,
+      "max_positive_edge_growth_p99_mm": 6.9,
+      "max_single_edge_growth_mm": 31.1,
+      "max_qualified_edge_count": 0,
+      "lowest_mesh_y_m": -0.012,
+      "lowest_shoe_y_m": -0.012
+    },
+    "admonish": {
+      "samples": 33,
+      "max_positive_edge_growth_p99_mm": 6.8,
+      "max_single_edge_growth_mm": 32.7,
+      "max_qualified_edge_count": 0,
+      "lowest_mesh_y_m": -0.012,
+      "lowest_shoe_y_m": -0.012
+    },
+    "insist": {
+      "samples": 28,
+      "max_positive_edge_growth_p99_mm": 7.6,
+      "max_single_edge_growth_mm": 34.5,
+      "max_qualified_edge_count": 0,
+      "lowest_mesh_y_m": -0.012,
+      "lowest_shoe_y_m": -0.012
+    },
+    "cancelled": {
+      "samples": 13,
+      "max_positive_edge_growth_p99_mm": 9.2,
+      "max_single_edge_growth_mm": 47.2,
+      "max_qualified_edge_count": 0,
+      "lowest_mesh_y_m": -0.0096,
+      "lowest_shoe_y_m": -0.0096
+    },
+    "down": {
+      "samples": 160,
+      "max_positive_edge_growth_p99_mm": 11.8,
+      "max_single_edge_growth_mm": 79.9,
+      "max_qualified_edge_count": 1,
+      "lowest_mesh_y_m": -0.1467,
+      "lowest_shoe_y_m": -0.1467
+    },
+    "scripted_flight": {
+      "samples": 20,
+      "max_positive_edge_growth_p99_mm": 4.9,
+      "max_single_edge_growth_mm": 27.6,
+      "max_qualified_edge_count": 0,
+      "lowest_mesh_y_m": -0.0292,
+      "lowest_shoe_y_m": -0.0292
+    }
+  },
+  "method": "Separate headless replay of the office capture gameplay script at fixed 30 fps. After every Skeleton3D.skeleton_updated, save world-space current bone transform times inverse global rest for all 50 bones. Apply the actual GLB JOINTS_0/WEIGHTS_0 linear blend to source vertex positions in matching Y-up axes. Sample every third replay frame before knockdown and all 180 down frames. Evaluate all indexed triangle edges >1mm rest length with each material seam separated. Count edges with both >2x stretch and >10mm growth. P99 refers to the highest per-sampled-frame 99th percentile of all edge growths in that phase; a rigid edge contributes zero.",
+  "floor_contact": {
+    "floor_collision_top_y_m": -0.02,
+    "carpet_top_y_m": -0.006,
+    "landing_deepest_vertex_y_m": -0.1467,
+    "landing_frame": 633,
+    "landing_part": "Foot.R outsole",
+    "same_frame_foot_box_min_y_m": -0.1747,
+    "settled_frame": 780,
+    "settled_shoe_min_y_m": -0.0277,
+    "settled_whole_mesh_min_y_m": -0.067,
+    "settled_lowest_part": "Thumb3.L",
+    "settled_head_min_y_m": 0.0217,
+    "perimeter_wall_min_clearance_during_fall_m": 0.4817,
+    "perimeter_wall_rest_clearance_m": 0.7804,
+    "lounge_plant_rest_clearance_m": 0.645
+  },
+  "floor_contact_m": {
+    "floor_top_y": -0.02,
+    "peak_shoe_penetration": 0.1267,
+    "settled_shoe_penetration": 0.0077,
+    "settled_left_thumb_penetration": 0.047,
+    "minimum_perimeter_wall_clearance": 0.482
+  }
+}
