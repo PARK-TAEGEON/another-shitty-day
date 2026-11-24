@@ -87,8 +87,8 @@ func _ready() -> void:
 	_left_home = _contact_positions[0] + _study_to_view * Vector3(-0.055, 0.058, 0.240)
 	_right_home = _contact_positions[1] + _study_to_view * Vector3(0.055, 0.058, 0.240)
 	if _rig_study:
-		_left_home = Vector3(-0.265, -0.188, -0.385)
-		_right_home = Vector3(0.265, -0.188, -0.385)
+		_left_home = Vector3(-0.37, -0.35, -0.46)
+		_right_home = Vector3(0.37, -0.35, -0.46)
 	_foot = Node3D.new()
 	_hands.add_child(_foot)
 	_mesh(_foot, Vector3(0.17, 0.37, 0.19), Vector3(0, 0.17, 0.03), Color("264b50"))
@@ -461,7 +461,7 @@ func _pickup_or_drop() -> void:
 func _update_held(delta: float) -> void:
 	if not is_instance_valid(held_prop):
 		return
-	var carry_anchor := Vector3(0.16, -0.13, -0.57) if _rig_study else Vector3(0.13, -0.14, -1.15)
+	var carry_anchor := Vector3(0.13, -0.14, -1.15)
 	var desired: Vector3 = camera.to_global(carry_anchor)
 	desired = _keep_prop_in_front_of_walls(held_prop, camera.global_position, desired)
 	desired = held_prop.global_position.lerp(desired, minf(delta * 18.0, 1.0))

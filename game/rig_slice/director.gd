@@ -12,6 +12,7 @@ var events: Array[String] = []
 var measured := {}
 var mug
 var active := false
+var dialogue_seen := false
 
 func _enter_tree() -> void:
 	get_tree().root.set_meta("rig_slice", true)
@@ -84,6 +85,10 @@ func _set_mug() -> void:
 func _process(_delta: float) -> void:
 	if not active:return
 	t+=1
+	if game._caption_panel.visible and not dialogue_seen:
+		dialogue_seen = true
+		measured["dialogue_frame"] = t
+		measured["dialogue_position"] = [game._caption_panel.position.x, game._caption_panel.position.y]
 	match t:
 		1: _stage("01    GUARD")
 		27: _stage("02    RIGHT PUNCH")
@@ -134,6 +139,8 @@ func _process(_delta: float) -> void:
 				_check(absf(measured["open"][side][1]-tips[side][1])>.05,"index flexion on side "+str(side))
 			_check(absf(tips[0][1]-tips[1][1])<.001,"mirrored fist symmetry")
 	if t==225:
+		var carried: Vector3 = p.camera.to_local(mug.global_position)
+		measured["carry_camera_m"] = [carried.x, carried.y, carried.z]
 		var closest:=INF
 		var deepest:=0.0
 		var closest_handle_surface:=INF
@@ -156,6 +163,7 @@ func _process(_delta: float) -> void:
 		_check(closest<.036,"fingers near mug handle")
 	if t==301:
 		active=false
+		_check(dialogue_seen,"native dialogue visible")
 		_check(contacts.size()==2 and contacts[0].variant=="B" and contacts[1].variant=="A","confirmed B then A")
 		_check("swing" in events or "impact" in events,"punch event")
 		var report={"measurements":measured,"contacts":contacts,"events":events,"errors":errors,"fov":p.camera.fov,"near":p.camera.near,"viewport":str(get_viewport().get_visible_rect().size)}
