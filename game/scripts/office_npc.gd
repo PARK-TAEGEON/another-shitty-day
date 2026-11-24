@@ -224,6 +224,15 @@ func _ready() -> void:
 			if rig and _attach_kim_visual(false):
 				return
 		print("KIM_VISUAL model=procedural motion=office_npc")
+	elif opening_role == "coworker":
+		var args := OS.get_cmdline_user_args()
+		var park_v2 := "--park-v2" in args or bool(ProjectSettings.get_setting("asd/characters/park_visual_v2_enabled", false))
+		if park_v2 and not "--park-legacy" in args:
+			var adapter := preload("res://scripts/characters/park_visual_adapter.gd").new()
+			if adapter.attach_to(self):
+				return
+			adapter.free()
+		print("PARK_VISUAL model=procedural motion=office_npc")
 
 func _attach_kim_visual(v2: bool) -> bool:
 	_rig_adapter = load("res://scripts/characters/kim_visual_adapter.gd").new()

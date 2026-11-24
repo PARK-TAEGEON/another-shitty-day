@@ -1,0 +1,404 @@
+{
+  "kim_parent_sha": "d5b2ebbf3e07a17247df6bc4a391c2f7fd6b4f62",
+  "all_measured_actions_and_dialogue_match_default": {
+    "default": true,
+    "park": true,
+    "coexist": true,
+    "rollback": true,
+    "setting": true,
+    "setting_rollback": true,
+    "park_with_legacy_kim": true
+  },
+  "environment": {
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "os": "Linux x86_64",
+    "physics": "Jolt Physics",
+    "mode": "headless fixed 60 fps",
+    "date_kst": "2026-11-24"
+  },
+  "commands": {
+    "fixture": "godot --headless --fixed-fps 60 --path game --script res://rig_slice/park_submission_verify.gd -- <mode flags>",
+    "existing": "godot --headless --fixed-fps 60 --path game --script \"$PWD/tools/tests/<test>.gd\" -- <mode flags>"
+  },
+  "modes": {
+    "default": [],
+    "park": [
+      "--park-v2"
+    ],
+    "coexist": [
+      "--kim-v2",
+      "--park-v2"
+    ],
+    "rollback": [
+      "--park-v2",
+      "--park-legacy"
+    ],
+    "setting": [
+      "--test-park-setting"
+    ],
+    "setting_rollback": [
+      "--test-park-setting",
+      "--park-legacy"
+    ],
+    "park_with_legacy_kim": [
+      "--park-v2",
+      "--kim-legacy"
+    ]
+  },
+  "mode_note": "--test-park-setting is a test-only option that enables the runtime setting in memory. The default game setting remains false.",
+  "behavior_fixture": "Actual packed main scene, original positions and routes. Production player slam triggers the opening. After Park is released, the fixture calls his normal react() receiver with a nearby threat and the existing AI chooses the flee destination. Player camera and actor positions are not edited. A reload checks selection, roster, actor disposal and cleared ledger.",
+  "source_sha256": {
+    "game/assets/rig_slice/park_office.glb": "97fda35bdee16d68ef82909a570268e7a4f0d1ff28d58bc13367f14cdcf255b3",
+    "game/scripts/office_npc.gd": "c96cd0b218195395648432e8636046e02110d2b3217815f0bac835c4c96816dc",
+    "game/scripts/characters/park_visual_adapter.gd": "0ef7246bc87a1786fe6863bee23fade3fbff7f093e9e754aad7588e5caa927fc",
+    "game/rig_slice/park_submission_verify.gd": "25553e83f35b83e999c903c70581004fc0adc7327f7f9507ac8d4a0382b8e904",
+    "game/scripts/characters/kim_visual_adapter.gd": "25bc9fc1d67896a420202e75f3e8bac0cf8d94306e1fb7e4c3369f51cd9cec8c"
+  },
+  "rows": [
+    {
+      "mode": "default",
+      "test": "office",
+      "exit_code": 0,
+      "passed": true,
+      "errors": [],
+      "observations": {
+        "actual_model": "procedural",
+        "errors": [],
+        "eye_open_y_work_peak": [
+          0.519999980926514,
+          1.0
+        ],
+        "flee_distance_m": 4.32123231887817,
+        "flee_leg_rad": 0.94222092628479,
+        "mouth_open_y_work_peak": [
+          0.200000002980232,
+          0.819999992847443
+        ],
+        "opening_dialogue": [
+          "왜 그래?",
+          "뭐야 무슨 소리야?",
+          "이게 무슨 짓이지?"
+        ],
+        "opening_drift_m": 0.0,
+        "peak_flee_speed_mps": 2.50000023841858,
+        "startle_arm_rad": 0.460354089736938,
+        "startle_brow_lift_m": 0.0374400019645691,
+        "startle_frames": 391,
+        "startle_head_rad": 1.04994904994965,
+        "visible_meshes": {
+          "imported": 0,
+          "procedural": 67
+        },
+        "work_elbow_rad": 0.0631443336606026
+      }
+    },
+    {
+      "mode": "park",
+      "test": "office",
+      "exit_code": 0,
+      "passed": true,
+      "errors": [],
+      "observations": {
+        "actual_model": "res://assets/rig_slice/park_office.glb",
+        "errors": [],
+        "eye_open_y_work_peak": [
+          0.519999980926514,
+          1.0
+        ],
+        "flee_distance_m": 4.32123231887817,
+        "flee_leg_rad": 0.94222092628479,
+        "mouth_open_y_work_peak": [
+          0.200000002980232,
+          0.819999992847443
+        ],
+        "opening_dialogue": [
+          "왜 그래?",
+          "뭐야 무슨 소리야?",
+          "이게 무슨 짓이지?"
+        ],
+        "opening_drift_m": 0.0,
+        "peak_flee_speed_mps": 2.50000023841858,
+        "startle_arm_rad": 0.460354089736938,
+        "startle_brow_lift_m": 0.0374400019645691,
+        "startle_frames": 391,
+        "startle_head_rad": 1.04994904994965,
+        "visible_meshes": {
+          "imported": 18,
+          "procedural": 0
+        },
+        "work_elbow_rad": 0.0631443336606026
+      }
+    },
+    {
+      "mode": "coexist",
+      "test": "office",
+      "exit_code": 0,
+      "passed": true,
+      "errors": [],
+      "observations": {
+        "actual_model": "res://assets/rig_slice/park_office.glb",
+        "errors": [],
+        "eye_open_y_work_peak": [
+          0.519999980926514,
+          1.0
+        ],
+        "flee_distance_m": 4.32123231887817,
+        "flee_leg_rad": 0.94222092628479,
+        "mouth_open_y_work_peak": [
+          0.200000002980232,
+          0.819999992847443
+        ],
+        "opening_dialogue": [
+          "왜 그래?",
+          "뭐야 무슨 소리야?",
+          "이게 무슨 짓이지?"
+        ],
+        "opening_drift_m": 0.0,
+        "peak_flee_speed_mps": 2.50000023841858,
+        "startle_arm_rad": 0.460354089736938,
+        "startle_brow_lift_m": 0.0374400019645691,
+        "startle_frames": 391,
+        "startle_head_rad": 1.04994904994965,
+        "visible_meshes": {
+          "imported": 18,
+          "procedural": 0
+        },
+        "work_elbow_rad": 0.0631443336606026
+      }
+    },
+    {
+      "mode": "rollback",
+      "test": "office",
+      "exit_code": 0,
+      "passed": true,
+      "errors": [],
+      "observations": {
+        "actual_model": "procedural",
+        "errors": [],
+        "eye_open_y_work_peak": [
+          0.519999980926514,
+          1.0
+        ],
+        "flee_distance_m": 4.32123231887817,
+        "flee_leg_rad": 0.94222092628479,
+        "mouth_open_y_work_peak": [
+          0.200000002980232,
+          0.819999992847443
+        ],
+        "opening_dialogue": [
+          "왜 그래?",
+          "뭐야 무슨 소리야?",
+          "이게 무슨 짓이지?"
+        ],
+        "opening_drift_m": 0.0,
+        "peak_flee_speed_mps": 2.50000023841858,
+        "startle_arm_rad": 0.460354089736938,
+        "startle_brow_lift_m": 0.0374400019645691,
+        "startle_frames": 391,
+        "startle_head_rad": 1.04994904994965,
+        "visible_meshes": {
+          "imported": 0,
+          "procedural": 67
+        },
+        "work_elbow_rad": 0.0631443336606026
+      }
+    },
+    {
+      "mode": "setting",
+      "test": "office",
+      "exit_code": 0,
+      "passed": true,
+      "errors": [],
+      "observations": {
+        "actual_model": "res://assets/rig_slice/park_office.glb",
+        "errors": [],
+        "eye_open_y_work_peak": [
+          0.519999980926514,
+          1.0
+        ],
+        "flee_distance_m": 4.32123231887817,
+        "flee_leg_rad": 0.94222092628479,
+        "mouth_open_y_work_peak": [
+          0.200000002980232,
+          0.819999992847443
+        ],
+        "opening_dialogue": [
+          "왜 그래?",
+          "뭐야 무슨 소리야?",
+          "이게 무슨 짓이지?"
+        ],
+        "opening_drift_m": 0.0,
+        "peak_flee_speed_mps": 2.50000023841858,
+        "startle_arm_rad": 0.460354089736938,
+        "startle_brow_lift_m": 0.0374400019645691,
+        "startle_frames": 391,
+        "startle_head_rad": 1.04994904994965,
+        "visible_meshes": {
+          "imported": 18,
+          "procedural": 0
+        },
+        "work_elbow_rad": 0.0631443336606026
+      }
+    },
+    {
+      "mode": "setting_rollback",
+      "test": "office",
+      "exit_code": 0,
+      "passed": true,
+      "errors": [],
+      "observations": {
+        "actual_model": "procedural",
+        "errors": [],
+        "eye_open_y_work_peak": [
+          0.519999980926514,
+          1.0
+        ],
+        "flee_distance_m": 4.32123231887817,
+        "flee_leg_rad": 0.94222092628479,
+        "mouth_open_y_work_peak": [
+          0.200000002980232,
+          0.819999992847443
+        ],
+        "opening_dialogue": [
+          "왜 그래?",
+          "뭐야 무슨 소리야?",
+          "이게 무슨 짓이지?"
+        ],
+        "opening_drift_m": 0.0,
+        "peak_flee_speed_mps": 2.50000023841858,
+        "startle_arm_rad": 0.460354089736938,
+        "startle_brow_lift_m": 0.0374400019645691,
+        "startle_frames": 391,
+        "startle_head_rad": 1.04994904994965,
+        "visible_meshes": {
+          "imported": 0,
+          "procedural": 67
+        },
+        "work_elbow_rad": 0.0631443336606026
+      }
+    },
+    {
+      "mode": "park_with_legacy_kim",
+      "test": "office",
+      "exit_code": 0,
+      "passed": true,
+      "errors": [],
+      "observations": {
+        "actual_model": "res://assets/rig_slice/park_office.glb",
+        "errors": [],
+        "eye_open_y_work_peak": [
+          0.519999980926514,
+          1.0
+        ],
+        "flee_distance_m": 4.32123231887817,
+        "flee_leg_rad": 0.94222092628479,
+        "mouth_open_y_work_peak": [
+          0.200000002980232,
+          0.819999992847443
+        ],
+        "opening_dialogue": [
+          "왜 그래?",
+          "뭐야 무슨 소리야?",
+          "이게 무슨 짓이지?"
+        ],
+        "opening_drift_m": 0.0,
+        "peak_flee_speed_mps": 2.50000023841858,
+        "startle_arm_rad": 0.460354089736938,
+        "startle_brow_lift_m": 0.0374400019645691,
+        "startle_frames": 391,
+        "startle_head_rad": 1.04994904994965,
+        "visible_meshes": {
+          "imported": 18,
+          "procedural": 0
+        },
+        "work_elbow_rad": 0.0631443336606026
+      }
+    },
+    {
+      "mode": "coexist",
+      "test": "opening_reaction_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "coexist",
+      "test": "npc_office_behavior_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "coexist",
+      "test": "boss_approach_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "coexist",
+      "test": "boss_lecture_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "coexist",
+      "test": "kim_demo_integration",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "coexist",
+      "test": "hit_feel_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "rollback",
+      "test": "opening_reaction_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "rollback",
+      "test": "npc_office_behavior_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "rollback",
+      "test": "boss_approach_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "rollback",
+      "test": "boss_lecture_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "rollback",
+      "test": "kim_demo_integration",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    },
+    {
+      "mode": "rollback",
+      "test": "hit_feel_regression",
+      "exit_code": 0,
+      "passed": true,
+      "errors": []
+    }
+  ],
+  "pass_count": 19,
+  "total": 19
+}
