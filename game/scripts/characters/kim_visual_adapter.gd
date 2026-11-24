@@ -215,9 +215,22 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 		capsule.height = maxf(length + (radius * .7 if sleeve else 0.0), radius * 2.0)
 		shape.shape = capsule
 	body.add_child(shape)
+	if visual_v2 and bone_name.begins_with("Hand."):
+		# Keep curled fingertips and the outlying thumb on the existing wrist body.
+		var side := 1.0 if bone_name.ends_with(".L") else -1.0
+		_add_hand_pad(body, Vector3(side * .020, .090, -.100) - center, .034)
+		_add_hand_pad(body, Vector3(0, .159, 0) - center, .056)
 	# Every limb can report the landing thud. Bounce stays on the torso only.
 	PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(), 4)
 	bodies.append(body)
+
+func _add_hand_pad(body: PhysicalBone3D, local_center: Vector3, radius: float) -> void:
+	var sphere := SphereShape3D.new()
+	sphere.radius = radius
+	var pad := CollisionShape3D.new()
+	pad.position = local_center
+	pad.shape = sphere
+	body.add_child(pad)
 
 func _build_physics() -> void:
 	_body("Pelvis", .16, .20, 14, 0, 0, Vector3(.54,.24,.39))

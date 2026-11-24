@@ -9,7 +9,7 @@
   },
   "source_sha256": {
     "game/assets/rig_slice/boss_kim_game.glb": "ece7fe126680aa258f4ae4df353b16413da53c05bc17de668c7e8f4abb2bb91a",
-    "game/scripts/characters/kim_visual_adapter.gd": "a200750980188efe22c9c630af39df2dba07c2b0902ead2a4955bb43fc2c2165",
+    "game/scripts/characters/kim_visual_adapter.gd": "25bc9fc1d67896a420202e75f3e8bac0cf8d94306e1fb7e4c3369f51cd9cec8c",
     "game/scripts/characters/kim_physical_bone.gd": "fe07698c4be54bd9fdf4210fdc422ad18080891c35e33939ade34254008ca7ff",
     "game/scripts/office_npc.gd": "a04de05e48c8e64452f4a078d323081be9baa9df06f43c0dc11cf3b58d9b934d",
     "game/rig_slice/kim_submission_verify.gd": "d80b43edaee17af58e855e0be20602cbe443701213899d1d227c4394e4baa632"
@@ -171,15 +171,18 @@
       }
     ],
     "exit_warnings": {
-      "WARNING: 5 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
-        "police_arrival_regression"
+      "WARNING: 12 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
+        "minimal_hud_regression"
+      ],
+      "WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
+        "ui_stars_result_regression"
       ],
       "WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
         "hit_feel_regression",
         "kim_demo_integration"
       ],
-      "WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
-        "social_damage_regression"
+      "WARNING: 5 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
+        "police_arrival_regression"
       ]
     }
   },
@@ -201,15 +204,15 @@
     },
     "v2": {
       "falls": 30,
-      "max_speed_mps": 5.93718433380127,
-      "max_bone_distance_from_pelvis_m": 0.968697130680084,
+      "max_speed_mps": 6.03920125961304,
+      "max_bone_distance_from_pelvis_m": 0.970981776714325,
       "final_pelvis_y_range_m": [
-        0.339025944471359,
-        0.373369157314301
+        0.339319437742233,
+        0.36805123090744
       ],
       "chair_and_table": {
         "chair_contact": true,
-        "chair_travel": 0.58820629119873,
+        "chair_travel": 0.253504395484924,
         "table_contact": true
       },
       "assertion_failures": [
@@ -225,7 +228,7 @@
       "Chest",
       "Foot.L"
     ],
-    "chair_travel_m": 0.0598379671573639,
+    "chair_travel_m": 0.0588902458548546,
     "contacted_chair": "내 의자",
     "contacts": [
       "punch",
@@ -243,7 +246,7 @@
     "knockdown_hp": -8.0,
     "lecture_forearm_angle_rad": 0.817826747894287,
     "lecture_head_angle_rad": 0.125546008348465,
-    "max_body_to_posed_bone_error_m": 1.47250318605074e-06,
+    "max_body_to_posed_bone_error_m": 1.47365255998011e-06,
     "max_body_to_posed_bone_error_rad": 0.0009765625,
     "mesh_samples": {
       "lecture": {
@@ -287,7 +290,7 @@
         "triangle_edge_occurrences_doubled_and_grew_over_1cm": 12
       },
       "settled": {
-        "largest_edge_growth_m": 0.0864005088806152,
+        "largest_edge_growth_m": 0.088288426399231,
         "material": "Cloth",
         "rest_midpoint_m": [
           -0.435141742229462,
@@ -314,16 +317,36 @@
       "Walk": 164
     },
     "peek_top_m": 2.2002124786377,
-    "resting_pelvis_y_m": 0.324869215488434,
+    "resting_pelvis_y_m": 0.319705128669739,
     "seated_min_y_m": -0.0105047198012471,
     "seated_top_m": 1.51863765716553,
-    "settled_skin_height_m": 0.730118870735168,
-    "settled_skin_min_y_m": -0.0206496715545654,
+    "settled_skin_height_m": 0.728284895420074,
+    "settled_skin_min_y_m": -0.0181778073310852,
     "walk_leg_angle_rad": 0.945065975189209,
     "walking_min_y_m": -0.0105049461126328,
     "geometry_method": "CPU linear blend skinning of every indexed surface using Godot imported bind names/poses and vertex weights. Ragdoll samples are taken inside modification_processed before the engine restores its pre-modifier pose. Interior shared triangle edges can count twice. Edge test requires rest length >1mm, more than 2x length and >10mm growth.",
     "furniture_fixture": "First office run used the original NPC spawn, natural approach, player slam, and raycast punch/kick. In a separate reloaded office, player and Kim were lined up beside the existing player chair; the chair was not relocated. Contact IDs recorded on actual PhysicalBone3D objects.",
-    "limits": "Six sampled poses do not bound all possible ragdolls, nor detect every possible gap between separate garment pieces. Floor collision top is -0.02 m. No Windows PC/GPU benchmark in this run."
+    "limits": "Six sampled poses do not bound all possible ragdolls, nor detect every possible gap between separate garment pieces. Floor collision top is -0.02 m. No Windows PC/GPU benchmark in this run.",
+    "finger_garment_intersection": {
+      "method": "BVH of final GLB triangle meshes driven by sampled Godot skin transforms. Includes weighted fingers and the torso/trousers. Sleeves excluded. Signed distances only describe the local projected distance to the nearest garment face at vertices of intersecting finger triangles.",
+      "triangle_pairs": {
+        "seated": 0,
+        "peek": 0,
+        "walk": 0,
+        "lecture": 0,
+        "punch": 0,
+        "settled": 185
+      },
+      "settled_region": "Right thumb against shirt/torso",
+      "settled_intersecting_finger_vertices": 134,
+      "settled_signed_vertex_distance_mm_min_q25_q50_q75_max": [
+        -6.7,
+        -1.6,
+        0.2,
+        2.0,
+        9.7
+      ]
+    }
   },
   "selection": [
     {
