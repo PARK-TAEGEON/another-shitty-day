@@ -9,6 +9,7 @@ signal contact_finished(source: Node3D, target: Node3D)
 
 ## Fictional balance amounts. Each entry is the cumulative damaged/unusable cost,
 ## not two separate invoices. The world ledger adds only the increase.
+const OfficeVisuals = preload("res://scripts/props/office_visuals.gd")
 const DAMAGE_COSTS: Dictionary = {
 	"monitor": [100000, 300000], "mug": [10000, 10000],
 	"printer": [150000, 450000], "keyboard": [20000, 50000],
@@ -112,13 +113,16 @@ func _build() -> void:
 	match kind:
 		"mug":
 			mass = 0.65
-			_parts["body"] = _cylinder(0.095, 0.21, Vector3.ZERO, tint)
-			_parts["coffee"] = _cylinder(0.078, 0.008, Vector3(0, 0.108, 0), Color("473123"))
-			_parts["handle"] = [
-				_box(Vector3(0.09, 0.032, 0.035), Vector3(0.112, 0.06, 0), tint),
-				_box(Vector3(0.035, 0.12, 0.035), Vector3(0.154, 0, 0), tint),
-				_box(Vector3(0.09, 0.032, 0.035), Vector3(0.112, -0.06, 0), tint)
-			]
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				_parts["body"] = _cylinder(0.095, 0.21, Vector3.ZERO, tint)
+				_parts["coffee"] = _cylinder(0.078, 0.008, Vector3(0, 0.108, 0), Color("473123"))
+				_parts["handle"] = [
+					_box(Vector3(0.09, 0.032, 0.035), Vector3(0.112, 0.06, 0), tint),
+					_box(Vector3(0.035, 0.12, 0.035), Vector3(0.154, 0, 0), tint),
+					_box(Vector3(0.09, 0.032, 0.035), Vector3(0.112, -0.06, 0), tint)
+				]
 			_bounds(Vector3(0.24, 0.22, 0.2))
 		"keyboard":
 			mass = 0.9
@@ -131,17 +135,20 @@ func _build() -> void:
 			_bounds(Vector3(0.6, 0.07, 0.23))
 		"monitor":
 			mass = 3.8
-			var head: Node3D = Node3D.new()
-			head.position = Vector3(0, 0.27, 0)
-			_visuals.add_child(head)
-			_parts["head"] = head
-			_box(Vector3(0.72, 0.44, 0.075), Vector3.ZERO, ink, Vector3.ZERO, head)
-			_parts["screen"] = _box(Vector3(0.65, 0.36, 0.008), Vector3(0, 0.01, 0.042), Color("497479"), Vector3.ZERO, head)
-			_parts["rows"] = [_box(Vector3(0.24, 0.018, 0.012), Vector3(-0.15, 0.12, 0.049), Color("cfdecd"), Vector3.ZERO, head)]
-			for n: int in range(4):
-				_parts["rows"].append(_box(Vector3(0.42 - n * 0.055, 0.011, 0.012), Vector3(-0.06, 0.04 - n * 0.04, 0.049), Color("93b5ae"), Vector3.ZERO, head))
-			_parts["stand"] = _box(Vector3(0.065, 0.2, 0.07), Vector3(0, -0.02, 0), ink)
-			_box(Vector3(0.33, 0.028, 0.24), Vector3(0, -0.115, 0.015), ink)
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				var head: Node3D = Node3D.new()
+				head.position = Vector3(0, 0.27, 0)
+				_visuals.add_child(head)
+				_parts["head"] = head
+				_box(Vector3(0.72, 0.44, 0.075), Vector3.ZERO, ink, Vector3.ZERO, head)
+				_parts["screen"] = _box(Vector3(0.65, 0.36, 0.008), Vector3(0, 0.01, 0.042), Color("497479"), Vector3.ZERO, head)
+				_parts["rows"] = [_box(Vector3(0.24, 0.018, 0.012), Vector3(-0.15, 0.12, 0.049), Color("cfdecd"), Vector3.ZERO, head)]
+				for n: int in range(4):
+					_parts["rows"].append(_box(Vector3(0.42 - n * 0.055, 0.011, 0.012), Vector3(-0.06, 0.04 - n * 0.04, 0.049), Color("93b5ae"), Vector3.ZERO, head))
+				_parts["stand"] = _box(Vector3(0.065, 0.2, 0.07), Vector3(0, -0.02, 0), ink)
+				_box(Vector3(0.33, 0.028, 0.24), Vector3(0, -0.115, 0.015), ink)
 			_bounds(Vector3(0.74, 0.62, 0.26), Vector3(0, 0.17, 0))
 		"chair":
 			mass = 5.5
