@@ -1,0 +1,138 @@
+Final PCK default startup without asset flags
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OFFICE_PROP model=desk version=2
+OFFICE_PROP model=monitor version=2
+OFFICE_PROP model=keyboard version=2
+OFFICE_PROP model=mug version=2
+OFFICE_PROP model=paper version=2
+OFFICE_PROP model=binder version=2
+OFFICE_PROP model=partition version=2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+
+Final PCK on Linux release template
+DESK_BREAKER_SMOKE_OK: seven employees, reach, actual work/prop/dispatch ledger, money-response separation, grab, results freeze, reset
+
+Final PCK UI replay
+DESK_BREAKER_UI_BOARDS_OK
+
+Office OFF/ON with no office CLI flag
+OFFICE_PHYSICS identical=true static_boxes=74 props=40
+
+Office stationery stages
+STATIONERY keyboard stage=1 cost=20000 passed=true
+STATIONERY keyboard stage=2 cost=50000 passed=true
+STATIONERY paper stage=1 cost=5000 passed=true
+STATIONERY paper stage=2 cost=15000 passed=true
+STATIONERY binder stage=1 cost=10000 passed=true
+STATIONERY binder stage=2 cost=30000 passed=true
+
+Final PCK prop replay
+CHECK camera ray picked up mug true
+CHECK drop returned mug to physics true
+CHECK picked mug up again true
+CHECK thrown mug reached terminal stage true
+CHECK throw booked property cost true
+CHECK monitor intermediate cost true
+CHECK monitor terminal cost true
+CHECK restart cleared ledger and restored monitor true
+CHECK restart restored mug true
+OFFICE_REVIEW []
+CHECK settled wrist socket follows mug true
+CHECK wrist does not snap during pickup or release true
+
+Integrated settings commit cf30808 · existing matrix
+default wall_throw_regression PASS
+default opening_reaction_regression PASS
+default boss_approach_regression PASS
+default boss_lecture_regression PASS
+default hand_motion_regression PASS
+default npc_office_behavior_regression PASS
+default property_damage_regression PASS
+default social_damage_regression PASS
+default office_layout_regression PASS
+default floor_transition_regression PASS
+default minimal_hud_regression PASS
+default ui_stars_result_regression PASS
+default star_pill_alignment_regression PASS
+default ceo_hold_regression PASS
+default police_hold_regression PASS
+default police_arrival_regression PASS
+default police_arrival_damage_regression PASS
+default kim_demo_integration PASS
+default hit_feel_regression PASS
+health-only wall_throw_regression PASS
+health-only opening_reaction_regression PASS
+health-only boss_approach_regression PASS
+health-only boss_lecture_regression PASS
+health-only hand_motion_regression PASS
+health-only npc_office_behavior_regression PASS
+health-only property_damage_regression PASS
+health-only social_damage_regression PASS
+health-only office_layout_regression PASS
+health-only floor_transition_regression PASS
+health-only minimal_hud_regression PASS
+health-only ui_stars_result_regression PASS
+health-only star_pill_alignment_regression PASS
+health-only ceo_hold_regression PASS
+health-only police_hold_regression PASS
+health-only police_arrival_regression PASS
+health-only police_arrival_damage_regression PASS
+health-only kim_demo_integration PASS
+health-only hit_feel_regression PASS
+legacy wall_throw_regression PASS
+legacy opening_reaction_regression PASS
+legacy boss_approach_regression PASS
+legacy boss_lecture_regression PASS
+legacy hand_motion_regression PASS
+legacy npc_office_behavior_regression PASS
+legacy property_damage_regression PASS
+legacy social_damage_regression PASS
+legacy office_layout_regression PASS
+legacy floor_transition_regression PASS
+legacy minimal_hud_regression PASS
+legacy ui_stars_result_regression PASS
+legacy star_pill_alignment_regression PASS
+legacy ceo_hold_regression PASS
+legacy police_hold_regression PASS
+legacy police_arrival_regression PASS
+legacy police_arrival_damage_regression PASS
+legacy kim_demo_integration PASS
+legacy hit_feel_regression PASS
+rig-31 kim_rig_regression PASS
+default kim_restart_regression PASS
+default hit_flight_obstacle_regression PASS
+
+Model for default-kim_demo_integration
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+
+Model for kim_rig_regression
+KIM_VISUAL model=res://assets/characters/boss_kim/boss_kim.glb bones=31 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "QA_Arms_Raised", "QA_Head_Turn", "QA_Knees_90", "QA_Torso_Bend", "Walk"]
+
+Final build commit e5d34d8 · affected tests rerun
+default-ceo_hold_regression: CEO_HOLD_REGRESSION_OK
+default-floor_transition_regression: FLOOR_TRANSITION_REGRESSION_OK
+default-hand_motion_regression: HAND_MOTION_REGRESSION_OK
+default-police_arrival_damage_regression: POLICE_ARRIVAL_DAMAGE_REGRESSION_OK
+default-police_arrival_regression: POLICE_ARRIVAL_REGRESSION_OK
+default-police_hold_regression: POLICE_HOLD_REGRESSION_OK
+default-property_damage_regression: PROPERTY_DAMAGE_REGRESSION_OK
+default-wall_throw_regression: WALL_THROW_REGRESSION_OK
+health-only-ceo_hold_regression: CEO_HOLD_REGRESSION_OK
+health-only-floor_transition_regression: FLOOR_TRANSITION_REGRESSION_OK
+health-only-hand_motion_regression: HAND_MOTION_REGRESSION_OK
+health-only-police_arrival_damage_regression: POLICE_ARRIVAL_DAMAGE_REGRESSION_OK
+health-only-police_arrival_regression: POLICE_ARRIVAL_REGRESSION_OK
+health-only-police_hold_regression: POLICE_HOLD_REGRESSION_OK
+health-only-property_damage_regression: PROPERTY_DAMAGE_REGRESSION_OK
+health-only-wall_throw_regression: WALL_THROW_REGRESSION_OK
+legacy-ceo_hold_regression: CEO_HOLD_REGRESSION_OK
+legacy-floor_transition_regression: FLOOR_TRANSITION_REGRESSION_OK
+legacy-hand_motion_regression: HAND_MOTION_REGRESSION_OK
+legacy-police_arrival_damage_regression: POLICE_ARRIVAL_DAMAGE_REGRESSION_OK
+legacy-police_arrival_regression: POLICE_ARRIVAL_REGRESSION_OK
+legacy-police_hold_regression: POLICE_HOLD_REGRESSION_OK
+legacy-property_damage_regression: PROPERTY_DAMAGE_REGRESSION_OK
+legacy-wall_throw_regression: WALL_THROW_REGRESSION_OK

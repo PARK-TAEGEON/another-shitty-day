@@ -1,0 +1,235 @@
+{
+  "desk": {
+    "back_in_guard": true,
+    "contacts": [
+      {
+        "seconds": 0.366666666666667,
+        "skins_y_m": [
+          1.06199991703033,
+          1.06199991703033
+        ],
+        "variant": "B"
+      },
+      {
+        "seconds": 0.3,
+        "skins_y_m": [
+          1.06200003623962,
+          1.06200003623962
+        ],
+        "variant": "A"
+      }
+    ]
+  },
+  "grip": {
+    "failures": [],
+    "max_settled_socket_error_m": 2.69974322009148e-07,
+    "max_wrist_turn_degrees_per_30fps_frame": 18.1572690216298,
+    "settled_frames": 34
+  },
+  "mug_glb_vertices": {
+    "samples": 11266,
+    "max_penetration_m": 0.0,
+    "handle_gap_m": 0.0003395974636077881
+  },
+  "kim_opening": {
+    "bones": 50,
+    "clip_first_frame": {
+      "Hit_Chest": 564,
+      "Idle": 0,
+      "Idle_Talking": 268,
+      "Walk": 157
+    },
+    "dialogue": [
+      "왜 그래?",
+      "뭐야 무슨 소리야?",
+      "이게 무슨 짓이지?",
+      "지금 뭐 하는 거야? 여기가 집이야?",
+      "기분 나쁘다고 책상을 치면, 일이 해결돼?",
+      "내가 말하고 있잖아. 대답 안 해?"
+    ],
+    "gesture_first_frame": {
+      "admonish": 365,
+      "insist": 476,
+      "question": 268
+    },
+    "kick_frame": 599,
+    "kim_hit_by": [
+      "punch",
+      "kick"
+    ],
+    "model": "res://assets/rig_slice/boss_kim_game.glb",
+    "phase_first_frame": {
+      "approach": 156,
+      "cancelled": 564,
+      "listen": 41,
+      "peek": 82,
+      "work": 0
+    },
+    "post_hit_states": [
+      "concern",
+      "down"
+    ],
+    "punch_frame": 560,
+    "ragdoll_frames": 180,
+    "valid": true
+  },
+  "kim_landing": {
+    "first_frame": 603,
+    "floor_top_m": -0.02,
+    "last_floor_penetration_m": 0.00606678009033203,
+    "lowest_frame": 639,
+    "lowest_m": -0.105217702686787,
+    "peak_floor_penetration_m": 0.0852177026867866,
+    "samples": 179,
+    "shoe_vertices": 3438
+  },
+  "kim_landing_control": {
+    "default": {
+      "count": 196,
+      "last_m": 0.00724480628967285,
+      "peak_m": 0.0811269614100456,
+      "pelvis_y": 0.326790511608124
+    },
+    "legacy_ensemble": {
+      "count": 196,
+      "last_m": 0.00724480628967285,
+      "peak_m": 0.0811269614100456,
+      "pelvis_y": 0.326790511608124
+    }
+  },
+  "kim_body": {
+    "approach_displacement_m": 2.94863629341125,
+    "binding_frames": 316,
+    "chair_contact_bones": [
+      "Pelvis",
+      "Chest",
+      "Foot.L"
+    ],
+    "chair_travel_m": 0.0588902458548546,
+    "contacted_chair": "내 의자",
+    "contacts": [
+      "punch",
+      "kick"
+    ],
+    "dialogue": [
+      "왜 그래?",
+      "뭐야 무슨 소리야?",
+      "이게 무슨 짓이지?",
+      "지금 뭐 하는 거야? 여기가 집이야?",
+      "기분 나쁘다고 책상을 치면, 일이 해결돼?",
+      "내가 말하고 있잖아. 대답 안 해?"
+    ],
+    "failures": [],
+    "knockdown_hp": -8.0,
+    "lecture_forearm_angle_rad": 0.817826747894287,
+    "lecture_head_angle_rad": 0.125546008348465,
+    "max_body_to_posed_bone_error_m": 1.47365255998011e-06,
+    "max_body_to_posed_bone_error_rad": 0.0009765625,
+    "mesh_samples": {
+      "lecture": {
+        "largest_edge_growth_m": 0.0283486098051071,
+        "material": "Cloth",
+        "rest_midpoint_m": [
+          0.404926240444183,
+          0.970595955848694,
+          -0.150266617536545
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 0
+      },
+      "peek": {
+        "largest_edge_growth_m": 0.0304697006940842,
+        "material": "Cloth",
+        "rest_midpoint_m": [
+          0.404926240444183,
+          0.970595955848694,
+          -0.150266617536545
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 0
+      },
+      "punch": {
+        "largest_edge_growth_m": 0.031304158270359,
+        "material": "Skin and hair",
+        "rest_midpoint_m": [
+          -0.0840961933135986,
+          1.61431574821472,
+          0.114256963133812
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 0
+      },
+      "seated": {
+        "largest_edge_growth_m": 0.0802650302648544,
+        "material": "Cloth",
+        "rest_midpoint_m": [
+          -0.347508072853088,
+          0.959765791893005,
+          -0.205829322338104
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 12
+      },
+      "settled": {
+        "largest_edge_growth_m": 0.088288426399231,
+        "material": "Cloth",
+        "rest_midpoint_m": [
+          -0.435141742229462,
+          1.21713137626648,
+          -0.101584434509277
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 0
+      },
+      "walk": {
+        "largest_edge_growth_m": 0.0618981011211872,
+        "material": "Skin and hair",
+        "rest_midpoint_m": [
+          0.0985488370060921,
+          1.60931694507599,
+          0.106842957437038
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 2
+      }
+    },
+    "model": "res://assets/rig_slice/boss_kim_game.glb",
+    "opening_clip_frames": {
+      "Idle": 367,
+      "Idle_Talking": 531,
+      "Walk": 164
+    },
+    "peek_top_m": 2.2002124786377,
+    "resting_pelvis_y_m": 0.319705128669739,
+    "seated_min_y_m": -0.0105047198012471,
+    "seated_top_m": 1.51863765716553,
+    "settled_skin_height_m": 0.728284895420074,
+    "settled_skin_min_y_m": -0.0181778073310852,
+    "walk_leg_angle_rad": 0.945065975189209,
+    "walking_min_y_m": -0.0105049461126328
+  },
+  "park": {
+    "actual_model": "res://assets/rig_slice/park_office.glb",
+    "errors": [],
+    "eye_open_y_work_peak": [
+      0.519999980926514,
+      1.0
+    ],
+    "flee_distance_m": 4.32123231887817,
+    "flee_leg_rad": 0.94222092628479,
+    "mouth_open_y_work_peak": [
+      0.200000002980232,
+      0.819999992847443
+    ],
+    "opening_dialogue": [
+      "왜 그래?",
+      "뭐야 무슨 소리야?",
+      "이게 무슨 짓이지?"
+    ],
+    "opening_drift_m": 0.0,
+    "peak_flee_speed_mps": 2.50000023841858,
+    "startle_arm_rad": 0.460354089736938,
+    "startle_brow_lift_m": 0.0374400019645691,
+    "startle_frames": 391,
+    "startle_head_rad": 1.04994904994965,
+    "visible_meshes": {
+      "imported": 18,
+      "procedural": 0
+    },
+    "work_elbow_rad": 0.0631443336606026
+  }
+}
