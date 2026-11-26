@@ -1,5 +1,11 @@
 # 플레이어 팔 제출 검증 · 2026-11-24
 
+## 최신 손목 검증 · 2026-11-26
+
+머그 집기·해제의 한 프레임 점프를 수정했다. 최종 본편과 동작 영상에는 52°·8° 가드와 저장소 글꼴을 사용했다.
+
+[검증 기록과 SHA](final_guard_review/README.md) · [본편 기본 주먹](final_guard_review/game_guard.png) · [머그 수정 전후 영상](final_guard_review/mug_comparison.mp4) · [300프레임 전체 영상](final_guard_review/actions.mp4)
+
 ## 기본 주먹 재조형 · 기준 `0a53fb3`
 
 [본편·엄지 측면·손바닥 전후 비교](guard_revision/guard_comparison.jpg) · [펼치기·머그·펀치·책상 접촉](guard_revision/actions.jpg) · [Godot 동작 결과](guard_revision/events.json) · [메시 변형 검사](guard_revision/geometry.json)
