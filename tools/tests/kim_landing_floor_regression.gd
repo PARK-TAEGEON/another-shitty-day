@@ -35,7 +35,7 @@ const NO_FLIGHT_STEPS := 30
 # rest. Source: aecd0f1 (the runtime before the flight pose) under these exact
 # runs, docs/evidence/submission/flight_pose/checks/landing-floor-aecd0f1-v2.txt:
 # the largest value among its runs whose floor contacts never pushed a foot
-# downwards (ledge 7 of 11, open 6 of 11), plus 0.1 cm. The measurement itself
+# downwards (ledge 8 of 11, open 6 of 11), plus 0.1 cm. The measurement itself
 # rounds to 0.01 cm and the lowest 5 cm of shoe vertices are skinned 100 % to the
 # foot, so the carried hull is exact there. The other aecd0f1 runs exceed these
 # limits (ledge to 13.64 cm, open to 13.65 cm): that is aecd0f1's own spike.
