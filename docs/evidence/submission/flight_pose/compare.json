@@ -30,9 +30,19 @@
    }
   ],
   "shoe": {
-   "last_floor_penetration_m": 0.0162573079764843,
-   "peak_floor_penetration_m": 0.0443747746944427,
+   "last_floor_penetration_m": 0.0198333743214607,
+   "peak_floor_penetration_m": 0.0421030554175377,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.21,
+   "peak_after_handoff": 3.64,
+   "peak_after_handoff_frame": 59,
+   "last": 1.98,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
   },
   "flight_frames": 16,
   "end_kind": "flight_end_crash",
@@ -55,22 +65,22 @@
    "torso": 12.9,
    "head": 9.0,
    "arms": 70.3,
-   "legs": 18.1,
+   "legs": 18.0,
    "knees": 13.4,
    "elbows": 30.0
   },
-  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
-  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_step_deg_during_flight_after_first_frame": 19.81,
+  "joint_gap_mm_at_flight_start": 94.6,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
    "max_joint_step_deg_first_3_frames": 0.0,
    "max_joint_gap_change_mm_first_10_frames": 0.02,
    "frames_until_first_step_over_10deg": 10,
-   "pelvis_y_at_that_frame": "(-0.019554, 0.7549, 0.698403)"
+   "pelvis_y_at_that_frame": "(-0.019345, 0.754589, 0.698641)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [],
-  "max_joint_gap_mm_after": 141.47
+  "max_joint_gap_mm_after": 94.62
  },
  "A-front": {
   "events": [
@@ -103,9 +113,19 @@
    }
   ],
   "shoe": {
-   "last_floor_penetration_m": 0.0162573079764843,
-   "peak_floor_penetration_m": 0.0443747746944427,
+   "last_floor_penetration_m": 0.0198333743214607,
+   "peak_floor_penetration_m": 0.0421030554175377,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.21,
+   "peak_after_handoff": 3.64,
+   "peak_after_handoff_frame": 59,
+   "last": 1.98,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
   },
   "flight_frames": 16,
   "end_kind": "flight_end_crash",
@@ -128,22 +148,22 @@
    "torso": 12.9,
    "head": 9.0,
    "arms": 70.3,
-   "legs": 18.1,
+   "legs": 18.0,
    "knees": 13.4,
    "elbows": 30.0
   },
-  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
-  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_step_deg_during_flight_after_first_frame": 19.81,
+  "joint_gap_mm_at_flight_start": 94.6,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
    "max_joint_step_deg_first_3_frames": 0.0,
    "max_joint_gap_change_mm_first_10_frames": 0.02,
    "frames_until_first_step_over_10deg": 10,
-   "pelvis_y_at_that_frame": "(-0.019554, 0.7549, 0.698403)"
+   "pelvis_y_at_that_frame": "(-0.019345, 0.754589, 0.698641)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [],
-  "max_joint_gap_mm_after": 141.47
+  "max_joint_gap_mm_after": 94.62
  },
  "A-ledge-sv": {
   "events": [
@@ -176,9 +196,19 @@
    }
   ],
   "shoe": {
-   "last_floor_penetration_m": 0.0285425889492035,
-   "peak_floor_penetration_m": 0.0300799417495728,
+   "last_floor_penetration_m": 0.0107339429855347,
+   "peak_floor_penetration_m": 0.13163242816925,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 0.0,
+   "peak_after_handoff": 13.16,
+   "peak_after_handoff_frame": 70,
+   "last": 1.07,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.05,
+   "last_sleeping_bodies": 0,
+   "last_is_rest": false
   },
   "flight_frames": 22,
   "end_kind": "flight_end_normal",
@@ -206,13 +236,13 @@
    "elbows": 30.0
   },
   "max_joint_step_deg_during_flight_after_first_frame": 19.5,
-  "joint_gap_mm_at_flight_start": 92.14,
+  "joint_gap_mm_at_flight_start": 91.98,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
    "max_joint_step_deg_first_3_frames": 0.0,
-   "max_joint_gap_change_mm_first_10_frames": 2.05,
+   "max_joint_gap_change_mm_first_10_frames": 2.57,
    "frames_until_first_step_over_10deg": 7,
-   "pelvis_y_at_that_frame": "(-5.477822, 0.811372, 2.905804)"
+   "pelvis_y_at_that_frame": "(-5.477978, 0.810547, 2.906055)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [
@@ -257,13 +287,19 @@
     ]
    ],
    [
-    114,
+    63,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    92,
     [
      "Foot.L"
     ]
    ]
   ],
-  "max_joint_gap_mm_after": 93.75
+  "max_joint_gap_mm_after": 94.77
  },
  "A-ledge": {
   "events": [
@@ -296,9 +332,19 @@
    }
   ],
   "shoe": {
-   "last_floor_penetration_m": 0.0285425889492035,
-   "peak_floor_penetration_m": 0.0300799417495728,
+   "last_floor_penetration_m": 0.0107339429855347,
+   "peak_floor_penetration_m": 0.13163242816925,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 0.0,
+   "peak_after_handoff": 13.16,
+   "peak_after_handoff_frame": 70,
+   "last": 1.07,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.05,
+   "last_sleeping_bodies": 0,
+   "last_is_rest": false
   },
   "flight_frames": 22,
   "end_kind": "flight_end_normal",
@@ -326,13 +372,13 @@
    "elbows": 30.0
   },
   "max_joint_step_deg_during_flight_after_first_frame": 19.5,
-  "joint_gap_mm_at_flight_start": 92.14,
+  "joint_gap_mm_at_flight_start": 91.98,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
    "max_joint_step_deg_first_3_frames": 0.0,
-   "max_joint_gap_change_mm_first_10_frames": 2.05,
+   "max_joint_gap_change_mm_first_10_frames": 2.57,
    "frames_until_first_step_over_10deg": 7,
-   "pelvis_y_at_that_frame": "(-5.477822, 0.811372, 2.905804)"
+   "pelvis_y_at_that_frame": "(-5.477978, 0.810547, 2.906055)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [
@@ -377,13 +423,19 @@
     ]
    ],
    [
-    114,
+    63,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    92,
     [
      "Foot.L"
     ]
    ]
   ],
-  "max_joint_gap_mm_after": 93.75
+  "max_joint_gap_mm_after": 94.77
  },
  "A-office": {
   "events": [
@@ -417,8 +469,18 @@
   ],
   "shoe": {
    "last_floor_penetration_m": 0.0,
-   "peak_floor_penetration_m": 0.0108765843510628,
+   "peak_floor_penetration_m": 0.0110175716876984,
    "samples": 179
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 1.09,
+   "peak_after_handoff": 1.1,
+   "peak_after_handoff_frame": 635,
+   "last": 0.0,
+   "last_frame": 782,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
   },
   "flight_frames": 22,
   "end_kind": "flight_end_normal",
@@ -431,7 +493,7 @@
     "torso": 6.5,
     "head": 4.5,
     "arms": 19.8,
-    "legs": 11.4,
+    "legs": 11.3,
     "knees": 7.8,
     "elbows": 9.7
    }
@@ -446,17 +508,17 @@
    "elbows": 30.0
   },
   "max_joint_step_deg_during_flight_after_first_frame": 17.13,
-  "joint_gap_mm_at_flight_start": 12.14,
+  "joint_gap_mm_at_flight_start": 12.03,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
    "max_joint_step_deg_first_3_frames": 0.0,
-   "max_joint_gap_change_mm_first_10_frames": 15.59,
+   "max_joint_gap_change_mm_first_10_frames": 10.82,
    "frames_until_first_step_over_10deg": 4,
-   "pelvis_y_at_that_frame": "(-6.585992, 0.760889, 0.387922)"
+   "pelvis_y_at_that_frame": "(-6.586145, 0.760906, 0.387814)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [],
-  "max_joint_gap_mm_after": 31.52
+  "max_joint_gap_mm_after": 33.23
  },
  "A-open": {
   "events": [
@@ -489,9 +551,19 @@
    }
   ],
   "shoe": {
-   "last_floor_penetration_m": 0.0381658780574799,
-   "peak_floor_penetration_m": 0.044371332526207,
+   "last_floor_penetration_m": 0.0239144149422646,
+   "peak_floor_penetration_m": 0.0578187662363052,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.21,
+   "peak_after_handoff": 5.78,
+   "peak_after_handoff_frame": 60,
+   "last": 2.39,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
   },
   "flight_frames": 21,
   "end_kind": "flight_end_crash",
@@ -518,18 +590,18 @@
    "knees": 6.6,
    "elbows": 30.0
   },
-  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
-  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_step_deg_during_flight_after_first_frame": 19.81,
+  "joint_gap_mm_at_flight_start": 94.6,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
-   "max_joint_step_deg_first_3_frames": 16.04,
-   "max_joint_gap_change_mm_first_10_frames": 1.61,
+   "max_joint_step_deg_first_3_frames": 12.75,
+   "max_joint_gap_change_mm_first_10_frames": 3.02,
    "frames_until_first_step_over_10deg": 3,
-   "pelvis_y_at_that_frame": "(-5.477928, 0.73444, 1.850771)"
+   "pelvis_y_at_that_frame": "(-5.478868, 0.73741, 1.850314)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [],
-  "max_joint_gap_mm_after": 94.82
+  "max_joint_gap_mm_after": 95.64
  },
  "A-side": {
   "events": [
@@ -562,9 +634,19 @@
    }
   ],
   "shoe": {
-   "last_floor_penetration_m": 0.018795530796051,
-   "peak_floor_penetration_m": 0.046181980073452,
+   "last_floor_penetration_m": 0.00756781131029129,
+   "peak_floor_penetration_m": 0.0452102753520012,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.52,
+   "peak_after_handoff": 1.32,
+   "peak_after_handoff_frame": 75,
+   "last": 0.76,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.97,
+   "last_sleeping_bodies": 0,
+   "last_is_rest": false
   },
   "flight_frames": 17,
   "end_kind": "flight_end_crash",
@@ -592,17 +674,17 @@
    "elbows": 30.0
   },
   "max_joint_step_deg_during_flight_after_first_frame": 25.28,
-  "joint_gap_mm_at_flight_start": 95.44,
+  "joint_gap_mm_at_flight_start": 95.38,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
    "max_joint_step_deg_first_3_frames": 0.0,
-   "max_joint_gap_change_mm_first_10_frames": 0.95,
+   "max_joint_gap_change_mm_first_10_frames": 0.37,
    "frames_until_first_step_over_10deg": 5,
-   "pelvis_y_at_that_frame": "(0.474717, 1.257145, 0.641975)"
+   "pelvis_y_at_that_frame": "(0.417646, 1.257953, 0.699867)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [],
-  "max_joint_gap_mm_after": 97.61
+  "max_joint_gap_mm_after": 109.07
  },
  "A-wall-sv": {
   "events": [
@@ -635,9 +717,19 @@
    }
   ],
   "shoe": {
-   "last_floor_penetration_m": 0.0429434287548065,
-   "peak_floor_penetration_m": 0.0773661467432976,
+   "last_floor_penetration_m": 0.0212802621722221,
+   "peak_floor_penetration_m": 0.0421030554175377,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.21,
+   "peak_after_handoff": 3.15,
+   "peak_after_handoff_frame": 73,
+   "last": 2.13,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
   },
   "flight_frames": 18,
   "end_kind": "flight_end_crash",
@@ -664,31 +756,25 @@
    "knees": 9.7,
    "elbows": 30.0
   },
-  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
-  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_step_deg_during_flight_after_first_frame": 19.81,
+  "joint_gap_mm_at_flight_start": 94.6,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
    "max_joint_step_deg_first_3_frames": 0.0,
-   "max_joint_gap_change_mm_first_10_frames": 0.63,
+   "max_joint_gap_change_mm_first_10_frames": 0.59,
    "frames_until_first_step_over_10deg": 8,
-   "pelvis_y_at_that_frame": "(-0.011442, 0.702378, 3.667328)"
+   "pelvis_y_at_that_frame": "(-0.010653, 0.702677, 3.667485)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [
    [
-    55,
+    58,
     [
      "Foot.R"
     ]
-   ],
-   [
-    59,
-    [
-     "Foot.L"
-    ]
    ]
   ],
-  "max_joint_gap_mm_after": 95.24
+  "max_joint_gap_mm_after": 95.19
  },
  "A-wall": {
   "events": [
@@ -721,9 +807,19 @@
    }
   ],
   "shoe": {
-   "last_floor_penetration_m": 0.0429434287548065,
-   "peak_floor_penetration_m": 0.0773661467432976,
+   "last_floor_penetration_m": 0.0212802621722221,
+   "peak_floor_penetration_m": 0.0421030554175377,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.21,
+   "peak_after_handoff": 3.15,
+   "peak_after_handoff_frame": 73,
+   "last": 2.13,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
   },
   "flight_frames": 18,
   "end_kind": "flight_end_crash",
@@ -750,31 +846,25 @@
    "knees": 9.7,
    "elbows": 30.0
   },
-  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
-  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_step_deg_during_flight_after_first_frame": 19.81,
+  "joint_gap_mm_at_flight_start": 94.6,
   "max_joint_gap_change_mm_during_flight": 0.0,
   "handoff": {
    "max_joint_step_deg_first_3_frames": 0.0,
-   "max_joint_gap_change_mm_first_10_frames": 0.63,
+   "max_joint_gap_change_mm_first_10_frames": 0.59,
    "frames_until_first_step_over_10deg": 8,
-   "pelvis_y_at_that_frame": "(-0.011442, 0.702378, 3.667328)"
+   "pelvis_y_at_that_frame": "(-0.010653, 0.702677, 3.667485)"
   },
   "overlap_frames_during_flight": [],
   "overlap_frames_after": [
    [
-    55,
+    58,
     [
      "Foot.R"
     ]
-   ],
-   [
-    59,
-    [
-     "Foot.L"
-    ]
    ]
   ],
-  "max_joint_gap_mm_after": 95.24
+  "max_joint_gap_mm_after": 95.19
  },
  "B-front-sv": {
   "events": [
@@ -810,6 +900,16 @@
    "last_floor_penetration_m": 0.0104147154092789,
    "peak_floor_penetration_m": 0.112724061608315,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.44,
+   "peak_after_handoff": 11.27,
+   "peak_after_handoff_frame": 99,
+   "last": 1.04,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
   },
   "flight_frames": 16,
   "end_kind": "flight_end_crash",
@@ -879,6 +979,16 @@
    "peak_floor_penetration_m": 0.112724061608315,
    "samples": 196
   },
+  "shoe_cm": {
+   "peak_before_handoff": 4.44,
+   "peak_after_handoff": 11.27,
+   "peak_after_handoff_frame": 99,
+   "last": 1.04,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
+  },
   "flight_frames": 16,
   "end_kind": "flight_end_crash",
   "end_u": 0.7381,
@@ -946,6 +1056,16 @@
    "last_floor_penetration_m": 0.0128927785158157,
    "peak_floor_penetration_m": 0.0279638017714024,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 0.0,
+   "peak_after_handoff": 2.8,
+   "peak_after_handoff_frame": 82,
+   "last": 1.29,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
   },
   "flight_frames": 22,
   "end_kind": "flight_end_normal",
@@ -1084,6 +1204,16 @@
    "peak_floor_penetration_m": 0.0279638017714024,
    "samples": 196
   },
+  "shoe_cm": {
+   "peak_before_handoff": 0.0,
+   "peak_after_handoff": 2.8,
+   "peak_after_handoff_frame": 82,
+   "last": 1.29,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
+  },
   "flight_frames": 22,
   "end_kind": "flight_end_normal",
   "end_u": 1.0,
@@ -1221,6 +1351,16 @@
    "peak_floor_penetration_m": 0.0844626086950302,
    "samples": 179
   },
+  "shoe_cm": {
+   "peak_before_handoff": 1.09,
+   "peak_after_handoff": 8.45,
+   "peak_after_handoff_frame": 640,
+   "last": 0.78,
+   "last_frame": 782,
+   "last_fastest_body_m_s": 0.0,
+   "last_sleeping_bodies": 15,
+   "last_is_rest": true
+  },
   "flight_frames": 22,
   "end_kind": "flight_end_normal",
   "end_u": 1.0,
@@ -1282,6 +1422,16 @@
    "peak_floor_penetration_m": 0.044371332526207,
    "samples": 196
   },
+  "shoe_cm": {
+   "peak_before_handoff": 4.44,
+   "peak_after_handoff": 4.41,
+   "peak_after_handoff_frame": 112,
+   "last": 2.72,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.039,
+   "last_sleeping_bodies": 0,
+   "last_is_rest": true
+  },
   "flight_frames": 21,
   "end_kind": "flight_end_crash",
   "end_u": 0.9524,
@@ -1342,6 +1492,16 @@
    "last_floor_penetration_m": 0.0165917980670929,
    "peak_floor_penetration_m": 0.0672584879398346,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.62,
+   "peak_after_handoff": 6.73,
+   "peak_after_handoff_frame": 56,
+   "last": 1.66,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 1.249,
+   "last_sleeping_bodies": 0,
+   "last_is_rest": false
   },
   "flight_frames": 17,
   "end_kind": "flight_end_crash",
@@ -1429,6 +1589,16 @@
    "peak_floor_penetration_m": 0.0545735242962837,
    "samples": 196
   },
+  "shoe_cm": {
+   "peak_before_handoff": 4.44,
+   "peak_after_handoff": 5.46,
+   "peak_after_handoff_frame": 56,
+   "last": 3.57,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.157,
+   "last_sleeping_bodies": 0,
+   "last_is_rest": false
+  },
   "flight_frames": 13,
   "end_kind": "flight_end_crash",
   "end_u": 0.5714,
@@ -1489,6 +1659,16 @@
    "last_floor_penetration_m": 0.0357175725698471,
    "peak_floor_penetration_m": 0.0545735242962837,
    "samples": 196
+  },
+  "shoe_cm": {
+   "peak_before_handoff": 4.44,
+   "peak_after_handoff": 5.46,
+   "peak_after_handoff_frame": 56,
+   "last": 3.57,
+   "last_frame": 221,
+   "last_fastest_body_m_s": 0.157,
+   "last_sleeping_bodies": 0,
+   "last_is_rest": false
   },
   "flight_frames": 13,
   "end_kind": "flight_end_crash",

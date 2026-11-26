@@ -1,0 +1,1519 @@
+{
+ "A-front-sv": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.5167,
+    "frame": 44,
+    "game_s": 1.4133,
+    "movie_s": 1.467,
+    "u": 0.7381
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0162573079764843,
+   "peak_floor_penetration_m": 0.0443747746944427,
+   "samples": 196
+  },
+  "flight_frames": 16,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.7381,
+  "first_two_groups_over_5deg": {
+   "frame": 31,
+   "game_s_after_flight_start": 0.0667,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 22.8,
+    "legs": 10.5,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 12.9,
+   "head": 9.0,
+   "arms": 70.3,
+   "legs": 18.1,
+   "knees": 13.4,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.0,
+   "max_joint_gap_change_mm_first_10_frames": 0.02,
+   "frames_until_first_step_over_10deg": 10,
+   "pelvis_y_at_that_frame": "(-0.019554, 0.7549, 0.698403)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 141.47
+ },
+ "A-front": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.5167,
+    "frame": 44,
+    "game_s": 1.4133,
+    "movie_s": 1.467,
+    "u": 0.7381
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0162573079764843,
+   "peak_floor_penetration_m": 0.0443747746944427,
+   "samples": 196
+  },
+  "flight_frames": 16,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.7381,
+  "first_two_groups_over_5deg": {
+   "frame": 31,
+   "game_s_after_flight_start": 0.0667,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 22.8,
+    "legs": 10.5,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 12.9,
+   "head": 9.0,
+   "arms": 70.3,
+   "legs": 18.1,
+   "knees": 13.4,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.0,
+   "max_joint_gap_change_mm_first_10_frames": 0.02,
+   "frames_until_first_step_over_10deg": 10,
+   "pelvis_y_at_that_frame": "(-0.019554, 0.7549, 0.698403)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 141.47
+ },
+ "A-ledge-sv": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_normal",
+    "flight_elapsed": 0.7,
+    "frame": 50,
+    "game_s": 1.6133,
+    "movie_s": 1.667,
+    "u": 1.0
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0285425889492035,
+   "peak_floor_penetration_m": 0.0300799417495728,
+   "samples": 196
+  },
+  "flight_frames": 22,
+  "end_kind": "flight_end_normal",
+  "end_u": 1.0,
+  "first_two_groups_over_5deg": {
+   "frame": 31,
+   "game_s_after_flight_start": 0.0667,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 22.5,
+    "legs": 10.6,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 8.1,
+   "head": 5.6,
+   "arms": 69.2,
+   "legs": 8.2,
+   "knees": 6.1,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 19.5,
+  "joint_gap_mm_at_flight_start": 92.14,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.0,
+   "max_joint_gap_change_mm_first_10_frames": 2.05,
+   "frames_until_first_step_over_10deg": 7,
+   "pelvis_y_at_that_frame": "(-5.477822, 0.811372, 2.905804)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    57,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    58,
+    [
+     "Pelvis",
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    59,
+    [
+     "Pelvis",
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    60,
+    [
+     "Pelvis",
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    61,
+    [
+     "Pelvis",
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    62,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    114,
+    [
+     "Foot.L"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 93.75
+ },
+ "A-ledge": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_normal",
+    "flight_elapsed": 0.7,
+    "frame": 50,
+    "game_s": 1.6133,
+    "movie_s": 1.667,
+    "u": 1.0
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0285425889492035,
+   "peak_floor_penetration_m": 0.0300799417495728,
+   "samples": 196
+  },
+  "flight_frames": 22,
+  "end_kind": "flight_end_normal",
+  "end_u": 1.0,
+  "first_two_groups_over_5deg": {
+   "frame": 31,
+   "game_s_after_flight_start": 0.0667,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 22.5,
+    "legs": 10.6,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 8.1,
+   "head": 5.6,
+   "arms": 69.2,
+   "legs": 8.2,
+   "knees": 6.1,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 19.5,
+  "joint_gap_mm_at_flight_start": 92.14,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.0,
+   "max_joint_gap_change_mm_first_10_frames": 2.05,
+   "frames_until_first_step_over_10deg": 7,
+   "pelvis_y_at_that_frame": "(-5.477822, 0.811372, 2.905804)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    57,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    58,
+    [
+     "Pelvis",
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    59,
+    [
+     "Pelvis",
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    60,
+    [
+     "Pelvis",
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    61,
+    [
+     "Pelvis",
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    62,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    114,
+    [
+     "Foot.L"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 93.75
+ },
+ "A-office": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 602,
+    "game_s": 20.0133,
+    "movie_s": 20.067
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 603,
+    "game_s": 20.0147,
+    "movie_s": 20.1
+   },
+   {
+    "event": "flight_start",
+    "frame": 607,
+    "game_s": 20.1267,
+    "movie_s": 20.233,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_normal",
+    "flight_elapsed": 0.7,
+    "frame": 628,
+    "game_s": 20.8267,
+    "movie_s": 20.933,
+    "u": 1.0
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0,
+   "peak_floor_penetration_m": 0.0108765843510628,
+   "samples": 179
+  },
+  "flight_frames": 22,
+  "end_kind": "flight_end_normal",
+  "end_u": 1.0,
+  "first_two_groups_over_5deg": {
+   "frame": 609,
+   "game_s_after_flight_start": 0.0666,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 19.8,
+    "legs": 11.4,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 8.1,
+   "head": 5.6,
+   "arms": 60.8,
+   "legs": 8.8,
+   "knees": 6.1,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 17.13,
+  "joint_gap_mm_at_flight_start": 12.14,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.0,
+   "max_joint_gap_change_mm_first_10_frames": 15.59,
+   "frames_until_first_step_over_10deg": 4,
+   "pelvis_y_at_that_frame": "(-6.585992, 0.760889, 0.387922)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 31.52
+ },
+ "A-open": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.6667,
+    "frame": 49,
+    "game_s": 1.58,
+    "movie_s": 1.633,
+    "u": 0.9524
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0381658780574799,
+   "peak_floor_penetration_m": 0.044371332526207,
+   "samples": 196
+  },
+  "flight_frames": 21,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.9524,
+  "first_two_groups_over_5deg": {
+   "frame": 31,
+   "game_s_after_flight_start": 0.0667,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 22.8,
+    "legs": 10.5,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 8.4,
+   "head": 5.9,
+   "arms": 70.3,
+   "legs": 8.9,
+   "knees": 6.6,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 16.04,
+   "max_joint_gap_change_mm_first_10_frames": 1.61,
+   "frames_until_first_step_over_10deg": 3,
+   "pelvis_y_at_that_frame": "(-5.477928, 0.73444, 1.850771)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 94.82
+ },
+ "A-side": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.5333,
+    "frame": 45,
+    "game_s": 1.4467,
+    "movie_s": 1.5,
+    "u": 0.7619
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.018795530796051,
+   "peak_floor_penetration_m": 0.046181980073452,
+   "samples": 196
+  },
+  "flight_frames": 17,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.7619,
+  "first_two_groups_over_5deg": {
+   "frame": 31,
+   "game_s_after_flight_start": 0.0667,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 29.1,
+    "legs": 3.7,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 12.3,
+   "head": 8.6,
+   "arms": 89.8,
+   "legs": 5.9,
+   "knees": 12.4,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 25.28,
+  "joint_gap_mm_at_flight_start": 95.44,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.0,
+   "max_joint_gap_change_mm_first_10_frames": 0.95,
+   "frames_until_first_step_over_10deg": 5,
+   "pelvis_y_at_that_frame": "(0.474717, 1.257145, 0.641975)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 97.61
+ },
+ "A-wall-sv": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.5833,
+    "frame": 46,
+    "game_s": 1.48,
+    "movie_s": 1.533,
+    "u": 0.8333
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0429434287548065,
+   "peak_floor_penetration_m": 0.0773661467432976,
+   "samples": 196
+  },
+  "flight_frames": 18,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.8333,
+  "first_two_groups_over_5deg": {
+   "frame": 31,
+   "game_s_after_flight_start": 0.0667,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 22.8,
+    "legs": 10.5,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 10.5,
+   "head": 7.3,
+   "arms": 70.3,
+   "legs": 13.1,
+   "knees": 9.7,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.0,
+   "max_joint_gap_change_mm_first_10_frames": 0.63,
+   "frames_until_first_step_over_10deg": 8,
+   "pelvis_y_at_that_frame": "(-0.011442, 0.702378, 3.667328)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    55,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    59,
+    [
+     "Foot.L"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 95.24
+ },
+ "A-wall": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.5833,
+    "frame": 46,
+    "game_s": 1.48,
+    "movie_s": 1.533,
+    "u": 0.8333
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0429434287548065,
+   "peak_floor_penetration_m": 0.0773661467432976,
+   "samples": 196
+  },
+  "flight_frames": 18,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.8333,
+  "first_two_groups_over_5deg": {
+   "frame": 31,
+   "game_s_after_flight_start": 0.0667,
+   "u": 0.119,
+   "groups_deg": {
+    "torso": 6.5,
+    "head": 4.5,
+    "arms": 22.8,
+    "legs": 10.5,
+    "knees": 7.8,
+    "elbows": 9.7
+   }
+  },
+  "frames_with_fewer_than_two_groups_moving": 2,
+  "fold_at_end_deg": {
+   "torso": 10.5,
+   "head": 7.3,
+   "arms": 70.3,
+   "legs": 13.1,
+   "knees": 9.7,
+   "elbows": 30.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 19.8,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.0,
+   "max_joint_gap_change_mm_first_10_frames": 0.63,
+   "frames_until_first_step_over_10deg": 8,
+   "pelvis_y_at_that_frame": "(-0.011442, 0.702378, 3.667328)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    55,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    59,
+    [
+     "Foot.L"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 95.24
+ },
+ "B-front-sv": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.5167,
+    "frame": 44,
+    "game_s": 1.4133,
+    "movie_s": 1.467,
+    "u": 0.7381
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0104147154092789,
+   "peak_floor_penetration_m": 0.112724061608315,
+   "samples": 196
+  },
+  "flight_frames": 16,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.7381,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 16,
+  "fold_at_end_deg": {
+   "torso": 0.0,
+   "head": 0.0,
+   "arms": 0.0,
+   "legs": 0.0,
+   "knees": 0.0,
+   "elbows": 0.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 0.0,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 8.23,
+   "max_joint_gap_change_mm_first_10_frames": 15.88,
+   "frames_until_first_step_over_10deg": 10,
+   "pelvis_y_at_that_frame": "(-0.021167, 0.752249, 0.716902)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    102,
+    [
+     "Foot.L"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 114.75
+ },
+ "B-front": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.5167,
+    "frame": 44,
+    "game_s": 1.4133,
+    "movie_s": 1.467,
+    "u": 0.7381
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0104147154092789,
+   "peak_floor_penetration_m": 0.112724061608315,
+   "samples": 196
+  },
+  "flight_frames": 16,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.7381,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 16,
+  "fold_at_end_deg": {
+   "torso": 0.0,
+   "head": 0.0,
+   "arms": 0.0,
+   "legs": 0.0,
+   "knees": 0.0,
+   "elbows": 0.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 0.0,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 0.0,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 8.23,
+   "max_joint_gap_change_mm_first_10_frames": 15.88,
+   "frames_until_first_step_over_10deg": 10,
+   "pelvis_y_at_that_frame": "(-0.021167, 0.752249, 0.716902)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    102,
+    [
+     "Foot.L"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 114.75
+ },
+ "B-ledge-sv": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_normal",
+    "flight_elapsed": 0.7,
+    "frame": 50,
+    "game_s": 1.6133,
+    "movie_s": 1.667,
+    "u": 1.0
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0128927785158157,
+   "peak_floor_penetration_m": 0.0279638017714024,
+   "samples": 196
+  },
+  "flight_frames": 22,
+  "end_kind": "flight_end_normal",
+  "end_u": 1.0,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 22,
+  "fold_at_end_deg": {
+   "torso": 0.4,
+   "head": 0.1,
+   "arms": 0.9,
+   "legs": 1.8,
+   "knees": 4.8,
+   "elbows": 1.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 5.04,
+  "joint_gap_mm_at_flight_start": 92.14,
+  "max_joint_gap_change_mm_during_flight": 3.41,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 7.29,
+   "max_joint_gap_change_mm_first_10_frames": 15.12,
+   "frames_until_first_step_over_10deg": 6,
+   "pelvis_y_at_that_frame": "(-5.477143, 0.953306, 2.781747)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    56,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    57,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    58,
+    [
+     "UpperLeg.R"
+    ]
+   ],
+   [
+    59,
+    [
+     "UpperLeg.L",
+     "UpperLeg.R",
+     "LowerLeg.R"
+    ]
+   ],
+   [
+    60,
+    [
+     "UpperLeg.L",
+     "UpperLeg.R"
+    ]
+   ],
+   [
+    61,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    62,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    63,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    64,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    65,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    66,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    67,
+    [
+     "UpperLeg.L"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 115.04
+ },
+ "B-ledge": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_normal",
+    "flight_elapsed": 0.7,
+    "frame": 50,
+    "game_s": 1.6133,
+    "movie_s": 1.667,
+    "u": 1.0
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0128927785158157,
+   "peak_floor_penetration_m": 0.0279638017714024,
+   "samples": 196
+  },
+  "flight_frames": 22,
+  "end_kind": "flight_end_normal",
+  "end_u": 1.0,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 22,
+  "fold_at_end_deg": {
+   "torso": 0.4,
+   "head": 0.1,
+   "arms": 0.9,
+   "legs": 1.8,
+   "knees": 4.8,
+   "elbows": 1.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 5.04,
+  "joint_gap_mm_at_flight_start": 92.14,
+  "max_joint_gap_change_mm_during_flight": 3.41,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 7.29,
+   "max_joint_gap_change_mm_first_10_frames": 15.12,
+   "frames_until_first_step_over_10deg": 6,
+   "pelvis_y_at_that_frame": "(-5.477143, 0.953306, 2.781747)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    56,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    57,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    58,
+    [
+     "UpperLeg.R"
+    ]
+   ],
+   [
+    59,
+    [
+     "UpperLeg.L",
+     "UpperLeg.R",
+     "LowerLeg.R"
+    ]
+   ],
+   [
+    60,
+    [
+     "UpperLeg.L",
+     "UpperLeg.R"
+    ]
+   ],
+   [
+    61,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    62,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    63,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    64,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    65,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    66,
+    [
+     "UpperLeg.L"
+    ]
+   ],
+   [
+    67,
+    [
+     "UpperLeg.L"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 115.04
+ },
+ "B-office": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 602,
+    "game_s": 20.0133,
+    "movie_s": 20.067
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 603,
+    "game_s": 20.0147,
+    "movie_s": 20.1
+   },
+   {
+    "event": "flight_start",
+    "frame": 607,
+    "game_s": 20.1267,
+    "movie_s": 20.233,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_normal",
+    "flight_elapsed": 0.7,
+    "frame": 628,
+    "game_s": 20.8267,
+    "movie_s": 20.933,
+    "u": 1.0
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.00776908874511719,
+   "peak_floor_penetration_m": 0.0844626086950302,
+   "samples": 179
+  },
+  "flight_frames": 22,
+  "end_kind": "flight_end_normal",
+  "end_u": 1.0,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 22,
+  "fold_at_end_deg": {
+   "torso": 0.1,
+   "head": 0.0,
+   "arms": 0.1,
+   "legs": 0.2,
+   "knees": 0.6,
+   "elbows": 0.2
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 0.75,
+  "joint_gap_mm_at_flight_start": 12.14,
+  "max_joint_gap_change_mm_during_flight": 0.59,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 0.95,
+   "max_joint_gap_change_mm_first_10_frames": 95.91,
+   "frames_until_first_step_over_10deg": 4,
+   "pelvis_y_at_that_frame": "(-6.579443, 0.759511, 0.387507)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 108.64
+ },
+ "B-open": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.6667,
+    "frame": 49,
+    "game_s": 1.58,
+    "movie_s": 1.633,
+    "u": 0.9524
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0272338125109673,
+   "peak_floor_penetration_m": 0.044371332526207,
+   "samples": 196
+  },
+  "flight_frames": 21,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.9524,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 21,
+  "fold_at_end_deg": {
+   "torso": 0.7,
+   "head": 0.3,
+   "arms": 1.1,
+   "legs": 1.7,
+   "knees": 4.5,
+   "elbows": 1.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 4.83,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 2.83,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 40.51,
+   "max_joint_gap_change_mm_first_10_frames": 16.01,
+   "frames_until_first_step_over_10deg": 2,
+   "pelvis_y_at_that_frame": "(-5.480862, 0.794149, 1.850089)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 114.26
+ },
+ "B-side": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.5333,
+    "frame": 45,
+    "game_s": 1.4467,
+    "movie_s": 1.5,
+    "u": 0.7619
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0165917980670929,
+   "peak_floor_penetration_m": 0.0672584879398346,
+   "samples": 196
+  },
+  "flight_frames": 17,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.7619,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 17,
+  "fold_at_end_deg": {
+   "torso": 0.9,
+   "head": 0.2,
+   "arms": 1.3,
+   "legs": 1.5,
+   "knees": 4.4,
+   "elbows": 1.1
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 4.51,
+  "joint_gap_mm_at_flight_start": 95.44,
+  "max_joint_gap_change_mm_during_flight": 2.24,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 6.96,
+   "max_joint_gap_change_mm_first_10_frames": 15.05,
+   "frames_until_first_step_over_10deg": 5,
+   "pelvis_y_at_that_frame": "(0.408618, 1.259011, 0.710424)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [
+   [
+    49,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    54,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    55,
+    [
+     "Foot.R"
+    ]
+   ],
+   [
+    56,
+    [
+     "Foot.R"
+    ]
+   ]
+  ],
+  "max_joint_gap_mm_after": 120.23
+ },
+ "B-wall-sv": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.4,
+    "frame": 41,
+    "game_s": 1.3133,
+    "movie_s": 1.367,
+    "u": 0.5714
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0357175725698471,
+   "peak_floor_penetration_m": 0.0545735242962837,
+   "samples": 196
+  },
+  "flight_frames": 13,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.5714,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 13,
+  "fold_at_end_deg": {
+   "torso": 0.7,
+   "head": 0.3,
+   "arms": 1.1,
+   "legs": 1.7,
+   "knees": 4.5,
+   "elbows": 1.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 4.83,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 2.83,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 6.49,
+   "max_joint_gap_change_mm_first_10_frames": 13.06,
+   "frames_until_first_step_over_10deg": 11,
+   "pelvis_y_at_that_frame": "(-0.014819, 0.704455, 3.653859)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 112.5
+ },
+ "B-wall": {
+  "events": [
+   {
+    "event": "kick_contact",
+    "frame": 24,
+    "game_s": 0.8,
+    "movie_s": 0.8
+   },
+   {
+    "event": "ragdoll_start",
+    "frame": 25,
+    "game_s": 0.8013,
+    "movie_s": 0.833
+   },
+   {
+    "event": "flight_start",
+    "frame": 29,
+    "game_s": 0.9133,
+    "movie_s": 0.967,
+    "u": 0.0238
+   },
+   {
+    "event": "flight_end_crash",
+    "flight_elapsed": 0.4,
+    "frame": 41,
+    "game_s": 1.3133,
+    "movie_s": 1.367,
+    "u": 0.5714
+   }
+  ],
+  "shoe": {
+   "last_floor_penetration_m": 0.0357175725698471,
+   "peak_floor_penetration_m": 0.0545735242962837,
+   "samples": 196
+  },
+  "flight_frames": 13,
+  "end_kind": "flight_end_crash",
+  "end_u": 0.5714,
+  "first_two_groups_over_5deg": null,
+  "frames_with_fewer_than_two_groups_moving": 13,
+  "fold_at_end_deg": {
+   "torso": 0.7,
+   "head": 0.3,
+   "arms": 1.1,
+   "legs": 1.7,
+   "knees": 4.5,
+   "elbows": 1.0
+  },
+  "max_joint_step_deg_during_flight_after_first_frame": 4.83,
+  "joint_gap_mm_at_flight_start": 94.61,
+  "max_joint_gap_change_mm_during_flight": 2.83,
+  "handoff": {
+   "max_joint_step_deg_first_3_frames": 6.49,
+   "max_joint_gap_change_mm_first_10_frames": 13.06,
+   "frames_until_first_step_over_10deg": 11,
+   "pelvis_y_at_that_frame": "(-0.014819, 0.704455, 3.653859)"
+  },
+  "overlap_frames_during_flight": [],
+  "overlap_frames_after": [],
+  "max_joint_gap_mm_after": 112.5
+ }
+}

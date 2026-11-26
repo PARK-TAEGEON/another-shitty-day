@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+KIM_VISUAL model=res://assets/characters/boss_kim/boss_kim.glb bones=31 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "QA_Arms_Raised", "QA_Head_Turn", "QA_Knees_90", "QA_Torso_Bend", "Walk"]
+KIM_MOTION model=res://assets/characters/boss_kim/boss_kim.glb playing=Idle
+KIM_FLIGHT_POSE {"at_rest":false,"case":"legacy","early_two_groups":true,"end":"crash","flight_s":0.667,"handoff_step_deg":4.19,"max_joint_opening_m":0.11649,"settle_s":0.0,"sole_below_box_max_m":0.0,"sole_floor_penetration_peak_m":0.0,"sole_floor_penetration_rest_m":0.0,"v2":false}
+KIM_FLIGHT_POSE_REGRESSION_OK

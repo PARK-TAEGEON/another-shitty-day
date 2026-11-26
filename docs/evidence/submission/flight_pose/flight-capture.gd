@@ -3,6 +3,8 @@ extends "../integration/kim-landing.gd"
 ##   -- --log=/path/out.json                     production office replay (default)
 ##   -- --log=... --fixture=front|side|wall|open|ledge fixed placement, one kick
 ##   -- ... --side-view                           review camera beside the arc
+##   -- ... --kim-offset=X                        shift Kim and the player X m sideways
+##                                                (landing spread; default 0)
 ## The log records the kick contact, ragdoll start, scripted flight start/end
 ## (normal or crash), the physics hand-off, flight progress u, game time and
 ## per-joint measurements of the 15 physical bones.
@@ -75,6 +77,13 @@ func _fixture_capture() -> void:
 	elif fixture == "wall":
 		# A test wall 1.1 m behind Kim makes the arc crash while he is folded.
 		_test_box(game, Vector3(0, 1.5, 2.9), Vector3(3.0, 3.0, 0.2))
+	var offset := 0.0
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--kim-offset="):
+			offset = float(arg.substr(13))
+	var sideways := Vector3(-flight_dir.z, 0, flight_dir.x) * offset
+	kim_at += sideways
+	player_at += sideways
 	kim.global_position = kim_at
 	player.place_at(player_at, player_yaw, -0.25)
 	for i in 20:
@@ -161,7 +170,8 @@ func _angle(a: Basis, b: Basis) -> float:
 	return rad_to_deg((a.inverse() * b).get_rotation_quaternion().normalized().get_angle())
 
 func _log_frame() -> void:
-	frame_index = Engine.get_frames_drawn()
+	# Rendered runs: the movie frame. Headless draws nothing, so count process frames.
+	frame_index = Engine.get_frames_drawn() if DisplayServer.get_name() != "headless" else Engine.get_process_frames()
 	if not is_instance_valid(rig) or rig.bodies.is_empty():
 		return
 	if not _kick_seen and is_instance_valid(player) and fixture == "":
@@ -229,15 +239,22 @@ func _log_frame() -> void:
 			if not info.is_empty() and (info.normal as Vector3).y < 0.72 and not overlaps.has(body.bone_name):
 				overlaps.append(body.bone_name)
 	var scripted_count := 0
+	var fastest := 0.0
+	var asleep := 0
 	for body: PhysicalBone3D in rig.bodies:
 		if bool(body.get("scripted")):
 			scripted_count += 1
+		fastest = maxf(fastest, body.linear_velocity.length())
+		if PhysicsServer3D.body_get_state(body.get_rid(), PhysicsServer3D.BODY_STATE_SLEEPING):
+			asleep += 1
 	rows.append({"frame": frame_index, "movie_s": snappedf(frame_index / 30.0, 0.001),
 		"game_s": snappedf(game_time, 0.0001), "flight": flight, "u": snappedf(u, 0.0001),
 		"scripted_bodies": scripted_count, "pelvis": rig.pelvis_position(),
 		"max_joint_gap_mm": snappedf(max_gap * 1000.0, 0.01), "joint_gap_mm": gaps,
 		"turn_since_flight_start_deg": turn, "max_joint_step_deg": snappedf(max_step, 0.01),
-		"bodies": positions, "wall_or_furniture_overlap": overlaps})
+		"bodies": positions, "wall_or_furniture_overlap": overlaps,
+		"shoe_lowest_m": snappedf(measurements[-1], 0.0001) if not measurements.is_empty() else null,
+		"fastest_body_m_s": snappedf(fastest, 0.001), "sleeping_bodies": asleep})
 	if _after_flight >= 0:
 		_after_flight += 1
 

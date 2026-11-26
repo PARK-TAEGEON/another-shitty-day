@@ -1,196 +1,214 @@
 # 김부장 발차기 비행 자세 · 2026-11-26
 
-## 실행 대상 SHA
+## SHA와 실행 환경
 
-| 구분 | SHA |
-| --- | --- |
-| 작업 기준 (`integration/submission-1126`, 원격에서 재확인) | `aecd0f1354bddf93827263e8692c8d83b796e4f2` |
-| 수정 후 검증한 코드 | `893dbaf3a7f17e517e1382184d4ea7f8bbe3418d` |
-| 증거 커밋 | 이 문서를 추가한 커밋(`893dbaf`의 다음 커밋). 런타임 코드는 바꾸지 않는다 |
-
-수정 전 결과는 `aecd0f1`을 별도 worktree에서 실행했다. 수정 후 결과는 `893dbaf`를 실행했다. 두 경우 모두 이 폴더의 같은 캡처 스크립트를 썼다.
-
-## 실행 환경
-
-- Ubuntu 24.04.5 x86-64
-- Godot `4.7.2.stable.official.ed1daf0bf`(공식 Linux 바이너리), Jolt, GL Compatibility
-- Mesa 25.2.8 llvmpipe(LLVM 20.1.2), Xvfb 1280×720
-- 녹화는 `--fixed-fps 30 --write-movie`로 했고, 물리는 60틱이다.
-
-통합 기록과 다른 점:
-- 통합 기록은 내보낸 PCK로 실행했다. 이번에는 export template이 없어 `--path game`으로 실행했다.
-- 고정 FPS 녹화라서 실시간 히트스톱, 타격감, 성능은 검증하지 않았다.
-- Windows 실기는 미검증이다.
-
-## 문제와 변경
-
-**문제.** 50본 김부장은 발차기 후 0.1초 동안 실제 물리로 움직인 뒤 스크립트 비행으로 넘어간다. 이때 15개 물리 본의 상대 위치를 그대로 고정하고, 몸 전체를 한 각도(최대 −60°)로만 기울였다. 그 결과 0.7초 비행 동안 선 자세 그대로 이동했다.
-
-**변경.** 런타임 파일은 `game/scripts/characters/kim_visual_adapter.gd` 하나다.
-
-1. **비행 시작 시 저장.** `_capture_flight_fold()`가 본마다 다음 값을 저장한다.
-   - 시작 transform, 부모 물리 본, 관절 피벗(본 원점)
-   - 완전히 접혔을 때의 회전
-2. **방향 기준.** 회전 방향은 전역 축이 아니라 김부장의 골반 프레임(좌우·앞)과 비행 방향에서 계산한다.
-   - 몸통·머리·팔은 맞은 쪽으로 뒤처진다. 팔은 어깨에서 바깥쪽으로도 벌어진다.
-   - 고관절은 타격 방향 중 앞뒤 성분으로만 굽힌다. 옆에서 맞았을 때 허벅지끼리 겹치지 않게 하기 위해서다.
-   - 무릎·팔꿈치는 각 본의 좌우 축(경첩)으로 굽힌다.
-3. **공통 자세 함수.** `_flight_body_transforms()`는 본 계층을 따라 각 관절을 자기 피벗 기준으로 회전시킨다(FK). 그래서 본 길이와 관절 연결이 바뀌지 않는다.
-   - 표시(`_place_flight_pose`)와 예상 충돌 검사(`_flight_pose_points` → `_pose_hits_solid`, `_planned_burial`, `_room_shift`)가 이 함수 하나를 쓴다.
-   - `_above_floor`는 50본에서만 실제 자세 점을 쓴다. 인계 뒤에는 실제 본 위치를 쓴다.
-4. **접힘 시간 곡선.**
-   - u 0→0.25 구간에서 접힌다.
-   - u 0.35→1 구간에서 몸통 60%, 머리 60%, 다리 75%를 다시 편다. 팔과 팔꿈치는 벌린 채 유지한다.
-   - 인계 직전에 선 자세로 강제로 되돌리지 않는다. 마지막으로 표시된 자세가 그대로 물리로 넘어간다.
-5. **물리 인계.** 원래 원뿔 관절은 발차기 순간의 선 자세를 기준으로 만들어져 있다. 그대로 두면 굽힌 고관절·무릎이 인계 직후 펴지는 쪽으로 당겨진다. 이를 실험으로 확인했다(무릎 35°를 3스텝 만에 약 24°로 되돌림).
-   - 충돌 종료와 정상 종료 모두 `_rebase_joints_to_flight_pose()`가 관절을 현재 자세로 다시 만든다(`joint_type` NONE→CONE).
-   - 관절 허용 범위(swing/twist)는 원래 값을 그대로 쓴다.
-6. **바꾸지 않은 것.**
-   - 31본(`--kim-rig`)과 절차 모델(`--kim-legacy`)은 기존 경로를 그대로 탄다.
-   - `flight_distance`, `flight_peak`, `flight_time`, `boost_delay`, 골반 포물선, 타격·피해·점수 처리는 바꾸지 않았다.
-
-**튜닝 값(제안값).**
-
-| 부위 | 몸통 | 머리 | 고관절 | 다리 벌림 | 무릎 | 어깨(맞은 쪽 방향) | 어깨(바깥쪽 벌림) | 팔꿈치 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 각도 | 20° | 14° | 35° | 8° | 24° | 35° | 55° | 30° |
-
-처음 후보였던 35°·25°·70° 중 몸통은 측면 화면에서 공처럼 말려 보여 25°→20°로 낮췄다. 사용자 시각 승인 전이므로 **PROPOSED**다.
-
-## 타임라인 (본편 오프닝 재생, 수정 전후 동일)
-
-`movie_s`는 영상 프레임/30이다. 이 영상에서 점수가 바뀌는 프레임으로 맞는지 확인했다. 히트스톱 때문에 게임 시간은 영상 시간보다 짧다.
-
-| 사건 | 영상 프레임 | 영상 시각 | 게임 시간 | u |
-| --- | --- | --- | --- | --- |
-| 발차기 입력(재생 스크립트 `kick_frame`) | 599 | 19.967s | — | — |
-| 발 표시 | 600 | 20.000s | — | — |
-| 발차기 접촉 | 602 | 20.067s | 20.0133 | — |
-| 래그돌 시작 | 603 | 20.100s | 20.0147 | — |
-| 스크립트 비행 시작 | 607 | 20.233s | 20.1267 | 0.024 |
-| 정상 종료(u=1) → 물리 인계 | 628 | 20.933s | 20.8267 | 1.000 |
-
-## 고정 장면
-
-모든 고정 장면은 발차기 접촉 f24(0.800s), 래그돌 시작 f25, 비행 시작 f29(0.967s, 게임 0.9133, u 0.024)로 같다.
-
-| 장면 | 조건 | 수정 전 종료 | 수정 후 종료 |
-| --- | --- | --- | --- |
-| front | `kim-landing-fixture.gd`와 같은 위치, 정면 타격 | 충돌 f44, u 0.738 | 충돌 f44, u 0.738 |
-| side | 김부장을 −90° 돌려 왼쪽 옆구리 타격 | 충돌 f45, u 0.762 | 충돌 f45, u 0.762 |
-| wall | 등 뒤 1.1m에 시험 벽(z=2.9) | 충돌 f41, u 0.571 | 충돌 f46, u 0.833 |
-| open | x=−5.5 통로, 5.4m 이상 비어 있음 | 바닥 충돌 f49, u 0.952 | 바닥 충돌 f49, u 0.952 |
-| ledge | 높이 1m 시험 받침대에서 차서 떨어뜨림 | 정상 종료 f50, u 1.0 | 정상 종료 f50, u 1.0 |
-
-`open`은 수정 전에도 u 0.952에서 끝난다. 하강 중 `_sweep_flight`의 골반 아래 0.5m 구가 바닥에 닿기 때문이다. 평평한 바닥에서 정상 종료(u=1)를 확인하려고 `ledge`를 추가했다. 본편 오프닝 재생은 정상 종료로 끝난다.
-
-## 결과
-
-`compare.py`로 산출했다. 원본 값은 [`compare.json`](compare.json)과 [`logs/`](logs/)에 있다(프레임별 JSON, gzip).
-
-| 장면 | 둘 이상 그룹 5° 이상 변화(비행 시작 후 게임 시간) | 비행 중 관절 간격 변화 | 인계 후 3프레임 최대 관절 회전 | 인계 후 10프레임 관절 간격 변화 | 신발 최대 바닥 침투 | 정지 후 바닥 침투 |
-| --- | --- | --- | --- | --- | --- | --- |
-| office 전 | 없음 | 0.6mm | 0.9° | 95.9mm | 8.45cm | 0.78cm |
-| office 후 | **0.067s** | 0.0mm | 0.0° | 15.6mm | 1.09cm | 0.00cm |
-| front 전 | 없음 | 0.0mm | 8.2° | 15.9mm | 11.27cm | 1.04cm |
-| front 후 | **0.067s** | 0.0mm | 0.0° | 0.0mm | 4.44cm | 1.63cm |
-| side 전 | 없음 | 2.2mm | 7.0° | 15.1mm | 6.73cm | 1.66cm |
-| side 후 | **0.067s** | 0.0mm | 0.0° | 1.0mm | 4.62cm | 1.88cm |
-| wall 전 | 없음 | 2.8mm | 6.5° | 13.1mm | 5.46cm | 3.57cm |
-| wall 후 | **0.067s** | 0.0mm | 0.0° | 0.6mm | 7.74cm | 4.29cm |
-| open 전 | 없음 | 2.8mm | 40.5° | 16.0mm | 4.44cm | 2.72cm |
-| open 후 | **0.067s** | 0.0mm | 16.0° | 1.6mm | 4.44cm | 3.82cm |
-| ledge 전 | 없음 | 3.4mm | 7.3° | 15.1mm | 2.80cm | 1.29cm |
-| ledge 후 | **0.067s** | 0.0mm | 0.0° | 2.0mm | 3.01cm | 2.85cm |
-
-- **그룹 변화.** 그룹은 몸통·머리·팔·다리·무릎·팔꿈치다. 각 본의 부모 본 대비 회전을 비행 시작 시점과 비교했다.
-  - 수정 후에는 비행 2프레임째(게임 0.067s)부터 둘 이상 그룹이 5° 넘게 움직인다. 0.1s 시점의 본편 값은 팔 37°, 몸통 12°, 다리 21°다(f610).
-  - 수정 전에는 비행 전체 13–22프레임이 선 자세 그대로였다.
-- **관절 간격.** 비행 시작 때의 부모 본 기준 관절 위치와 비교했다.
-  - 수정 후 비행 중 변화는 0.0mm다. 팔다리가 늘거나 관절이 벌어지지 않는다.
-  - 인계 직후 간격이 벌어지는 정도도 줄었다. 본편 기준 95.9mm에서 15.6mm다.
-- **인계 연속성.** 수정 후에는 정상 종료와 조기 충돌 모두 인계 후 3프레임 동안 자세 변화가 0°다. 낙하 중에는 접힌 자세를 유지한다.
-  - `open`의 16.0°는 바닥 충돌로 끝나 인계 3프레임 안에 착지한 값이다. 수정 전에는 같은 상황에서 40.5°였다.
-- **벽·가구 관통.** 비행 중 벽·가구와 겹친 프레임은 모든 장면에서 0이다.
-  - `wall` 수정 후 본 중심의 최소 z는 3.378이다(벽 면은 z=3.0, 수정 전은 3.156).
-  - 인계 뒤 착지 중 발이 2프레임 접촉했다(f55, f59).
-
-### 착지 비교와 악화 항목
-
-| 장면 | 신발 최대 침투 | 정지 후 침투 |
+| 구분 | SHA | 내용 |
 | --- | --- | --- |
-| office | 8.45 → **1.09cm** (개선) | 0.78 → **0.00cm** (개선) |
-| front | 11.27 → **4.44cm** (개선) | 1.04 → 1.63cm (+0.59cm) |
-| side | 6.73 → **4.62cm** (개선) | 1.66 → 1.88cm (+0.22cm) |
-| wall | 5.46 → 7.74cm (**+2.28cm**) | 3.57 → 4.29cm (+0.72cm) |
-| open | 4.44 → 4.44cm | 2.72 → 3.82cm (**+1.10cm**) |
-| ledge | 2.80 → 3.01cm | 1.29 → 2.85cm (**+1.56cm**) |
+| 작업 기준 (`integration/submission-1126`, 원격 재확인) | `aecd0f1` | 수정 전 |
+| 1차 비행 자세 | `893dbaf` | 런타임(비행 자세·인계) + 신규 검사 |
+| 1차 증거 | `48356e3` | 증거만. 신발 침투 회귀가 이 커밋의 기록에서 확인됨 |
+| **검증한 코드** | **`c434672`** | 발 충돌체가 신발을 감싸도록 수정, 신규 검사 착지 항목 추가, `test-kim-integration.ps1` 연결 |
+| 증거 커밋 | 이 문서를 추가한 커밋(`c434672`의 다음 커밋) | 런타임 코드는 바꾸지 않는다 |
 
-- **본편 오프닝은 개선, 시험 장면 일부는 악화.** 시험 장면 중 정지 후 침투가 가장 크게 늘어난 것은 ledge +1.56cm, open +1.10cm다.
-- **추정 원인.** 인계 때 관절 기준을 접힌 자세로 다시 잡아서, 정지 자세가 이전(곧게 펴고 엎드림)보다 다리를 약간 굽힌 상태로 남는다. 이 때문에 신발 밑창 끝이 바닥 아래로 더 내려간다.
-- **완화한 과정.** 처음에는 접힌 자세를 끝까지 유지했고, 그때 정지 후 침투는 최대 3.8cm였다. u 0.35부터 다리를 다시 펴도록 바꿔 줄였다.
-- **wall 충돌 시점 변화(u 0.571 → 0.833).** 새 자세에서는 다리가 맞은 쪽(뒤)으로 굽어 비행 방향 앞쪽에 오는 점이 줄었다. 그래서 `_pose_hits_solid`와 `_planned_burial`이 더 늦게 벽을 감지한다. 벽은 통과하지 않았다.
+**로컬 실행 환경**
+- Ubuntu 24.04.5 x86-64
+- Godot `4.7.2.stable.official.ed1daf0bf`(공식 Linux 바이너리), Jolt
+- Mesa 25.2.8 llvmpipe, Xvfb 1280×720
+- 녹화는 `--fixed-fps 30 --write-movie`, 물리는 60틱이다.
+- `--path game`으로 실행했다. 내보낸 PCK가 아니다.
+
+**CI 실행 환경(실제 로그)**
+- Linux: GitHub Actions `ubuntu-22.04`, workflow *Kim vertical slice*, run 45819643169
+- Windows: GitHub Actions `windows-latest`, workflow *Office scenario v0.3*, run 45819643263
+- 둘 다 `c434672`에서 실행했다.
+
+**검증하지 않은 것:** 고정 FPS 녹화라서 실시간 히트스톱, 타격감, 성능은 검증하지 않았다. Windows 실기 화면도 미검증이다.
+
+## 변경 요약
+
+**`893dbaf` — 비행 자세.** 대상은 50본이다.
+- 본 계층 FK로 각 관절이 자기 피벗을 기준으로 회전한다.
+- 몸통·머리·팔은 맞은 쪽으로 뒤처지고, 무릎·팔꿈치는 경첩 축으로 굽는다. 내려오는 동안 몸통·머리·다리를 일부 다시 편다.
+- 표시와 예상 충돌 검사가 같은 자세 함수를 쓴다.
+- 인계 시 관절을 마지막 표시 자세 기준으로 다시 만든다.
+- 각도(제안값, **PROPOSED**): 몸통 20°, 머리 14°, 고관절 35°, 다리 벌림 8°, 무릎 24°, 어깨(맞은 쪽) 35°, 어깨(바깥쪽) 55°, 팔꿈치 30°. 펴는 시점은 u 0.35부터다.
+
+**`c434672` — 신발 침투 회귀 수정.** 비행 각도·방향·시간 곡선은 그대로다.
+- 50본 발 상자 충돌체(`V2_BOX_SIZE`, `V2_CENTER_SHIFT`의 `Foot`)를 신발 메시 위로 옮겼다.
+  - 바깥쪽 1.6cm, 뒤꿈치 쪽 0.95cm 이동. 좌우 대칭으로 오른발은 x를 반전한다.
+  - 폭 0.279 → 0.29m. 높이와 길이는 그대로다.
+- 결과: 신발 정점 1,719개 중 상자 밖에 있던 163개가 0개가 됐다.
+- 다른 부위의 충돌체, 관절 제한, 질량, 물리 설정은 바꾸지 않았다.
+
+## 신발 침투 원인 확인
+
+요청에 있던 확인 지점별 결과다.
+
+| 확인 지점 | 결과 | 근거 |
+| --- | --- | --- |
+| `_above_floor()`가 본 중심점만 확인해 회전한 밑창을 놓치는가 | 실제 침투 원인이 아니다 | 스크립트 비행 2번째 프레임부터 끝까지, 세 버전 2,442프레임에서 신발 바닥 침투 **0cm**(headless 분산 실행). 비행 첫 프레임 f29의 약 4.4cm는 아직 물리 자세(발차기 직후 0.1s)를 그린 프레임이며, 수정 전후가 같다. 함수는 바꾸지 않았다 |
+| `_sole_points`를 비행 예상 자세와 실제 물리 자세에서 올바르게 변환할 수 있는가 | 가능하다 | 렌더 본(`skeleton.get_bone_global_pose`)과 물리 본(`body.global_transform * body_offset⁻¹`)으로 변환한 값이 모든 프레임에서 같았다. 신규 검사가 이 변환을 쓴다 |
+| 발 충돌체가 실제 밑창을 충분히 감싸는가 | **감싸지 못했다 → 정지 후 침투 회귀의 원인** | 발 본 기준 휴지 자세에서 상자가 신발보다 1.6cm 안쪽에 있었다. 바깥 밑창 모서리가 **2.0cm**, 뒤꿈치가 **0.7cm** 상자 밖으로 나왔다(발당 1,719개 중 163개). 새 비행 자세로 착지하면 발이 바깥 모서리로 눕는다. 그때 정지 후 신발이 상자 바닥보다 1.4–1.8cm 아래에 있었다(wall 왼발: 상자 2.48cm, 신발 4.29cm, 밑창점 4.22cm 침투) |
+| 물리 전환 순간의 침투인가, 전환 후 관절·접촉 상태 때문인가 | **전환 후**다 | 인계 직후 3프레임의 자세 변화는 0°이고, 인계 전 침투는 수정 전후가 같다. 증가분은 모두 착지 이후다. 큰 최대값은 착지 충격 중 발 상자 자체가 바닥에 한두 물리 스텝 묻히는 현상이다(아래 "남은 문제" 1) |
+
+**정지 상태 판정.** 각 장면 마지막 측정 프레임에서 가장 빠른 물리 본 속도와 잠든 본 수를 함께 기록했다.
+- 모든 본이 0.05m/s 미만일 때만 "정지 후" 값으로 부른다.
+- 그렇지 않으면 "마지막 측정(정지 아님)"으로 표시한다.
+
+## 같은 조건 수정 전후 비교 (렌더 실행)
+
+같은 고정 장면·입력·Godot·환경에서 녹화했다. 로그는 [`logs/`](logs/)의 SHA별 폴더에, 요약은 [`compare.json`](compare.json)(수정 전 대 `c434672`)과 [`compare-48356e3.json`](compare-48356e3.json)에 있다.
+
+### 신발 바닥 침투 (cm)
+
+| 장면 | 최대: 수정 전 | 최대: 48356e3 | **최대: c434672** | 마지막: 수정 전 | 마지막: 48356e3 | **마지막: c434672** | c434672 마지막 프레임 정지? |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| office(본편) | 8.45 | 1.09 | **1.10** | 0.78 | 0.00 | **0.00** | 정지(15본 모두 수면) |
+| front | 11.27 | 4.44 | **4.21** | 1.04 | 1.63 | **1.98** | 정지 |
+| side | 6.73 | 4.62 | **4.52** | 1.66 | 1.88 | **0.76** | 정지 아님(최고 0.97m/s, 수정 전 1.25m/s) |
+| wall | 5.46 | 7.74 | **4.21** | 3.57 | 4.29 | **2.13** | 정지(수정 전은 정지 아님 0.16m/s) |
+| open | 4.44 | 4.44 | **5.78** | 2.72 | 3.82 | **2.39** | 정지 |
+| ledge | 2.80 | 3.01 | **13.16** | 1.29 | 2.85 | **1.07** | 정지 아님(0.050m/s) |
+
+**최대값을 인계 전후로 나눈 값**(c434672)
+- 인계 전 최대는 모든 장면에서 수정 전과 같거나 작다: front 4.21 / side 4.52 / wall 4.21 / open 4.21 / ledge 0.00 / office 1.09.
+- 인계 후(착지) 최대는 다음과 같다.
+
+| 장면 | 수정 전 | c434672 |
+| --- | --- | --- |
+| front | 11.27 | **3.64** |
+| side | 6.73 | **1.32** |
+| wall | 5.46 | **3.15** |
+| open | 4.41 | **5.78** |
+| ledge | 2.80 | **13.16** |
+| office | 8.45 | **1.10** |
+
+**요청한 회귀 항목의 결과**
+- wall 최대 7.74 → **4.21** (수정 전 5.46보다 낮음)
+- wall 마지막 4.29 → **2.13** (수정 전 3.57보다 낮음)
+- open 마지막 3.82 → **2.39** (수정 전 2.72보다 낮음)
+- ledge 마지막 2.85 → **1.07** (수정 전 1.29보다 낮음)
+- side 마지막 1.88 → **0.76** (수정 전 1.66보다 낮음)
+- front 마지막 1.63 → **1.98**: 해결 안 됨. 수정 전 1.04보다 0.94cm 높다(아래 "남은 문제" 2)
+
+### 착지 분산 (headless, 장면당 시작 위치 11개)
+
+렌더 1회 결과는 발이 어디에 닿느냐에 크게 흔들린다. 그래서 김부장과 플레이어를 옆으로 −0.10–0.10m 옮긴 11회씩을 세 버전에서 돌렸다.
+- headless는 히트스톱 실시간 계산이 렌더 실행과 달라서 렌더 표와 같은 조건이 아니다. 분포 비교용이다.
+- 전체 표는 [`spread-table.txt`](spread-table.txt), 실행별 값은 [`spread-summary.json`](spread-summary.json), 산출 스크립트는 [`spread.py`](spread.py)다.
+
+| 장면 | 착지 최대 중앙값 cm (전 → 48356e3 → c434672) | 마지막 중앙값 cm (전 → 48356e3 → c434672) |
+| --- | --- | --- |
+| front | 7.57 → 3.35 → **3.34** | 3.09 → 1.90 → **1.86** |
+| side | 4.40 → 2.84 → **1.90** | 1.33 → 2.33 → **0.74** |
+| wall | 5.78 → 3.30 → **3.38** | 3.51 → 2.39 → **2.20** |
+| open | 7.02 → 9.16 → **9.03** | 1.23 → 3.43 → **2.19** |
+| ledge | 3.35 → 6.77 → **7.89** | 1.09 → 0.00 → **0.00** |
+
+### 유지 확인
+
+c434672 기준 모든 렌더 장면에서 다음을 확인했다.
+
+- **비행 초반 움직임:** 비행 시작 후 게임 0.067s에 둘 이상 부위가 5° 넘게 움직인다. 비행 중 관절 간격 변화는 0mm, 벽·가구 관통은 0프레임이다.
+- **정상 종료와 충돌 종료:** ledge·office는 u=1 정상 종료, front·side·wall·open은 충돌 종료다. 수정 전과 종료 시점이 같다. 단, wall은 48356e3과 같은 u 0.833이다(수정 전 0.571, 원인은 1차 README 참고).
+- **인계 직후:** 3프레임 자세 변화는 0°다. 예외는 open의 12.8°로, 바닥 충돌 종료 직후 착지가 겹친 값이다(수정 전 40.5°).
+- **본편 오프닝:** 수정 전후 모두 `valid:true`다. 발차기 입력 f599(19.967s) → 비행 시작 f607(20.233s) → 정상 종료 f628(20.933s).
 
 ## 검사
 
 | 검사 | 결과 |
 | --- | --- |
-| `tools/test-kim-integration.ps1` 구성(3모드×19 + 31본 `--kim-rig`, 재시작, 비행 장애물) | 수정 전 60/60, 수정 후 60/60 통과. [후](checks/matrix-after-893dbaf.txt) · [전](checks/matrix-before-aecd0f1.txt) |
-| 신규 `tools/tests/kim_flight_pose_regression.gd` | 수정 후 기본값·`--kim-rig` 통과. 수정 전 코드에 같은 파일을 넣으면 기본값에서 실패한다(초반 상대 움직임 없음, ledge 인계 8.5° 튐). [기록](checks/kim_flight_pose_regression.txt) |
-| 본편 오프닝 재생(`kim-landing.gd` 동일 흐름) | 수정 전후 모두 `valid:true`. 대사, 빼꼼·접근, 주먹 뒤 `concern`, 발차기 뒤 `down` 확인 |
+| 로컬: `test-kim-integration.ps1`과 같은 구성 | `run-kim-matrix.sh`로 62/62 통과. ps1과 같은 종료 코드·`ERROR` 줄·표식 규칙을 적용했다. [기록](checks/matrix-after-c434672.txt) |
+| CI Linux(`ubuntu-22.04`) | `pwsh tools/test-kim-integration.ps1` 62개 실행·통과. `RUN default kim_flight_pose_regression`, `RUN rig-31 kim_flight_pose_regression`, `KIM_INTEGRATION_MATRIX_OK` 확인. [발췌](checks/ci-c434672/linux-ubuntu-22.04-kim-slice-45819643169.txt) |
+| CI Windows(`windows-latest`) | 같은 62개 실행·통과. 착지 수치는 Linux와 같고 ledge 정지 시간만 1.30s 대 1.32s로 다름. [발췌](checks/ci-c434672/windows-latest-office-scenario-45819643263.txt) |
+| 실패 종료 확인 | `48356e3` 코드에 새 검사를 넣으면 `ERROR: KIM_FLIGHT_POSE_CHECK` 3건이 나오고 종료 코드 1로 끝난다. ps1 helper는 0이 아닌 종료 코드나 `ERROR:` 줄에서 `throw`한다. [기록](checks/kim_flight_pose_regression-on-48356e3-fails.txt) |
 
-- **matrix 실행 방식.** PowerShell을 쓸 수 없어 같은 검사 목록·인수·통과 표식을 그대로 옮긴 [`run-kim-matrix.sh`](run-kim-matrix.sh)로 실행했다. 기존 기대값은 바꾸지 않았다.
-- **신규 검사 항목.**
-  - 비행 0.1s 안에 몸통·팔·다리 중 둘 이상이 5° 이상 상대 회전한다.
-  - 비행 중 관절이 2mm 넘게 벌어지지 않는다.
-  - 인계 후 3스텝 자세 변화가 6° 미만이다.
-  - ledge는 정상 종료하고, 1.9m 벽은 충돌하며 통과하지 않는다.
-  - 31본은 50본 비행 자세 상태를 쓰지 않는다.
+**ps1 변경:** `kim_flight_pose_regression`을 기존 3모드 반복 배열에 넣지 않았다. 별도 블록에서 두 모드로만 명시 실행한다.
+- `default`: 50본
+- `rig-31`: `--kim-rig`, 31본
 
-## 영상과 연속 프레임
+**`kim_flight_pose_regression` 착지 항목(이번 추가)**
+- **정적:** 양발의 신발 정점(신발 재질, 발 본 주 가중치)이 모두 발 상자 안에 있다. 허용 1mm, 정점 100개 이상이어야 한다. 이번 회귀 원인을 직접 잡는다(48356e3에서 2.0cm 밖으로 나와 실패).
+- **동적:** ledge 정상 종료와 1.9m 벽 충돌 착지 뒤 확인한다.
+  - 모든 본이 0.5초 연속 0.05m/s 미만이 될 때까지 진행한다(최대 8초).
+  - 김부장이 실제로 정지해야 한다.
+  - 착지 동안 밑창점이 발 상자 바닥보다 5mm 넘게 내려가지 않아야 한다.
+  - 정지 후와 최대 밑창 침투를 출력한다: ledge 2.35/2.17cm, wall 2.00/1.72cm.
+- **기존 항목:** 비행 초반 움직임, 관절 연결, 인계 연속성, 벽 관통, 31본 경로 유지는 그대로 검사한다.
+
+## 남은 문제 (해결되지 않은 회귀)
+
+### 1. ledge·open의 착지 최대 침투
+
+렌더 기준 ledge 2.80 → 13.16cm, open 4.41 → 5.78cm다. 분산 중앙값도 ledge 3.35 → 7.89, open 7.02 → 9.03으로 높다.
+
+**원인(확인)**
+- 침투가 계속 쌓이는 것이 아니다. 착지 후 한 물리 스텝 동안 발 상자 자체가 바닥으로 7–10cm 내려갔다가 다음 프레임에 돌아온다.
+- 그 스텝에서 Jolt가 보고한 발–바닥 접촉 법선이 **(0, −1, 0)**이고, 접촉점은 바닥 위 0.35–0.44m다.
+  - 바닥은 두께 0.3m 상자 하나뿐이고, 우리 `_integrate_forces`는 비스크립트 상태에서 발을 건드리지 않는다.
+  - 같은 스텝에 발목 관절 간격이 30mm에서 78–91mm로 벌어진다.
+- **수정 전 코드에서도 같은 현상이 나온다.** 예: open 분산의 수정 전 실행, 거의 정지한 f157에서 발목 간격 22 → 78mm, 발 7cm 하강.
+- ledge에서는 착지 지점 옆 낮은 가구(상판 밑면 y=0.45m) 아래로 발이 들어간 경우가 큰 값을 만든다. 분산의 5cm 초과 8/8건이 모두 이 경우다.
+- 새 비행 자세는 착지 위치와 발 방향을 바꿔서, 이 두 레인에서 이 현상을 더 자주 일으킨다. 48356e3에서도 같은 경향이었다.
+- **확인한 실험:** 발목 비틀기 제한을 10°에서 30°로 넓히면 ledge는 줄었지만 open이 13cm로 커졌다. 원인 해결이 아니어서 넣지 않았다.
+
+**다음 후보(범위 밖, PROPOSED)**
+- 발 충돌체 형태 변경(상자 → 캡슐 등)
+- Jolt 반복 횟수 등 물리 설정
+
+둘 다 모든 래그돌에 영향을 주므로 별도 작업으로 다뤄야 한다.
+
+### 2. front 마지막 측정
+
+렌더 1회 기준 1.04 → 1.98cm다. 분산 중앙값은 3.09 → 1.86으로 낮아졌다.
+
+**원인:** 신발은 이제 발 상자 안에 있다. 남은 침투는 정지한 발 상자 자체가 바닥에 약 2.5cm 묻혀 있는 상태다(Jolt 접촉 여유, 모든 버전 공통 2–4cm). 렌더 1회의 착지 방향에 따라 값이 달라진다.
+
+### 3. 기존 한계(1차와 같음)
+
+- 골반–가슴 관절이 발차기 직후 약 9cm 벌어진다.
+- 시험 장면 wall·ledge는 시험용 정적 박스를 쓴다.
+- 각도는 사용자 시각 승인 전이다.
+
+## 영상과 연속 프레임 (수정 전 `aecd0f1` 대 `c434672`)
 
 | 장면 | 전후 비교 영상 | 30fps 연속 프레임(위: 전, 아래: 후) |
 | --- | --- | --- |
-| 본편 오프닝 발차기 | [office-kick-before-after.mp4](video/office-kick-before-after.mp4) (19.8s부터 4.2s) | [office-f604-635.jpg](frames/office-f604-635.jpg) |
+| 본편 오프닝 발차기 | [office-kick-before-after.mp4](video/office-kick-before-after.mp4) | [office-f604-635.jpg](frames/office-f604-635.jpg) |
 | 정면 타격, 플레이어 시점 | [front-before-after.mp4](video/front-before-after.mp4) | — |
 | 정면 타격, 측면 카메라 | [front-sideview-before-after.mp4](video/front-sideview-before-after.mp4) | [front-sideview-f28-51.jpg](frames/front-sideview-f28-51.jpg) |
-| 정상 종료(ledge), 측면 카메라 | [ledge-normal-end-sideview-before-after.mp4](video/ledge-normal-end-sideview-before-after.mp4) | [ledge-normal-end-sideview-f28-59.jpg](frames/ledge-normal-end-sideview-f28-59.jpg) |
+| 정상 종료(ledge), 측면 카메라, 착지 후까지 6s | [ledge-normal-end-sideview-before-after.mp4](video/ledge-normal-end-sideview-before-after.mp4) | [ledge-normal-end-sideview-f28-59.jpg](frames/ledge-normal-end-sideview-f28-59.jpg) |
 | 조기 충돌(wall), 측면 카메라 | [wall-early-crash-sideview-before-after.mp4](video/wall-early-crash-sideview-before-after.mp4) | [wall-early-crash-sideview-f28-51.jpg](frames/wall-early-crash-sideview-f28-51.jpg) |
 | 측면 타격 | [side-hit-before-after.mp4](video/side-hit-before-after.mp4) | [side-hit-f28-51.jpg](frames/side-hit-f28-51.jpg) |
 | 본편 재생 전체 | [전](video/office-replay-before.mp4) · [후](video/office-replay-after.mp4) | — |
 
-- 연속 프레임 이미지의 라벨은 영상 프레임, 영상 시각, 게임 시간, u, 비행 여부다. 빨간 띠는 사건(비행 시작·종료)이다.
-- 측면 카메라는 증거용 별도 Camera3D다(`--side-view`). 게임 카메라와 물리는 바꾸지 않는다.
+`48356e3` 기준 영상·프레임은 그 커밋의 같은 경로에 남아 있다.
 
-## 남은 한계
+ledge 착지 스파이크(f66, f69)는 측면 카메라에서 발이 화면 밖·HUD 뒤에 있어 영상으로 보여 줄 수 없다. 프레임별 수치로만 기록했다(`logs/c434672/A-ledge.json.gz`).
 
-- **골반–가슴 관절 간격(기존 문제).** 발차기 직후 0.1s 실제 물리 구간에서 골반–가슴 관절 간격이 약 92–95mm로 벌어진다. 수정 전후 같으며, 비행 중에는 그 값이 유지된다. 이번 범위(비행 자세·인계) 밖이라 고치지 않았다.
-- **정지 후 신발 침투.** 시험 장면 일부(ledge, open, wall)에서 정지 후 침투가 0.7–1.6cm 늘었다. 본편 오프닝은 개선됐다.
-- **접힘 속도.** 30fps 기준 접히는 3–4프레임 동안 팔이 프레임당 최대 약 20° 회전한다. 의도한 빠른 반응이지만, 실시간 화면에서 끊겨 보이는지는 사용자 확인이 필요하다.
-- **미검증.** 각도 값은 제안값이다. 실시간 타격감, Windows 실기, 내보낸 PCK 실행은 확인하지 않았다.
-- **고정 장면 구성.** `wall`·`ledge`는 시험용 정적 박스를 추가한 고정 장면이다. 본편 레벨 구성이 아니다.
+## 변경 파일 (`c434672` + 증거 커밋)
 
-## 변경 파일
-
-- `game/scripts/characters/kim_visual_adapter.gd`(런타임)
-- `tools/tests/kim_flight_pose_regression.gd`(신규 검사)
-- `docs/evidence/submission/flight_pose/` 증거 일체
-  - 스크립트: `flight-capture.gd`, `compare.py`, `frames.py`, `run-kim-matrix.sh`
-  - 결과: `compare.json`, `logs/`, `video/`, `frames/`, `checks/`
+- `game/scripts/characters/kim_visual_adapter.gd`: 발 상자 크기·위치, 오른발 x 반전
+- `tools/tests/kim_flight_pose_regression.gd`: 신발 상자 포함, 착지 정지·밑창 검사
+- `tools/test-kim-integration.ps1`: 신규 검사 2모드 명시 실행
+- 증거 폴더
+  - `flight-capture.gd`: 신발 최저점·정지 기록, `--kim-offset`, headless 프레임 번호
+  - `compare.py`: 인계 전후 최대, 정지 판정
+  - `spread.py`, `run-kim-matrix.sh`: 종료 코드·ERROR 규칙, 신규 2모드
+  - 로그·영상·프레임·검사 기록 갱신
 
 ## 재현
-
-저장소 루트에서 실행한다. 캡처에는 디스플레이(Xvfb 가능)가 필요하다.
 
 ```sh
 godot --headless --path game --import
 D="$PWD/docs/evidence/submission/flight_pose"
-# 본편 오프닝 재생 (kim-landing.gd와 같은 흐름 + 프레임 로그)
-godot --path game --audio-driver Dummy --fixed-fps 30 --write-movie /tmp/office.avi --script "$D/flight-capture.gd" -- --log=/tmp/A-office.json
-# 고정 장면: front | side | wall | open | ledge, 측면 카메라는 --side-view
-godot --path game --audio-driver Dummy --fixed-fps 30 --write-movie /tmp/front.avi --script "$D/flight-capture.gd" -- --log=/tmp/A-front.json --fixture=front
-python3 "$D/compare.py" /tmp /tmp/compare.json   # B-*/A-* 로그 비교
-bash "$D/run-kim-matrix.sh" "$(command -v godot)" "$PWD" /tmp/matrix
-godot --headless --fixed-fps 60 --path game --script "$PWD/tools/tests/kim_flight_pose_regression.gd"
-godot --headless --fixed-fps 60 --path game --script "$PWD/tools/tests/kim_flight_pose_regression.gd" -- --kim-rig
+# 렌더 비교 (Xvfb 가능): office는 --fixture 없이, 고정 장면은 front|side|wall|open|ledge
+godot --path game --audio-driver Dummy --fixed-fps 30 --write-movie /tmp/A-front.avi --script "$D/flight-capture.gd" -- --log=/tmp/A-front.json --fixture=front
+python3 "$D/compare.py" /tmp /tmp/compare.json
+# 착지 분산 (headless): 시작 위치를 옆으로 이동
+godot --headless --path game --fixed-fps 30 --script "$D/flight-capture.gd" -- --log=/tmp/<tree>-ledge-0.04.json --fixture=ledge --kim-offset=0.04
+python3 "$D/spread.py" /tmp <tree> ...
+# 검사
+pwsh tools/test-kim-integration.ps1 -GodotPath "$(command -v godot)"     # CI와 같은 실행
+bash "$D/run-kim-matrix.sh" "$(command -v godot)" "$PWD" /tmp/matrix    # PowerShell이 없을 때
 ```

@@ -33,6 +33,20 @@ def summarise(path):
     gap0 = flight[0]["max_joint_gap_mm"]
     after = [r for r in rows if r["frame"] > end["frame"]]
     landing = next((r for r in after if r["max_joint_step_deg"] > 10.0), None)
+    FLOOR = -0.02
+    shoe = [r for r in rows if r.get("shoe_lowest_m") is not None]
+    pen = lambda r: round(max(0.0, FLOOR - r["shoe_lowest_m"]) * 100, 2)
+    last = shoe[-1] if shoe else None
+    out["shoe_cm"] = {
+        "peak_before_handoff": max((pen(r) for r in shoe if r["frame"] <= end["frame"]), default=None),
+        "peak_after_handoff": max((pen(r) for r in shoe if r["frame"] > end["frame"]), default=None),
+        "peak_after_handoff_frame": max((r for r in shoe if r["frame"] > end["frame"]), key=pen, default={}).get("frame"),
+        "last": pen(last) if last else None,
+        "last_frame": last["frame"] if last else None,
+        "last_fastest_body_m_s": last["fastest_body_m_s"] if last else None,
+        "last_sleeping_bodies": last["sleeping_bodies"] if last else None,
+        "last_is_rest": bool(last and last["fastest_body_m_s"] < 0.05),
+    }
     out.update({
         "flight_frames": len(flight),
         "end_kind": end["event"], "end_u": end.get("u"),
@@ -61,7 +75,7 @@ def main():
         if name.endswith(".json") and (name.startswith("B-") or name.startswith("A-")):
             result[name[:-5]] = summarise(os.path.join(src, name))
     json.dump(result, open(dst, "w"), indent=1, ensure_ascii=False)
-    print(f"{'run':16} {'end':18} {'endU':>5} {'2grp@s':>7} {'rigidF':>6} {'stepFl':>6} {'gapΔ':>5} {'hoStep':>6} {'hoGapΔ':>6} {'ovl':>4} {'shoePk':>6} {'shoeEnd':>7}")
+    print(f"{'run':16} {'end':18} {'endU':>5} {'2grp@s':>7} {'rigidF':>6} {'stepFl':>6} {'gapΔ':>5} {'hoStep':>6} {'hoGapΔ':>6} {'ovl':>4} {'shoePk':>6} {'shoeEnd':>7} {'pkPre':>6} {'pkPost':>6} {'rest':>5}")
     for k, v in result.items():
         if "end_kind" not in v:
             print(k, "no flight"); continue
@@ -69,6 +83,7 @@ def main():
         print(f"{k:16} {v['end_kind']:18} {v['end_u']:5.3f} {('%.3f' % f2['game_s_after_flight_start']) if f2 else '  none':>7} {v['frames_with_fewer_than_two_groups_moving']:6d} "
               f"{v['max_joint_step_deg_during_flight_after_first_frame']:6.1f} {v['max_joint_gap_change_mm_during_flight']:5.1f} "
               f"{v['handoff']['max_joint_step_deg_first_3_frames']:6.1f} {v['handoff']['max_joint_gap_change_mm_first_10_frames']:6.1f} "
-              f"{len(v['overlap_frames_during_flight']):4d} {v['shoe']['peak_floor_penetration_m']*100:5.1f}cm {v['shoe']['last_floor_penetration_m']*100:6.1f}cm")
+              f"{len(v['overlap_frames_during_flight']):4d} {v['shoe']['peak_floor_penetration_m']*100:5.2f}cm {v['shoe']['last_floor_penetration_m']*100:6.2f}cm"
+              f" {v['shoe_cm']['peak_before_handoff']:6.2f} {v['shoe_cm']['peak_after_handoff']:6.2f} {str(v['shoe_cm']['last_is_rest']):>5}")
 
 main()
