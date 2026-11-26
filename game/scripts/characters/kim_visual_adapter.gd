@@ -21,6 +21,8 @@ const V2_CENTER_SHIFT := {
 	"Pelvis": Vector3(0, .115, .058), "Chest": Vector3(0, -.045, .040),
 	"Head": Vector3(0, -.004, .042), "Foot": Vector3(.016, -.004, -.0315),
 }
+# Radius of the capsules on the 50-bone foot box edges (see _add_foot_edges).
+const FOOT_EDGE_RADIUS := 0.015
 var visual_v2: bool = false
 const PHYSICAL_BONE = preload("res://scripts/characters/kim_physical_bone.gd")
 const MEDIUM_IMPULSE: float = 8.5
@@ -236,6 +238,8 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 		capsule.height = maxf(length + (radius * .7 if sleeve else 0.0), radius * 2.0)
 		shape.shape = capsule
 	body.add_child(shape)
+	if visual_v2 and bone_name.begins_with("Foot."):
+		_add_foot_edges(body, shape)
 	if visual_v2 and bone_name.begins_with("Hand."):
 		# Keep curled fingertips and the outlying thumb on the existing wrist body.
 		var side := 1.0 if bone_name.ends_with(".L") else -1.0
@@ -244,6 +248,35 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 	# Every limb can report the landing thud. Bounce stays on the torso only.
 	PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(), 4)
 	bodies.append(body)
+
+## 50-bone feet only. A capsule of FOOT_EDGE_RADIUS on each of the 12 box edges.
+## Jolt gives the thin foot box a 0.7 cm convex radius and the floor 1.2 cm;
+## their sum is below the 2 cm penetration slop, so a resting foot box sits in
+## deep (EPA) contact and some steps report the floor normal reversed, pushing
+## the foot through the floor (measured on Foot.L/R only). The capsules carry
+## the floor contacts on their own 1.5 cm radius; the box keeps wrapping the shoe.
+func _add_foot_edges(body: PhysicalBone3D, box: CollisionShape3D) -> void:
+	var half: Vector3 = (box.shape as BoxShape3D).size * 0.5
+	for axis in 3:
+		var a := (axis + 1) % 3
+		var b := (axis + 2) % 3
+		var turn := Basis.IDENTITY # capsules run along local Y
+		if axis == 0:
+			turn = Basis(Vector3.BACK, PI * 0.5)
+		elif axis == 2:
+			turn = Basis(Vector3.RIGHT, PI * 0.5)
+		for sa: float in [-1.0, 1.0]:
+			for sb: float in [-1.0, 1.0]:
+				var centre := Vector3.ZERO
+				centre[a] = half[a] * sa
+				centre[b] = half[b] * sb
+				var capsule := CapsuleShape3D.new()
+				capsule.radius = FOOT_EDGE_RADIUS
+				capsule.height = half[axis] * 2.0 + FOOT_EDGE_RADIUS * 2.0
+				var edge := CollisionShape3D.new()
+				edge.shape = capsule
+				edge.transform = box.transform * Transform3D(turn, centre)
+				body.add_child(edge)
 
 func _add_hand_pad(body: PhysicalBone3D, local_center: Vector3, radius: float) -> void:
 	var sphere := SphereShape3D.new()
@@ -436,6 +469,12 @@ func _activate_physics() -> void:
 	simulator.physical_bones_add_collision_exception(actor.get_rid())
 	var before: Vector3 = bodies[0].global_position
 	simulator.physical_bones_start_simulation()
+	if visual_v2:
+		# The feet reach about 5 m/s at the first floor impact; without CCD one
+		# step can carry the foot 5 cm into the floor before the contact solves.
+		for body: PhysicalBone3D in bodies:
+			if body.bone_name.begins_with("Foot."):
+				PhysicsServer3D.body_set_enable_continuous_collision_detection(body.get_rid(), true)
 	takeover_error = before.distance_to(bodies[0].global_position)
 	_starting = false
 	for pending: Dictionary in _pending_impulses:
