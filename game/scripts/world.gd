@@ -29,6 +29,7 @@ var _pending_reactions: Dictionary = {}
 var _scenario_spoken: Dictionary = {}
 var scenario_line_can_start: Callable
 
+const OfficeVisuals = preload("res://scripts/props/office_visuals.gd")
 const PROP_SCRIPT: Script = preload("res://scripts/prop.gd")
 const NPC_SCRIPT: Script = preload("res://scripts/office_npc.gd")
 const CREAM: Color = Color("eee7d6")
@@ -135,19 +136,23 @@ func _box(size: Vector3, at: Vector3, color: Color, solid: bool = false, emissio
 	mesh_node.position = at
 	_furniture.add_child(mesh_node)
 	if solid:
-		var body: StaticBody3D = StaticBody3D.new()
-		body.collision_layer = 1
-		body.collision_mask = 15
-		var collision: CollisionShape3D = CollisionShape3D.new()
-		var shape: BoxShape3D = BoxShape3D.new()
-		shape.size = size
-		collision.shape = shape
-		body.add_child(collision)
-		mesh_node.add_child(body)
-		# Only solids intersecting a standing body on that floor block navigation.
-		var half_size: Vector3 = size * 0.5
-		_add_navigation_bounds(at - half_size, at + half_size, _navigation_obstacles)
+		_furniture_solid(mesh_node, size, at)
 	return mesh_node
+
+func _furniture_solid(parent: Node3D, size: Vector3, at: Vector3) -> void:
+	var body: StaticBody3D = StaticBody3D.new()
+	body.collision_layer = 1
+	body.collision_mask = 15
+	var collision: CollisionShape3D = CollisionShape3D.new()
+	var shape: BoxShape3D = BoxShape3D.new()
+	shape.size = size
+	collision.shape = shape
+	body.add_child(collision)
+	parent.add_child(body)
+	body.position = at if parent == _furniture else Vector3.ZERO
+	# Only solids intersecting a standing body on that floor block navigation.
+	var half_size: Vector3 = size * 0.5
+	_add_navigation_bounds(at - half_size, at + half_size, _navigation_obstacles)
 
 func floor_index(at: Vector3) -> int:
 	# The split is above the office ceiling and below the executive floor slab.
@@ -391,6 +396,13 @@ func _build_room() -> void:
 	_light(Vector3(-3, 2.9, -7.8), 0.85, Color("d6edf0"), 8.0)
 
 func _desk(at: Vector3, width: float = 2.3) -> void:
+	if OfficeVisuals.enabled():
+		OfficeVisuals.desk(_furniture, at, width)
+		_furniture_solid(_furniture, Vector3(width, 0.105, 1.3), at + Vector3(0, 0.98, 0))
+		for side: float in [-1.0, 1.0]:
+			_furniture_solid(_furniture, Vector3(0.11, 0.93, 1.0), at + Vector3(side * (width * 0.5 - 0.17), 0.45, 0))
+		_furniture_solid(_furniture, Vector3(width - 0.2, 0.33, 0.06), at + Vector3(0, 0.72, -0.44))
+		return
 	_box(Vector3(width, 0.105, 1.3), at + Vector3(0, 0.98, 0), WOOD, true)
 	_box(Vector3(width - 0.06, 0.028, 1.26), at + Vector3(0, 1.047, 0), Color("e5c99d"))
 	for side: float in [-1.0, 1.0]:
@@ -431,12 +443,19 @@ func _workstation(at: Vector3, color: Color, personal: bool = false) -> void:
 		_box(Vector3(0.65, 0.008, 0.43), at + Vector3(0.63, 1.066, 0.15), Color("617d76"))
 		_label("EMPLOYEE OF THE MONTH*", at + Vector3(0, 0.84, 0.668), 0.00155, CREAM)
 
+func _divider(size: Vector3, at: Vector3, color: Color) -> void:
+	if OfficeVisuals.enabled():
+		OfficeVisuals.partition(_furniture, at, size)
+		_furniture_solid(_furniture, size, at)
+	else:
+		_box(size, at, color, true)
+
 func _build_furniture() -> void:
 	_workstation(Vector3(0, 0, -0.5), TEAL, true)
 	_workstation(Vector3(-4.1, 0, -4.5), ORANGE)
 	_workstation(Vector3(4.15, 0, -5.5), Color("779078"))
 	# The opposite divider masks the seated boss; its open left end is a real route.
-	_box(Vector3(2.7, 1.50, 0.13), Vector3(-0.15, 0.77, -1.46), Color("78888a"), true)
+	_divider(Vector3(2.7, 1.50, 0.13), Vector3(-0.15, 0.77, -1.46), Color("78888a"))
 	_box(Vector3(2.76, 0.045, 0.16), Vector3(-0.15, 1.54, -1.46), Color("b9b7a7"))
 	for px: float in [-1.47, 1.17]:
 		_box(Vector3(0.06, 1.54, 0.17), Vector3(px, 0.77, -1.46), Color("a5aea7"))
@@ -449,9 +468,9 @@ func _build_furniture() -> void:
 	_prop("keyboard", "동료의 키보드", Vector3(2.58, 1.105, -1.52), CREAM, -0.2)
 	_prop("paper", "검토 중인 서류", Vector3(3.5, 1.09, -1.61), CREAM)
 	# Freestanding dividers leave a clear central circulation route.
-	_box(Vector3(2.9, 1.28, 0.13), Vector3(-4.15, 0.64, -5.3), TEAL, true)
+	_divider(Vector3(2.9, 1.28, 0.13), Vector3(-4.15, 0.64, -5.3), TEAL)
 	_box(Vector3(2.9, 0.055, 0.15), Vector3(-4.15, 1.3, -5.3), WOOD)
-	_box(Vector3(2.9, 1.28, 0.13), Vector3(4.15, 0.64, -6.3), TEAL, true)
+	_divider(Vector3(2.9, 1.28, 0.13), Vector3(4.15, 0.64, -6.3), TEAL)
 	_box(Vector3(2.9, 0.055, 0.15), Vector3(4.15, 1.3, -6.3), WOOD)
 	# Shared printer / credenza.
 	_box(Vector3(2.6, 0.89, 0.66), Vector3(-6.55, 0.46, -8.9), CREAM, true)
