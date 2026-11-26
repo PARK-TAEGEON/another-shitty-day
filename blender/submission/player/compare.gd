@@ -72,11 +72,11 @@ func run() -> void:
 		var inspect := Camera3D.new()
 		game.add_child(inspect)
 		inspect.projection = Camera3D.PROJECTION_ORTHOGONAL
-		inspect.size = 0.24
+		inspect.size = 0.34
 		inspect.cull_mask = 1 << 18
 		for mesh in p._right.meshes:
 			mesh.set_layer_mask_value(19, true)
-		var target: Vector3 = p._right.to_global(Vector3(0,0.056,-0.019))
+		var target: Vector3 = p._right.to_global(Vector3(0,0.080,-0.019))
 		inspect.global_position = target + p._right.global_basis * Vector3(-0.44,0.07,-0.10)
 		inspect.look_at(target, p._right.global_basis.y.normalized())
 		# A separate inspection camera and soft key only affect this paused QA shot.
@@ -95,11 +95,14 @@ func run() -> void:
 		fill.global_position = target + p._right.global_basis * Vector3(-0.12,-0.12,-0.80)
 		fill.look_at(target)
 		inspect.current = true
-		await shot("thumb_guard")
-		p._right.set_grip(1.0)
-		await shot("thumb_tight")
-		p._right.set_grip(0.55)
+		await shot_grips("thumb")
 		inspect.global_position = target + p._right.global_basis * Vector3(0.12,0.16,-0.55)
 		inspect.look_at(target, p._right.global_basis.y.normalized())
-		await shot("palm_guard")
+		await shot_grips("palm")
 	quit()
+
+
+func shot_grips(view: String) -> void:
+	for pose in [["open", 0.0], ["guard", 0.55], ["tight", 1.0]]:
+		p._right.set_grip(pose[1])
+		await shot(view + "_" + pose[0])

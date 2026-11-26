@@ -10,6 +10,9 @@ const SLAM_PHASES: Dictionary = {
 	"B": {"lift": 8, "down": 3, "hold": 4, "recover": 13}
 }
 const HAND_VIEW_SCALE: float = 1.2
+const HAND_SOCKET := Vector3(-0.003, 0.084, -0.041)
+const MUG_GRIP_TARGET := Vector3(0.15305, 0.01334, -0.01783)
+const MUG_REACH_SECONDS := 0.20
 const CAMERA_HEIGHT: float = 1.62
 const START_PITCH: float = -0.12
 const START_Z: float = 0.65
@@ -32,6 +35,9 @@ var actor_hold: Node
 var office_world: Node3D
 var _rig_study := "--rig-slice" in OS.get_cmdline_user_args()
 var _release_hand := 0.0
+var _mug_reach_left := 0.0
+var _mug_start_socket := Vector3.ZERO
+var _mug_start_rotation := Quaternion.IDENTITY
 var _hands: Node3D
 var _left: Node3D
 var _right: Node3D
@@ -237,7 +243,12 @@ func _process(delta: float) -> void:
 	_shake = move_toward(_shake, 0.0, delta * 1.8)
 	_update_viewmodel(delta)
 	if _rig_study:
+		if _mug_reach_left > 0.0:
+			_blend_mug_wrist(delta)
 		var extension := clampf((_right_home.z - _right.position.z) / 0.30, 0.0, 1.0)
+		# A nearby handle can be well above the guard before it is far forward.
+		if _mug_reach_left > 0.0 or (is_instance_valid(held_prop) and held_prop.get("kind") == "mug"):
+			extension = clampf(_right.position.distance_to(_right_home) / 0.30, 0.0, 1.0)
 		_right.pose_sleeve(camera, 1.0, extension if _anim_kind != "slam" or _anim <= 0.0 else 0.0)
 	# Emit only after the same rendered pose has reached CONTACT. A frame crossing
 	# the contact threshold is held at contact once, even under a long frame.
@@ -270,10 +281,9 @@ func _update_viewmodel(_delta: float) -> void:
 	if _rig_study and is_instance_valid(held_prop):
 		var grip_target := held_prop.global_position
 		if held_prop.get("kind") == "mug":
-			grip_target = held_prop.to_global(Vector3(0.15305, 0.01334, -0.01783))
-		var socket := Vector3(-0.003, 0.084, -0.041)
+			grip_target = held_prop.to_global(MUG_GRIP_TARGET)
 		_right.quaternion = _carry_basis.get_rotation_quaternion()
-		_right.position = camera.to_local(grip_target) - _carry_basis * socket * HAND_VIEW_SCALE
+		_right.position = camera.to_local(grip_target) - _carry_basis * HAND_SOCKET * HAND_VIEW_SCALE
 		_right.call("set_grip", 0.31)
 	elif is_instance_valid(held_prop):
 		_left.position += Vector3(-0.05, -0.05, -0.09)
@@ -382,6 +392,7 @@ func perform_action(kind: String) -> void:
 	_anim_kind = kind
 	_anim_duration = 0.38
 	if kind == "slam":
+		_mug_reach_left = 0.0
 		_slam_variant = "A" if _slam_confirmed else "B"
 		var config: Dictionary = SLAM_PHASES[_slam_variant]
 		_anim_duration = float(config["lift"] + config["down"] + config["hold"] + config["recover"]) / MOTION_FPS
@@ -461,13 +472,33 @@ func _pickup_or_drop() -> void:
 	var body: RigidBody3D = result.get("collider") as RigidBody3D
 	if body != null and body.has_method("set_held"):
 		contact_started.emit("pickup", body)
+		_start_prop_transition(body)
 		held_prop = body
 		held_prop.set_held(true)
 		contact_finished.emit("pickup", body)
 		action_performed.emit("pickup", body.global_position)
 
+func _start_prop_transition(prop: RigidBody3D) -> void:
+	_mug_reach_left = 0.0
+	if _rig_study and prop.get("kind") == "mug":
+		_mug_start_socket = _right.transform * HAND_SOCKET
+		_mug_start_rotation = _right.quaternion
+		_mug_reach_left = MUG_REACH_SECONDS
+
+func _blend_mug_wrist(delta: float) -> void:
+	# The destination is this frame's authored carry, guard or throw pose.
+	# Interpolate the socket, then solve the wrist with the very same rotation.
+	_mug_reach_left = maxf(0.0, _mug_reach_left - delta)
+	var weight := smoothstep(0.0, MUG_REACH_SECONDS, MUG_REACH_SECONDS - _mug_reach_left)
+	var socket := _mug_start_socket.lerp(_right.transform * HAND_SOCKET, weight)
+	_right.quaternion = _mug_start_rotation.slerp(_right.quaternion, weight)
+	_right.position = socket - _right.basis * HAND_SOCKET
+
 func _update_held(delta: float) -> void:
 	if not is_instance_valid(held_prop):
+		return
+	# Keep the grabbed mug in place while the fingers reach the handle.
+	if _mug_reach_left > 0.00001:
 		return
 	var carry_anchor := Vector3(0.13, -0.14, -1.15)
 	var desired: Vector3 = camera.to_global(carry_anchor)
@@ -527,6 +558,7 @@ func _drop(throw_item: bool) -> void:
 		held_prop = null
 		return
 	if _rig_study:
+		_start_prop_transition(held_prop)
 		_release_hand = 0.28
 	var item: RigidBody3D = held_prop
 	contact_started.emit("throw" if throw_item else "drop", item)
@@ -578,6 +610,7 @@ func receive_security_push(direction: Vector3, strength: float = 2.4) -> void:
 
 func place_at(at: Vector3, yaw: float, pitch: float) -> void:
 	_cancel_action()
+	_mug_reach_left = 0.0
 	velocity = Vector3.ZERO
 	_shake = 0.0
 	_bob = 0.0
