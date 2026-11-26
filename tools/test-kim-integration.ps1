@@ -34,5 +34,16 @@ foreach($test in @('kim_rig_regression','kim_restart_regression','hit_flight_obs
     if($result -notmatch ($test.ToUpper()+'_OK')) {throw "Missing marker $test"}
     $summary+=@{mode=$mode;test=$test;result='PASS'}
 }
+# Kick flight pose and landing. Two explicit modes, not the 3-mode loop: the
+# 50-bone default and the 31-bone rig. The procedural --kim-legacy model has no
+# scripted pose to check.
+foreach($run in @(@{mode='default';flags=@()}, @{mode='rig-31';flags=@('--kim-rig')})) {
+    $test='kim_flight_pose_regression'
+    Write-Host ("RUN {0} {1}" -f $run.mode, $test)
+    $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments (@('--headless','--fixed-fps','60','--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--')+$run.flags)
+    $result | Set-Content -LiteralPath (Join-Path $EvidencePath ("{0}-{1}.txt" -f $run.mode, $test)) -Encoding utf8
+    if($result -notmatch ($test.ToUpper()+'_OK')) {throw "Missing marker $test in $($run.mode)"}
+    $summary+=@{mode=$run.mode;test=$test;result='PASS'}
+}
 $summary | ConvertTo-Json | Set-Content (Join-Path $EvidencePath 'summary.json') -Encoding utf8
-Write-Host ("KIM_INTEGRATION_MATRIX_OK: 3 modes x {0} regressions, plus rig, reload and flight checks" -f $checks.Count)
+Write-Host ("KIM_INTEGRATION_MATRIX_OK: 3 modes x {0} regressions, plus rig, reload, flight and flight-pose (50-bone, 31-bone) checks" -f $checks.Count)

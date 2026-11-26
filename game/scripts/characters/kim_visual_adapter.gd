@@ -11,13 +11,15 @@ const V2_BODY_SIZE := {
 	"UpperLeg": Vector2(.351, .138), "LowerLeg": Vector2(.276, .110), "Foot": Vector2(.238, .090),
 }
 const V2_BOX_SIZE := {
-	"Pelvis": Vector3(.77, .52, .70), "Chest": Vector3(.82, .44, .64), "Foot": Vector3(.279, .175, .44),
+	"Pelvis": Vector3(.77, .52, .70), "Chest": Vector3(.82, .44, .64), "Foot": Vector3(.29, .175, .44),
 }
-# Offsets from the bone midpoint in the model's rest axes. The coat belly is
-# between the pelvis and chest joints. The shoes extend behind the ankle too.
+# Offsets from the bone midpoint in the model's rest axes, written for the left
+# side (x mirrors on the right). The coat belly is between the pelvis and chest
+# joints. The foot box sits on the shoe mesh: its outer sole edge reaches 0.396 m
+# from the centre line and the heel 0.148 m behind the ankle (rest model space).
 const V2_CENTER_SHIFT := {
 	"Pelvis": Vector3(0, .115, .058), "Chest": Vector3(0, -.045, .040),
-	"Head": Vector3(0, -.004, .042), "Foot": Vector3(0, -.004, -.022),
+	"Head": Vector3(0, -.004, .042), "Foot": Vector3(.016, -.004, -.0315),
 }
 var visual_v2: bool = false
 const PHYSICAL_BONE = preload("res://scripts/characters/kim_physical_bone.gd")
@@ -197,7 +199,10 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 		radius = size.y
 		box = V2_BOX_SIZE.get(part, box)
 		var inverse_rest := skeleton.get_bone_global_rest(skeleton.find_bone(bone_name)).basis.inverse().orthonormalized()
-		center = Vector3.UP * length * .5 + inverse_rest * Vector3(V2_CENTER_SHIFT.get(part, Vector3.ZERO))
+		var shift: Vector3 = V2_CENTER_SHIFT.get(part, Vector3.ZERO)
+		if bone_name.ends_with(".R"):
+			shift.x = -shift.x
+		center = Vector3.UP * length * .5 + inverse_rest * shift
 		if box != Vector3.ZERO:
 			orientation = inverse_rest
 	var body: PhysicalBone3D = PHYSICAL_BONE.new()
