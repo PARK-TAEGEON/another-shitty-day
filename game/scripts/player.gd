@@ -280,10 +280,15 @@ func _update_viewmodel(_delta: float) -> void:
 		_right.call("set_grip", lerpf(0.55, 0.0, minf(_release_hand * 8.0, 1.0)))
 	if _rig_study and is_instance_valid(held_prop):
 		var grip_target := held_prop.global_position
+		var grip_basis := _carry_basis
 		if held_prop.get("kind") == "mug":
 			grip_target = held_prop.to_global(MUG_GRIP_TARGET)
-		_right.quaternion = _carry_basis.get_rotation_quaternion()
-		_right.position = camera.to_local(grip_target) - _carry_basis * HAND_SOCKET * HAND_VIEW_SCALE
+			# Preserve the authored grip relative to the cup even when the player
+			# looks down or the cup is still turning toward its carry pose.
+			var mug_grip_basis := Basis(Vector3.RIGHT, START_PITCH) * _carry_basis
+			grip_basis = camera.global_basis.inverse() * held_prop.global_basis * mug_grip_basis
+		_right.quaternion = grip_basis.orthonormalized().get_rotation_quaternion()
+		_right.position = camera.to_local(grip_target) - grip_basis * HAND_SOCKET * HAND_VIEW_SCALE
 		_right.call("set_grip", 0.31)
 	elif is_instance_valid(held_prop):
 		_left.position += Vector3(-0.05, -0.05, -0.09)
