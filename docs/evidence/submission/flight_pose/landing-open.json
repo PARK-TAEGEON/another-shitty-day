@@ -1,0 +1,226 @@
+{
+ "aecd0f1": {
+  "room_and_wall_renders_same_physics": true,
+  "floor": {
+   "path": "/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7",
+   "top_m": -0.0199999958276749
+  },
+  "handoff": {
+   "event": "flight_end_crash",
+   "frame": 49,
+   "movie_s": 1.633,
+   "game_s": 1.58,
+   "step": 50
+  },
+  "first_floor_impact": {
+   "step": 50,
+   "frame": 49,
+   "movie_s": 1.633,
+   "game_s": 1.58,
+   "shoe_cm": -2.39,
+   "collider_cm": -0.45,
+   "floor_normal_down": 0
+  },
+  "deepest_shoe": {
+   "step": 175,
+   "frame": 112,
+   "movie_s": 3.733,
+   "game_s": 3.6267,
+   "shoe_cm": 4.42,
+   "collider_cm": 5.16,
+   "floor_normal_down": 0
+  },
+  "deepest_collider": {
+   "step": 173,
+   "frame": 111,
+   "movie_s": 3.7,
+   "game_s": 3.5933,
+   "shoe_cm": 4.39,
+   "collider_cm": 5.17,
+   "floor_normal_down": 0
+  },
+  "pre_handoff_max": {
+   "shoe_cm": -6.42,
+   "collider_cm": -4.57
+  },
+  "down_contact_steps": 0,
+  "rest": {
+   "step": 302,
+   "frame": 175,
+   "movie_s": 5.833,
+   "game_s": 5.7267,
+   "shoe_cm": 3.41,
+   "collider_cm": 4.12,
+   "floor_normal_down": 0,
+   "reached": true
+  }
+ },
+ "c434672": {
+  "room_and_wall_renders_same_physics": false,
+  "floor": {
+   "path": "/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7",
+   "top_m": -0.0199999958276749
+  },
+  "handoff": {
+   "event": "flight_end_crash",
+   "frame": 49,
+   "movie_s": 1.633,
+   "game_s": 1.58,
+   "step": 50
+  },
+  "first_floor_impact": {
+   "step": 51,
+   "frame": 50,
+   "movie_s": 1.667,
+   "game_s": 1.592,
+   "shoe_cm": -0.13,
+   "collider_cm": 1.31,
+   "floor_normal_down": 0
+  },
+  "deepest_shoe": {
+   "step": 100,
+   "frame": 74,
+   "movie_s": 2.467,
+   "game_s": 2.392,
+   "shoe_cm": 2.86,
+   "collider_cm": 3.8,
+   "floor_normal_down": 0
+  },
+  "deepest_collider": {
+   "step": 80,
+   "frame": 64,
+   "movie_s": 2.133,
+   "game_s": 2.0587,
+   "shoe_cm": 2.5,
+   "collider_cm": 4.2,
+   "floor_normal_down": 0
+  },
+  "pre_handoff_max": {
+   "shoe_cm": -7.1,
+   "collider_cm": -5.66
+  },
+  "down_contact_steps": 0,
+  "rest": {
+   "step": 194,
+   "frame": 121,
+   "movie_s": 4.033,
+   "game_s": 3.9587,
+   "shoe_cm": 2.32,
+   "collider_cm": 2.87,
+   "floor_normal_down": 0,
+   "reached": true
+  }
+ },
+ "c434672 wall": {
+  "room_and_wall_renders_same_physics": false,
+  "floor": {
+   "path": "/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7",
+   "top_m": -0.0199999958276749
+  },
+  "handoff": {
+   "event": "flight_end_crash",
+   "frame": 49,
+   "movie_s": 1.633,
+   "game_s": 1.58,
+   "step": 50
+  },
+  "first_floor_impact": {
+   "step": 51,
+   "frame": 50,
+   "movie_s": 1.667,
+   "game_s": 1.5813,
+   "shoe_cm": -0.13,
+   "collider_cm": 1.31,
+   "floor_normal_down": 0
+  },
+  "deepest_shoe": {
+   "step": 70,
+   "frame": 59,
+   "movie_s": 1.967,
+   "game_s": 1.86,
+   "shoe_cm": 5.78,
+   "collider_cm": 7.63,
+   "floor_normal_down": 4
+  },
+  "deepest_collider": {
+   "step": 70,
+   "frame": 59,
+   "movie_s": 1.967,
+   "game_s": 1.86,
+   "shoe_cm": 5.78,
+   "collider_cm": 7.63,
+   "floor_normal_down": 4
+  },
+  "pre_handoff_max": {
+   "shoe_cm": -7.1,
+   "collider_cm": -5.66
+  },
+  "down_contact_steps": 1,
+  "rest": {
+   "step": 228,
+   "frame": 138,
+   "movie_s": 4.6,
+   "game_s": 4.4933,
+   "shoe_cm": 2.4,
+   "collider_cm": 2.91,
+   "floor_normal_down": 0,
+   "reached": true
+  }
+ },
+ "fix": {
+  "room_and_wall_renders_same_physics": true,
+  "floor": {
+   "path": "/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7",
+   "top_m": -0.0199999958276749
+  },
+  "handoff": {
+   "event": "flight_end_crash",
+   "frame": 49,
+   "movie_s": 1.633,
+   "game_s": 1.58,
+   "step": 50
+  },
+  "first_floor_impact": {
+   "step": 55,
+   "frame": 52,
+   "movie_s": 1.733,
+   "game_s": 1.6267,
+   "shoe_cm": -2.74,
+   "collider_cm": -0.18,
+   "floor_normal_down": 0
+  },
+  "deepest_shoe": {
+   "step": 177,
+   "frame": 113,
+   "movie_s": 3.767,
+   "game_s": 3.66,
+   "shoe_cm": 0.19,
+   "collider_cm": 2.07,
+   "floor_normal_down": 0
+  },
+  "deepest_collider": {
+   "step": 69,
+   "frame": 59,
+   "movie_s": 1.967,
+   "game_s": 1.86,
+   "shoe_cm": -0.39,
+   "collider_cm": 2.22,
+   "floor_normal_down": 0
+  },
+  "pre_handoff_max": {
+   "shoe_cm": -8.42,
+   "collider_cm": -5.33
+  },
+  "down_contact_steps": 0,
+  "rest": {
+   "step": 264,
+   "frame": 156,
+   "movie_s": 5.2,
+   "game_s": 5.0933,
+   "shoe_cm": 0.13,
+   "collider_cm": 2.07,
+   "floor_normal_down": 0,
+   "reached": true
+  }
+ }
+}

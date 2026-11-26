@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+ERROR: KIM_FLIGHT_POSE_CHECK: Foot.L shoe reaches 0.0200 m outside its physics box
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/prev/tools/tests/kim_flight_pose_regression.gd:23)
+       [1] _check_shoe_inside_foot_box (/home/claude/work/prev/tools/tests/kim_flight_pose_regression.gd:257)
+       [2] _case (/home/claude/work/prev/tools/tests/kim_flight_pose_regression.gd:102)
+ERROR: KIM_FLIGHT_POSE_CHECK: Foot.R shoe reaches 0.0201 m outside its physics box
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/prev/tools/tests/kim_flight_pose_regression.gd:23)
+       [1] _check_shoe_inside_foot_box (/home/claude/work/prev/tools/tests/kim_flight_pose_regression.gd:257)
+       [2] _case (/home/claude/work/prev/tools/tests/kim_flight_pose_regression.gd:102)
+KIM_FLIGHT_POSE_SHOE {"L":{"outside_m":0.02,"vertices":1719},"R":{"outside_m":0.0201,"vertices":1719}}
+KIM_FLIGHT_POSE {"at_rest":true,"case":"ledge","early_two_groups":true,"end":"normal","flight_s":0.683,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"settle_s":1.65,"sole_below_box_max_m":0.0041,"sole_floor_penetration_peak_m":0.0299,"sole_floor_penetration_rest_m":0.0293,"v2":true}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+ERROR: KIM_FLIGHT_POSE_CHECK: wall: Kim did not come to rest within 8 s of the hand-off
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/prev/tools/tests/kim_flight_pose_regression.gd:23)
+       [1] _case (/home/claude/work/prev/tools/tests/kim_flight_pose_regression.gd:177)
+KIM_FLIGHT_POSE {"at_rest":false,"case":"wall","early_two_groups":true,"end":"crash","flight_s":0.35,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"settle_s":8.0,"sole_below_box_max_m":0.0,"sole_floor_penetration_peak_m":0.0093,"sole_floor_penetration_rest_m":0.008,"v2":true}
+KIM_FLIGHT_POSE_REGRESSION_FAILED: ["Foot.L shoe reaches 0.0200 m outside its physics box", "Foot.R shoe reaches 0.0201 m outside its physics box", "wall: Kim did not come to rest within 8 s of the hand-off"]
+exit code was 1

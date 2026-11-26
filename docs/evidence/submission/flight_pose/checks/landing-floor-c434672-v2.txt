@@ -1,0 +1,301 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+OFFICE_PROP model=desk version=2
+OFFICE_PROP model=monitor version=2
+OFFICE_PROP model=keyboard version=2
+OFFICE_PROP model=mug version=2
+OFFICE_PROP model=paper version=2
+OFFICE_PROP model=binder version=2
+OFFICE_PROP model=partition version=2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.1,"ok":true,"post":{"collider_cm":11.97,"collider_step":102,"shoe_cm":11.22,"shoe_step":102},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.26,"reached":true,"s_after_handoff":6.08,"shoe_cm":-4.24,"step":414},"steps":414}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.10: collider 11.97 cm below the floor at step 102 (limit 5.17 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.10: shoe 11.22 cm below the floor at step 102 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@1680/OfficeSet/@MeshInstance3D@1683/@StaticBody3D@1685","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.08,"ok":true,"post":{"collider_cm":5.56,"collider_step":64,"shoe_cm":4.21,"shoe_step":64},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.49,"reached":true,"s_after_handoff":16.08,"shoe_cm":-4.64,"step":1014},"steps":1014}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.08: collider 5.56 cm below the floor at step 64 (limit 5.17 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.08: shoe 4.21 cm below the floor at step 64 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":2,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@3358/OfficeSet/@MeshInstance3D@3361/@StaticBody3D@3363","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.06,"ok":true,"post":{"collider_cm":8.23,"collider_step":82,"shoe_cm":7.08,"shoe_step":82},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":3.31,"reached":true,"s_after_handoff":3.15,"shoe_cm":2.48,"step":238},"steps":238}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.06: collider 8.23 cm below the floor at step 82 (limit 5.17 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.06: shoe 7.08 cm below the floor at step 82 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@5036/OfficeSet/@MeshInstance3D@5039/@StaticBody3D@5041","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.04,"ok":true,"post":{"collider_cm":15.73,"collider_step":83,"shoe_cm":14.49,"shoe_step":83},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.18,"reached":true,"s_after_handoff":3.38,"shoe_cm":0.27,"step":252},"steps":252}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.04: collider 15.73 cm below the floor at step 83 (limit 5.17 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.04: shoe 14.49 cm below the floor at step 83 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@6714/OfficeSet/@MeshInstance3D@6717/@StaticBody3D@6719","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.02,"ok":true,"post":{"collider_cm":5.16,"collider_step":64,"shoe_cm":3.98,"shoe_step":64},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.18,"reached":true,"s_after_handoff":2.88,"shoe_cm":-1.48,"step":222},"steps":222}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge -0.02: shoe 3.98 cm below the floor at step 64 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@8392/OfficeSet/@MeshInstance3D@8395/@StaticBody3D@8397","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.0,"ok":true,"post":{"collider_cm":17.56,"collider_step":66,"shoe_cm":15.25,"shoe_step":66},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.57,"reached":true,"s_after_handoff":3.23,"shoe_cm":-4.75,"step":243},"steps":243}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.00: collider 17.56 cm below the floor at step 66 (limit 5.17 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.00: shoe 15.25 cm below the floor at step 66 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@10070/OfficeSet/@MeshInstance3D@10073/@StaticBody3D@10075","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.02,"ok":true,"post":{"collider_cm":5.16,"collider_step":64,"shoe_cm":3.98,"shoe_step":64},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.64,"reached":true,"s_after_handoff":3.98,"shoe_cm":-4.2,"step":288},"steps":288}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.02: shoe 3.98 cm below the floor at step 64 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@11748/OfficeSet/@MeshInstance3D@11751/@StaticBody3D@11753","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.04,"ok":true,"post":{"collider_cm":5.16,"collider_step":64,"shoe_cm":3.98,"shoe_step":64},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.42,"reached":true,"s_after_handoff":10.17,"shoe_cm":-4.68,"step":659},"steps":659}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.04: shoe 3.98 cm below the floor at step 64 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":3,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@13426/OfficeSet/@MeshInstance3D@13429/@StaticBody3D@13431","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.06,"ok":true,"post":{"collider_cm":17.6,"collider_step":66,"shoe_cm":15.31,"shoe_step":66},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.69,"reached":true,"s_after_handoff":4.52,"shoe_cm":-4.53,"step":320},"steps":320}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.06: collider 17.60 cm below the floor at step 66 (limit 5.17 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.06: shoe 15.31 cm below the floor at step 66 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@15104/OfficeSet/@MeshInstance3D@15107/@StaticBody3D@15109","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.08,"ok":true,"post":{"collider_cm":5.16,"collider_step":64,"shoe_cm":3.98,"shoe_step":64},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.5,"reached":true,"s_after_handoff":4.47,"shoe_cm":-4.62,"step":317},"steps":317}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.08: shoe 3.98 cm below the floor at step 64 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":5,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@16782/OfficeSet/@MeshInstance3D@16785/@StaticBody3D@16787","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.1,"ok":true,"post":{"collider_cm":14.28,"collider_step":76,"shoe_cm":12.8,"shoe_step":76},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.44,"reached":true,"s_after_handoff":12.13,"shoe_cm":-4.54,"step":777},"steps":777}
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.10: collider 14.28 cm below the floor at step 76 (limit 5.17 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: ledge +0.10: shoe 12.80 cm below the floor at step 76 (limit 3.78 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@18460/OfficeSet/@MeshInstance3D@18463/@StaticBody3D@18465","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":-0.1,"ok":true,"post":{"collider_cm":11.52,"collider_step":62,"shoe_cm":9.39,"shoe_step":62},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":4.61,"reached":true,"s_after_handoff":1.7,"shoe_cm":3.74,"step":148},"steps":148}
+ERROR: KIM_LANDING_FLOOR_CHECK: open -0.10: collider 11.52 cm below the floor at step 62 (limit 5.90 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: open -0.10: shoe 9.39 cm below the floor at step 62 (limit 4.71 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@20136/OfficeSet/@MeshInstance3D@20139/@StaticBody3D@20141","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":-0.08,"ok":true,"post":{"collider_cm":18.0,"collider_step":115,"shoe_cm":10.7,"shoe_step":115},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":2.81,"reached":true,"s_after_handoff":7.23,"shoe_cm":2.24,"step":480},"steps":480}
+ERROR: KIM_LANDING_FLOOR_CHECK: open -0.08: collider 18.00 cm below the floor at step 115 (limit 5.90 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: open -0.08: shoe 10.70 cm below the floor at step 115 (limit 4.71 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@21812/OfficeSet/@MeshInstance3D@21815/@StaticBody3D@21817","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":-0.06,"ok":true,"post":{"collider_cm":11.11,"collider_step":62,"shoe_cm":9.03,"shoe_step":62},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":4.09,"reached":true,"s_after_handoff":2.02,"shoe_cm":3.28,"step":167},"steps":167}
+ERROR: KIM_LANDING_FLOOR_CHECK: open -0.06: collider 11.11 cm below the floor at step 62 (limit 5.90 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: open -0.06: shoe 9.03 cm below the floor at step 62 (limit 4.71 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@23488/OfficeSet/@MeshInstance3D@23491/@StaticBody3D@23493","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":-0.04,"ok":true,"post":{"collider_cm":3.37,"collider_step":70,"shoe_cm":2.7,"shoe_step":399},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":2.95,"reached":true,"s_after_handoff":8.3,"shoe_cm":2.36,"step":544},"steps":544}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@25164/OfficeSet/@MeshInstance3D@25167/@StaticBody3D@25169","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":-0.02,"ok":true,"post":{"collider_cm":10.01,"collider_step":59,"shoe_cm":8.6,"shoe_step":59},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":4.3,"reached":true,"s_after_handoff":2.27,"shoe_cm":3.5,"step":182},"steps":182}
+ERROR: KIM_LANDING_FLOOR_CHECK: open -0.02: collider 10.01 cm below the floor at step 59 (limit 5.90 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: open -0.02: shoe 8.60 cm below the floor at step 59 (limit 4.71 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@26840/OfficeSet/@MeshInstance3D@26843/@StaticBody3D@26845","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":0.0,"ok":true,"post":{"collider_cm":3.33,"collider_step":71,"shoe_cm":2.38,"shoe_step":127},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":3.01,"reached":true,"s_after_handoff":1.87,"shoe_cm":2.28,"step":158},"steps":158}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@28516/OfficeSet/@MeshInstance3D@28519/@StaticBody3D@28521","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":0.02,"ok":true,"post":{"collider_cm":11.45,"collider_step":60,"shoe_cm":10.0,"shoe_step":60},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":4.1,"reached":true,"s_after_handoff":2.13,"shoe_cm":3.4,"step":174},"steps":174}
+ERROR: KIM_LANDING_FLOOR_CHECK: open +0.02: collider 11.45 cm below the floor at step 60 (limit 5.90 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: open +0.02: shoe 10.00 cm below the floor at step 60 (limit 4.71 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":1,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@30192/OfficeSet/@MeshInstance3D@30195/@StaticBody3D@30197","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":0.04,"ok":true,"post":{"collider_cm":11.46,"collider_step":60,"shoe_cm":10.01,"shoe_step":60},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":4.09,"reached":true,"s_after_handoff":2.12,"shoe_cm":3.4,"step":173},"steps":173}
+ERROR: KIM_LANDING_FLOOR_CHECK: open +0.04: collider 11.46 cm below the floor at step 60 (limit 5.90 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+ERROR: KIM_LANDING_FLOOR_CHECK: open +0.04: shoe 10.01 cm below the floor at step 60 (limit 4.71 cm)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:68)
+       [1] run (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:91)
+       [2] _case (/home/claude/work/kfp/tools/tests/kim_landing_floor_regression.gd:184)
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@31868/OfficeSet/@MeshInstance3D@31871/@StaticBody3D@31873","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":0.06,"ok":true,"post":{"collider_cm":3.41,"collider_step":78,"shoe_cm":2.44,"shoe_step":133},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":2.67,"reached":true,"s_after_handoff":5.03,"shoe_cm":2.08,"step":348},"steps":348}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@33544/OfficeSet/@MeshInstance3D@33547/@StaticBody3D@33549","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":0.08,"ok":true,"post":{"collider_cm":3.35,"collider_step":70,"shoe_cm":2.38,"shoe_step":119},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":2.99,"reached":true,"s_after_handoff":2.35,"shoe_cm":2.31,"step":187},"steps":187}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":51,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@35220/OfficeSet/@MeshInstance3D@35223/@StaticBody3D@35225","top_m":-0.02},"handoff_step":46,"kick":true,"offset_m":0.1,"ok":true,"post":{"collider_cm":3.4,"collider_step":78,"shoe_cm":2.56,"shoe_step":140},"pre":{"collider_cm":4.46,"collider_step":7,"shoe_cm":3.42,"shoe_step":7},"rest":{"collider_cm":2.76,"reached":true,"s_after_handoff":3.73,"shoe_cm":2.13,"step":270},"steps":270}
+KIM_LANDING_FLOOR_SUMMARY {"limits_cm":{"ledge":{"collider":5.17,"shoe":3.78},"open":{"collider":5.9,"shoe":4.71}},"mode":"50-bone","worst_cm":{"ledge":{"collider":17.6,"shoe":15.31},"open":{"collider":18.0,"shoe":10.7}}}
+KIM_LANDING_FLOOR_REGRESSION_FAILED: 30 checks

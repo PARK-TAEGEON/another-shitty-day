@@ -11,14 +11,18 @@ const V2_BODY_SIZE := {
 	"UpperLeg": Vector2(.351, .138), "LowerLeg": Vector2(.276, .110), "Foot": Vector2(.238, .090),
 }
 const V2_BOX_SIZE := {
-	"Pelvis": Vector3(.77, .52, .70), "Chest": Vector3(.82, .44, .64), "Foot": Vector3(.279, .175, .44),
+	"Pelvis": Vector3(.77, .52, .70), "Chest": Vector3(.82, .44, .64), "Foot": Vector3(.29, .175, .44),
 }
-# Offsets from the bone midpoint in the model's rest axes. The coat belly is
-# between the pelvis and chest joints. The shoes extend behind the ankle too.
+# Offsets from the bone midpoint in the model's rest axes, written for the left
+# side (x mirrors on the right). The coat belly is between the pelvis and chest
+# joints. The foot box sits on the shoe mesh: its outer sole edge reaches 0.396 m
+# from the centre line and the heel 0.148 m behind the ankle (rest model space).
 const V2_CENTER_SHIFT := {
 	"Pelvis": Vector3(0, .115, .058), "Chest": Vector3(0, -.045, .040),
-	"Head": Vector3(0, -.004, .042), "Foot": Vector3(0, -.004, -.022),
+	"Head": Vector3(0, -.004, .042), "Foot": Vector3(.016, -.004, -.0315),
 }
+# Radius of the capsules on the 50-bone foot box edges (see _add_foot_edges).
+const FOOT_EDGE_RADIUS := 0.015
 var visual_v2: bool = false
 const PHYSICAL_BONE = preload("res://scripts/characters/kim_physical_bone.gd")
 const MEDIUM_IMPULSE: float = 8.5
@@ -60,6 +64,22 @@ var _flight_origin: Vector3 = Vector3.ZERO
 var _flight_dir: Vector3 = Vector3.FORWARD
 var _flight_offsets: Array[Vector3] = []
 var _flight_bases: Array[Basis] = []
+# 50-bone flight pose: degrees at full fold, reached by u = FLIGHT_FOLD_RAMP_U.
+# Torso, head and limbs lag towards the hit; knees and elbows bend on their hinge.
+const FLIGHT_FOLD_DEG := {
+	"Chest": 20.0, "Head": 14.0, "UpperLeg": 35.0, "UpperLegOut": 8.0, "LowerLeg": 24.0,
+	"UpperArm": 35.0, "UpperArmOut": 55.0, "Forearm": 30.0,
+}
+const FLIGHT_FOLD_RAMP_U := 0.25
+# On the way down the torso, head and legs open back out towards a sprawl.
+# Share of the fold released by u = 1. Arms and elbows stay flung.
+const FLIGHT_UNFOLD := {"Chest": 0.6, "Head": 0.6, "UpperLeg": 0.75, "LowerLeg": 0.75}
+const FLIGHT_UNFOLD_FROM_U := 0.35
+var _flight_unfold: Array[float] = []
+var _flight_start_xf: Array[Transform3D] = []
+var _flight_parent: Array[int] = []
+var _flight_pivot: Array[Vector3] = []
+var _flight_fold: Array[Quaternion] = []
 var _sole_points: Dictionary = {}
 var _clamp_flight_to_room: bool = false
 var _joints_relaxed: bool = false
@@ -181,7 +201,10 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 		radius = size.y
 		box = V2_BOX_SIZE.get(part, box)
 		var inverse_rest := skeleton.get_bone_global_rest(skeleton.find_bone(bone_name)).basis.inverse().orthonormalized()
-		center = Vector3.UP * length * .5 + inverse_rest * Vector3(V2_CENTER_SHIFT.get(part, Vector3.ZERO))
+		var shift: Vector3 = V2_CENTER_SHIFT.get(part, Vector3.ZERO)
+		if bone_name.ends_with(".R"):
+			shift.x = -shift.x
+		center = Vector3.UP * length * .5 + inverse_rest * shift
 		if box != Vector3.ZERO:
 			orientation = inverse_rest
 	var body: PhysicalBone3D = PHYSICAL_BONE.new()
@@ -215,6 +238,8 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 		capsule.height = maxf(length + (radius * .7 if sleeve else 0.0), radius * 2.0)
 		shape.shape = capsule
 	body.add_child(shape)
+	if visual_v2 and bone_name.begins_with("Foot."):
+		_add_foot_edges(body, shape)
 	if visual_v2 and bone_name.begins_with("Hand."):
 		# Keep curled fingertips and the outlying thumb on the existing wrist body.
 		var side := 1.0 if bone_name.ends_with(".L") else -1.0
@@ -223,6 +248,35 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 	# Every limb can report the landing thud. Bounce stays on the torso only.
 	PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(), 4)
 	bodies.append(body)
+
+## 50-bone feet only. A capsule of FOOT_EDGE_RADIUS on each of the 12 box edges.
+## Jolt gives the thin foot box a 0.7 cm convex radius and the floor 1.2 cm;
+## their sum is below the 2 cm penetration slop, so a resting foot box sits in
+## deep (EPA) contact and some steps report the floor normal reversed, pushing
+## the foot through the floor (measured on Foot.L/R only). The capsules carry
+## the floor contacts on their own 1.5 cm radius; the box keeps wrapping the shoe.
+func _add_foot_edges(body: PhysicalBone3D, box: CollisionShape3D) -> void:
+	var half: Vector3 = (box.shape as BoxShape3D).size * 0.5
+	for axis in 3:
+		var a := (axis + 1) % 3
+		var b := (axis + 2) % 3
+		var turn := Basis.IDENTITY # capsules run along local Y
+		if axis == 0:
+			turn = Basis(Vector3.BACK, PI * 0.5)
+		elif axis == 2:
+			turn = Basis(Vector3.RIGHT, PI * 0.5)
+		for sa: float in [-1.0, 1.0]:
+			for sb: float in [-1.0, 1.0]:
+				var centre := Vector3.ZERO
+				centre[a] = half[a] * sa
+				centre[b] = half[b] * sb
+				var capsule := CapsuleShape3D.new()
+				capsule.radius = FOOT_EDGE_RADIUS
+				capsule.height = half[axis] * 2.0 + FOOT_EDGE_RADIUS * 2.0
+				var edge := CollisionShape3D.new()
+				edge.shape = capsule
+				edge.transform = box.transform * Transform3D(turn, centre)
+				body.add_child(edge)
 
 func _add_hand_pad(body: PhysicalBone3D, local_center: Vector3, radius: float) -> void:
 	var sphere := SphereShape3D.new()
@@ -415,6 +469,12 @@ func _activate_physics() -> void:
 	simulator.physical_bones_add_collision_exception(actor.get_rid())
 	var before: Vector3 = bodies[0].global_position
 	simulator.physical_bones_start_simulation()
+	if visual_v2:
+		# The feet reach about 5 m/s at the first floor impact; without CCD one
+		# step can carry the foot 5 cm into the floor before the contact solves.
+		for body: PhysicalBone3D in bodies:
+			if body.bone_name.begins_with("Foot."):
+				PhysicsServer3D.body_set_enable_continuous_collision_detection(body.get_rid(), true)
 	takeover_error = before.distance_to(bodies[0].global_position)
 	_starting = false
 	for pending: Dictionary in _pending_impulses:
@@ -464,8 +524,116 @@ func _begin_scripted_flight(impulse: Vector3) -> void:
 		body.collision_layer = 0
 		body.collision_mask = 0
 		body.set("scripted", true)
+	_capture_flight_fold()
 	_flight_active = true
 	_advance_scripted_flight(0.0)
+
+## 50-bone only. Store each body's start transform, its parent body and the
+## rotation it reaches at full fold about its own joint (the bone origin).
+## Directions come from Kim's own pelvis frame and the flight direction.
+func _capture_flight_fold() -> void:
+	_flight_start_xf.clear()
+	_flight_parent.clear()
+	_flight_pivot.clear()
+	_flight_fold.clear()
+	_flight_unfold.clear()
+	if not visual_v2:
+		return
+	var index_of: Dictionary = {}
+	for index in range(bodies.size()):
+		index_of[bodies[index].bone_name] = index
+	var pelvis: Basis = _bone_world(bodies[0]).basis.orthonormalized()
+	var lateral: Vector3 = pelvis.x - Vector3.UP * pelvis.x.dot(Vector3.UP)
+	if lateral.length_squared() < 0.0001:
+		lateral = Vector3.UP.cross(_flight_dir)
+	lateral = lateral.normalized() # Kim's left
+	var forward: Vector3 = lateral.cross(Vector3.UP).normalized()
+	# The pelvis leads the arc. Torso, head and limbs lag back towards the hit.
+	var toward: Vector3 = -_flight_dir
+	var sagittal: Vector3 = forward * toward.dot(forward)
+	for index in range(bodies.size()):
+		var body: PhysicalBone3D = bodies[index]
+		var bone: Transform3D = _bone_world(body)
+		var along: Vector3 = bone.basis.y.normalized()
+		var part: String = body.bone_name.get_slice(".", 0)
+		var outward: Vector3 = lateral * (1.0 if body.bone_name.ends_with(".L") else -1.0)
+		var turn := Quaternion.IDENTITY
+		match part:
+			"Chest", "Head":
+				turn = _swing_towards(along, toward, FLIGHT_FOLD_DEG[part])
+			"UpperArm":
+				var first: Quaternion = _swing_towards(along, toward, FLIGHT_FOLD_DEG["UpperArm"])
+				turn = _swing_towards(Basis(first) * along, outward, FLIGHT_FOLD_DEG["UpperArmOut"]) * first
+			"UpperLeg":
+				# Hips flex or extend with the front/back share of the hit. A side hit
+				# bends the torso instead of crossing one thigh through the other.
+				var first: Quaternion = _swing_towards(along, sagittal.normalized(), FLIGHT_FOLD_DEG["UpperLeg"] * sagittal.length())
+				turn = _swing_towards(Basis(first) * along, outward, FLIGHT_FOLD_DEG["UpperLegOut"]) * first
+			"LowerLeg":
+				turn = _hinge(bone.basis.x, along, -forward, FLIGHT_FOLD_DEG["LowerLeg"])
+			"Forearm":
+				turn = _hinge(bone.basis.x, along, forward, FLIGHT_FOLD_DEG["Forearm"])
+		_flight_start_xf.append(body.global_transform)
+		_flight_parent.append(_parent_body_index(body, index_of))
+		_flight_pivot.append(bone.origin)
+		_flight_fold.append(turn.normalized())
+		_flight_unfold.append(float(FLIGHT_UNFOLD.get(part, 0.0)))
+
+func _bone_world(body: PhysicalBone3D) -> Transform3D:
+	return body.global_transform * body.body_offset.affine_inverse()
+
+func _parent_body_index(body: PhysicalBone3D, index_of: Dictionary) -> int:
+	var bone: int = skeleton.get_bone_parent(skeleton.find_bone(body.bone_name))
+	while bone >= 0:
+		var name_value: String = skeleton.get_bone_name(bone)
+		if index_of.has(name_value):
+			return int(index_of[name_value])
+		bone = skeleton.get_bone_parent(bone)
+	return -1
+
+## Swing a bone direction towards a target direction, about their common normal.
+func _swing_towards(along: Vector3, target: Vector3, degrees: float) -> Quaternion:
+	var side: Vector3 = target - along * target.dot(along)
+	if absf(degrees) < 0.01 or side.length_squared() < 0.000001:
+		return Quaternion.IDENTITY
+	return Quaternion(along.cross(side).normalized(), deg_to_rad(degrees))
+
+## Bend a knee or elbow about its own lateral axis so the segment moves towards bend.
+func _hinge(axis: Vector3, along: Vector3, bend: Vector3, degrees: float) -> Quaternion:
+	var hinge: Vector3 = axis.normalized()
+	var sign_value: float = 1.0 if hinge.cross(along).dot(bend) >= 0.0 else -1.0
+	return Quaternion(hinge * sign_value, deg_to_rad(degrees))
+
+func _flight_pitch(u: float) -> Basis:
+	var axis: Vector3 = Vector3.UP.cross(_flight_dir)
+	if axis.length_squared() < 0.0001:
+		axis = Vector3.RIGHT
+	return Basis(axis.normalized(), lerpf(0.0, -1.05, smoothstep(0.1, 0.55, u)))
+
+## The one flight pose used for display and for every look-ahead check.
+## Legacy rig: the rigid pitched pose. 50-bone: forward kinematics down the
+## body tree, each joint turning about its own pivot, so segments keep length.
+func _flight_body_transforms(pelvis_target: Vector3, u: float) -> Array[Transform3D]:
+	var pitched: Basis = _flight_pitch(u)
+	var poses: Array[Transform3D] = []
+	if _flight_start_xf.size() != bodies.size():
+		for index in range(bodies.size()):
+			var basis: Basis = pitched * _flight_bases[index] if index < _flight_bases.size() else Basis.IDENTITY
+			poses.append(Transform3D(basis, pelvis_target + pitched * _flight_offsets[index]))
+		return poses
+	var fold_in: float = smoothstep(0.0, FLIGHT_FOLD_RAMP_U, u)
+	var fold_out: float = smoothstep(FLIGHT_UNFOLD_FROM_U, 1.0, u)
+	var flight := Transform3D(pitched, pelvis_target - pitched * _flight_origin)
+	var motion: Array[Transform3D] = []
+	for index in range(bodies.size()):
+		var parent: int = _flight_parent[index]
+		var inherited: Transform3D = motion[parent] if parent >= 0 else Transform3D.IDENTITY
+		var weight: float = fold_in * (1.0 - _flight_unfold[index] * fold_out)
+		var turn := Basis(Quaternion.IDENTITY.slerp(_flight_fold[index], weight))
+		var pivot: Vector3 = _flight_pivot[index]
+		motion.append(inherited * Transform3D(turn, pivot - turn * pivot))
+		poses.append(flight * motion[index] * _flight_start_xf[index])
+	return poses
 
 func _advance_scripted_flight(delta: float) -> void:
 	_flight_elapsed += delta
@@ -482,10 +650,10 @@ func _advance_scripted_flight(delta: float) -> void:
 		if blocked.has("fraction"):
 			stop = bodies[0].global_position + motion * float(blocked.fraction)
 		stop += (blocked.normal as Vector3) * 0.1
-		_place_flight_pose(_above_floor(stop), u)
+		_place_flight_pose(_above_floor(stop, u), u)
 		_crash_flight(blocked.normal, bool(blocked.furniture))
 		return
-	_place_flight_pose(_above_floor(desired), u)
+	_place_flight_pose(_above_floor(desired, u), u)
 	if u >= 1.0:
 		_release_scripted_flight(false)
 
@@ -495,38 +663,25 @@ func _flight_pose_pelvis(u: float) -> Vector3:
 
 func _place_flight_pose(pelvis_target: Vector3, u: float) -> void:
 	pelvis_target += _room_shift(_flight_pose_points(pelvis_target, u))
-	var axis: Vector3 = Vector3.UP.cross(_flight_dir)
-	if axis.length_squared() < 0.0001:
-		axis = Vector3.RIGHT
-	var pitched: Basis = Basis(axis.normalized(), lerpf(0.0, -1.05, smoothstep(0.1, 0.55, u)))
+	var poses: Array[Transform3D] = _flight_body_transforms(pelvis_target, u)
 	for index in range(bodies.size()):
 		var body: PhysicalBone3D = bodies[index]
 		body.set("scripted", true)
-		body.set("scripted_position", pelvis_target + pitched * _flight_offsets[index])
+		body.set("scripted_position", poses[index].origin)
 		if visual_v2:
-			body.set("scripted_basis", pitched * _flight_bases[index])
+			body.set("scripted_basis", poses[index].basis)
 		body.linear_velocity = Vector3.ZERO
 
 func _flight_pose_points(pelvis_target: Vector3, u: float) -> Array[Vector3]:
-	var axis: Vector3 = Vector3.UP.cross(_flight_dir)
-	if axis.length_squared() < 0.0001:
-		axis = Vector3.RIGHT
-	var pitched: Basis = Basis(axis.normalized(), lerpf(0.0, -1.05, smoothstep(0.1, 0.55, u)))
 	var points: Array[Vector3] = [pelvis_target]
-	for offset: Vector3 in _flight_offsets:
-		points.append(pelvis_target + pitched * offset)
+	for pose: Transform3D in _flight_body_transforms(pelvis_target, u):
+		points.append(pose.origin)
 	return points
 
 func _pose_hits_solid(pelvis_target: Vector3, u: float) -> Dictionary:
 	if not is_instance_valid(actor) or bodies.is_empty():
 		return {}
-	var axis: Vector3 = Vector3.UP.cross(_flight_dir)
-	if axis.length_squared() < 0.0001:
-		axis = Vector3.RIGHT
-	var pitched: Basis = Basis(axis.normalized(), lerpf(0.0, -1.05, smoothstep(0.1, 0.55, u)))
-	var samples: Array[Vector3] = [pelvis_target]
-	for offset: Vector3 in _flight_offsets:
-		samples.append(pelvis_target + pitched * offset)
+	var samples: Array[Vector3] = _flight_pose_points(pelvis_target, u)
 	var space: PhysicsDirectSpaceState3D = actor.get_world_3d().direct_space_state
 	var exclude: Array[RID] = [actor.get_rid()]
 	for body: PhysicalBone3D in bodies:
@@ -550,8 +705,21 @@ func _pose_hits_solid(pelvis_target: Vector3, u: float) -> Dictionary:
 		return {"fraction": 0.0, "normal": normal, "furniture": furniture}
 	return {}
 
-func _above_floor(pelvis_target: Vector3) -> Vector3:
+func _above_floor(pelvis_target: Vector3, u: float = -1.0) -> Vector3:
 	var lowest: float = pelvis_target.y
+	if _flight_start_xf.size() == bodies.size():
+		# 50-bone: the posed flight points, or after hand-off the actual bodies.
+		var points: Array[Vector3] = []
+		if u >= 0.0:
+			points = _flight_pose_points(pelvis_target, u)
+		else:
+			for body: PhysicalBone3D in bodies:
+				points.append(body.global_position - bodies[0].global_position + pelvis_target)
+		for point: Vector3 in points:
+			lowest = minf(lowest, point.y)
+		if lowest < 0.06:
+			pelvis_target.y += 0.06 - lowest
+		return pelvis_target
 	for offset: Vector3 in _flight_offsets:
 		lowest = minf(lowest, (pelvis_target + offset).y)
 	if lowest < 0.06:
@@ -610,6 +778,7 @@ func _crash_flight(normal: Vector3, furniture: bool) -> void:
 		body.collision_layer = 4
 		body.collision_mask = 11
 		body.linear_velocity = slide
+	_rebase_joints_to_flight_pose()
 	_set_joints_relaxed(true)
 	_impact_feedback(furniture)
 
@@ -624,7 +793,28 @@ func _release_scripted_flight(crashed: bool) -> void:
 		body.collision_layer = 4
 		body.collision_mask = 11
 		body.linear_velocity = smack
+	_rebase_joints_to_flight_pose()
 	_set_joints_relaxed(true)
+
+## 50-bone hand-off. The cone limits were built around the standing pose at the
+## kick, so a folded hip or knee would be yanked straight on the first steps.
+## Rebuild each joint from the current (last displayed) pose; spans are unchanged.
+func _rebase_joints_to_flight_pose() -> void:
+	if _flight_start_xf.size() != bodies.size():
+		return
+	for body: PhysicalBone3D in bodies:
+		if body.bone_name == "Pelvis":
+			continue
+		if not _joint_rest.has(body.bone_name):
+			_joint_rest[body.bone_name] = {
+				"swing": float(body.get("joint_constraints/swing_span")),
+				"twist": float(body.get("joint_constraints/twist_span")),
+			}
+		var rest: Dictionary = _joint_rest[body.bone_name]
+		body.joint_type = PhysicalBone3D.JOINT_TYPE_NONE
+		body.joint_type = PhysicalBone3D.JOINT_TYPE_CONE
+		body.set("joint_constraints/swing_span", float(rest["swing"]))
+		body.set("joint_constraints/twist_span", float(rest["twist"]))
 
 func _separate_from_solids(preferred: Vector3) -> void:
 	if not is_instance_valid(actor) or bodies.is_empty():

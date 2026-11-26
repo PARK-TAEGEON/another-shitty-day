@@ -1,0 +1,28 @@
+== c434672 ledge-trace.json
+ floor /root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7 top -0.0200 m | post steps 746 | floor contacts by foot shape {0: 2377}
+ downward floor normals: 12
+   step 66 Foot.L shape 0 normal (0.008, -1.0, -0.007) point (-5.848, 0.359, 3.273) collider depth 17.56 cm
+   step 66 Foot.L shape 0 normal (0.008, -1.0, -0.007) point (-5.824, 0.075, 2.937) collider depth 17.56 cm
+   step 66 Foot.L shape 0 normal (0.008, -1.0, -0.007) point (-5.534, 0.08, 2.954) collider depth 17.56 cm
+   step 66 Foot.L shape 0 normal (0.008, -1.0, -0.007) point (-5.558, 0.364, 3.289) collider depth 17.56 cm
+   step 137 Foot.L shape 0 normal (0.0, -1.0, 0.006) point (-5.762, 0.405, 2.962) collider depth 4.69 cm
+   step 137 Foot.L shape 0 normal (0.0, -1.0, 0.006) point (-5.719, 0.293, 2.835) collider depth 4.69 cm
+   step 137 Foot.L shape 0 normal (0.0, -1.0, 0.006) point (-5.444, 0.292, 2.928) collider depth 4.69 cm
+   step 137 Foot.L shape 0 normal (0.0, -1.0, 0.006) point (-5.487, 0.404, 3.055) collider depth 4.69 cm
+ deepest shoe step 66: L shoe 15.26 collider 17.56 | R shoe -0.89 collider 0.39 cm
+== c434672 open-trace.json
+ floor /root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7 top -0.0200 m | post steps 749 | floor contacts by foot shape {0: 5775}
+ downward floor normals: 4
+   step 60 Foot.L shape 0 normal (0.005, -1.0, -0.004) point (-5.795, 0.353, 1.988) collider depth 11.45 cm
+   step 60 Foot.L shape 0 normal (0.005, -1.0, -0.004) point (-5.796, 0.426, 1.829) collider depth 11.45 cm
+   step 60 Foot.L shape 0 normal (0.005, -1.0, -0.004) point (-5.507, 0.437, 1.832) collider depth 11.45 cm
+   step 60 Foot.L shape 0 normal (0.005, -1.0, -0.004) point (-5.505, 0.364, 1.991) collider depth 11.45 cm
+ deepest shoe step 60: L shoe 9.99 collider 11.45 | R shoe 1.67 collider 2.46 cm
+== ee08dbb ledge-trace.json
+ floor /root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7 top -0.0200 m | post steps 746 | floor contacts by foot shape {2: 22, 4: 2822, 8: 772, 9: 1, 10: 1423, 11: 5, 12: 704}
+ downward floor normals: 0
+ deepest shoe step 73: L shoe 0.42 collider 2.32 | R shoe -5.12 collider 1.25 cm
+== ee08dbb open-trace.json
+ floor /root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7 top -0.0200 m | post steps 748 | floor contacts by foot shape {0: 1486, 2: 1510, 7: 706, 8: 25, 9: 736, 10: 729, 11: 766, 12: 3}
+ downward floor normals: 0
+ deepest shoe step 70: L shoe 0.17 collider 2.16 | R shoe -0.02 collider 2.19 cm

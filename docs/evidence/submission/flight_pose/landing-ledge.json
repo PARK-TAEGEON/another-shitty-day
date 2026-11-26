@@ -1,0 +1,170 @@
+{
+ "aecd0f1": {
+  "room_and_wall_renders_same_physics": true,
+  "floor": {
+   "path": "/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7",
+   "top_m": -0.0199999958276749
+  },
+  "handoff": {
+   "event": "flight_end_normal",
+   "frame": 50,
+   "movie_s": 1.667,
+   "game_s": 1.6133,
+   "step": 52
+  },
+  "first_floor_impact": {
+   "step": 66,
+   "frame": 57,
+   "movie_s": 1.9,
+   "game_s": 1.8467,
+   "shoe_cm": 1.9,
+   "collider_cm": 3.25,
+   "floor_normal_down": 0
+  },
+  "deepest_shoe": {
+   "step": 115,
+   "frame": 82,
+   "movie_s": 2.733,
+   "game_s": 2.68,
+   "shoe_cm": 2.8,
+   "collider_cm": 3.77,
+   "floor_normal_down": 0
+  },
+  "deepest_collider": {
+   "step": 158,
+   "frame": 103,
+   "movie_s": 3.433,
+   "game_s": 3.38,
+   "shoe_cm": 2.32,
+   "collider_cm": 3.91,
+   "floor_normal_down": 0
+  },
+  "pre_handoff_max": {
+   "shoe_cm": -85.25,
+   "collider_cm": -83.37
+  },
+  "down_contact_steps": 0,
+  "rest": {
+   "step": 280,
+   "frame": 164,
+   "movie_s": 5.467,
+   "game_s": 5.4133,
+   "shoe_cm": 1.34,
+   "collider_cm": 2.97,
+   "floor_normal_down": 0,
+   "reached": true
+  }
+ },
+ "c434672": {
+  "room_and_wall_renders_same_physics": true,
+  "floor": {
+   "path": "/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7",
+   "top_m": -0.0199999958276749
+  },
+  "handoff": {
+   "event": "flight_end_normal",
+   "frame": 50,
+   "movie_s": 1.667,
+   "game_s": 1.6133,
+   "step": 52
+  },
+  "first_floor_impact": {
+   "step": 68,
+   "frame": 58,
+   "movie_s": 1.933,
+   "game_s": 1.88,
+   "shoe_cm": 0.44,
+   "collider_cm": 3.27,
+   "floor_normal_down": 0
+  },
+  "deepest_shoe": {
+   "step": 90,
+   "frame": 69,
+   "movie_s": 2.3,
+   "game_s": 2.2467,
+   "shoe_cm": 13.16,
+   "collider_cm": 15.43,
+   "floor_normal_down": 4
+  },
+  "deepest_collider": {
+   "step": 90,
+   "frame": 69,
+   "movie_s": 2.3,
+   "game_s": 2.2467,
+   "shoe_cm": 13.16,
+   "collider_cm": 15.43,
+   "floor_normal_down": 4
+  },
+  "pre_handoff_max": {
+   "shoe_cm": -86.07,
+   "collider_cm": -85.13
+  },
+  "down_contact_steps": 2,
+  "rest": {
+   "step": 286,
+   "frame": 167,
+   "movie_s": 5.567,
+   "game_s": 5.5133,
+   "shoe_cm": 1.47,
+   "collider_cm": 2.19,
+   "floor_normal_down": 0,
+   "reached": true
+  }
+ },
+ "fix": {
+  "room_and_wall_renders_same_physics": true,
+  "floor": {
+   "path": "/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7",
+   "top_m": -0.0199999958276749
+  },
+  "handoff": {
+   "event": "flight_end_normal",
+   "frame": 50,
+   "movie_s": 1.667,
+   "game_s": 1.6133,
+   "step": 52
+  },
+  "first_floor_impact": {
+   "step": 68,
+   "frame": 58,
+   "movie_s": 1.933,
+   "game_s": 1.88,
+   "shoe_cm": -1.82,
+   "collider_cm": 0.3,
+   "floor_normal_down": 0
+  },
+  "deepest_shoe": {
+   "step": 89,
+   "frame": 69,
+   "movie_s": 2.3,
+   "game_s": 2.2467,
+   "shoe_cm": 0.23,
+   "collider_cm": 2.08,
+   "floor_normal_down": 0
+  },
+  "deepest_collider": {
+   "step": 343,
+   "frame": 196,
+   "movie_s": 6.533,
+   "game_s": 6.48,
+   "shoe_cm": -7.61,
+   "collider_cm": 2.32,
+   "floor_normal_down": 0
+  },
+  "pre_handoff_max": {
+   "shoe_cm": -87.12,
+   "collider_cm": -84.21
+  },
+  "down_contact_steps": 0,
+  "rest": {
+   "step": 426,
+   "frame": 237,
+   "movie_s": 7.9,
+   "game_s": 7.8467,
+   "shoe_cm": -7.39,
+   "collider_cm": 2.11,
+   "floor_normal_down": 0,
+   "reached": true
+  }
+ }
+}

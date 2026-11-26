@@ -1,0 +1,16 @@
+== after 893dbaf default
+KIM_FLIGHT_POSE {"case":"ledge","early_two_groups":true,"end":"normal","flight_s":0.683,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"v2":true}
+KIM_FLIGHT_POSE {"case":"wall","early_two_groups":true,"end":"crash","flight_s":0.35,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"v2":true}
+KIM_FLIGHT_POSE_REGRESSION_OK
+== after 893dbaf --kim-rig
+KIM_FLIGHT_POSE {"case":"legacy","early_two_groups":true,"end":"crash","flight_s":0.667,"handoff_step_deg":4.19,"max_joint_opening_m":0.11649,"v2":false}
+KIM_FLIGHT_POSE_REGRESSION_OK
+== before aecd0f1 (test file copied in) default
+ERROR: KIM_FLIGHT_POSE_CHECK: ledge: fewer than two of torso/arms/legs turned 5 degrees within 0.1 s of flight
+ERROR: KIM_FLIGHT_POSE_CHECK: ledge: pose jumped 8.5 degrees in the first hand-off steps
+KIM_FLIGHT_POSE {"case":"ledge","early_two_groups":false,"end":"normal","flight_s":0.683,"handoff_step_deg":8.52,"max_joint_opening_m":0.0,"v2":true}
+ERROR: KIM_FLIGHT_POSE_CHECK: wall: fewer than two of torso/arms/legs turned 5 degrees within 0.1 s of flight
+KIM_FLIGHT_POSE {"case":"wall","early_two_groups":false,"end":"crash","flight_s":0.367,"handoff_step_deg":1.83,"max_joint_opening_m":0.0,"v2":true}
+KIM_FLIGHT_POSE_REGRESSION_FAILED: ["ledge: fewer than two of torso/arms/legs turned 5 degrees within 0.1 s of flight", "ledge: pose jumped 8.5 degrees in the first hand-off steps", "wall: fewer than two of torso/arms/legs turned 5 degrees within 0.1 s of flight"]
+== before aecd0f1 (test file copied in) --kim-rig
+KIM_FLIGHT_POSE_REGRESSION_OK

@@ -1,0 +1,68 @@
+regressions	Set up job	2026-11-26T18:10:50.8014907Z Version: 20261111.635
+regressions	Set up job	2026-11-26T18:10:50.8022828Z Image: ubuntu-22.04
+regressions	Set up job	2026-11-26T18:10:50.8023343Z Version: 20261116.365.1
+RUN lines: 61
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.4832790Z RUN default kim_flight_pose_regression
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9179872Z Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9180895Z KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9181524Z KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9181952Z KIM_FLIGHT_POSE_SHOE {"L":{"outside_m":0.0,"vertices":1719},"R":{"outside_m":0.0,"vertices":1719}}
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9182802Z KIM_FLIGHT_POSE {"at_rest":true,"case":"ledge","early_two_groups":true,"end":"normal","flight_s":0.683,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"settle_s":0.5,"sole_below_box_max_m":0.0,"sole_floor_penetration_peak_m":0.0024,"sole_floor_penetration_rest_m":0.0023,"v2":true}
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9183860Z KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9184399Z KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9185337Z KIM_FLIGHT_POSE {"at_rest":false,"case":"wall","early_two_groups":true,"end":"crash","flight_s":0.333,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"settle_s":8.0,"sole_below_box_max_m":0.0,"sole_floor_penetration_peak_m":0.0,"sole_floor_penetration_rest_m":0.0,"v2":true}
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9186165Z KIM_FLIGHT_POSE_REGRESSION_FAILED: ["wall: Kim did not come to rest within 8 s of the hand-off"]
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9186442Z 
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9186617Z ERROR: KIM_FLIGHT_POSE_CHECK: wall: Kim did not come to rest within 8 s of the hand-off
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9186990Z    at: push_error (core/variant/variant_utility.cpp:1023)
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9187270Z    GDScript backtrace (most recent call first):
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9187712Z        [0] check (/home/runner/work/another-shitty-day/another-shitty-day/tools/tests/kim_flight_pose_regression.gd:23)
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:25.9188293Z        [1] _case (/home/runner/work/another-shitty-day/another-shitty-day/tools/tests/kim_flight_pose_regression.gd:177)
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:26.0171756Z Exception: /home/runner/work/another-shitty-day/another-shitty-day/tools/godot-common.ps1:42
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:26.0172325Z Line |
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:26.0172912Z   42 |              throw "Godot exited with code $($proc.ExitCode). See the  …
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:26.0173747Z      |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:26.0174543Z      | Godot exited with code 1. See the output above.
+regressions	Default, health-only and legacy integration matrix	2026-11-26T18:12:26.9663391Z ##[error]Process completed with exit code 1.
+regressions	Run actions/upload-artifact@v4	﻿2026-11-26T18:12:26.9733162Z ##[group]Run actions/upload-artifact@v4
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9733408Z with:
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9733587Z   name: kim-slice-headless-evidence
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9733818Z   path: validation/kim
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9734026Z   if-no-files-found: warn
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9734228Z   compression-level: 6
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9734406Z   overwrite: false
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9734586Z   include-hidden-files: false
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9734785Z env:
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9734953Z   GODOT: /home/runner/bin/godot
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9735172Z   GODOT4: /home/runner/bin/godot
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:26.9735369Z ##[endgroup]
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.1111179Z (node:2727) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.1112108Z (Use `node --trace-deprecation ...` to show where the warning was created)
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.1252054Z With the provided path, there will be 62 files uploaded
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.1255930Z Artifact name is valid!
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.1256602Z Root directory input is valid!
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.3639588Z Beginning upload of artifact content to blob storage
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.4231950Z (node:2727) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.5684599Z Uploaded bytes 90561
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.6006282Z Finished uploading artifact content to blob storage!
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.6006958Z SHA256 digest of uploaded artifact zip is b166a7a830570ad1e24a2be8bbf62f86c53231e8019620c85cb94be33b649173
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.6009057Z Finalizing artifact upload
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.9832298Z Artifact kim-slice-headless-evidence.zip successfully finalized. Artifact ID 15143039944
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.9833027Z Artifact kim-slice-headless-evidence has been successfully uploaded! Final size is 90561 bytes. Artifact ID is 15143039944
+regressions	Run actions/upload-artifact@v4	2026-11-26T18:12:27.9837690Z Artifact download URL: https://github.com/PARK-TAEGEON/another-shitty-day/actions/runs/45873824235/artifacts/15143039944
+regressions	Post Run actions/checkout@v4	﻿2026-11-26T18:12:28.0011832Z Post job cleanup.
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.0731733Z [command]/usr/bin/git version
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.0797656Z git version 2.56.1
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.0827225Z Temporarily overriding HOME='/home/runner/work/_temp/dcb79d06-88fc-4bc5-8495-c52aba186c08' before making global git config changes
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.0828205Z Adding repository directory to the temporary git global config as a safe directory
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.0832286Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/another-shitty-day/another-shitty-day
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.0868695Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.0900646Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.1139743Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.1162572Z http.https://github.com/.extraheader
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.1173185Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.1214270Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.1459628Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+regressions	Post Run actions/checkout@v4	2026-11-26T18:12:28.1493755Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+regressions	Complete job	﻿2026-11-26T18:12:28.1833812Z Cleaning up orphan processes
+regressions	Complete job	2026-11-26T18:12:28.2107151Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
