@@ -1,0 +1,11 @@
+{
+  "sampled_poses_per_hand": 117,
+  "intersection_samples": {},
+  "tip_clearance_mm": {
+    "Palm and fingers.L@20": 1.497,
+    "Palm and fingers.R@20": 1.497,
+    "Palm and fingers.L@30": 0.199,
+    "Palm and fingers.R@30": 0.199
+  },
+  "max_thumb_rotation_per_frame_deg": 7.480517947872698
+}

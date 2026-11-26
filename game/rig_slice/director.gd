@@ -12,6 +12,9 @@ var events: Array[String] = []
 var measured := {}
 var mug
 var active := false
+var dialogue_seen := false
+var mug_trace: Array[Dictionary] = []
+var previous_wrist_rotation := Quaternion.IDENTITY
 
 func _enter_tree() -> void:
 	get_tree().root.set_meta("rig_slice", true)
@@ -28,8 +31,6 @@ func _ready() -> void:
 		DirAccess.make_dir_recursive_absolute(out)
 	game._automated_run = true
 	game._resume()
-	# Keep NPC dialogue clear of the hand contact during review playback.
-	game._caption_panel.position.y = 67
 	game.police_arrival.mode = "off"
 	p.desk_requested.connect(_contact)
 	p.action_performed.connect(func(kind, _point): events.append(kind))
@@ -73,7 +74,7 @@ func _contact(_origin) -> void:
 
 func _stage(s: String) -> void:
 	stage=s
-	caption.text=s
+	caption.text="QA   /   " + s
 
 func _set_mug() -> void:
 	mug.freeze=true
@@ -83,9 +84,32 @@ func _set_mug() -> void:
 	mug.global_position=p.camera.to_global(Vector3(0,0,-.65))
 	mug.reset_physics_interpolation()
 
+func _record_mug_frame() -> void:
+	# Sample the rendered pose before this director dispatches the frame's input.
+	var wrist: Node3D = p._right
+	var pixel: Vector2 = p.camera.unproject_position(wrist.global_position)
+	var row := {"frame": t, "wrist_px": [pixel.x, pixel.y],
+		"turn_degrees": rad_to_deg(previous_wrist_rotation.angle_to(wrist.quaternion))}
+	if p.held_prop == mug:
+		var target: Vector3 = mug.to_global(Vector3(0.15305, 0.01334, -0.01783))
+		var socket := wrist.to_global(Vector3(-0.003, 0.084, -0.041))
+		row["socket_error_m"] = socket.distance_to(target)
+		if (t >= 216 and t <= 231) or (t >= 261 and t <= 275):
+			_check(socket.distance_to(target) < 0.0001, "held mug socket at frame " + str(t))
+	previous_wrist_rotation = wrist.quaternion
+	mug_trace.append(row)
+
 func _process(_delta: float) -> void:
 	if not active:return
 	t+=1
+	if game._caption_panel.visible and not dialogue_seen:
+		dialogue_seen = true
+		measured["dialogue_frame"] = t
+		measured["dialogue_position"] = [game._caption_panel.position.x, game._caption_panel.position.y]
+	if t == 207:
+		previous_wrist_rotation = p._right.quaternion
+	if t >= 208 and t <= 283:
+		_record_mug_frame()
 	match t:
 		1: _stage("01    GUARD")
 		27: _stage("02    RIGHT PUNCH")
@@ -94,9 +118,12 @@ func _process(_delta: float) -> void:
 		61: p.perform_action("slam")
 		95: _stage("04    REPEAT   /   A")
 		101: p.perform_action("slam")
-		135: _stage("05    OPEN   /   LOOSE   /   CLOSED")
+		135: _stage("05    OPEN   /   GUARD   /   TIGHT")
 		202: _stage("06    MUG   /   PICK UP")
-		204,249: _set_mug()
+		204: _set_mug()
+		249:
+			_stage("08    PICK UP AGAIN")
+			_set_mug()
 		209,254:
 			p._pickup_or_drop()
 			_check(p.held_prop==mug,"mug pickup")
@@ -105,16 +132,16 @@ func _process(_delta: float) -> void:
 			p._pickup_or_drop()
 			_check(p.held_prop==null,"mug release")
 		275:
-			_stage("08    THROW")
+			_stage("09    THROW")
 			p.perform_action("throw")
 			_check(p.held_prop==null,"mug throw")
 	if t>=135 and t<202:
-		var grip := 0.38 * smoothstep(148.0, 159.0, t)
-		grip += 0.62 * smoothstep(174.0, 188.0, t)
+		var grip := 0.55 * smoothstep(148.0, 159.0, t)
+		grip += 0.45 * smoothstep(174.0, 188.0, t)
 		p._left.set_grip(grip)
 		p._right.set_grip(grip)
 	if t in [20,147,169,193]:
-		var label_name: String = {20:"guard",147:"open",169:"loose",193:"fist"}[t]
+		var label_name: String = {20:"guard",147:"open",169:"guard_after_open",193:"fist"}[t]
 		var tips: Array = []
 		for arm in [p._left,p._right]:
 			var sk: Skeleton3D=arm.skeleton
@@ -135,7 +162,9 @@ func _process(_delta: float) -> void:
 			for side in 2:
 				_check(absf(measured["open"][side][1]-tips[side][1])>.05,"index flexion on side "+str(side))
 			_check(absf(tips[0][1]-tips[1][1])<.001,"mirrored fist symmetry")
-	if t==225:
+	if t==230:
+		var carried: Vector3 = p.camera.to_local(mug.global_position)
+		measured["carry_camera_m"] = [carried.x, carried.y, carried.z]
 		var closest:=INF
 		var deepest:=0.0
 		var closest_handle_surface:=INF
@@ -158,9 +187,10 @@ func _process(_delta: float) -> void:
 		_check(closest<.036,"fingers near mug handle")
 	if t==301:
 		active=false
+		_check(dialogue_seen,"native dialogue visible")
 		_check(contacts.size()==2 and contacts[0].variant=="B" and contacts[1].variant=="A","confirmed B then A")
 		_check("swing" in events or "impact" in events,"punch event")
-		var report={"measurements":measured,"contacts":contacts,"events":events,"errors":errors,"fov":p.camera.fov,"near":p.camera.near,"viewport":str(get_viewport().get_visible_rect().size)}
+		var report={"mug_frames":mug_trace,"measurements":measured,"contacts":contacts,"events":events,"errors":errors,"fov":p.camera.fov,"near":p.camera.near,"viewport":str(get_viewport().get_visible_rect().size)}
 		print("RIG_SLICE ",JSON.stringify(report))
 		if not out.is_empty():
 			var file=FileAccess.open(out.path_join("events.json"),FileAccess.WRITE)

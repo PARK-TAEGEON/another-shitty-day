@@ -1,0 +1,24 @@
+{
+  "previous": {
+    "sampled_poses_per_hand": 117,
+    "intersection_samples": {},
+    "tip_clearance_mm": {
+      "Palm and fingers.L@20": 5.566,
+      "Palm and fingers.R@20": 5.566,
+      "Palm and fingers.L@30": 3.779,
+      "Palm and fingers.R@30": 3.779
+    },
+    "max_thumb_rotation_per_frame_deg": 3.331313136769472
+  },
+  "submission": {
+    "sampled_poses_per_hand": 117,
+    "intersection_samples": {},
+    "tip_clearance_mm": {
+      "Palm and fingers.L@20": 1.969,
+      "Palm and fingers.R@20": 1.969,
+      "Palm and fingers.L@30": 0.31,
+      "Palm and fingers.R@30": 0.31
+    },
+    "max_thumb_rotation_per_frame_deg": 8.521609532111892
+  }
+}
