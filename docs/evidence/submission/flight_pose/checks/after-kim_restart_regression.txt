@@ -1,0 +1,34 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+OFFICE_PROP model=desk version=2
+OFFICE_PROP model=monitor version=2
+OFFICE_PROP model=keyboard version=2
+OFFICE_PROP model=mug version=2
+OFFICE_PROP model=paper version=2
+OFFICE_PROP model=binder version=2
+OFFICE_PROP model=partition version=2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_RESTART_REGRESSION_OK: 5 actual reloads, pending/active takeover, ledger, contact audio

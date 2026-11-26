@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+HIT_FLIGHT_OBSTACLE_REGRESSION_OK
