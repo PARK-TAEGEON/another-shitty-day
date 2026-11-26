@@ -216,8 +216,9 @@ func _ready() -> void:
 	# The explicit procedural model wins over both rig flags, including build settings.
 	if _broad:
 		var args := OS.get_cmdline_user_args()
-		var v2 := "--kim-v2" in args or bool(ProjectSettings.get_setting("asd/characters/kim_visual_v2_enabled", false))
-		var rig := use_kim_rig or "--kim-rig" in args or bool(ProjectSettings.get_setting("asd/characters/kim_rig_enabled", false))
+		var explicit_rig := "--kim-rig" in args
+		var v2 := "--kim-v2" in args or (not explicit_rig and bool(ProjectSettings.get_setting("asd/characters/kim_visual_v2_enabled", false)))
+		var rig := use_kim_rig or explicit_rig or bool(ProjectSettings.get_setting("asd/characters/kim_rig_enabled", false))
 		if not "--kim-legacy" in args:
 			if v2 and _attach_kim_visual(true):
 				return

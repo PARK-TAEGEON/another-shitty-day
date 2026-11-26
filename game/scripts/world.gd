@@ -148,8 +148,8 @@ func _furniture_solid(parent: Node3D, size: Vector3, at: Vector3) -> void:
 	shape.size = size
 	collision.shape = shape
 	body.add_child(collision)
-	parent.add_child(body)
 	body.position = at if parent == _furniture else Vector3.ZERO
+	parent.add_child(body)
 	# Only solids intersecting a standing body on that floor block navigation.
 	var half_size: Vector3 = size * 0.5
 	_add_navigation_bounds(at - half_size, at + half_size, _navigation_obstacles)

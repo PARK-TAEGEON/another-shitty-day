@@ -214,12 +214,15 @@ func _test_response() -> void:
 	_check(world.floor_index(guard.global_position) == 1 and guard.player_target == player,
 		"the same live guard did not follow the player to 2F")
 	# Drive the production threshold path while isolating the test from long delays.
-	game.elapsed += game.RESPONSE_DELAYS[3]
+	# Cross each boundary by one simulation tick so floating-point rounding
+	# does not turn an exact fixture delay into a value just below the threshold.
+	var tick := 1.0 / Engine.physics_ticks_per_second
+	game.elapsed += game.RESPONSE_DELAYS[3] + tick
 	world.incident_event.emit("fixture", game.RESPONSE_THRESHOLDS[3] - game.response_heat, player.global_position)
 	var police: CharacterBody3D = world.npcs[-1]
 	_check(game.phase == 3 and police.role == "police" and world.floor_index(police.global_position) == 1,
 		"first police did not dispatch on the active 2F")
-	game.elapsed += game.RESPONSE_DELAYS[4]
+	game.elapsed += game.RESPONSE_DELAYS[4] + tick
 	world.incident_event.emit("fixture", game.RESPONSE_THRESHOLDS[4] - game.response_heat, player.global_position)
 	var backup: CharacterBody3D = world.npcs[-1]
 	_check(game.phase == 4 and backup != police and backup.role == "police" and world.floor_index(backup.global_position) == 1,
