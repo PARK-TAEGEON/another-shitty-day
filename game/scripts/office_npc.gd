@@ -213,15 +213,42 @@ func _ready() -> void:
 		state = "pursue"
 		health = 65.0 if role == "police" else 48.0
 	add_to_group("office_npc")
-	# Explicit rollback wins over the build default and per-instance opt-in.
-	var kim_enabled: bool = use_kim_rig or bool(ProjectSettings.get_setting("asd/characters/kim_rig_enabled", false)) or "--kim-rig" in OS.get_cmdline_user_args()
-	if _broad and kim_enabled and not "--kim-legacy" in OS.get_cmdline_user_args():
-		_rig_adapter = load("res://scripts/characters/kim_visual_adapter.gd").new()
-		_rig_adapter.name = "KimVisualAdapter"
-		_rig_adapter.actor = self
-		add_child(_rig_adapter)
-		_visual.hide()
-		_rig_adapter.update_pose(0.0)
+	# The explicit procedural model wins over both rig flags, including build settings.
+	if _broad:
+		var args := OS.get_cmdline_user_args()
+		var explicit_rig := "--kim-rig" in args
+		var v2 := "--kim-v2" in args or (not explicit_rig and bool(ProjectSettings.get_setting("asd/characters/kim_visual_v2_enabled", false)))
+		var rig := use_kim_rig or explicit_rig or bool(ProjectSettings.get_setting("asd/characters/kim_rig_enabled", false))
+		if not "--kim-legacy" in args:
+			if v2 and _attach_kim_visual(true):
+				return
+			if rig and _attach_kim_visual(false):
+				return
+		print("KIM_VISUAL model=procedural motion=office_npc")
+	elif opening_role == "coworker":
+		var args := OS.get_cmdline_user_args()
+		var park_v2 := "--park-v2" in args or bool(ProjectSettings.get_setting("asd/characters/park_visual_v2_enabled", false))
+		if park_v2 and not "--park-legacy" in args:
+			var adapter := preload("res://scripts/characters/park_visual_adapter.gd").new()
+			if adapter.attach_to(self):
+				return
+			adapter.free()
+		print("PARK_VISUAL model=procedural motion=office_npc")
+
+func _attach_kim_visual(v2: bool) -> bool:
+	_rig_adapter = load("res://scripts/characters/kim_visual_adapter.gd").new()
+	_rig_adapter.name = "KimVisualAdapter"
+	_rig_adapter.actor = self
+	_rig_adapter.visual_v2 = v2
+	add_child(_rig_adapter)
+	if _rig_adapter.simulator == null:
+		remove_child(_rig_adapter)
+		_rig_adapter.queue_free()
+		_rig_adapter = null
+		return false
+	_visual.hide()
+	_rig_adapter.update_pose(0.0)
+	return true
 
 func _is_responder() -> bool:
 	return affiliation == "security" or role in ["guard", "police"]

@@ -30,5 +30,9 @@ common/physics_ticks_per_second=60
 driver/enable_input=false
 
 [asd]
+assets/player_arms_v2_enabled=true
+assets/office_props_v2_enabled=true
+characters/kim_visual_v2_enabled=true
+characters/park_visual_v2_enabled=true
 characters/kim_rig_enabled=true
 characters/kim_heavy_knockdown=true

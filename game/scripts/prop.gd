@@ -9,6 +9,7 @@ signal contact_finished(source: Node3D, target: Node3D)
 
 ## Fictional balance amounts. Each entry is the cumulative damaged/unusable cost,
 ## not two separate invoices. The world ledger adds only the increase.
+const OfficeVisuals = preload("res://scripts/props/office_visuals.gd")
 const DAMAGE_COSTS: Dictionary = {
 	"monitor": [100000, 300000], "mug": [10000, 10000],
 	"printer": [150000, 450000], "keyboard": [20000, 50000],
@@ -112,36 +113,45 @@ func _build() -> void:
 	match kind:
 		"mug":
 			mass = 0.65
-			_parts["body"] = _cylinder(0.095, 0.21, Vector3.ZERO, tint)
-			_parts["coffee"] = _cylinder(0.078, 0.008, Vector3(0, 0.108, 0), Color("473123"))
-			_parts["handle"] = [
-				_box(Vector3(0.09, 0.032, 0.035), Vector3(0.112, 0.06, 0), tint),
-				_box(Vector3(0.035, 0.12, 0.035), Vector3(0.154, 0, 0), tint),
-				_box(Vector3(0.09, 0.032, 0.035), Vector3(0.112, -0.06, 0), tint)
-			]
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				_parts["body"] = _cylinder(0.095, 0.21, Vector3.ZERO, tint)
+				_parts["coffee"] = _cylinder(0.078, 0.008, Vector3(0, 0.108, 0), Color("473123"))
+				_parts["handle"] = [
+					_box(Vector3(0.09, 0.032, 0.035), Vector3(0.112, 0.06, 0), tint),
+					_box(Vector3(0.035, 0.12, 0.035), Vector3(0.154, 0, 0), tint),
+					_box(Vector3(0.09, 0.032, 0.035), Vector3(0.112, -0.06, 0), tint)
+				]
 			_bounds(Vector3(0.24, 0.22, 0.2))
 		"keyboard":
 			mass = 0.9
-			_parts["body"] = _box(Vector3(0.6, 0.045, 0.22), Vector3.ZERO, cream)
-			_parts["keys"] = []
-			for row: int in range(3):
-				for col: int in range(11):
-					_parts["keys"].append(_box(Vector3(0.039, 0.014, 0.04), Vector3(-0.255 + col * 0.05, 0.03, -0.07 + row * 0.05), ink if col == 10 else Color("c2c7be")))
-			_parts["space"] = _box(Vector3(0.24, 0.012, 0.025), Vector3(0, 0.031, 0.095), Color("c2c7be"))
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				_parts["body"] = _box(Vector3(0.6, 0.045, 0.22), Vector3.ZERO, cream)
+				_parts["keys"] = []
+				for row: int in range(3):
+					for col: int in range(11):
+						_parts["keys"].append(_box(Vector3(0.039, 0.014, 0.04), Vector3(-0.255 + col * 0.05, 0.03, -0.07 + row * 0.05), ink if col == 10 else Color("c2c7be")))
+				_parts["space"] = _box(Vector3(0.24, 0.012, 0.025), Vector3(0, 0.031, 0.095), Color("c2c7be"))
 			_bounds(Vector3(0.6, 0.07, 0.23))
 		"monitor":
 			mass = 3.8
-			var head: Node3D = Node3D.new()
-			head.position = Vector3(0, 0.27, 0)
-			_visuals.add_child(head)
-			_parts["head"] = head
-			_box(Vector3(0.72, 0.44, 0.075), Vector3.ZERO, ink, Vector3.ZERO, head)
-			_parts["screen"] = _box(Vector3(0.65, 0.36, 0.008), Vector3(0, 0.01, 0.042), Color("497479"), Vector3.ZERO, head)
-			_parts["rows"] = [_box(Vector3(0.24, 0.018, 0.012), Vector3(-0.15, 0.12, 0.049), Color("cfdecd"), Vector3.ZERO, head)]
-			for n: int in range(4):
-				_parts["rows"].append(_box(Vector3(0.42 - n * 0.055, 0.011, 0.012), Vector3(-0.06, 0.04 - n * 0.04, 0.049), Color("93b5ae"), Vector3.ZERO, head))
-			_parts["stand"] = _box(Vector3(0.065, 0.2, 0.07), Vector3(0, -0.02, 0), ink)
-			_box(Vector3(0.33, 0.028, 0.24), Vector3(0, -0.115, 0.015), ink)
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				var head: Node3D = Node3D.new()
+				head.position = Vector3(0, 0.27, 0)
+				_visuals.add_child(head)
+				_parts["head"] = head
+				_box(Vector3(0.72, 0.44, 0.075), Vector3.ZERO, ink, Vector3.ZERO, head)
+				_parts["screen"] = _box(Vector3(0.65, 0.36, 0.008), Vector3(0, 0.01, 0.042), Color("497479"), Vector3.ZERO, head)
+				_parts["rows"] = [_box(Vector3(0.24, 0.018, 0.012), Vector3(-0.15, 0.12, 0.049), Color("cfdecd"), Vector3.ZERO, head)]
+				for n: int in range(4):
+					_parts["rows"].append(_box(Vector3(0.42 - n * 0.055, 0.011, 0.012), Vector3(-0.06, 0.04 - n * 0.04, 0.049), Color("93b5ae"), Vector3.ZERO, head))
+				_parts["stand"] = _box(Vector3(0.065, 0.2, 0.07), Vector3(0, -0.02, 0), ink)
+				_box(Vector3(0.33, 0.028, 0.24), Vector3(0, -0.115, 0.015), ink)
 			_bounds(Vector3(0.74, 0.62, 0.26), Vector3(0, 0.17, 0))
 		"chair":
 			mass = 5.5
@@ -167,21 +177,27 @@ func _build() -> void:
 			_bounds(Vector3(0.32, 0.6, 0.32), Vector3(0, 0.16, 0))
 		"paper":
 			mass = 0.45
-			_parts["sheets"] = []
-			for n: int in range(4):
-				_parts["sheets"].append(_box(Vector3(0.28, 0.012, 0.35), Vector3(n * 0.012, n * 0.014, 0), cream, Vector3(0, n * 0.07, 0)))
-			_parts["label"] = _box(Vector3(0.15, 0.003, 0.018), Vector3(0.02, 0.064, -0.09), Color("78928e"))
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				_parts["sheets"] = []
+				for n: int in range(4):
+					_parts["sheets"].append(_box(Vector3(0.28, 0.012, 0.35), Vector3(n * 0.012, n * 0.014, 0), cream, Vector3(0, n * 0.07, 0)))
+				_parts["label"] = _box(Vector3(0.15, 0.003, 0.018), Vector3(0.02, 0.064, -0.09), Color("78928e"))
 			_bounds(Vector3(0.34, 0.08, 0.4), Vector3(0.02, 0.02, 0))
 		"binder":
 			mass = 1.1
-			_box(Vector3(0.24, 0.065, 0.32), Vector3.ZERO, tint)
-			_parts["pages"] = _box(Vector3(0.21, 0.043, 0.28), Vector3(0.015, 0, 0.01), cream)
-			var hinge: Node3D = Node3D.new()
-			hinge.position = Vector3(-0.12, 0.036, 0)
-			_visuals.add_child(hinge)
-			_parts["hinge"] = hinge
-			_box(Vector3(0.24, 0.01, 0.32), Vector3(0.12, 0, 0), tint, Vector3.ZERO, hinge)
-			_box(Vector3(0.11, 0.004, 0.055), Vector3(0.12, 0.007, -0.055), cream, Vector3.ZERO, hinge)
+			if OfficeVisuals.enabled():
+				_parts = OfficeVisuals.prop_parts(kind, _visuals, tint)
+			else:
+				_box(Vector3(0.24, 0.065, 0.32), Vector3.ZERO, tint)
+				_parts["pages"] = _box(Vector3(0.21, 0.043, 0.28), Vector3(0.015, 0, 0.01), cream)
+				var hinge: Node3D = Node3D.new()
+				hinge.position = Vector3(-0.12, 0.036, 0)
+				_visuals.add_child(hinge)
+				_parts["hinge"] = hinge
+				_box(Vector3(0.24, 0.01, 0.32), Vector3(0.12, 0, 0), tint, Vector3.ZERO, hinge)
+				_box(Vector3(0.11, 0.004, 0.055), Vector3(0.12, 0.007, -0.055), cream, Vector3.ZERO, hinge)
 			_bounds(Vector3(0.25, 0.08, 0.33))
 		"printer":
 			mass = 7.0

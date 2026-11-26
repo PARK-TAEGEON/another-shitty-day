@@ -8,11 +8,15 @@ var _was_touching: bool = false
 var _previous_speed: float = 0.0
 var scripted: bool = false
 var scripted_position: Vector3 = Vector3.ZERO
+var rotate_with_flight := false
+var scripted_basis := Basis.IDENTITY
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if scripted:
 		var posed: Transform3D = state.transform
 		posed.origin = scripted_position
+		if rotate_with_flight:
+			posed.basis = scripted_basis
 		state.transform = posed
 		state.linear_velocity = Vector3.ZERO
 		state.angular_velocity = Vector3.ZERO

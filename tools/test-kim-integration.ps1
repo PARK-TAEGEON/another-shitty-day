@@ -22,11 +22,17 @@ foreach($mode in @('default','health-only','legacy')) {
     }
 }
 foreach($test in @('kim_rig_regression','kim_restart_regression','hit_flight_obstacle_regression')) {
-    Write-Host ("RUN default {0}" -f $test)
-    $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments @('--headless','--fixed-fps','60','--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--','--report',(Join-Path $EvidencePath 'physics.json'))
+    $mode='default'
+    $flags=@()
+    if($test -eq 'kim_rig_regression') {
+        $mode='rig-31'
+        $flags=@('--kim-rig')
+    }
+    Write-Host ("RUN {0} {1}" -f $mode, $test)
+    $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments (@('--headless','--fixed-fps','60','--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--','--report',(Join-Path $EvidencePath 'physics.json'))+$flags)
     $result | Set-Content -LiteralPath (Join-Path $EvidencePath "$test.txt") -Encoding utf8
     if($result -notmatch ($test.ToUpper()+'_OK')) {throw "Missing marker $test"}
-    $summary+=@{mode='default';test=$test;result='PASS'}
+    $summary+=@{mode=$mode;test=$test;result='PASS'}
 }
 $summary | ConvertTo-Json | Set-Content (Join-Path $EvidencePath 'summary.json') -Encoding utf8
 Write-Host ("KIM_INTEGRATION_MATRIX_OK: 3 modes x {0} regressions, plus rig, reload and flight checks" -f $checks.Count)

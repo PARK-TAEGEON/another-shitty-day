@@ -1,0 +1,422 @@
+{
+  "environment": {
+    "date_kst": "2026-11-24",
+    "os": "Linux x86_64, kernel 6.18.57",
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "physics": "Jolt Physics",
+    "fixed_fps": 60,
+    "display": "headless"
+  },
+  "source_sha256": {
+    "game/assets/rig_slice/boss_kim_game.glb": "ece7fe126680aa258f4ae4df353b16413da53c05bc17de668c7e8f4abb2bb91a",
+    "game/scripts/characters/kim_visual_adapter.gd": "25bc9fc1d67896a420202e75f3e8bac0cf8d94306e1fb7e4c3369f51cd9cec8c",
+    "game/scripts/characters/kim_physical_bone.gd": "fe07698c4be54bd9fdf4210fdc422ad18080891c35e33939ade34254008ca7ff",
+    "game/scripts/office_npc.gd": "a04de05e48c8e64452f4a078d323081be9baa9df06f43c0dc11cf3b58d9b934d",
+    "game/rig_slice/kim_submission_verify.gd": "d80b43edaee17af58e855e0be20602cbe443701213899d1d227c4394e4baa632"
+  },
+  "commands": {
+    "office": "godot --headless --fixed-fps 60 --path game --script res://rig_slice/kim_submission_verify.gd -- --kim-v2",
+    "existing": "godot --headless --fixed-fps 60 --path game --script \"$PWD/tools/tests/<test>.gd\" -- <mode flags>",
+    "rig_report": "Append --report <absolute JSON path> when running kim_rig_regression."
+  },
+  "mode_flags": {
+    "default": [],
+    "legacy": [
+      "--kim-legacy"
+    ],
+    "v2": [
+      "--kim-v2"
+    ],
+    "mixed": [
+      "--kim-v2",
+      "--kim-legacy"
+    ],
+    "health-only": [
+      "--kim-v2",
+      "--kim-health-only"
+    ]
+  },
+  "existing_regressions": {
+    "executions": 67,
+    "passed": 66,
+    "tests": {
+      "boss_approach_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "boss_lecture_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "ceo_hold_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "floor_transition_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "hand_motion_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "hit_feel_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS",
+        "health-only": "PASS",
+        "mixed": "PASS"
+      },
+      "hit_flight_obstacle_regression": {
+        "default": "PASS",
+        "v2": "PASS"
+      },
+      "kim_demo_integration": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS",
+        "health-only": "PASS",
+        "mixed": "PASS"
+      },
+      "kim_restart_regression": {
+        "default": "PASS",
+        "v2": "PASS"
+      },
+      "kim_rig_regression": {
+        "default": "PASS",
+        "v2": "FAIL"
+      },
+      "minimal_hud_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "npc_office_behavior_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "office_layout_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "opening_reaction_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "police_arrival_damage_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "police_arrival_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "police_hold_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "property_damage_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "social_damage_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "star_pill_alignment_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "ui_stars_result_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      },
+      "wall_throw_regression": {
+        "default": "PASS",
+        "legacy": "PASS",
+        "v2": "PASS"
+      }
+    },
+    "failures": [
+      {
+        "mode": "v2",
+        "test": "kim_rig_regression",
+        "exit_code": 1,
+        "errors": [
+          "ERROR: KIM_CHECK: 31-bone rig missing",
+          "ERROR: Animation not found: \"QA_Arms_Raised\".",
+          "ERROR: Animation not found: QA_Arms_Raised.",
+          "ERROR: Animation not found: \"QA_Knees_90\".",
+          "ERROR: Animation not found: QA_Knees_90.",
+          "ERROR: Animation not found: \"QA_Head_Turn\".",
+          "ERROR: Animation not found: QA_Head_Turn.",
+          "ERROR: Animation not found: \"QA_Torso_Bend\".",
+          "ERROR: Animation not found: QA_Torso_Bend."
+        ]
+      }
+    ],
+    "exit_warnings": {
+      "WARNING: 12 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
+        "minimal_hud_regression"
+      ],
+      "WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
+        "ui_stars_result_regression"
+      ],
+      "WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
+        "hit_feel_regression",
+        "kim_demo_integration"
+      ],
+      "WARNING: 5 ObjectDB instances were leaked at exit (run with `--verbose` for details).": [
+        "police_arrival_regression"
+      ]
+    }
+  },
+  "legacy_rig_test_physics_trials": {
+    "default": {
+      "falls": 30,
+      "max_speed_mps": 6.44346284866333,
+      "max_bone_distance_from_pelvis_m": 0.949575364589691,
+      "final_pelvis_y_range_m": [
+        0.188342303037643,
+        0.201159909367561
+      ],
+      "chair_and_table": {
+        "chair_contact": true,
+        "chair_travel": 0.1074103936553,
+        "table_contact": true
+      },
+      "assertion_failures": []
+    },
+    "v2": {
+      "falls": 30,
+      "max_speed_mps": 6.03920125961304,
+      "max_bone_distance_from_pelvis_m": 0.970981776714325,
+      "final_pelvis_y_range_m": [
+        0.339319437742233,
+        0.36805123090744
+      ],
+      "chair_and_table": {
+        "chair_contact": true,
+        "chair_travel": 0.253504395484924,
+        "table_contact": true
+      },
+      "assertion_failures": [
+        "31-bone rig missing"
+      ]
+    }
+  },
+  "office_v2": {
+    "approach_displacement_m": 2.94863629341125,
+    "binding_frames": 316,
+    "chair_contact_bones": [
+      "Pelvis",
+      "Chest",
+      "Foot.L"
+    ],
+    "chair_travel_m": 0.0588902458548546,
+    "contacted_chair": "내 의자",
+    "contacts": [
+      "punch",
+      "kick"
+    ],
+    "dialogue": [
+      "왜 그래?",
+      "뭐야 무슨 소리야?",
+      "이게 무슨 짓이지?",
+      "지금 뭐 하는 거야? 여기가 집이야?",
+      "기분 나쁘다고 책상을 치면, 일이 해결돼?",
+      "내가 말하고 있잖아. 대답 안 해?"
+    ],
+    "failures": [],
+    "knockdown_hp": -8.0,
+    "lecture_forearm_angle_rad": 0.817826747894287,
+    "lecture_head_angle_rad": 0.125546008348465,
+    "max_body_to_posed_bone_error_m": 1.47365255998011e-06,
+    "max_body_to_posed_bone_error_rad": 0.0009765625,
+    "mesh_samples": {
+      "lecture": {
+        "largest_edge_growth_m": 0.0283486098051071,
+        "material": "Cloth",
+        "rest_midpoint_m": [
+          0.404926240444183,
+          0.970595955848694,
+          -0.150266617536545
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 0
+      },
+      "peek": {
+        "largest_edge_growth_m": 0.0304697006940842,
+        "material": "Cloth",
+        "rest_midpoint_m": [
+          0.404926240444183,
+          0.970595955848694,
+          -0.150266617536545
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 0
+      },
+      "punch": {
+        "largest_edge_growth_m": 0.031304158270359,
+        "material": "Skin and hair",
+        "rest_midpoint_m": [
+          -0.0840961933135986,
+          1.61431574821472,
+          0.114256963133812
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 0
+      },
+      "seated": {
+        "largest_edge_growth_m": 0.0802650302648544,
+        "material": "Cloth",
+        "rest_midpoint_m": [
+          -0.347508072853088,
+          0.959765791893005,
+          -0.205829322338104
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 12
+      },
+      "settled": {
+        "largest_edge_growth_m": 0.088288426399231,
+        "material": "Cloth",
+        "rest_midpoint_m": [
+          -0.435141742229462,
+          1.21713137626648,
+          -0.101584434509277
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 0
+      },
+      "walk": {
+        "largest_edge_growth_m": 0.0618981011211872,
+        "material": "Skin and hair",
+        "rest_midpoint_m": [
+          0.0985488370060921,
+          1.60931694507599,
+          0.106842957437038
+        ],
+        "triangle_edge_occurrences_doubled_and_grew_over_1cm": 2
+      }
+    },
+    "model": "res://assets/rig_slice/boss_kim_game.glb",
+    "opening_clip_frames": {
+      "Idle": 367,
+      "Idle_Talking": 531,
+      "Walk": 164
+    },
+    "peek_top_m": 2.2002124786377,
+    "resting_pelvis_y_m": 0.319705128669739,
+    "seated_min_y_m": -0.0105047198012471,
+    "seated_top_m": 1.51863765716553,
+    "settled_skin_height_m": 0.728284895420074,
+    "settled_skin_min_y_m": -0.0181778073310852,
+    "walk_leg_angle_rad": 0.945065975189209,
+    "walking_min_y_m": -0.0105049461126328,
+    "geometry_method": "CPU linear blend skinning of every indexed surface using Godot imported bind names/poses and vertex weights. Ragdoll samples are taken inside modification_processed before the engine restores its pre-modifier pose. Interior shared triangle edges can count twice. Edge test requires rest length >1mm, more than 2x length and >10mm growth.",
+    "furniture_fixture": "First office run used the original NPC spawn, natural approach, player slam, and raycast punch/kick. In a separate reloaded office, player and Kim were lined up beside the existing player chair; the chair was not relocated. Contact IDs recorded on actual PhysicalBone3D objects.",
+    "limits": "Six sampled poses do not bound all possible ragdolls, nor detect every possible gap between separate garment pieces. Floor collision top is -0.02 m. No Windows PC/GPU benchmark in this run.",
+    "finger_garment_intersection": {
+      "method": "BVH of final GLB triangle meshes driven by sampled Godot skin transforms. Includes weighted fingers and the torso/trousers. Sleeves excluded. Signed distances only describe the local projected distance to the nearest garment face at vertices of intersecting finger triangles.",
+      "triangle_pairs": {
+        "seated": 0,
+        "peek": 0,
+        "walk": 0,
+        "lecture": 0,
+        "punch": 0,
+        "settled": 185
+      },
+      "settled_region": "Right thumb against shirt/torso",
+      "settled_intersecting_finger_vertices": 134,
+      "settled_signed_vertex_distance_mm_min_q25_q50_q75_max": [
+        -6.7,
+        -1.6,
+        0.2,
+        2.0,
+        9.7
+      ]
+    }
+  },
+  "selection": [
+    {
+      "actual": "res://assets/characters/boss_kim/boss_kim.glb",
+      "args": [],
+      "procedural_visible": false,
+      "pass": true
+    },
+    {
+      "actual": "res://assets/rig_slice/boss_kim_game.glb",
+      "args": [
+        "--kim-v2"
+      ],
+      "procedural_visible": false,
+      "pass": true
+    },
+    {
+      "actual": "procedural",
+      "args": [
+        "--kim-legacy"
+      ],
+      "procedural_visible": true,
+      "pass": true
+    },
+    {
+      "actual": "procedural",
+      "args": [
+        "--kim-v2",
+        "--kim-legacy"
+      ],
+      "procedural_visible": true,
+      "pass": true
+    },
+    {
+      "actual": "res://assets/rig_slice/boss_kim_game.glb",
+      "args": [
+        "--set-rig=false",
+        "--set-v2=true"
+      ],
+      "procedural_visible": false,
+      "pass": true
+    },
+    {
+      "actual": "procedural",
+      "args": [
+        "--set-rig=false",
+        "--set-v2=false"
+      ],
+      "procedural_visible": true,
+      "pass": true
+    },
+    {
+      "actual": "procedural",
+      "args": [
+        "--set-rig=false",
+        "--set-v2=true",
+        "--kim-legacy"
+      ],
+      "procedural_visible": true,
+      "pass": true
+    },
+    {
+      "actual": "res://assets/rig_slice/boss_kim_game.glb",
+      "args": [
+        "--set-rig=false",
+        "--kim-v2"
+      ],
+      "procedural_visible": false,
+      "pass": true
+    }
+  ],
+  "selection_note": "--set-rig and --set-v2 are fixture-only annotations for session-scoped ProjectSettings.set_setting() before the packed main scene is instantiated. They are not game CLI options. Each actual value comes from the ancestor scene_file_path of the office skeleton, or from visible procedural geometry."
+}

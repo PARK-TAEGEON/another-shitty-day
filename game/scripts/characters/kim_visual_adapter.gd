@@ -1,6 +1,25 @@
 extends Node3D
 ## Visual and physical ownership only. World/NPC retain dialogue and accounting.
-const MODEL = preload("res://assets/characters/boss_kim/boss_kim.glb")
+const RIG_MODEL_PATH := "res://assets/characters/boss_kim/boss_kim.glb"
+const V2_MODEL_PATH := "res://assets/rig_slice/boss_kim_game.glb"
+const GAME_CLIPS := ["Idle", "Walk", "Idle_Talking", "Hit_Head", "Hit_Chest"]
+const V2_DIGITS := ["Index", "Middle", "Ring", "Little"]
+# Length along each metre-scale rest bone's local +Y and capsule radius.
+const V2_BODY_SIZE := {
+	"Pelvis": Vector2(.253, .20), "Chest": Vector2(.338, .20), "Head": Vector2(.550, .309),
+	"UpperArm": Vector2(.332, .165), "Forearm": Vector2(.340, .120), "Hand": Vector2(.161, .067),
+	"UpperLeg": Vector2(.351, .138), "LowerLeg": Vector2(.276, .110), "Foot": Vector2(.238, .090),
+}
+const V2_BOX_SIZE := {
+	"Pelvis": Vector3(.77, .52, .70), "Chest": Vector3(.82, .44, .64), "Foot": Vector3(.279, .175, .44),
+}
+# Offsets from the bone midpoint in the model's rest axes. The coat belly is
+# between the pelvis and chest joints. The shoes extend behind the ankle too.
+const V2_CENTER_SHIFT := {
+	"Pelvis": Vector3(0, .115, .058), "Chest": Vector3(0, -.045, .040),
+	"Head": Vector3(0, -.004, .042), "Foot": Vector3(0, -.004, -.022),
+}
+var visual_v2: bool = false
 const PHYSICAL_BONE = preload("res://scripts/characters/kim_physical_bone.gd")
 const MEDIUM_IMPULSE: float = 8.5
 const HEAVY_IMPULSE: float = 11.5
@@ -40,15 +59,42 @@ var _flight_peak: float = 1.45
 var _flight_origin: Vector3 = Vector3.ZERO
 var _flight_dir: Vector3 = Vector3.FORWARD
 var _flight_offsets: Array[Vector3] = []
+var _flight_bases: Array[Basis] = []
+var _sole_points: Dictionary = {}
 var _clamp_flight_to_room: bool = false
 var _joints_relaxed: bool = false
 var _joint_rest: Dictionary = {}
 
 func _ready() -> void:
-	var model: Node3D = MODEL.instantiate()
+	var path := V2_MODEL_PATH if visual_v2 else RIG_MODEL_PATH
+	var scene := load(path) as PackedScene
+	if scene == null:
+		push_error("KIM_VISUAL failed to load %s" % path)
+		return
+	var model := scene.instantiate() as Node3D
 	add_child(model)
 	skeleton = model.find_child("Skeleton3D", true, false) as Skeleton3D
 	animation = model.find_child("AnimationPlayer", true, false) as AnimationPlayer
+	if skeleton == null or animation == null:
+		push_error("KIM_VISUAL missing skeleton or player in %s" % path)
+		model.hide()
+		return
+	for required: String in GAME_CLIPS:
+		if not animation.has_animation(required):
+			push_error("KIM_VISUAL missing %s in %s" % [required, path])
+			model.hide()
+			return
+	if visual_v2:
+		# Heel/toe and both sole edges, cached in the shoe bone's local frame.
+		for side: String in ["L", "R"]:
+			var foot_id := skeleton.find_bone("Foot." + side)
+			var inverse := skeleton.get_bone_global_rest(foot_id).affine_inverse()
+			var points := PackedVector3Array()
+			var sign_x := 1.0 if side == "L" else -1.0
+			for x: float in [.112, .394]:
+				for z: float in [-.146, .285]:
+					points.append(inverse * Vector3(x * sign_x, .0095, z))
+			_sole_points[foot_id] = points
 	animation.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	# Imported legacy auto-simulator is empty. Use one explicit simulator.
 	skeleton.animate_physical_bones = false
@@ -61,12 +107,18 @@ func _ready() -> void:
 	_build_physics()
 	for name: String in ["Idle", "Walk", "Idle_Talking"]:
 		animation.get_animation(name).loop_mode = Animation.LOOP_LINEAR
-	animation.play("Idle")
+	print("KIM_VISUAL model=%s bones=%d physical=%d clips=%s" % [
+		model.scene_file_path, skeleton.get_bone_count(), bodies.size(), animation.get_animation_list()])
+	_play_motion("Idle")
 	animation.advance(0.0)
 	_impact_audio = AudioStreamPlayer3D.new()
 	_impact_audio.max_distance = 16.0
 	_impact_audio.max_polyphony = 1
 	add_child(_impact_audio)
+
+func _play_motion(motion: String, blend: float = -1.0) -> void:
+	animation.play(motion, blend)
+	print("KIM_MOTION model=%s playing=%s" % [skeleton.owner.scene_file_path, animation.current_animation])
 
 func _physics_process(delta: float) -> void:
 	_contact_cooldown = maxf(_contact_cooldown - delta, 0.0)
@@ -120,9 +172,22 @@ func notify_impact(speed: float) -> void:
 	players[0].add_shake(feel.shake_impact)
 
 func _body(bone_name: String, length: float, radius: float, mass_value: float, swing: float, twist: float, box: Vector3 = Vector3.ZERO) -> void:
+	var center := Vector3.UP * length * .5
+	var orientation := Basis.IDENTITY
+	if visual_v2:
+		var part := bone_name.get_slice(".", 0)
+		var size: Vector2 = V2_BODY_SIZE[part]
+		length = size.x
+		radius = size.y
+		box = V2_BOX_SIZE.get(part, box)
+		var inverse_rest := skeleton.get_bone_global_rest(skeleton.find_bone(bone_name)).basis.inverse().orthonormalized()
+		center = Vector3.UP * length * .5 + inverse_rest * Vector3(V2_CENTER_SHIFT.get(part, Vector3.ZERO))
+		if box != Vector3.ZERO:
+			orientation = inverse_rest
 	var body: PhysicalBone3D = PHYSICAL_BONE.new()
 	body.name = "Physical_" + bone_name.replace(".", "_")
 	body.actor = actor
+	body.rotate_with_flight = visual_v2
 	simulator.add_child(body)
 	body.bone_name = bone_name
 	body.mass = mass_value
@@ -132,8 +197,8 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 	body.angular_damp = 1.8
 	body.collision_layer = 0
 	body.collision_mask = 0
-	body.body_offset = Transform3D(Basis.IDENTITY, Vector3(0, length * .5, 0))
-	body.joint_offset = Transform3D(Basis.IDENTITY, Vector3(0, -length * .5, 0))
+	body.body_offset = Transform3D(orientation, center)
+	body.joint_offset = body.body_offset.affine_inverse()
 	if bone_name != "Pelvis":
 		body.joint_type = PhysicalBone3D.JOINT_TYPE_CONE
 		body.set("joint_constraints/swing_span", swing)
@@ -146,12 +211,26 @@ func _body(bone_name: String, length: float, radius: float, mass_value: float, s
 	else:
 		var capsule := CapsuleShape3D.new()
 		capsule.radius = radius
-		capsule.height = maxf(length, radius * 2.0)
+		var sleeve := visual_v2 and (bone_name.begins_with("UpperArm") or bone_name.begins_with("Forearm"))
+		capsule.height = maxf(length + (radius * .7 if sleeve else 0.0), radius * 2.0)
 		shape.shape = capsule
 	body.add_child(shape)
+	if visual_v2 and bone_name.begins_with("Hand."):
+		# Keep curled fingertips and the outlying thumb on the existing wrist body.
+		var side := 1.0 if bone_name.ends_with(".L") else -1.0
+		_add_hand_pad(body, Vector3(side * .020, .090, -.100) - center, .034)
+		_add_hand_pad(body, Vector3(0, .159, 0) - center, .056)
 	# Every limb can report the landing thud. Bounce stays on the torso only.
 	PhysicsServer3D.body_set_max_contacts_reported(body.get_rid(), 4)
 	bodies.append(body)
+
+func _add_hand_pad(body: PhysicalBone3D, local_center: Vector3, radius: float) -> void:
+	var sphere := SphereShape3D.new()
+	sphere.radius = radius
+	var pad := CollisionShape3D.new()
+	pad.position = local_center
+	pad.shape = sphere
+	body.add_child(pad)
 
 func _build_physics() -> void:
 	_body("Pelvis", .16, .20, 14, 0, 0, Vector3(.54,.24,.39))
@@ -188,7 +267,7 @@ func react_to_hit(impulse: Vector3, point: Vector3) -> void:
 	reaction_time = reaction_duration
 	reaction_direction = actor.global_basis.inverse() * impulse.normalized()
 	clip = "Hit_Head" if actor.to_local(point).y > 1.65 else "Hit_Chest"
-	animation.play(clip)
+	_play_motion(clip)
 	animation.advance(0.0)
 
 func _apply_world_rotation(name_value: String, rotation_value: Basis, neutral: Basis) -> void:
@@ -212,23 +291,32 @@ func update_pose(delta: float) -> void:
 	# cancelled seated/head/finger overrides cannot leak into a different clip.
 	skeleton.reset_bone_poses()
 	reaction_time = maxf(reaction_time - delta, 0.0)
-	var requested: String = "Walk" if actor._walk_blend > .05 else ("Idle_Talking" if actor._talk_time > 0.0 else "Idle")
+	var talking: bool = actor._talk_time > 0.0 or (visual_v2 and actor.boss_lecture_gesture != "")
+	var requested: String = "Walk" if actor._walk_blend > .05 else ("Idle_Talking" if talking else "Idle")
 	if reaction_time <= 0.0 and clip != requested:
 		clip = requested
-		animation.play(clip, .15)
+		_play_motion(clip, .15)
 	animation.advance(delta)
 	animation_time += delta
 	# Reuse the accepted control rig's actual post-collision gait, peek height,
 	# head tracking and three lecture gestures. UAL supplies idle/talking motion.
 	var authored: bool = actor.opening_role == "boss" and not actor.opening_cancelled
-	if authored or actor._walk_blend > .05:
+	var seated: float = clampf(-actor._pose_height / .58, 0.0, 1.0) if visual_v2 else 0.0
+	if authored or actor._walk_blend > .05 or seated > .001:
 		var torso: Basis = actor._upper_body.basis
+		if visual_v2:
+			# Authored leg controls replace the baked gait and its sole-height correction.
+			var root_index := skeleton.find_bone("Root")
+			skeleton.set_bone_pose_position(root_index, skeleton.get_bone_rest(root_index).origin)
+			# Sit back and bend at the spine as the existing control descends behind the divider.
+			position += Vector3(0, .18, -.25) * seated
+			torso = torso * Basis(Vector3.RIGHT, .54 * seated)
 		_apply_world_rotation("Spine", torso, skeleton.get_bone_global_rest(skeleton.find_bone("Spine")).basis)
 		_apply_world_rotation("Chest", torso, skeleton.get_bone_global_rest(skeleton.find_bone("Chest")).basis)
-		_apply_world_rotation("Head", torso * actor._head.basis, skeleton.get_bone_global_rest(skeleton.find_bone("Head")).basis)
+		_apply_world_rotation("Head", torso * Basis(Vector3.RIGHT, .16 * seated) * actor._head.basis, skeleton.get_bone_global_rest(skeleton.find_bone("Head")).basis)
 		# Bone translation is local to the parent, unlike control-node coordinates.
 		var head_index: int = skeleton.find_bone("Head")
-		skeleton.set_bone_pose_position(head_index, skeleton.get_bone_rest(head_index).origin + Vector3(0, actor._head_drop, 0))
+		skeleton.set_bone_pose_position(head_index, skeleton.get_bone_rest(head_index).origin + Vector3(0, actor._head_drop * (.48 if visual_v2 else 1.0), 0))
 		for side: String in ["L", "R"]:
 			# Legacy names are screen-space; new rig uses anatomical left/right.
 			var arm: Node3D = actor._right_arm if side == "L" else actor._left_arm
@@ -236,23 +324,49 @@ func update_pose(delta: float) -> void:
 			var leg: Node3D = actor._right_leg if side == "L" else actor._left_leg
 			var knee: Node3D = actor._right_knee if side == "L" else actor._left_knee
 			var ankle: Node3D = actor._right_ankle if side == "L" else actor._left_ankle
-			_apply_world_rotation("UpperArm."+side, torso * arm.basis, _neutral_limb("UpperArm."+side))
-			_apply_world_rotation("Forearm."+side, torso * arm.basis * elbow.basis, _neutral_limb("Forearm."+side))
+			var shoulder := torso * arm.basis
+			if visual_v2:
+				# Let the walking thumb swing past the wider suit at the waist.
+				var clearance: float = .035 * actor._walk_blend * (1.0 if side == "L" else -1.0)
+				shoulder = torso * Basis(Vector3.BACK, clearance) * arm.basis
+			_apply_world_rotation("UpperArm."+side, shoulder, _neutral_limb("UpperArm."+side))
+			_apply_world_rotation("Forearm."+side, shoulder * elbow.basis, _neutral_limb("Forearm."+side))
 			var hand_index: int = 1 if side == "L" else 0
 			var wrist: Basis = actor._lecture_wrists[hand_index].basis if actor._lecture_blend > .01 else Basis.IDENTITY
-			_apply_world_rotation("Hand."+side, torso * arm.basis * elbow.basis * wrist, _neutral_limb("Hand."+side))
-			for finger in range(4):
-				var finger_bone: int = skeleton.find_bone("Finger%d.%s" % [finger,side])
-				var curl: float = actor._lecture_fingers[hand_index*4+finger].rotation.x if actor._lecture_blend > .01 else .30
-				skeleton.set_bone_pose_rotation(finger_bone,skeleton.get_bone_rest(finger_bone).basis.get_rotation_quaternion()*Quaternion(Vector3.RIGHT,curl))
-			_apply_world_rotation("UpperLeg."+side, leg.basis, skeleton.get_bone_global_rest(skeleton.find_bone("UpperLeg."+side)).basis)
-			_apply_world_rotation("LowerLeg."+side, leg.basis * knee.basis, skeleton.get_bone_global_rest(skeleton.find_bone("LowerLeg."+side)).basis)
-			_apply_world_rotation("Foot."+side, leg.basis * knee.basis * ankle.basis, skeleton.get_bone_global_rest(skeleton.find_bone("Foot."+side)).basis)
-	var jaw: int = skeleton.find_bone("Jaw")
-	skeleton.set_bone_pose_rotation(jaw, skeleton.get_bone_rest(jaw).basis.get_rotation_quaternion() * Quaternion(Vector3.RIGHT, actor._mouth_open * .19))
-	for side: String in ["L","R"]:
-		var brow: int = skeleton.find_bone("Brow."+side)
-		skeleton.set_bone_pose_position(brow,skeleton.get_bone_rest(brow).origin+Vector3(0,(actor._eye_open-.48)*.045,0))
+			_apply_world_rotation("Hand."+side, shoulder * elbow.basis * wrist, _neutral_limb("Hand."+side))
+			_pose_fingers(side, hand_index)
+			var thigh: Basis = leg.basis
+			var shin: Basis = thigh * knee.basis
+			var foot: Basis = shin * ankle.basis
+			if seated > .001:
+				# Keep the shin upright and choose a hip angle that places the sole on the floor.
+				var hip_idx := skeleton.find_bone("UpperLeg."+side)
+				var knee_idx := skeleton.find_bone("LowerLeg."+side)
+				var hip_height := skeleton.get_bone_global_pose(hip_idx).origin.y + position.y
+				var rest_knee := skeleton.get_bone_global_rest(knee_idx).origin
+				var upper := rest_knee - skeleton.get_bone_global_rest(hip_idx).origin
+				var bend := acos(clampf((hip_height - rest_knee.y) / Vector2(upper.y, upper.z).length(), -1.0, 1.0))
+				thigh = Basis(Vector3.RIGHT, atan2(upper.z, -upper.y) - bend)
+				shin = Basis.IDENTITY
+				foot = Basis.IDENTITY
+			_apply_world_rotation("UpperLeg."+side, thigh, skeleton.get_bone_global_rest(skeleton.find_bone("UpperLeg."+side)).basis)
+			_apply_world_rotation("LowerLeg."+side, shin, skeleton.get_bone_global_rest(skeleton.find_bone("LowerLeg."+side)).basis)
+			_apply_world_rotation("Foot."+side, foot, skeleton.get_bone_global_rest(skeleton.find_bone("Foot."+side)).basis)
+	if visual_v2 and actor._walk_blend > .05:
+		# The control gait targets the older shoes. Preserve its stride while keeping
+		# these longer soles above the standing floor in the NPC's local space.
+		var lowest := INF
+		for foot_id: int in _sole_points:
+			var foot_pose := transform * skeleton.get_bone_global_pose(foot_id)
+			for point: Vector3 in _sole_points[foot_id]:
+				lowest = minf(lowest, (foot_pose * point).y)
+		position.y += maxf(.0095 - lowest, 0.0)
+	if not visual_v2:
+		var jaw: int = skeleton.find_bone("Jaw")
+		skeleton.set_bone_pose_rotation(jaw, skeleton.get_bone_rest(jaw).basis.get_rotation_quaternion() * Quaternion(Vector3.RIGHT, actor._mouth_open * .19))
+		for side: String in ["L","R"]:
+			var brow: int = skeleton.find_bone("Brow."+side)
+			skeleton.set_bone_pose_position(brow,skeleton.get_bone_rest(brow).origin+Vector3(0,(actor._eye_open-.48)*.045,0))
 	if reaction_time > 0.0:
 		var pulse: float = sin((1.0 - reaction_time / reaction_duration) * PI) * (.34 if reaction == "Medium" else .14)
 		for name_value: String in ["Chest", "Head"]:
@@ -261,6 +375,22 @@ func update_pose(delta: float) -> void:
 			skeleton.set_bone_pose_rotation(index, skeleton.get_bone_pose_rotation(index) * turn)
 		if reaction == "Medium":
 			position += reaction_direction * sin((1.0-reaction_time/reaction_duration)*PI) * .06
+
+func _pose_fingers(side: String, hand_index: int) -> void:
+	for finger in range(4):
+		var curl: float = actor._lecture_fingers[hand_index * 4 + finger].rotation.x if actor._lecture_blend > .01 else .30
+		if visual_v2:
+			# Three joints share the curl along the same anatomical axis as Joint_review.
+			var axis := Vector3.FORWARD if side == "L" else Vector3.BACK
+			for joint in range(1, 4):
+				var index := skeleton.find_bone("%s%d.%s" % [V2_DIGITS[finger], joint, side])
+				var rest := skeleton.get_bone_rest(index).basis.get_rotation_quaternion()
+				var local_axis := skeleton.get_bone_global_rest(index).basis.inverse() * axis
+				skeleton.set_bone_pose_rotation(index, rest * Quaternion(local_axis.normalized(), curl * 0.50))
+		else:
+			var index := skeleton.find_bone("Finger%d.%s" % [finger, side])
+			var rest := skeleton.get_bone_rest(index).basis.get_rotation_quaternion()
+			skeleton.set_bone_pose_rotation(index, rest * Quaternion(Vector3.RIGHT, curl))
 
 func start_ragdoll(impulse: Vector3, point: Vector3) -> void:
 	if ragdoll_active:
@@ -326,8 +456,11 @@ func _begin_scripted_flight(impulse: Vector3) -> void:
 	_flight_distance = _clear_flight(_flight_origin, _flight_dir, feel.flight_distance)
 	_flight_elapsed = 0.0
 	_flight_offsets.clear()
+	_flight_bases.clear()
 	for body: PhysicalBone3D in bodies:
 		_flight_offsets.append(body.global_position - _flight_origin)
+		if visual_v2:
+			_flight_bases.append(body.global_basis.orthonormalized())
 		body.collision_layer = 0
 		body.collision_mask = 0
 		body.set("scripted", true)
@@ -370,6 +503,8 @@ func _place_flight_pose(pelvis_target: Vector3, u: float) -> void:
 		var body: PhysicalBone3D = bodies[index]
 		body.set("scripted", true)
 		body.set("scripted_position", pelvis_target + pitched * _flight_offsets[index])
+		if visual_v2:
+			body.set("scripted_basis", pitched * _flight_bases[index])
 		body.linear_velocity = Vector3.ZERO
 
 func _flight_pose_points(pelvis_target: Vector3, u: float) -> Array[Vector3]:

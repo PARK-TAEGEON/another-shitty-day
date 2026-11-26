@@ -1,0 +1,50 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ASD player arms loaded: legacy
+{
+  "checks": [
+    "B28f and A20f",
+    "contact11f and9f",
+    "success-confirmed switch",
+    "event/contact pose alignment",
+    "desktop height",
+    "left/right placement",
+    "pause cancellation",
+    "normal punch"
+  ],
+  "contacts": [
+    {
+      "elapsed": 0.366666666666667,
+      "left_error": 0.0,
+      "left_x": -0.245000004768372,
+      "min_world_y": 1.06199991703033,
+      "right_error": 0.0,
+      "right_x": 0.245000004768372,
+      "variant": "B"
+    },
+    {
+      "elapsed": 0.933333333333333,
+      "left_error": 0.0,
+      "left_x": -0.245000004768372,
+      "min_world_y": 1.06199991703033,
+      "right_error": 0.0,
+      "right_x": 0.245000004768372,
+      "variant": "B"
+    },
+    {
+      "elapsed": 0.3,
+      "left_error": 0.0,
+      "left_x": -0.245000004768372,
+      "min_world_y": 1.06199991703033,
+      "right_error": 0.0,
+      "right_x": 0.245000004768372,
+      "variant": "A"
+    }
+  ],
+  "failures": [],
+  "status": "pass",
+  "swings": [
+    "swing"
+  ]
+}
+HAND_MOTION_REGRESSION_OK

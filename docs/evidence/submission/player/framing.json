@@ -1,0 +1,71 @@
+{
+  "legacy": {
+    "arms": {
+      "pixels": 14433,
+      "percent": 1.566,
+      "bbox": [
+        321,
+        638,
+        958,
+        719
+      ]
+    },
+    "mug": {
+      "pixels": 8845,
+      "percent": 0.96,
+      "bbox": [
+        653,
+        367,
+        761,
+        468
+      ]
+    },
+    "background_and_hud_changed_pixels": 0
+  },
+  "previous_rig": {
+    "arms": {
+      "pixels": 136655,
+      "percent": 14.828,
+      "bbox": [
+        0,
+        472,
+        1279,
+        719
+      ]
+    },
+    "mug": {
+      "pixels": 37787,
+      "percent": 4.1,
+      "bbox": [
+        690,
+        366,
+        914,
+        587
+      ]
+    },
+    "background_and_hud_changed_pixels": 0
+  },
+  "submission": {
+    "arms": {
+      "pixels": 31771,
+      "percent": 3.447,
+      "bbox": [
+        142,
+        597,
+        1137,
+        719
+      ]
+    },
+    "mug": {
+      "pixels": 8845,
+      "percent": 0.96,
+      "bbox": [
+        653,
+        367,
+        761,
+        468
+      ]
+    },
+    "background_and_hud_changed_pixels": 0
+  }
+}
