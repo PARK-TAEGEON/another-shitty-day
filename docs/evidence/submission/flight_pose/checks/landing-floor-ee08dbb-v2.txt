@@ -1,0 +1,121 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+OFFICE_PROP model=desk version=2
+OFFICE_PROP model=monitor version=2
+OFFICE_PROP model=keyboard version=2
+OFFICE_PROP model=mug version=2
+OFFICE_PROP model=paper version=2
+OFFICE_PROP model=binder version=2
+OFFICE_PROP model=partition version=2
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":66,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@2/OfficeSet/@MeshInstance3D@5/@StaticBody3D@7","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.1,"ok":true,"post":{"collider_cm":2.37,"collider_step":67,"shoe_cm":0.1,"shoe_step":78},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.11,"reached":true,"s_after_handoff":4.38,"shoe_cm":-5.47,"step":312},"steps":312}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@1704/OfficeSet/@MeshInstance3D@1707/@StaticBody3D@1709","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.08,"ok":true,"post":{"collider_cm":2.37,"collider_step":314,"shoe_cm":0.02,"shoe_step":83},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.05,"reached":true,"s_after_handoff":14.6,"shoe_cm":-6.21,"step":925},"steps":925}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@3406/OfficeSet/@MeshInstance3D@3409/@StaticBody3D@3411","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.06,"ok":true,"post":{"collider_cm":2.4,"collider_step":127,"shoe_cm":0.37,"shoe_step":74},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.17,"reached":true,"s_after_handoff":4.12,"shoe_cm":-7.13,"step":296},"steps":296}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@5108/OfficeSet/@MeshInstance3D@5111/@StaticBody3D@5113","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.04,"ok":true,"post":{"collider_cm":2.42,"collider_step":85,"shoe_cm":0.38,"shoe_step":74},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.21,"reached":true,"s_after_handoff":5.5,"shoe_cm":-7.01,"step":379},"steps":379}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":66,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@6810/OfficeSet/@MeshInstance3D@6813/@StaticBody3D@6815","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":-0.02,"ok":true,"post":{"collider_cm":2.21,"collider_step":87,"shoe_cm":0.03,"shoe_step":75},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.01,"reached":true,"s_after_handoff":8.15,"shoe_cm":-7.07,"step":538},"steps":538}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":66,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@8512/OfficeSet/@MeshInstance3D@8515/@StaticBody3D@8517","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.0,"ok":true,"post":{"collider_cm":2.37,"collider_step":67,"shoe_cm":0.15,"shoe_step":73},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.01,"reached":true,"s_after_handoff":4.02,"shoe_cm":-4.4,"step":290},"steps":290}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":65,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@10214/OfficeSet/@MeshInstance3D@10217/@StaticBody3D@10219","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.02,"ok":true,"post":{"collider_cm":2.25,"collider_step":69,"shoe_cm":0.31,"shoe_step":73},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.02,"reached":true,"s_after_handoff":3.42,"shoe_cm":-7.15,"step":254},"steps":254}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":66,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@11916/OfficeSet/@MeshInstance3D@11919/@StaticBody3D@11921","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.04,"ok":true,"post":{"collider_cm":2.42,"collider_step":249,"shoe_cm":0.14,"shoe_step":75},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.23,"reached":true,"s_after_handoff":5.1,"shoe_cm":-6.99,"step":355},"steps":355}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":66,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@13618/OfficeSet/@MeshInstance3D@13621/@StaticBody3D@13623","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.06,"ok":true,"post":{"collider_cm":2.36,"collider_step":67,"shoe_cm":0.22,"shoe_step":81},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.13,"reached":true,"s_after_handoff":9.1,"shoe_cm":-6.99,"step":595},"steps":595}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":66,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@15320/OfficeSet/@MeshInstance3D@15323/@StaticBody3D@15325","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.08,"ok":true,"post":{"collider_cm":2.38,"collider_step":220,"shoe_cm":0.08,"shoe_step":73},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.11,"reached":true,"s_after_handoff":4.38,"shoe_cm":-7.23,"step":312},"steps":312}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"normal","first_floor_step":66,"fixture":"ledge","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@17022/OfficeSet/@MeshInstance3D@17025/@StaticBody3D@17027","top_m":-0.02},"handoff_step":49,"kick":true,"offset_m":0.1,"ok":true,"post":{"collider_cm":2.33,"collider_step":67,"shoe_cm":0.21,"shoe_step":72},"pre":{"collider_cm":0.0,"collider_step":-1,"shoe_cm":0.0,"shoe_step":-1},"rest":{"collider_cm":2.11,"reached":true,"s_after_handoff":5.27,"shoe_cm":-6.94,"step":365},"steps":365}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@18724/OfficeSet/@MeshInstance3D@18727/@StaticBody3D@18729","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":-0.1,"ok":true,"post":{"collider_cm":2.5,"collider_step":103,"shoe_cm":0.34,"shoe_step":65},"pre":{"collider_cm":3.15,"collider_step":7,"shoe_cm":0.91,"shoe_step":7},"rest":{"collider_cm":2.22,"reached":true,"s_after_handoff":2.7,"shoe_cm":0.13,"step":209},"steps":209}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@20424/OfficeSet/@MeshInstance3D@20427/@StaticBody3D@20429","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":-0.08,"ok":true,"post":{"collider_cm":2.52,"collider_step":185,"shoe_cm":0.48,"shoe_step":185},"pre":{"collider_cm":3.02,"collider_step":7,"shoe_cm":0.85,"shoe_step":7},"rest":{"collider_cm":2.28,"reached":true,"s_after_handoff":6.15,"shoe_cm":0.23,"step":416},"steps":416}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@22124/OfficeSet/@MeshInstance3D@22127/@StaticBody3D@22129","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":-0.06,"ok":true,"post":{"collider_cm":2.36,"collider_step":54,"shoe_cm":0.31,"shoe_step":75},"pre":{"collider_cm":3.11,"collider_step":7,"shoe_cm":0.9,"shoe_step":7},"rest":{"collider_cm":2.08,"reached":true,"s_after_handoff":5.7,"shoe_cm":-0.06,"step":389},"steps":389}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@23824/OfficeSet/@MeshInstance3D@23827/@StaticBody3D@23829","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":-0.04,"ok":true,"post":{"collider_cm":2.38,"collider_step":54,"shoe_cm":0.29,"shoe_step":78},"pre":{"collider_cm":3.03,"collider_step":7,"shoe_cm":0.9,"shoe_step":7},"rest":{"collider_cm":2.09,"reached":true,"s_after_handoff":4.92,"shoe_cm":-0.07,"step":342},"steps":342}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@25524/OfficeSet/@MeshInstance3D@25527/@StaticBody3D@25529","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":-0.02,"ok":true,"post":{"collider_cm":2.33,"collider_step":55,"shoe_cm":0.26,"shoe_step":74},"pre":{"collider_cm":3.02,"collider_step":7,"shoe_cm":0.83,"shoe_step":7},"rest":{"collider_cm":2.15,"reached":true,"s_after_handoff":2.38,"shoe_cm":-0.16,"step":190},"steps":190}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@27224/OfficeSet/@MeshInstance3D@27227/@StaticBody3D@27229","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":0.0,"ok":true,"post":{"collider_cm":2.34,"collider_step":105,"shoe_cm":0.3,"shoe_step":74},"pre":{"collider_cm":3.1,"collider_step":7,"shoe_cm":0.9,"shoe_step":7},"rest":{"collider_cm":2.06,"reached":true,"s_after_handoff":2.5,"shoe_cm":-0.28,"step":197},"steps":197}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@28924/OfficeSet/@MeshInstance3D@28927/@StaticBody3D@28929","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":0.02,"ok":true,"post":{"collider_cm":2.38,"collider_step":54,"shoe_cm":0.27,"shoe_step":76},"pre":{"collider_cm":3.08,"collider_step":7,"shoe_cm":0.91,"shoe_step":7},"rest":{"collider_cm":2.11,"reached":true,"s_after_handoff":3.07,"shoe_cm":-0.04,"step":231},"steps":231}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@30624/OfficeSet/@MeshInstance3D@30627/@StaticBody3D@30629","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":0.04,"ok":true,"post":{"collider_cm":2.38,"collider_step":54,"shoe_cm":0.28,"shoe_step":86},"pre":{"collider_cm":3.16,"collider_step":7,"shoe_cm":0.91,"shoe_step":7},"rest":{"collider_cm":2.11,"reached":true,"s_after_handoff":4.52,"shoe_cm":-0.05,"step":318},"steps":318}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@32324/OfficeSet/@MeshInstance3D@32327/@StaticBody3D@32329","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":0.06,"ok":true,"post":{"collider_cm":2.51,"collider_step":283,"shoe_cm":0.4,"shoe_step":282},"pre":{"collider_cm":3.01,"collider_step":7,"shoe_cm":0.85,"shoe_step":7},"rest":{"collider_cm":2.27,"reached":true,"s_after_handoff":5.9,"shoe_cm":0.19,"step":401},"steps":401}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@34024/OfficeSet/@MeshInstance3D@34027/@StaticBody3D@34029","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":0.08,"ok":true,"post":{"collider_cm":2.34,"collider_step":54,"shoe_cm":0.26,"shoe_step":79},"pre":{"collider_cm":3.08,"collider_step":7,"shoe_cm":0.84,"shoe_step":7},"rest":{"collider_cm":2.12,"reached":true,"s_after_handoff":6.22,"shoe_cm":-0.02,"step":420},"steps":420}
+KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+PARK_VISUAL model=res://assets/rig_slice/park_office.glb motion=office_npc controls=12
+ASD player arms loaded: rigged_v2
+KIM_LANDING_FLOOR {"down_contact_steps":0,"end":"crash","first_floor_step":48,"fixture":"open","flight_start_step":8,"floor":{"path":"/root/DeskBreaker/@Node3D@35724/OfficeSet/@MeshInstance3D@35727/@StaticBody3D@35729","top_m":-0.02},"handoff_step":47,"kick":true,"offset_m":0.1,"ok":true,"post":{"collider_cm":2.38,"collider_step":54,"shoe_cm":0.3,"shoe_step":80},"pre":{"collider_cm":3.08,"collider_step":7,"shoe_cm":0.89,"shoe_step":7},"rest":{"collider_cm":2.18,"reached":true,"s_after_handoff":2.93,"shoe_cm":0.03,"step":223},"steps":223}
+KIM_LANDING_FLOOR_SUMMARY {"limits_cm":{"ledge":{"collider":5.17,"shoe":3.78},"open":{"collider":5.9,"shoe":4.71}},"mode":"50-bone","worst_cm":{"ledge":{"collider":2.42,"shoe":0.38},"open":{"collider":3.16,"shoe":0.91}}}
+KIM_LANDING_FLOOR_REGRESSION_OK

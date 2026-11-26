@@ -1,0 +1,24 @@
+# Diagnostic copy of tools/tests/kim_flight_pose_regression.gd (checks/wall-rest-diagnostic.gd.txt):
+# settle loop extended from 480 to 2400 steps (40 s) and every 200 steps prints the fastest body plus
+# Hand.L / Forearm.L contacts (local shape index, other body, normal). Not a CI test; limits unchanged there.
+== runtime aecd0f1
+DBG wall step 200 fastest Hand.L 1.093 ang 2.31 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 400 fastest Hand.L 1.547 ang 5.82 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 600 fastest Hand.L 1.158 ang 7.52 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 800 fastest Foot.L 0.079 ang 0.53 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 1000 fastest Hand.L 0.237 ang 3.61 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 1200 fastest Hand.R 0.107 ang 4.51 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 1400 fastest Forearm.L 1.309 ang 3.49 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 1600 fastest Hand.L 1.999 ang 9.95 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 1800 fastest Hand.L 2.394 ang 9.55 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 2000 fastest Hand.L 0.715 ang 3.53 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 2200 fastest Hand.L 0.060 ang 0.64 | Hand.L contacts [] | Forearm.L contacts []
+DBG wall step 2400 fastest Hand.L 0.373 ang 2.59 | Hand.L contacts [] | Forearm.L contacts []
+KIM_FLIGHT_POSE {"at_rest":false,"case":"wall","early_two_groups":false,"end":"crash","flight_s":0.367,"handoff_step_deg":1.83,"max_joint_opening_m":0.0,"settle_s":40.0,"sole_below_box_max_m":0.0106,"sole_floor_penetration_peak_m":0.0236,"sole_floor_penetration_rest_m":0.0185,"v2":true}
+== runtime c434672
+KIM_FLIGHT_POSE {"at_rest":true,"case":"wall","early_two_groups":true,"end":"crash","flight_s":0.35,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"settle_s":3.1,"sole_below_box_max_m":0.0,"sole_floor_penetration_peak_m":0.02,"sole_floor_penetration_rest_m":0.0172,"v2":true}
+== runtime ee08dbb
+DBG wall step 200 fastest Forearm.L 0.082 ang 2.68 | Hand.L contacts [[2, "@StaticBody3D@3", (0.0, 1.0, 0.0)]] | Forearm.L contacts []
+DBG wall step 400 fastest LowerLeg.L 0.052 ang 0.26 | Hand.L contacts [[2, "@StaticBody3D@3", (0.0, 1.0, 0.0)]] | Forearm.L contacts []
+DBG wall step 600 fastest Forearm.L 0.022 ang 0.54 | Hand.L contacts [[2, "@StaticBody3D@3", (0.0, 1.0, 0.0)]] | Forearm.L contacts []
+KIM_FLIGHT_POSE {"at_rest":true,"case":"wall","early_two_groups":true,"end":"crash","flight_s":0.333,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"settle_s":11.43,"sole_below_box_max_m":0.0,"sole_floor_penetration_peak_m":0.0,"sole_floor_penetration_rest_m":0.0,"v2":true}

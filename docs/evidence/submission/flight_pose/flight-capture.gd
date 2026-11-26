@@ -3,6 +3,8 @@ extends "../integration/kim-landing.gd"
 ##   -- --log=/path/out.json                     production office replay (default)
 ##   -- --log=... --fixture=front|side|wall|open|ledge fixed placement, one kick
 ##   -- ... --side-view                           review camera beside the arc
+##   -- ... --review-cam=room|wall                fixed low camera beside the landing area, HUD hidden
+##   -- ... --after-frames=N                      frames recorded after the kick (default 200)
 ##   -- ... --kim-offset=X                        shift Kim and the player X m sideways
 ##                                                (landing spread; default 0)
 ## The log records the kick contact, ragdoll start, scripted flight start/end
@@ -26,7 +28,17 @@ var _was_flight := false
 var _after_flight := -1
 var _kick_seen := false
 
+# Per physics step, from flight start until the end: per foot, collider and shoe
+# floor penetration against the floor collider's top face, floor contacts whose
+# normal points down (from the floor towards the foot), and the ankle gap.
+var steps: Array = []
+var _step_index := 0
+var _shoe_hull: Dictionary = {}
+var _floor_top := NAN
+var _floor_path := ""
+
 func _initialize() -> void:
+	physics_frame.connect(_log_step)
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--log="):
 			log_path = arg.substr(6)
@@ -104,7 +116,37 @@ func _fixture_capture() -> void:
 		side_cam.global_position = middle + beside * 4.5 + Vector3.UP * 2.1
 		side_cam.look_at(middle + Vector3.UP * 0.8)
 		side_cam.make_current()
-	for i in 200:
+	# Review-only landing cameras, fixed for the whole run, 0.4 m above the floor
+	# and 2.3 m beside the landing area: --review-cam=room (room side of the lane)
+	# or --review-cam=wall (wall side). Together they show both feet, the floor
+	# and the low cabinet beside the lane from the hand-off to rest. The HUD is
+	# hidden in these evidence captures only.
+	var review := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--review-cam="):
+			review = arg.substr(13)
+	if review == "room" or review == "wall":
+		var cam := Camera3D.new()
+		cam.fov = 60.0
+		game.world.add_child(cam)
+		var aim: Vector3 = Vector3(kim_at.x, 0.0, kim_at.z) + flight_dir * 5.2
+		var beside := Vector3(-flight_dir.z, 0, flight_dir.x)
+		if (aim + beside).length() > (aim - beside).length():
+			beside = -beside # the room side of the lane
+		if review == "wall":
+			beside = -beside
+		cam.global_position = aim + beside * 2.3 + Vector3.UP * 0.4
+		cam.look_at(aim + Vector3.UP * 0.25)
+		cam.make_current()
+		for node: Node in game.find_children("*", "CanvasLayer", true, false):
+			(node as CanvasLayer).visible = false
+		if game.get("_hud") is CanvasItem:
+			(game._hud as CanvasItem).visible = false
+	var after_frames := 200
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--after-frames="):
+			after_frames = int(arg.substr(15))
+	for i in after_frames:
 		_look_towards(rig.pelvis_position() + Vector3.UP * 0.3, 0.12)
 		await process_frame
 	print("FLIGHT_FIXTURE ", JSON.stringify({"fixture": fixture, "samples": measurements.size(),
@@ -258,12 +300,121 @@ func _log_frame() -> void:
 	if _after_flight >= 0:
 		_after_flight += 1
 
+## Shoe vertices skinned mostly to each foot, as a convex hull in the foot bone frame.
+func _prepare_feet() -> void:
+	var sk: Skeleton3D = rig.skeleton
+	var mesh_node := rig.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
+	var skin := mesh_node.skin
+	for side: String in ["L", "R"]:
+		var foot := sk.find_bone("Foot." + side)
+		var rest_inv := sk.get_bone_global_rest(foot).affine_inverse()
+		var points := PackedVector3Array()
+		for surface in mesh_node.mesh.get_surface_count():
+			var material := mesh_node.mesh.surface_get_material(surface)
+			if material == null or material.resource_name != "Leather and eyes":
+				continue
+			var data := mesh_node.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = data[Mesh.ARRAY_VERTEX]
+			var joints: PackedInt32Array = data[Mesh.ARRAY_BONES]
+			var weights: PackedFloat32Array = data[Mesh.ARRAY_WEIGHTS]
+			var stride := joints.size() / vertices.size()
+			for i in vertices.size():
+				if vertices[i].y > 0.18:
+					continue
+				var best := 0
+				for k in stride:
+					if weights[i * stride + k] > weights[i * stride + best]:
+						best = k
+				if sk.find_bone(skin.get_bind_name(joints[i * stride + best])) == foot:
+					points.append(rest_inv * vertices[i])
+		if points.is_empty():
+			continue
+		var cloud := ArrayMesh.new()
+		var arrays := []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = points
+		cloud.add_surface_from_arrays(Mesh.PRIMITIVE_POINTS, arrays)
+		_shoe_hull[side] = (cloud.create_convex_shape(true, false) as ConvexPolygonShape3D).points
+	# The floor: what a ray finds 1 m beside Kim's start (the ledge box sits under him).
+	var space: PhysicsDirectSpaceState3D = rig.get_world_3d().direct_space_state
+	var at: Vector3 = (kim as Node3D).global_position + Vector3(1.0, 0, 0)
+	var query := PhysicsRayQueryParameters3D.create(Vector3(at.x, 3.0, at.z), Vector3(at.x, -3.0, at.z), 1)
+	var exclude: Array[RID] = []
+	for body: PhysicalBone3D in rig.bodies:
+		exclude.append(body.get_rid())
+	query.exclude = exclude
+	var hit: Dictionary = space.intersect_ray(query)
+	if hit.is_empty():
+		return
+	var floor_body := hit.collider as CollisionObject3D
+	_floor_path = str(floor_body.get_path())
+	for child: Node in floor_body.get_children():
+		if child is CollisionShape3D and (child as CollisionShape3D).shape is BoxShape3D:
+			var box: Transform3D = floor_body.global_transform * (child as CollisionShape3D).transform
+			_floor_top = (box * Vector3(0, ((child as CollisionShape3D).shape as BoxShape3D).size.y * 0.5, 0)).y
+
+## Lowest world height of a body's collision shapes (box, capsule, sphere, convex).
+static func collider_low(body: CollisionObject3D) -> float:
+	var low := INF
+	for child: Node in body.get_children():
+		if not child is CollisionShape3D:
+			continue
+		var cs := child as CollisionShape3D
+		var xf: Transform3D = body.global_transform * cs.transform
+		var shape := cs.shape
+		if shape is BoxShape3D:
+			var h: Vector3 = (shape as BoxShape3D).size * 0.5
+			for x: float in [-1.0, 1.0]:
+				for y: float in [-1.0, 1.0]:
+					for z: float in [-1.0, 1.0]:
+						low = minf(low, (xf * Vector3(h.x * x, h.y * y, h.z * z)).y)
+		elif shape is CapsuleShape3D:
+			var c := shape as CapsuleShape3D
+			var half_line: float = c.height * 0.5 - c.radius
+			low = minf(low, minf((xf * Vector3(0, half_line, 0)).y, (xf * Vector3(0, -half_line, 0)).y) - c.radius)
+		elif shape is SphereShape3D:
+			low = minf(low, xf.origin.y - (shape as SphereShape3D).radius)
+		elif shape is ConvexPolygonShape3D:
+			for p: Vector3 in (shape as ConvexPolygonShape3D).points:
+				low = minf(low, (xf * p).y)
+	return low
+
+func _log_step() -> void:
+	if not is_instance_valid(rig) or rig.bodies.is_empty() or not rig.ragdoll_active:
+		return
+	if _shoe_hull.is_empty():
+		_prepare_feet()
+	_step_index += 1
+	if is_nan(_floor_top) or (not rig._flight_active and rig._flight_elapsed <= 0.0):
+		return
+	var row := {"step": _step_index, "frame": Engine.get_frames_drawn() if DisplayServer.get_name() != "headless" else Engine.get_process_frames(),
+		"flight": rig._flight_active}
+	for side: String in ["L", "R"]:
+		var body := _body("Foot." + side)
+		if body == null or not _shoe_hull.has(side):
+			continue
+		var bone: Transform3D = body.global_transform * body.body_offset.affine_inverse()
+		var shoe := INF
+		for p: Vector3 in _shoe_hull[side]:
+			shoe = minf(shoe, (bone * p).y)
+		var down := 0
+		var state := PhysicsServer3D.body_get_direct_state(body.get_rid())
+		for i in state.get_contact_count():
+			if str((state.get_contact_collider_object(i) as Node).get_path()) == _floor_path and state.get_contact_local_normal(i).y < -0.5:
+				down += 1
+		var shin := _body("LowerLeg." + side)
+		row[side] = {"collider_cm": snappedf((_floor_top - collider_low(body)) * 100.0, 0.01),
+			"shoe_cm": snappedf((_floor_top - shoe) * 100.0, 0.01), "floor_normal_down": down,
+			"ankle_gap_mm": snappedf((body.global_transform * body.joint_offset.origin).distance_to(shin.global_transform * (_anchor_local["Foot." + side] as Vector3)) * 1000.0, 0.1) if _anchor_local.has("Foot." + side) else null,
+			"speed": snappedf(body.linear_velocity.length(), 0.001)}
+	steps.append(row)
+
 func _write_log() -> void:
 	if log_path == "":
 		return
 	var out := FileAccess.open(log_path, FileAccess.WRITE)
 	out.store_string(JSON.stringify({"fixture": fixture if fixture != "" else "office_replay",
-		"events": events, "frames": rows,
+		"events": events, "frames": rows, "floor": {"path": _floor_path, "top_m": _floor_top}, "steps": steps,
 		"shoe": {"samples": measurements.size(),
 			"peak_floor_penetration_m": maxf(0.0, FLOOR_TOP_M - measurements.min()) if not measurements.is_empty() else null,
 			"last_floor_penetration_m": maxf(0.0, FLOOR_TOP_M - measurements[-1]) if not measurements.is_empty() else null}}, "  "))

@@ -1,0 +1,66 @@
+windows-gameplay	Set up job	2026-11-26T18:10:51.8630083Z Version: 20261111.635
+windows-gameplay	Set up job	2026-11-26T18:10:51.8636928Z Image: windows-2025-vs2026
+windows-gameplay	Set up job	2026-11-26T18:10:51.8637362Z Version: 20261116.315.1
+RUN lines: 61
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.2096702Z RUN default kim_flight_pose_regression
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8925451Z Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8925919Z 
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8926284Z KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8926842Z KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8927256Z KIM_FLIGHT_POSE_SHOE {"L":{"outside_m":0.0,"vertices":1719},"R":{"outside_m":0.0,"vertices":1719}}
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8928111Z KIM_FLIGHT_POSE {"at_rest":true,"case":"ledge","early_two_groups":true,"end":"normal","flight_s":0.683,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"settle_s":0.5,"sole_below_box_max_m":0.0,"sole_floor_penetration_peak_m":0.0024,"sole_floor_penetration_rest_m":0.0023,"v2":true}
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8929470Z KIM_VISUAL model=res://assets/rig_slice/boss_kim_game.glb bones=50 physical=15 clips=["Hit_Chest", "Hit_Head", "Idle", "Idle_Talking", "Joint_review", "Walk"]
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8930001Z KIM_MOTION model=res://assets/rig_slice/boss_kim_game.glb playing=Idle
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8930859Z KIM_FLIGHT_POSE {"at_rest":false,"case":"wall","early_two_groups":true,"end":"crash","flight_s":0.333,"handoff_step_deg":0.0,"max_joint_opening_m":0.0,"settle_s":8.0,"sole_below_box_max_m":0.0,"sole_floor_penetration_peak_m":0.0,"sole_floor_penetration_rest_m":0.0,"v2":true}
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8931857Z KIM_FLIGHT_POSE_REGRESSION_FAILED: ["wall: Kim did not come to rest within 8 s of the hand-off"]
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8932125Z 
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8932285Z ERROR: KIM_FLIGHT_POSE_CHECK: wall: Kim did not come to rest within 8 s of the hand-off
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8932630Z    at: push_error (core/variant/variant_utility.cpp:1023)
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8932892Z    GDScript backtrace (most recent call first):
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8933422Z        [0] check (D:/a/another-shitty-day/another-shitty-day/tools/tests/kim_flight_pose_regression.gd:23)
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:00.8933914Z        [1] _case (D:/a/another-shitty-day/another-shitty-day/tools/tests/kim_flight_pose_regression.gd:177)
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:01.0112037Z Exception: D:\a\another-shitty-day\another-shitty-day\tools\godot-common.ps1:42
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:01.0113008Z Line |
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:01.0113499Z   42 |              throw "Godot exited with code $($proc.ExitCode). See the  …
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:01.0114048Z      |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:01.0114865Z      | Godot exited with code 1. See the output above.
+windows-gameplay	Existing and scenario regressions	2026-11-26T18:14:01.0330749Z ##[error]Process completed with exit code 1.
+windows-gameplay	Run actions/upload-artifact@v4	﻿2026-11-26T18:14:01.0500614Z ##[group]Run actions/upload-artifact@v4
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.0500890Z with:
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.0501059Z   name: kim-office-windows-regressions
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.0501283Z   path: validation/kim-integration
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.0501476Z   if-no-files-found: warn
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.0501644Z   compression-level: 6
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.0501802Z   overwrite: false
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.0501961Z   include-hidden-files: false
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.0502138Z ##[endgroup]
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.2046456Z (node:5824) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.2047030Z (Use `node --trace-deprecation ...` to show where the warning was created)
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.2184657Z With the provided path, there will be 61 files uploaded
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.2188679Z Artifact name is valid!
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.2189798Z Root directory input is valid!
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.4276748Z Beginning upload of artifact content to blob storage
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.5011976Z (node:5824) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.5605027Z Uploaded bytes 60569
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.5773358Z Finished uploading artifact content to blob storage!
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.5774371Z SHA256 digest of uploaded artifact zip is 4de92b45333c98e78709509acd350cc8bb5f0e8c93f49e5c35d7412bfcf4543e
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.5776204Z Finalizing artifact upload
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.9305956Z Artifact kim-office-windows-regressions.zip successfully finalized. Artifact ID 15144182058
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.9306921Z Artifact kim-office-windows-regressions has been successfully uploaded! Final size is 60569 bytes. Artifact ID is 15144182058
+windows-gameplay	Run actions/upload-artifact@v4	2026-11-26T18:14:01.9314905Z Artifact download URL: https://github.com/PARK-TAEGEON/another-shitty-day/actions/runs/45873824174/artifacts/15144182058
+windows-gameplay	Post Run actions/checkout@v4	﻿2026-11-26T18:14:01.9638704Z Post job cleanup.
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.0986257Z [command]"C:\Program Files\Git\bin\git.exe" version
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.1265517Z git version 2.56.1.windows.1
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.1319117Z Temporarily overriding HOME='D:\a\_temp\b0200070-3515-483e-84de-7b7effa3b7d8' before making global git config changes
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.1319719Z Adding repository directory to the temporary git global config as a safe directory
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.1328018Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\another-shitty-day\another-shitty-day
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.1698095Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.2038973Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.6700373Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.6980087Z http.https://github.com/.extraheader
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.7026836Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:02.7363997Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:03.1978019Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+windows-gameplay	Post Run actions/checkout@v4	2026-11-26T18:14:03.2275263Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+windows-gameplay	Complete job	﻿2026-11-26T18:14:03.6734189Z Cleaning up orphan processes
+windows-gameplay	Complete job	2026-11-26T18:14:03.7533166Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
