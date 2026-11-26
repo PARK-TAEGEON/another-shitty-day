@@ -37,16 +37,25 @@ foreach($test in @('kim_rig_regression','kim_restart_regression','hit_flight_obs
 # Kick flight pose and landing. Two explicit modes, not the 3-mode loop: the
 # 50-bone default and the 31-bone rig. The procedural --kim-legacy model has no
 # scripted pose to check. The office landing test runs at 30 fps, the frame rate
-# of the flight-pose evidence captures it reproduces.
+# of the flight-pose evidence captures it reproduces. All four runs execute even
+# when one fails; the block then fails with the list.
+$poseFailures=@()
 foreach($run in @(@{mode='default';flags=@()}, @{mode='rig-31';flags=@('--kim-rig')})) {
     foreach($case in @(@{test='kim_flight_pose_regression';fps='60'}, @{test='kim_landing_floor_regression';fps='30'})) {
         $test=$case.test
         Write-Host ("RUN {0} {1}" -f $run.mode, $test)
-        $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments (@('--headless','--fixed-fps',$case.fps,'--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--')+$run.flags)
-        $result | Set-Content -LiteralPath (Join-Path $EvidencePath ("{0}-{1}.txt" -f $run.mode, $test)) -Encoding utf8
-        if($result -notmatch ($test.ToUpper()+'_OK')) {throw "Missing marker $test in $($run.mode)"}
-        $summary+=@{mode=$run.mode;test=$test;result='PASS'}
+        try {
+            $result=Invoke-DeskBreakerGodot -Executable $executable -Arguments (@('--headless','--fixed-fps',$case.fps,'--path',$projectPath,'--script',(Join-Path $PSScriptRoot "tests/$test.gd"),'--')+$run.flags)
+            $result | Set-Content -LiteralPath (Join-Path $EvidencePath ("{0}-{1}.txt" -f $run.mode, $test)) -Encoding utf8
+            if($result -notmatch ($test.ToUpper()+'_OK')) {throw "Missing marker $test in $($run.mode)"}
+            $summary+=@{mode=$run.mode;test=$test;result='PASS'}
+        } catch {
+            Write-Host ("FAIL {0} {1}: {2}" -f $run.mode, $test, $_)
+            $summary+=@{mode=$run.mode;test=$test;result='FAIL'}
+            $poseFailures+=("{0} {1}" -f $run.mode, $test)
+        }
     }
 }
 $summary | ConvertTo-Json | Set-Content (Join-Path $EvidencePath 'summary.json') -Encoding utf8
+if($poseFailures.Count -gt 0) {throw ("Flight-pose/landing checks failed: " + ($poseFailures -join ', '))}
 Write-Host ("KIM_INTEGRATION_MATRIX_OK: 3 modes x {0} regressions, plus rig, reload, flight, flight-pose and office landing-floor (50-bone, 31-bone) checks" -f $checks.Count)
